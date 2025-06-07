@@ -41,6 +41,14 @@ export default function CourseInfoModal({ course, isOpen, onClose }: CourseInfoM
     return "bg-green-100 text-green-800"
   }
 
+  const getUniversityShortName = (university: string): string => {
+    const universityMap: Record<string, string> = {
+      "Cape Peninsula University of Technology": "cput",
+      // Add more mappings as needed
+    };
+    return universityMap[university] || university.toLowerCase().replace(/\s+/g, "");
+  };
+
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
       <DialogContent className="max-w-4xl max-h-[90vh] overflow-hidden">
@@ -165,7 +173,7 @@ export default function CourseInfoModal({ course, isOpen, onClose }: CourseInfoM
             <div className="flex gap-3 pt-4">
               <Button
                 onClick={() =>
-                  window.open(`https://${course.university.toLowerCase().replace(/\s+/g, "")}.ac.za`, "_blank")
+                  window.open(`https://${getUniversityShortName(course.university)}.ac.za`, "_blank")
                 }
                 className="flex-1"
               >
