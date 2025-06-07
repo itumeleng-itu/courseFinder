@@ -44,7 +44,31 @@ export default function CourseInfoModal({ course, isOpen, onClose }: CourseInfoM
   const getUniversityShortName = (university: string): string => {
     const universityMap: Record<string, string> = {
       "Cape Peninsula University of Technology": "cput",
-      // Add more mappings as needed
+      "University of Cape Town": "uct",
+      "University of the Witwatersrand": "wits",
+      "Stellenbosch University": "sun",
+      "University of Pretoria": "up",
+      "University of Johannesburg": "uj",
+      "University of KwaZulu-Natal": "ukzn",
+      "North-West University": "nwu",
+      "University of the Free State": "ufs",
+      "Rhodes University": "ru",
+      "Nelson Mandela University": "nmu",
+      "University of Limpopo": "ul",
+      "University of Venda": "univen",
+      "University of Zululand": "unizulu",
+      "Tshwane University of Technology": "tut",
+      "Vaal University of Technology": "vut",
+      "Central University of Technology": "cut",
+      "Durban University of Technology": "dut",
+      "Mangosuthu University of Technology": "mut",
+      "Walter Sisulu University": "wsu",
+      "University of Mpumalanga": "ump",
+      "Sol Plaatje University": "spu",
+      "Sefako Makgatho Health Sciences University": "smu",
+      "University of the Western Cape": "uwc",
+      "University of Fort Hare": "ufh",
+      "University of South Africa": "unisa",
     };
     return universityMap[university] || university.toLowerCase().replace(/\s+/g, "");
   };
