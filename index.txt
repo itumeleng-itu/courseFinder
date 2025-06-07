@@ -1,0 +1,18 @@
+1:"$Sreact.fragment"
+2:I[7555,[],""]
+3:I[1295,[],""]
+4:I[6622,["942","static/chunks/942-26eca6756635c5c1.js","202","static/chunks/202-846cbf17ff9c4b00.js","177","static/chunks/app/layout-034fed564efd63f6.js"],"Toaster"]
+5:I[894,[],"ClientPageRoot"]
+6:I[5031,["942","static/chunks/942-26eca6756635c5c1.js","150","static/chunks/150-cba36870db534ec4.js","974","static/chunks/app/page-543e37989bb9e856.js"],"default"]
+9:I[9665,[],"OutletBoundary"]
+c:I[9665,[],"ViewportBoundary"]
+e:I[9665,[],"MetadataBoundary"]
+10:I[6614,[],""]
+:HL["/courseFinder/_next/static/css/f49a75071bae4731.css","style"]
+0:{"P":null,"b":"pI_8bhcdxbuW4HPruNM1-","p":"/courseFinder","c":["",""],"i":false,"f":[[["",{"children":["__PAGE__",{}]},"$undefined","$undefined",true],["",["$","$1","c",{"children":[[["$","link","0",{"rel":"stylesheet","href":"/courseFinder/_next/static/css/f49a75071bae4731.css","precedence":"next","crossOrigin":"$undefined","nonce":"$undefined"}]],["$","html",null,{"lang":"en","children":["$","body",null,{"className":"__className_a3e165","children":[["$","$L2",null,{"parallelRouterKey":"children","error":"$undefined","errorStyles":"$undefined","errorScripts":"$undefined","template":["$","$L3",null,{}],"templateStyles":"$undefined","templateScripts":"$undefined","notFound":[[["$","title",null,{"children":"404: This page could not be found."}],["$","div",null,{"style":{"fontFamily":"system-ui,\"Segoe UI\",Roboto,Helvetica,Arial,sans-serif,\"Apple Color Emoji\",\"Segoe UI Emoji\"","height":"100vh","textAlign":"center","display":"flex","flexDirection":"column","alignItems":"center","justifyContent":"center"},"children":["$","div",null,{"children":[["$","style",null,{"dangerouslySetInnerHTML":{"__html":"body{color:#000;background:#fff;margin:0}.next-error-h1{border-right:1px solid rgba(0,0,0,.3)}@media (prefers-color-scheme:dark){body{color:#fff;background:#000}.next-error-h1{border-right:1px solid rgba(255,255,255,.3)}}"}}],["$","h1",null,{"className":"next-error-h1","style":{"display":"inline-block","margin":"0 20px 0 0","padding":"0 23px 0 0","fontSize":24,"fontWeight":500,"verticalAlign":"top","lineHeight":"49px"},"children":404}],["$","div",null,{"style":{"display":"inline-block"},"children":["$","h2",null,{"style":{"fontSize":14,"fontWeight":400,"lineHeight":"49px","margin":0},"children":"This page could not be found."}]}]]}]}]],[]],"forbidden":"$undefined","unauthorized":"$undefined"}],["$","$L4",null,{}]]}]}]]}],{"children":["__PAGE__",["$","$1","c",{"children":[["$","$L5",null,{"Component":"$6","searchParams":{},"params":{},"promises":["$@7","$@8"]}],"$undefined",null,["$","$L9",null,{"children":["$La","$Lb",null]}]]}],{},null,false]},[null,[],[]],false],["$","$1","h",{"children":[null,["$","$1","ZFnfO6iMr4EZKAFGXkctd",{"children":[["$","$Lc",null,{"children":"$Ld"}],null]}],["$","$Le",null,{"children":"$Lf"}]]}],false]],"m":"$undefined","G":["$10","$undefined"],"s":false,"S":true}
+7:{}
+8:{}
+d:[["$","meta","0",{"charSet":"utf-8"}],["$","meta","1",{"name":"viewport","content":"width=device-width, initial-scale=1"}]]
+a:null
+b:null
+f:[["$","title","0",{"children":"CourseFinder South Africa"}],["$","meta","1",{"name":"description","content":"Find South African university courses you qualify for based on your NSC results"}],["$","meta","2",{"name":"generator","content":"v0.dev"}]]
