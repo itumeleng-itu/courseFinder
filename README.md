@@ -1,29 +1,30 @@
-# courseFinder
+# Matric University App
 
-A modern Next.js web application for discovering and managing courses, built with:
+*Automatically synced with your [v0.dev](https://v0.dev) deployments*
 
-- Next.js 14 (App Router)
-- TypeScript
-- Tailwind CSS for styling
-- Shadcn/ui components (based on components.json)
-- React hooks architecture
+[![Deployed on Vercel](https://img.shields.io/badge/Deployed%20on-Vercel-black?style=for-the-badge&logo=vercel)](https://vercel.com/matomejohn170-gmailcoms-projects/v0-matric-university-app)
+[![Built with v0](https://img.shields.io/badge/Built%20with-v0.dev-black?style=for-the-badge)](https://v0.dev/chat/projects/0o5uon6woPx)
 
-## Key Features
+## Overview
 
-1. **Course Discovery**:
-   - Search and filter courses
-   - Browse course details
-   - Responsive design for all devices
+This repository will stay in sync with your deployed chats on [v0.dev](https://v0.dev).
+Any changes you make to your deployed app will be automatically pushed to this repository from [v0.dev](https://v0.dev).
 
-2. **Technical Stack**:
-   - Next.js for server-side rendering and API routes
-   - TypeScript for type safety
-   - Tailwind CSS for utility-first styling
-   - Modern React patterns with custom hooks
+## Deployment
 
-3. **Development Features**:
-   - Pre-configured with ESLint and TypeScript
-   - Optimized build configuration
-   - CI/CD ready (GitHub workflows)
+Your project is live at:
 
-## Project Structure
+**[https://vercel.com/matomejohn170-gmailcoms-projects/v0-matric-university-app](https://vercel.com/matomejohn170-gmailcoms-projects/v0-matric-university-app)**
+
+## Build your app
+
+Continue building your app on:
+
+**[https://v0.dev/chat/projects/0o5uon6woPx](https://v0.dev/chat/projects/0o5uon6woPx)**
+
+## How It Works
+
+1. Create and modify your project using [v0.dev](https://v0.dev)
+2. Deploy your chats from the v0 interface
+3. Changes are automatically pushed to this repository
+4. Vercel deploys the latest version from this repository

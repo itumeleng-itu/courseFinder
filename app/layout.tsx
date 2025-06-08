@@ -8,7 +8,14 @@ const inter = Inter({ subsets: ["latin"] })
 export const metadata = {
   title: "CourseFinder South Africa",
   description: "Find South African university courses you qualify for based on your NSC results",
-    generator: 'v0.dev'
+  generator: "v0.dev",
+  icons: {
+    icon: [
+      { url: "/favicon.png", type: "image/svg+xml" },
+      { url: "/favicon.ico", sizes: "32x32" },
+    ],
+    apple: "/apple-touch-icon.png",
+  },
 }
 
 export default function RootLayout({

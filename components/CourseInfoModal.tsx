@@ -53,7 +53,7 @@ export default function CourseInfoModal({ course, isOpen, onClose }: CourseInfoM
       "North-West University": "nwu",
       "University of the Free State": "ufs",
       "Rhodes University": "ru",
-      "Nelson Mandela University": "mandela",
+      "Nelson Mandela University": "nmu",
       "University of Limpopo": "ul",
       "University of Venda": "univen",
       "University of Zululand": "unizulu",
