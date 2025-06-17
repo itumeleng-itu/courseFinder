@@ -8,9 +8,22 @@ export const metadata = {
   title: "CourseFinder South Africa",
   description: "Find South African university courses you qualify for based on your NSC results",
   generator: "v0.dev",
+  metadataBase: new URL("https://www.coursefind.co.za"),
+  openGraph: {
+    title: "CourseFinder South Africa",
+    description: "Find South African university courses you qualify for based on your NSC results",
+    url: "https://www.coursefind.co.za",
+    siteName: "CourseFinder South Africa",
+    type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "CourseFinder South Africa",
+    description: "Find South African university courses you qualify for based on your NSC results",
+  },
   icons: {
     icon: [
-      { url: "/favicon.png", type: "image/svg+xml" },
+      { url: "/favicon.svg", type: "image/svg+xml" },
       { url: "/favicon.ico", sizes: "32x32" },
     ],
     apple: "/apple-touch-icon.png",
