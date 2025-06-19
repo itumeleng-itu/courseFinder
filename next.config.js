@@ -13,6 +13,10 @@ const nextConfig = {
   typescript: {
     ignoreBuildErrors: true,
   },
+  // Force cache busting
+  generateBuildId: async () => {
+    return `build-${Date.now()}`
+  },
 }
 
 module.exports = nextConfig

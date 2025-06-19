@@ -1,0 +1,32 @@
+<!-- Standalone analytics test page -->
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Analytics Test</title>
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-3C11RRX3FV"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-3C11RRX3FV');
+  </script>
+</head>
+<body>
+  <h1>Analytics Test Page</h1>
+  <p>This page tests if Google Analytics is working.</p>
+  <script>
+    // Test if gtag is loaded
+    setTimeout(() => {
+      if (typeof gtag !== 'undefined') {
+        console.log('✅ Google Analytics loaded successfully');
+        gtag('event', 'test_event', {
+          'custom_parameter': 'test_value'
+        });
+      } else {
+        console.log('❌ Google Analytics failed to load');
+      }
+    }, 2000);
+  </script>
+</body>
+</html>

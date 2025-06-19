@@ -2,7 +2,8 @@ import type React from "react"
 import "@/app/globals.css"
 import { Inter } from "next/font/google"
 import { Toaster } from "@/components/ui/toaster"
-import Script from "next/script"
+import { GoogleAnalytics } from "@/components/GoogleAnalytics"
+import { Suspense } from "react"
 
 const inter = Inter({ subsets: ["latin"] })
 
@@ -39,19 +40,23 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
+      <head>
+        {/* Fallback Google Analytics in head */}
+        <script async src="https://www.googletagmanager.com/gtag/js?id=G-3C11RRX3FV"></script>
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `
+              window.dataLayer = window.dataLayer || [];
+              function gtag(){dataLayer.push(arguments);}
+              gtag('js', new Date());
+              gtag('config', 'G-3C11RRX3FV');
+            `,
+          }}
+        />
+      </head>
       <body className={inter.className}>
-        {/* Google Analytics */}
-        <Script src="https://www.googletagmanager.com/gtag/js?id=G-3C11RRX3FV" strategy="afterInteractive" />
-        <Script id="google-analytics" strategy="afterInteractive">
-          {`
-            window.dataLayer = window.dataLayer || [];
-            function gtag(){dataLayer.push(arguments);}
-            gtag('js', new Date());
-            gtag('config', 'G-3C11RRX3FV');
-          `}
-        </Script>
-
-        {children}
+        <GoogleAnalytics />
+        <Suspense>{children}</Suspense>
         <Toaster />
       </body>
     </html>
