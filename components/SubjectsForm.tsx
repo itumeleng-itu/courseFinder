@@ -85,7 +85,6 @@ export default function SubjectsForm({
 
         <Link href="/bursaries" passHref legacyBehavior>
           <Button
-            as="a"
             className="bg-white/20 hover:bg-white/30 text-white"
             disabled={loading}
           >
@@ -94,7 +93,6 @@ export default function SubjectsForm({
         </Link>
         <Link href="/colleges" passHref legacyBehavior>
           <Button
-            as="a"
             className="bg-white/20 hover:bg-white/30 text-white"
             disabled={loading}
           >
