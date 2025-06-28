@@ -28,6 +28,7 @@ export const metadata = {
     icon: [
       { url: "/favicon.svg", type: "image/svg+xml" },
       { url: "/favicon.ico", sizes: "32x32" },
+      { url: "/favicon.png", type: "image/png", sizes: "32x32" }, // Add this line
     ],
     apple: "/apple-touch-icon.png",
   },
@@ -41,6 +42,18 @@ export default function RootLayout({
   return (
     <html lang="en">
       <head>
+        {/* Google Tag Manager */}
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `
+              (function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+              new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+              j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+              'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+              })(window,document,'script','dataLayer','GTM-PVJ9QBLV');
+            `,
+          }}
+        />
         {/* Fallback Google Analytics in head */}
         <script async src="https://www.googletagmanager.com/gtag/js?id=G-3C11RRX3FV"></script>
         <script
@@ -50,11 +63,33 @@ export default function RootLayout({
               function gtag(){dataLayer.push(arguments);}
               gtag('js', new Date());
               gtag('config', 'G-3C11RRX3FV');
+
+              // Track link clicks globally
+              document.addEventListener('DOMContentLoaded', function() {
+                document.querySelectorAll('a').forEach(link => {
+                  link.addEventListener('click', function(e) {
+                    gtag('event', 'click', {
+                      'event_category': 'Outbound Link',
+                      'event_label': this.href,
+                      'transport_type': 'beacon'
+                    });
+                  });
+                });
+              });
             `,
           }}
         />
       </head>
       <body className={inter.className}>
+        {/* Google Tag Manager (noscript) */}
+        <noscript>
+          <iframe
+            src="https://www.googletagmanager.com/ns.html?id=GTM-PVJ9QBLV"
+            height="0"
+            width="0"
+            style={{ display: "none", visibility: "hidden" }}
+          ></iframe>
+        </noscript>
         <GoogleAnalytics />
         <Suspense>{children}</Suspense>
         <Toaster />

@@ -5,6 +5,7 @@ import { PlusCircle, FileText, Trash2 } from "lucide-react"
 import type { Subject } from "@/components/SubjectSelect"
 import SubjectSelect from "@/components/SubjectSelect"
 import { Badge } from "@/components/ui/badge"
+import Link from "next/link"
 
 interface SubjectsFormProps {
   subjects: Subject[]
@@ -81,6 +82,25 @@ export default function SubjectsForm({
           <FileText className="mr-2 h-5 w-5" /> Find Courses
           {loading && <span className="ml-2">...</span>}
         </Button>
+
+        <Link href="/bursaries" passHref legacyBehavior>
+          <Button
+            as="a"
+            className="bg-white/20 hover:bg-white/30 text-white"
+            disabled={loading}
+          >
+            Bursaries
+          </Button>
+        </Link>
+        <Link href="/colleges" passHref legacyBehavior>
+          <Button
+            as="a"
+            className="bg-white/20 hover:bg-white/30 text-white"
+            disabled={loading}
+          >
+            Private Institutions
+          </Button>
+        </Link>
       </div>
 
       <p className="text-sm text-white/80">Add at least 6 subjects excluding Life Orientation for APS calculation</p>
