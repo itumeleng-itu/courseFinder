@@ -3,6 +3,12 @@
 import Script from "next/script"
 import { useEffect } from "react"
 
+declare global {
+  interface Window {
+    dataLayer: any[];
+  }
+}
+
 export function GoogleAnalytics() {
   useEffect(() => {
     // Ensure gtag is available
