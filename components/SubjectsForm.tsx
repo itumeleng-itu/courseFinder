@@ -1,112 +1,126 @@
 "use client"
+
+import { useState } from "react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
-import { PlusCircle, FileText, Trash2 } from "lucide-react"
-import type { Subject } from "@/components/SubjectSelect"
-import SubjectSelect from "@/components/SubjectSelect"
-import { Badge } from "@/components/ui/badge"
-import Link from "next/link"
+import { Label } from "@/components/ui/label"
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
+import { Plus, Trash2 } from "lucide-react"
+import type { SubjectEntry } from "@/lib/types"
 
 interface SubjectsFormProps {
-  subjects: Subject[]
-  selectedSubjects: string[]
-  onAddSubject: () => void
-  onCalculate: () => void
-  onSubjectChange: (index: number, name: string) => void
-  onPercentageChange: (index: number, percentage: string) => void
-  onRemoveSubject: (index: number) => void
-  canCalculate: boolean
-  loading: boolean
+  onSubjectsChange: (subjects: SubjectEntry[]) => void
 }
 
-export default function SubjectsForm({
-  subjects,
-  selectedSubjects,
-  onAddSubject,
-  onCalculate,
-  onSubjectChange,
-  onPercentageChange,
-  onRemoveSubject,
-  canCalculate,
-  loading,
-}: SubjectsFormProps) {
-  return (
-    <div className="space-y-6">
-      <h2 className="text-2xl font-semibold">Enter your NSC Subject Results</h2>
+const commonSubjects = [
+  "Mathematics",
+  "Mathematical Literacy",
+  "English Home Language",
+  "English First Additional Language",
+  "Physical Sciences",
+  "Life Sciences",
+  "Accounting",
+  "Business Studies",
+  "Economics",
+  "Geography",
+  "History",
+  "Life Orientation",
+  "Information Technology",
+  "Computer Applications Technology",
+  "Agricultural Sciences",
+  "Engineering Graphics and Design",
+  "Visual Arts",
+  "Music",
+  "Dramatic Arts",
+  "Afrikaans Home Language",
+  "Afrikaans First Additional Language",
+  "IsiZulu Home Language",
+  "IsiZulu First Additional Language",
+  "IsiXhosa Home Language",
+  "IsiXhosa First Additional Language",
+  "Sepedi",
+  "Sesotho",
+  "Setswana",
+]
 
+export default function SubjectsForm({ onSubjectsChange }: SubjectsFormProps) {
+  const [subjects, setSubjects] = useState<SubjectEntry[]>([{ id: "1", name: "", percentage: 0 }])
+
+  const addSubject = () => {
+    const newSubject: SubjectEntry = {
+      id: Date.now().toString(),
+      name: "",
+      percentage: 0,
+    }
+    const updatedSubjects = [...subjects, newSubject]
+    setSubjects(updatedSubjects)
+  }
+
+  const removeSubject = (id: string) => {
+    const updatedSubjects = subjects.filter((s) => s.id !== id)
+    setSubjects(updatedSubjects)
+    onSubjectsChange(updatedSubjects)
+  }
+
+  const updateSubject = (id: string, field: "name" | "percentage", value: string | number) => {
+    const updatedSubjects = subjects.map((s) => (s.id === id ? { ...s, [field]: value } : s))
+    setSubjects(updatedSubjects)
+    onSubjectsChange(updatedSubjects)
+  }
+
+  return (
+    <div className="space-y-4">
       {subjects.map((subject, index) => (
-        <div key={index} className="flex items-center gap-3">
-          <div className="flex-1">
-            <SubjectSelect
-              value={subject.name}
-              onChange={(value) => onSubjectChange(index, value)}
-              selectedSubjects={selectedSubjects}
-              disabled={loading}
-            />
+        <div key={subject.id} className="space-y-3 p-4 border rounded-lg bg-gray-50">
+          <div className="flex items-center justify-between">
+            <Label className="text-sm font-medium">Subject {index + 1}</Label>
+            {subjects.length > 1 && (
+              <Button type="button" variant="ghost" size="sm" onClick={() => removeSubject(subject.id)}>
+                <Trash2 className="h-4 w-4 text-red-500" />
+              </Button>
+            )}
           </div>
-          <div className="w-24">
+
+          <div className="space-y-2">
+            <Label htmlFor={`subject-${subject.id}`} className="text-xs">
+              Subject Name
+            </Label>
+            <Select value={subject.name} onValueChange={(value) => updateSubject(subject.id, "name", value)}>
+              <SelectTrigger id={`subject-${subject.id}`}>
+                <SelectValue placeholder="Select a subject" />
+              </SelectTrigger>
+              <SelectContent>
+                {commonSubjects.map((subjectName) => (
+                  <SelectItem key={subjectName} value={subjectName}>
+                    {subjectName}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          </div>
+
+          <div className="space-y-2">
+            <Label htmlFor={`percentage-${subject.id}`} className="text-xs">
+              Percentage (%)
+            </Label>
             <Input
+              id={`percentage-${subject.id}`}
               type="number"
               min="0"
               max="100"
-              placeholder="%"
-              value={subject.percentage}
-              onChange={(e) => onPercentageChange(index, e.target.value)}
-              className="bg-white/20 border-none text-white placeholder:text-white/70"
-              disabled={loading}
+              value={subject.percentage || ""}
+              onChange={(e) => updateSubject(subject.id, "percentage", Number(e.target.value))}
+              placeholder="Enter percentage"
             />
           </div>
-          <Button
-            variant="ghost"
-            size="icon"
-            onClick={() => onRemoveSubject(index)}
-            className="text-white hover:bg-white/20"
-            disabled={loading}
-          >
-            <Trash2 className="h-5 w-5" />
-            <span className="sr-only">Remove subject</span>
-          </Button>
         </div>
       ))}
 
-      <div className="flex flex-col sm:flex-row gap-4">
-        <Button onClick={onAddSubject} className="bg-white/20 hover:bg-white/30 text-white" disabled={loading}>
-          <PlusCircle className="mr-2 h-5 w-5" /> Add Subject
+      {subjects.length < 7 && (
+        <Button type="button" variant="outline" onClick={addSubject} className="w-full bg-transparent">
+          <Plus className="h-4 w-4 mr-2" />
+          Add Subject
         </Button>
-
-        <Button
-          onClick={onCalculate}
-          className="bg-white/20 hover:bg-white/30 text-white"
-          disabled={!canCalculate || loading}
-        >
-          <FileText className="mr-2 h-5 w-5" /> Find Courses
-          {loading && <span className="ml-2">...</span>}
-        </Button>
-
-        <Link href="/bursaries" passHref legacyBehavior>
-          <Button
-            className="bg-white/20 hover:bg-white/30 text-white"
-            disabled={loading}
-          >
-            Bursaries
-          </Button>
-        </Link>
-        <Link href="/colleges" passHref legacyBehavior>
-          <Button
-            className="bg-white/20 hover:bg-white/30 text-white"
-            disabled={loading}
-          >
-            Private Institutions
-          </Button>
-        </Link>
-      </div>
-
-      <p className="text-sm text-white/80">Add at least 6 subjects excluding Life Orientation for APS calculation</p>
-
-      {subjects.length > 0 && selectedSubjects.length !== new Set(selectedSubjects).size && (
-        <Badge variant="destructive" className="bg-red-500/80">
-          Duplicate subjects detected. Please select unique subjects.
-        </Badge>
       )}
     </div>
   )

@@ -4,6 +4,7 @@ import { Inter } from "next/font/google"
 import { Toaster } from "@/components/ui/toaster"
 import { GoogleAnalytics } from "@/components/GoogleAnalytics"
 import { Suspense } from "react"
+import { SidebarProvider } from "@/components/ui/sidebar"
 
 const inter = Inter({ subsets: ["latin"] })
 
@@ -28,7 +29,7 @@ export const metadata = {
     icon: [
       { url: "/favicon.svg", type: "image/svg+xml" },
       { url: "/favicon.ico", sizes: "32x32" },
-      { url: "/favicon.png", type: "image/png", sizes: "32x32" }, // Add this line
+      { url: "/favicon.png", type: "image/png", sizes: "32x32" },
     ],
     apple: "/apple-touch-icon.png",
   },
@@ -42,7 +43,6 @@ export default function RootLayout({
   return (
     <html lang="en">
       <head>
-        {/* Google Tag Manager */}
         <script
           dangerouslySetInnerHTML={{
             __html: `
@@ -54,7 +54,6 @@ export default function RootLayout({
             `,
           }}
         />
-        {/* Fallback Google Analytics in head */}
         <script async src="https://www.googletagmanager.com/gtag/js?id=G-3C11RRX3FV"></script>
         <script
           dangerouslySetInnerHTML={{
@@ -64,7 +63,6 @@ export default function RootLayout({
               gtag('js', new Date());
               gtag('config', 'G-3C11RRX3FV');
 
-              // Track link clicks globally
               document.addEventListener('DOMContentLoaded', function() {
                 document.querySelectorAll('a').forEach(link => {
                   link.addEventListener('click', function(e) {
@@ -81,7 +79,6 @@ export default function RootLayout({
         />
       </head>
       <body className={inter.className}>
-        {/* Google Tag Manager (noscript) */}
         <noscript>
           <iframe
             src="https://www.googletagmanager.com/ns.html?id=GTM-PVJ9QBLV"
@@ -91,7 +88,9 @@ export default function RootLayout({
           ></iframe>
         </noscript>
         <GoogleAnalytics />
-        <Suspense>{children}</Suspense>
+        <SidebarProvider>
+          <Suspense>{children}</Suspense>
+        </SidebarProvider>
         <Toaster />
       </body>
     </html>

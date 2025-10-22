@@ -1,235 +1,222 @@
 "use client"
 
-import { useState } from "react"
-import type { Subject } from "@/components/SubjectSelect"
-import { getAPSPoints } from "@/utils/calculations"
-import { getAllCourses } from "@/data/universities"
-import CoursesHeader from "@/components/CoursesHeader"
+import { useState, useEffect } from "react"
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
+import { Button } from "@/components/ui/button"
+import { Badge } from "@/components/ui/badge"
+import { Separator } from "@/components/ui/separator"
+import { BookOpen, Calculator, GraduationCap, Users, TrendingUp, AlertCircle } from "lucide-react"
 import SubjectsForm from "@/components/SubjectsForm"
-import APSScoreDisplay from "@/components/APSScoreDisplay"
 import QualifyingCourses from "@/components/QualifyingCourses"
-import type { Course } from "@/lib/types"
+import APSScoreDisplay from "@/components/APSScoreDisplay"
+import { calculateAPS } from "@/lib/aps-calculator"
+import type { SubjectEntry } from "@/lib/types"
+import { AppSidebar } from "@/components/app-sidebar"
+import { SidebarInset, SidebarTrigger } from "@/components/ui/sidebar"
+import { Chatbot } from "@/components/chatbot"
 
 export default function Home() {
-  const [subjects, setSubjects] = useState<Subject[]>([])
-  const [apsScore, setApsScore] = useState<number | null>(null)
-  const [qualifyingCourses, setQualifyingCourses] = useState<Array<Course & { university: string }>>([])
-  const [loading, setLoading] = useState(false)
-  const [debugInfo, setDebugInfo] = useState<any>(null)
+  const [subjects, setSubjects] = useState<SubjectEntry[]>([])
+  const [apsScore, setApsScore] = useState<number>(0)
+  const [showResults, setShowResults] = useState(false)
 
-  const selectedSubjects = subjects.map((s) => s.name).filter(Boolean)
-
-  const addSubject = () => {
-    setSubjects([...subjects, { name: "", percentage: "" }])
-  }
-
-  const removeSubject = (index: number) => {
-    setSubjects(subjects.filter((_, i) => i !== index))
-  }
-
-  const updateSubject = (index: number, name: string) => {
-    const newSubjects = [...subjects]
-    newSubjects[index].name = name
-    setSubjects(newSubjects)
-  }
-
-  const updatePercentage = (index: number, percentage: string) => {
-    const newSubjects = [...subjects]
-    newSubjects[index].percentage = percentage
-    setSubjects(newSubjects)
-  }
-
-  const calculateQualifications = () => {
-    setLoading(true)
-    try {
-      let totalPoints = 0
-      const subjectLevels: Record<string, number> = {}
-      let validSubjectsCount = 0
-
-      subjects.forEach((subject) => {
-        if (subject.name && subject.percentage) {
-          const percentage = Number.parseInt(subject.percentage)
-          const points = getAPSPoints(percentage)
-          subjectLevels[subject.name] = points
-
-          if (subject.name === "Life Orientation") {
-            return
-          }
-
-          totalPoints += points
-          validSubjectsCount++
-        }
-      })
-
-      if (validSubjectsCount < 6) {
-        alert("Please enter at least 6 subjects excluding Life Orientation for a valid APS calculation.")
-        setLoading(false)
-        return
-      }
-
-      setApsScore(totalPoints)
-
-      // Get all courses from all universities
-      const allCourses = getAllCourses()
-
-      // Debug info
-      const universityCounts: Record<string, number> = {}
-      allCourses.forEach((course) => {
-        if (!universityCounts[course.university]) {
-          universityCounts[course.university] = 0
-        }
-        universityCounts[course.university]++
-      })
-
-      // Check specifically for TUT
-      const tutCourses = allCourses.filter((course) => course.university === "Tshwane University of Technology")
-      console.log(`Found ${tutCourses.length} TUT courses in all courses`)
-
-      setDebugInfo({
-        totalCourses: allCourses.length,
-        universityCounts,
-        apsScore: totalPoints,
-        subjectLevels,
-        tutCoursesCount: tutCourses.length,
-      })
-
-      // Filter courses based on APS score and subject requirements
-      const qualifying = allCourses.filter((course) => {
-        // First check APS score
-        if (totalPoints < course.apsMin) {
-          return false
-        }
-
-        // Then check subject requirements if they exist
-        if (course.subjectRequirements && Object.keys(course.subjectRequirements).length > 0) {
-          // Check if the student meets the subject requirements
-          for (const [subject, requirement] of Object.entries(course.subjectRequirements)) {
-            // Case 1: Simple requirement (e.g., Mathematics: 5)
-            if (typeof requirement === "number") {
-              // Check if any subject matches (case-insensitive and partial match)
-              let foundMatch = false
-              for (const [studentSubject, level] of Object.entries(subjectLevels)) {
-                // Normalize subject names for comparison
-                const normalizedRequirement = subject.toLowerCase()
-                const normalizedStudentSubject = studentSubject.toLowerCase()
-
-                // Check for exact match or if student subject contains the requirement
-                if (
-                  normalizedStudentSubject === normalizedRequirement ||
-                  normalizedStudentSubject.includes(normalizedRequirement) ||
-                  normalizedRequirement.includes(normalizedStudentSubject)
-                ) {
-                  if (level >= requirement) {
-                    foundMatch = true
-                    break
-                  }
-                }
-              }
-
-              if (!foundMatch) {
-                return false
-              }
-            }
-            // Case 2: Alternative requirements (e.g., Mathematics OR Mathematical Literacy)
-            else if (requirement.alternatives) {
-              // Check if at least one alternative is met
-              let meetsAnyAlternative = false
-
-              for (const alt of requirement.alternatives) {
-                // Check if any subject matches (case-insensitive and partial match)
-                for (const [studentSubject, level] of Object.entries(subjectLevels)) {
-                  // Normalize subject names for comparison
-                  const normalizedRequirement = alt.subject.toLowerCase()
-                  const normalizedStudentSubject = studentSubject.toLowerCase()
-
-                  // Check for exact match or if student subject contains the requirement
-                  if (
-                    normalizedStudentSubject === normalizedRequirement ||
-                    normalizedStudentSubject.includes(normalizedRequirement) ||
-                    normalizedRequirement.includes(normalizedStudentSubject)
-                  ) {
-                    if (level >= alt.level) {
-                      meetsAnyAlternative = true
-                      break
-                    }
-                  }
-                }
-
-                if (meetsAnyAlternative) break
-              }
-
-              if (!meetsAnyAlternative) {
-                return false
-              }
-            }
-          }
-        }
-
-        // If we get here, the student meets all requirements
-        return true
-      })
-
-      // Check specifically for TUT in qualifying courses
-      const qualifyingTutCourses = qualifying.filter(
-        (course) => course.university === "Tshwane University of Technology",
-      )
-      console.log(`Found ${qualifyingTutCourses.length} qualifying TUT courses`)
-
-      // Sort qualifying courses by university name for consistency
-      const sortedQualifying = qualifying.sort((a, b) => a.university.localeCompare(b.university))
-
-      setQualifyingCourses(sortedQualifying)
-    } catch (error) {
-      console.error("Error calculating qualifying courses:", error)
-      alert("Failed to calculate qualifying courses. Please try again.")
-    } finally {
-      setLoading(false)
+  useEffect(() => {
+    if (subjects.length > 0) {
+      const score = calculateAPS(subjects)
+      setApsScore(score)
+      setShowResults(true)
+    } else {
+      setShowResults(false)
+      setApsScore(0)
     }
+  }, [subjects])
+
+  const handleSubjectsChange = (newSubjects: SubjectEntry[]) => {
+    setSubjects(newSubjects)
   }
 
-  const canCalculate =
-    subjects.length >= 6 &&
-    subjects.every((s) => s.name && s.percentage) &&
-    new Set(selectedSubjects).size === selectedSubjects.length
+  const handleReset = () => {
+    setSubjects([])
+    setShowResults(false)
+    setApsScore(0)
+  }
 
   return (
-    <div className="space-y-8 max-w-4xl mx-auto p-4">
-      <div className="bg-gradient-to-r from-blue-600 to-purple-600 text-white rounded-lg p-8 shadow-lg w-full">
-        <CoursesHeader />
-      </div>
-
-      <div className="bg-gradient-to-r from-blue-600 to-purple-600 text-white rounded-lg p-8 shadow-lg">
-        <SubjectsForm
-          subjects={subjects}
-          selectedSubjects={selectedSubjects}
-          onAddSubject={addSubject}
-          onCalculate={calculateQualifications}
-          onSubjectChange={updateSubject}
-          onPercentageChange={updatePercentage}
-          onRemoveSubject={removeSubject}
-          canCalculate={canCalculate}
-          loading={loading}
-        />
-      </div>
-
-      {apsScore !== null && (
-        <div className="space-y-6">
-          <APSScoreDisplay score={apsScore} />
-          <QualifyingCourses courses={qualifyingCourses} loading={loading} />
-
-          {/* Debug information - can be removed in production */}
-          {debugInfo && (
-            <div className="text-xs text-gray-500 mt-4">
-              <details>
-                <summary>Debug Info</summary>
-                <pre className="bg-gray-100 p-2 rounded overflow-auto max-h-60">
-                  {JSON.stringify(debugInfo, null, 2)}
-                </pre>
-              </details>
+    <>
+      <AppSidebar />
+      <SidebarInset>
+        <header className="bg-white/80 backdrop-blur-sm border-b border-gray-200 sticky top-0 z-50 flex h-16 shrink-0 items-center gap-2">
+          <div className="flex items-center gap-2 px-4">
+            <SidebarTrigger className="-ml-1" />
+            <Separator orientation="vertical" className="mr-2 h-4" />
+            <div className="flex items-center space-x-3">
+              <div className="bg-gradient-to-r from-blue-600 to-purple-600 p-2 rounded-lg">
+                <GraduationCap className="h-6 w-6 text-white" />
+              </div>
+              <div>
+                <h1 className="text-xl font-bold text-gray-900">Course Finder</h1>
+                <p className="text-sm text-gray-600">Find your perfect university course</p>
+              </div>
             </div>
-          )}
-        </div>
-      )}
-    </div>
+            <div className="flex items-center space-x-4">
+              <Badge variant="outline" className="hidden sm:flex">
+                <Users className="h-3 w-3 mr-1" />
+                26 Universities
+              </Badge>
+              <Badge variant="outline" className="hidden sm:flex">
+                <BookOpen className="h-3 w-3 mr-1" />
+                1000+ Courses
+              </Badge>
+            </div>
+          </div>
+        </header>
+
+        <main className="container mx-auto px-4 py-8">
+          <div className="max-w-6xl mx-auto">
+            {/* Hero Section */}
+            <div className="text-center mb-12">
+              <h2 className="text-4xl font-bold text-gray-900 mb-4">Discover Your Academic Future</h2>
+              <p className="text-xl text-gray-600 max-w-3xl mx-auto">
+                Enter your matric results to find university courses that match your APS score and subject requirements
+                across South African universities.
+              </p>
+            </div>
+
+            {/* Main Content */}
+            <div className="grid lg:grid-cols-3 gap-8">
+              {/* Left Column - Input Form */}
+              <div className="lg:col-span-1">
+                <Card className="sticky top-24">
+                  <CardHeader>
+                    <CardTitle className="flex items-center gap-2">
+                      <Calculator className="h-5 w-5 text-blue-600" />
+                      Enter Your Results
+                    </CardTitle>
+                    <CardDescription>Add your matric subject results to calculate your APS score</CardDescription>
+                  </CardHeader>
+                  <CardContent>
+                    <SubjectsForm onSubjectsChange={handleSubjectsChange} />
+
+                    {subjects.length > 0 && (
+                      <div className="mt-6 pt-6 border-t">
+                        <Button onClick={handleReset} variant="outline" className="w-full bg-transparent">
+                          Reset All
+                        </Button>
+                      </div>
+                    )}
+                  </CardContent>
+                </Card>
+              </div>
+
+              {/* Right Column - Results */}
+              <div className="lg:col-span-2">
+                {showResults ? (
+                  <div className="space-y-6">
+                    {/* APS Score Display */}
+                    <APSScoreDisplay score={apsScore} subjects={subjects} />
+
+                    <Separator />
+
+                    {/* Qualifying Courses */}
+                    <QualifyingCourses apsScore={apsScore} subjects={subjects} />
+                  </div>
+                ) : (
+                  /* Welcome Card */
+                  <Card className="h-full">
+                    <CardContent className="flex flex-col items-center justify-center text-center p-12">
+                      <div className="bg-gradient-to-r from-blue-100 to-purple-100 p-6 rounded-full mb-6">
+                        <TrendingUp className="h-12 w-12 text-blue-600" />
+                      </div>
+                      <h3 className="text-2xl font-semibold text-gray-900 mb-4">Ready to Find Your Course?</h3>
+                      <p className="text-gray-600 mb-6 max-w-md">
+                        Start by entering your matric subject results on the left. We'll calculate your APS score and
+                        show you all the courses you qualify for.
+                      </p>
+                      <div className="grid grid-cols-2 gap-4 text-sm text-gray-500">
+                        <div className="flex items-center gap-2">
+                          <div className="w-2 h-2 bg-green-500 rounded-full"></div>
+                          Instant APS calculation
+                        </div>
+                        <div className="flex items-center gap-2">
+                          <div className="w-2 h-2 bg-blue-500 rounded-full"></div>
+                          Subject matching
+                        </div>
+                        <div className="flex items-center gap-2">
+                          <div className="w-2 h-2 bg-purple-500 rounded-full"></div>
+                          Multiple universities
+                        </div>
+                        <div className="flex items-center gap-2">
+                          <div className="w-2 h-2 bg-orange-500 rounded-full"></div>
+                          Career guidance
+                        </div>
+                      </div>
+                    </CardContent>
+                  </Card>
+                )}
+              </div>
+            </div>
+
+            {/* Info Cards */}
+            <div className="grid md:grid-cols-3 gap-6 mt-12">
+              <Card>
+                <CardHeader>
+                  <CardTitle className="text-lg flex items-center gap-2">
+                    <Calculator className="h-5 w-5 text-green-600" />
+                    APS Calculator
+                  </CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <p className="text-gray-600 text-sm">
+                    Our calculator uses the standard South African APS system, taking your best 6 subjects (excluding
+                    Life Orientation) to determine your score.
+                  </p>
+                </CardContent>
+              </Card>
+
+              <Card>
+                <CardHeader>
+                  <CardTitle className="text-lg flex items-center gap-2">
+                    <BookOpen className="h-5 w-5 text-blue-600" />
+                    Course Matching
+                  </CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <p className="text-gray-600 text-sm">
+                    We match your subjects and APS score against admission requirements from major South African
+                    universities to find your perfect fit.
+                  </p>
+                </CardContent>
+              </Card>
+
+              <Card>
+                <CardHeader>
+                  <CardTitle className="text-lg flex items-center gap-2">
+                    <AlertCircle className="h-5 w-5 text-orange-600" />
+                    Important Note
+                  </CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <p className="text-gray-600 text-sm">
+                    Meeting minimum requirements doesn't guarantee admission. Universities may have additional selection
+                    criteria and limited spaces.
+                  </p>
+                </CardContent>
+              </Card>
+            </div>
+          </div>
+        </main>
+
+        {/* Footer */}
+        <footer className="bg-gray-50 border-t border-gray-200 mt-16">
+          <div className="container mx-auto px-4 py-8">
+            <div className="text-center text-gray-600">
+              <p className="text-sm">Course Finder - Helping South African students find their academic path</p>
+              <p className="text-xs mt-2">Always verify admission requirements directly with universities</p>
+            </div>
+          </div>
+        </footer>
+        <Chatbot />
+      </SidebarInset>
+    </>
   )
 }

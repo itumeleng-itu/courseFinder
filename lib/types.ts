@@ -1,23 +1,23 @@
 export interface SubjectEntry {
-  id: number
+  id: string
   name: string
-  percentage: string
+  percentage: number
 }
 
 export interface Course {
-  id: string
   name: string
   faculty?: string
-  apsMin: number
-  duration?: string
+  minimumAPS: number
   requirements?: string[]
-  subjectRequirements: Record<string, number | AlternativeRequirement>
+  duration?: string
+  description?: string
 }
 
-export interface AlternativeRequirement {
-  alternatives: Array<{ subject: string; level: number }>
-}
-
-export interface CourseResult extends Course {
-  apsGap?: number
+export interface University {
+  id: string
+  name: string
+  shortName: string
+  location: string
+  website: string
+  courses: Course[]
 }

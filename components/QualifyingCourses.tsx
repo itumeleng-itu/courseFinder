@@ -1,178 +1,133 @@
 "use client"
 
 import { useState } from "react"
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
-import { Skeleton } from "@/components/ui/skeleton"
-import { GraduationCap, MapPin, Clock, Info, TrendingUp } from "lucide-react"
-import CourseInfoModal from "./CourseInfoModal"
-import type { Course } from "@/lib/types"
+import { Input } from "@/components/ui/input"
+import { ScrollArea } from "@/components/ui/scroll-area"
+import { GraduationCap, Search, ExternalLink } from "lucide-react"
+import type { SubjectEntry } from "@/lib/types"
+import { universities } from "@/data/universities"
 
 interface QualifyingCoursesProps {
-  courses: Array<Course & { university: string }>
-  loading: boolean
+  apsScore: number
+  subjects: SubjectEntry[]
 }
 
-export default function QualifyingCourses({ courses, loading }: QualifyingCoursesProps) {
-  const [selectedCourse, setSelectedCourse] = useState<(Course & { university: string }) | null>(null)
-  const [isModalOpen, setIsModalOpen] = useState(false)
+export default function QualifyingCourses({ apsScore, subjects }: QualifyingCoursesProps) {
+  const [searchQuery, setSearchQuery] = useState("")
 
-  const handleCourseInfo = (course: Course & { university: string }) => {
-    setSelectedCourse(course)
-    setIsModalOpen(true)
-  }
-
-  const closeModal = () => {
-    setIsModalOpen(false)
-    setSelectedCourse(null)
-  }
-
-  const getDurationBadgeColor = (duration: string) => {
-    if (duration.includes("3")) return "bg-green-100 text-green-800"
-    if (duration.includes("4")) return "bg-blue-100 text-blue-800"
-    if (duration.includes("5")) return "bg-orange-100 text-orange-800"
-    if (duration.includes("6")) return "bg-red-100 text-red-800"
-    return "bg-gray-100 text-gray-800"
-  }
-
-  const getAPSBadgeColor = (aps: number) => {
-    if (aps >= 35) return "bg-red-100 text-red-800"
-    if (aps >= 30) return "bg-orange-100 text-orange-800"
-    if (aps >= 25) return "bg-yellow-100 text-yellow-800"
-    return "bg-green-100 text-green-800"
-  }
-
-  if (loading) {
-    return (
-      <Card>
-        <CardHeader>
-          <CardTitle className="flex items-center gap-2">
-            <GraduationCap className="h-5 w-5" />
-            Qualifying Courses
-          </CardTitle>
-        </CardHeader>
-        <CardContent>
-          <div className="space-y-4">
-            {[1, 2, 3].map((i) => (
-              <div key={i} className="space-y-2">
-                <Skeleton className="h-4 w-3/4" />
-                <Skeleton className="h-4 w-1/2" />
-                <Skeleton className="h-8 w-full" />
-              </div>
-            ))}
-          </div>
-        </CardContent>
-      </Card>
-    )
-  }
-
-  if (courses.length === 0) {
-    return (
-      <Card>
-        <CardHeader>
-          <CardTitle className="flex items-center gap-2">
-            <GraduationCap className="h-5 w-5" />
-            Qualifying Courses
-          </CardTitle>
-        </CardHeader>
-        <CardContent>
-          <div className="text-center py-8">
-            <GraduationCap className="h-12 w-12 text-gray-400 mx-auto mb-4" />
-            <p className="text-gray-600 mb-2">No qualifying courses found</p>
-            <p className="text-sm text-gray-500">Try improving your marks or consider alternative study paths</p>
-          </div>
-        </CardContent>
-      </Card>
-    )
-  }
-
-  // Group courses by university
-  const coursesByUniversity = courses.reduce(
-    (acc, course) => {
-      if (!acc[course.university]) {
-        acc[course.university] = []
-      }
-      acc[course.university].push(course)
-      return acc
-    },
-    {} as Record<string, Array<Course & { university: string }>>,
+  // Get all courses from all universities
+  const allCourses = universities.flatMap((uni) =>
+    uni.courses.map((course) => ({
+      ...course,
+      universityName: uni.name,
+      universityShortName: uni.shortName,
+      universityWebsite: uni.website,
+    })),
   )
 
+  // Filter courses based on APS score and search query
+  const qualifyingCourses = allCourses.filter((course) => {
+    const meetsAPS = apsScore >= course.minimumAPS
+    const matchesSearch =
+      searchQuery === "" ||
+      course.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      course.universityName.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      course.faculty?.toLowerCase().includes(searchQuery.toLowerCase())
+
+    return meetsAPS && matchesSearch
+  })
+
   return (
-    <>
-      <Card>
-        <CardHeader>
-          <CardTitle className="flex items-center gap-2">
-            <GraduationCap className="h-5 w-5" />
-            Qualifying Courses ({courses.length})
-          </CardTitle>
-          <p className="text-sm text-gray-600">Based on your APS score and subject requirements</p>
-        </CardHeader>
-        <CardContent>
-          <div className="space-y-6">
-            {Object.entries(coursesByUniversity).map(([university, universityCourses]) => (
-              <div key={university}>
-                <div className="flex items-center gap-2 mb-4">
-                  <MapPin className="h-4 w-4 text-blue-600" />
-                  <h3 className="font-semibold text-lg">{university}</h3>
-                  <Badge variant="outline">{universityCourses.length} courses</Badge>
-                </div>
-
-                <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-                  {universityCourses.map((course) => (
-                    <Card key={course.id} className="hover:shadow-md transition-shadow">
-                      <CardContent className="p-4">
-                        <div className="space-y-3">
-                          <div>
-                            <h4 className="font-medium text-sm leading-tight mb-2">{course.name}</h4>
-                            {course.faculty && <p className="text-xs text-gray-600 mb-2">{course.faculty}</p>}
-                          </div>
-
-                          <div className="flex flex-wrap gap-1">
-                            <Badge className={`text-xs ${getAPSBadgeColor(course.apsMin)}`}>
-                              <TrendingUp className="h-3 w-3 mr-1" />
-                              APS: {course.apsMin}
-                            </Badge>
-                            {course.duration && (
-                              <Badge className={`text-xs ${getDurationBadgeColor(course.duration)}`}>
-                                <Clock className="h-3 w-3 mr-1" />
-                                {course.duration}
-                              </Badge>
-                            )}
-                          </div>
-
-                          {course.subjectRequirements && Object.keys(course.subjectRequirements).length > 0 && (
-                            <div className="text-xs text-gray-600">
-                              <p className="font-medium">Key subjects:</p>
-                              <p className="truncate">
-                                {Object.keys(course.subjectRequirements).slice(0, 2).join(", ")}
-                                {Object.keys(course.subjectRequirements).length > 2 && "..."}
-                              </p>
-                            </div>
-                          )}
-
-                          <Button
-                            variant="outline"
-                            size="sm"
-                            onClick={() => handleCourseInfo(course)}
-                            className="w-full text-xs"
-                          >
-                            <Info className="h-3 w-3 mr-1" />
-                            Course Information
-                          </Button>
-                        </div>
-                      </CardContent>
-                    </Card>
-                  ))}
-                </div>
-              </div>
-            ))}
+    <Card>
+      <CardHeader>
+        <CardTitle className="flex items-center gap-2">
+          <GraduationCap className="h-5 w-5 text-blue-600" />
+          Qualifying Courses
+        </CardTitle>
+        <CardDescription>
+          {qualifyingCourses.length} course{qualifyingCourses.length !== 1 ? "s" : ""} available with your APS score of{" "}
+          {apsScore}
+        </CardDescription>
+      </CardHeader>
+      <CardContent>
+        <div className="space-y-4">
+          <div className="relative">
+            <Search className="absolute left-3 top-3 h-4 w-4 text-gray-400" />
+            <Input
+              placeholder="Search courses or universities..."
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              className="pl-10"
+            />
           </div>
-        </CardContent>
-      </Card>
 
-      <CourseInfoModal course={selectedCourse} isOpen={isModalOpen} onClose={closeModal} />
-    </>
+          <ScrollArea className="h-[500px] pr-4">
+            {qualifyingCourses.length === 0 ? (
+              <div className="text-center py-12 text-gray-500">
+                <GraduationCap className="h-12 w-12 mx-auto mb-4 opacity-50" />
+                <p>No courses found matching your criteria.</p>
+                <p className="text-sm mt-2">Try adjusting your search or improving your APS score.</p>
+              </div>
+            ) : (
+              <div className="space-y-4">
+                {qualifyingCourses.map((course, index) => (
+                  <Card key={`${course.universityShortName}-${course.name}-${index}`} className="overflow-hidden">
+                    <CardHeader className="pb-3">
+                      <div className="flex items-start justify-between">
+                        <div className="space-y-1">
+                          <CardTitle className="text-lg">{course.name}</CardTitle>
+                          <CardDescription className="flex items-center gap-2">
+                            {course.universityName}
+                            {course.faculty && (
+                              <>
+                                <span>•</span>
+                                <span>{course.faculty}</span>
+                              </>
+                            )}
+                          </CardDescription>
+                        </div>
+                        <Badge variant="secondary" className="shrink-0">
+                          APS: {course.minimumAPS}
+                        </Badge>
+                      </div>
+                    </CardHeader>
+                    <CardContent className="space-y-3">
+                      {course.description && <p className="text-sm text-gray-600">{course.description}</p>}
+
+                      {course.duration && (
+                        <div className="text-sm">
+                          <span className="font-medium">Duration:</span> {course.duration}
+                        </div>
+                      )}
+
+                      {course.requirements && course.requirements.length > 0 && (
+                        <div className="space-y-2">
+                          <div className="text-sm font-medium">Requirements:</div>
+                          <ul className="list-disc list-inside text-sm text-gray-600 space-y-1">
+                            {course.requirements.map((req, reqIndex) => (
+                              <li key={reqIndex}>{req}</li>
+                            ))}
+                          </ul>
+                        </div>
+                      )}
+
+                      <Button variant="outline" size="sm" asChild className="w-full bg-transparent">
+                        <a href={course.universityWebsite} target="_blank" rel="noopener noreferrer">
+                          Visit {course.universityShortName} Website
+                          <ExternalLink className="h-3 w-3 ml-2" />
+                        </a>
+                      </Button>
+                    </CardContent>
+                  </Card>
+                ))}
+              </div>
+            )}
+          </ScrollArea>
+        </div>
+      </CardContent>
+    </Card>
   )
 }
