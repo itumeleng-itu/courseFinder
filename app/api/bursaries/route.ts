@@ -1,192 +1,206 @@
 import { NextResponse } from "next/server"
 
 export const dynamic = "force-dynamic"
-export const revalidate = 3600 // Cache for 1 hour
+export const revalidate = 3600 // 1 hour
 
-interface Bursary {
-  title: string
-  description: string
-  deadline: string
-  link: string
-  provider: string
-  value?: string
-}
+const BURSARIES_DATA = [
+  {
+    id: "1",
+    title: "NSFAS Bursary",
+    provider: "National Student Financial Aid Scheme",
+    amount: "Full tuition + accommodation + allowances",
+    field: "All Fields",
+    description:
+      "NSFAS provides comprehensive financial aid to students from poor and working-class families. Covers tuition, accommodation, transport, and living allowances.",
+    eligibility: [
+      "South African citizen",
+      "Combined household income of R350,000 or less per year",
+      "Accepted at a public university or TVET college",
+      "SASSA grant recipient automatically qualifies",
+    ],
+    deadline: "Various deadlines throughout the year",
+    link: "https://www.nsfas.org.za",
+  },
+  {
+    id: "2",
+    title: "Funza Lushaka Bursary",
+    provider: "Department of Basic Education",
+    amount: "Full tuition + R27,000 annual allowance",
+    field: "Teaching",
+    description:
+      "For students studying to become teachers. Covers full tuition and provides annual allowances. Recipients must teach for the same number of years they received the bursary.",
+    eligibility: [
+      "South African citizen",
+      "Studying teaching at a public higher education institution",
+      "Maintain 60% average",
+      "Willing to teach in a public school after graduation",
+    ],
+    deadline: "31 January 2024",
+    link: "https://www.funzalushaka.doe.gov.za",
+  },
+  {
+    id: "3",
+    title: "Eskom Tertiary Education Support Programme",
+    provider: "Eskom",
+    amount: "Full tuition + R75,000 annual allowance",
+    field: "Engineering, Science, Technology",
+    description:
+      "Comprehensive bursary for students pursuing careers in engineering and technical fields. Includes vacation work opportunities and potential employment after graduation.",
+    eligibility: [
+      "South African citizen",
+      "Studying Engineering, Finance, IT, or related fields",
+      "Academic achievement of 60%+",
+      "Financially needy students prioritized",
+    ],
+    deadline: "30 September 2024",
+    link: "https://www.eskom.co.za/careers/bursaries",
+  },
+  {
+    id: "4",
+    title: "Anglo American Bursary",
+    provider: "Anglo American",
+    amount: "Full tuition + accommodation + allowances",
+    field: "Mining Engineering, Metallurgy, Geology",
+    description:
+      "Prestigious bursary for students in mining-related fields. Includes mentorship, vacation work, and excellent employment prospects.",
+    eligibility: [
+      "South African citizen",
+      "Studying at a recognized SA university",
+      "65% average minimum",
+      "Strong Mathematics and Physical Sciences results",
+    ],
+    deadline: "31 August 2024",
+    link: "https://www.angloamerican.com/careers/bursaries",
+  },
+  {
+    id: "5",
+    title: "Sasol Bursary Programme",
+    provider: "Sasol",
+    amount: "Full tuition + R70,000 annual allowance",
+    field: "Chemical Engineering, Chemistry, Mechanical Engineering",
+    description:
+      "Comprehensive support for students in engineering and science. Includes vacation work, mentorship, and potential employment.",
+    eligibility: [
+      "South African citizen",
+      "Studying Chemical, Mechanical, Electrical Engineering or related",
+      "60% average minimum",
+      "From a disadvantaged background",
+    ],
+    deadline: "31 July 2024",
+    link: "https://www.sasol.com/careers/bursaries",
+  },
+  {
+    id: "6",
+    title: "Allan Gray Orbis Foundation",
+    provider: "Allan Gray Orbis Foundation",
+    amount: "Full cost of study + development programs",
+    field: "All Fields (Business focus)",
+    description:
+      "Highly competitive bursary with entrepreneurial focus. Includes mentorship, leadership development, and networking opportunities.",
+    eligibility: [
+      "South African citizen",
+      "Outstanding academic record (70%+)",
+      "Demonstrated leadership potential",
+      "Entrepreneurial mindset",
+    ],
+    deadline: "30 June 2024",
+    link: "https://www.allangrayorbis.org",
+  },
+  {
+    id: "7",
+    title: "Transnet Bursary Scheme",
+    provider: "Transnet",
+    amount: "Full tuition + accommodation + R30,000 allowance",
+    field: "Engineering, Logistics, Finance",
+    description:
+      "For students pursuing careers in transport and logistics-related fields. Includes vacation work and potential permanent employment.",
+    eligibility: [
+      "South African citizen",
+      "Studying Engineering, Transport, Logistics, Finance",
+      "60% average minimum",
+      "Financially needy",
+    ],
+    deadline: "31 August 2024",
+    link: "https://www.transnet.net/careers/Pages/Bursaries.aspx",
+  },
+  {
+    id: "8",
+    title: "Sibanye-Stillwater Bursary",
+    provider: "Sibanye-Stillwater",
+    amount: "Full tuition + accommodation + allowances",
+    field: "Mining Engineering, Geology, Metallurgy",
+    description:
+      "Comprehensive bursary for mining and engineering students. Strong focus on practical experience and career development.",
+    eligibility: [
+      "South African citizen",
+      "Studying Mining Engineering or related fields",
+      "65% average minimum",
+      "Strong Mathematics and Physical Sciences",
+    ],
+    deadline: "30 September 2024",
+    link: "https://www.sibanyestillwater.com/careers/bursaries",
+  },
+  {
+    id: "9",
+    title: "Shoprite Checkers Bursary",
+    provider: "Shoprite Holdings",
+    amount: "Full tuition + R25,000 annual allowance",
+    field: "Retail, Supply Chain, Finance, IT",
+    description:
+      "For students interested in retail, supply chain management, and business-related fields. Includes vacation work opportunities.",
+    eligibility: [
+      "South African citizen",
+      "Studying BCom, IT, Engineering, Supply Chain",
+      "60% average minimum",
+      "Passion for retail industry",
+    ],
+    deadline: "31 July 2024",
+    link: "https://www.shopriteholdings.co.za/careers/bursaries.html",
+  },
+  {
+    id: "10",
+    title: "Clicks Bursary Programme",
+    provider: "Clicks Group",
+    amount: "Full tuition + R20,000 annual allowance",
+    field: "Pharmacy, Nursing, Retail Management",
+    description:
+      "For students pursuing careers in healthcare and pharmacy. Excellent opportunity for future employment in the Clicks Group.",
+    eligibility: [
+      "South African citizen",
+      "Studying Pharmacy, Nursing, or Healthcare Management",
+      "60% average minimum",
+      "Financially needy students prioritized",
+    ],
+    deadline: "31 August 2024",
+    link: "https://www.clicksgroup.co.za/careers/bursaries",
+  },
+]
 
-export async function GET(request: Request) {
+export async function GET() {
   try {
-    const { searchParams } = new URL(request.url)
-    const search = searchParams.get("search")?.toLowerCase() || ""
-
-    // Fetch the bursaries page
-    const response = await fetch("https://www.zabursaries.co.za/", {
-      headers: {
-        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36",
+    // In a real implementation, this would scrape https://www.zabursaries.co.za/
+    // For now, we return curated data
+    return NextResponse.json(
+      {
+        success: true,
+        bursaries: BURSARIES_DATA,
+        totalCount: BURSARIES_DATA.length,
+        lastUpdated: new Date().toISOString(),
       },
-    })
-
-    if (!response.ok) {
-      throw new Error("Failed to fetch bursaries website")
-    }
-
-    const html = await response.text()
-
-    // Parse HTML to extract bursary information
-    const bursaries: Bursary[] = []
-
-    // Extract bursary entries using regex patterns
-    // This is a simplified parser - adjust based on actual HTML structure
-    const titlePattern = /<h3[^>]*>(.*?)<\/h3>/gi
-    const linkPattern = /<a[^>]*href=["'](.*?)["'][^>]*>/gi
-
-    const titles = Array.from(html.matchAll(titlePattern))
-    const links = Array.from(html.matchAll(linkPattern))
-
-    // Extract bursary cards or listings
-    const bursaryBlockPattern = /<article[^>]*class=["'][^"']*bursary[^"']*["'][^>]*>([\s\S]*?)<\/article>/gi
-    const blocks = Array.from(html.matchAll(bursaryBlockPattern))
-
-    if (blocks.length > 0) {
-      for (const block of blocks.slice(0, 20)) {
-        const blockHtml = block[1]
-
-        // Extract title
-        const titleMatch = blockHtml.match(/<h[23][^>]*>(.*?)<\/h[23]>/i)
-        const title = titleMatch ? titleMatch[1].replace(/<[^>]*>/g, "").trim() : "Unknown Bursary"
-
-        // Extract link
-        const linkMatch = blockHtml.match(/<a[^>]*href=["'](.*?)["']/i)
-        const link = linkMatch ? linkMatch[1] : "https://www.zabursaries.co.za/"
-
-        // Extract description
-        const descMatch = blockHtml.match(/<p[^>]*>(.*?)<\/p>/i)
-        const description = descMatch ? descMatch[1].replace(/<[^>]*>/g, "").trim() : ""
-
-        // Extract deadline if available
-        const deadlineMatch = blockHtml.match(/deadline[:\s]*(.*?)(?:<|$)/i)
-        const deadline = deadlineMatch ? deadlineMatch[1].trim() : "Check website"
-
-        // Extract provider
-        const providerMatch = blockHtml.match(/provider[:\s]*(.*?)(?:<|$)/i)
-        const provider = providerMatch ? providerMatch[1].trim() : "Various"
-
-        if (title !== "Unknown Bursary") {
-          bursaries.push({
-            title,
-            description,
-            deadline,
-            link: link.startsWith("http") ? link : `https://www.zabursaries.co.za${link}`,
-            provider,
-          })
-        }
-      }
-    }
-
-    // If no structured data found, create fallback entries
-    if (bursaries.length === 0) {
-      bursaries.push(
-        {
-          title: "NSFAS (National Student Financial Aid Scheme)",
-          description:
-            "Comprehensive financial aid for students from low-income households. Covers tuition, accommodation, and living expenses.",
-          deadline: "November 30, 2024",
-          link: "https://www.zabursaries.co.za/nsfas-bursary/",
-          provider: "Government",
-          value: "Full cost of study",
+      {
+        headers: {
+          "Cache-Control": "public, s-maxage=3600, stale-while-revalidate=1800",
         },
-        {
-          title: "Funza Lushaka Bursary Programme",
-          description:
-            "Bursary for students pursuing teaching qualifications in priority subjects like Mathematics, Science, and Technology.",
-          deadline: "October 31, 2024",
-          link: "https://www.zabursaries.co.za/funza-lushaka-bursary/",
-          provider: "Department of Basic Education",
-          value: "Full tuition + allowances",
-        },
-        {
-          title: "Sasol Bursary Programme",
-          description: "Bursaries for engineering, science, and technology students with strong academic performance.",
-          deadline: "June 30, 2024",
-          link: "https://www.zabursaries.co.za/sasol-bursary/",
-          provider: "Sasol",
-          value: "Full tuition + accommodation",
-        },
-        {
-          title: "Anglo American Bursary",
-          description: "Supports students in mining, engineering, and related fields with full financial assistance.",
-          deadline: "July 31, 2024",
-          link: "https://www.zabursaries.co.za/anglo-american-bursary/",
-          provider: "Anglo American",
-          value: "Full tuition + living allowance",
-        },
-        {
-          title: "Transnet Bursary Scheme",
-          description:
-            "Financial support for students pursuing engineering, logistics, and transport-related qualifications.",
-          deadline: "September 30, 2024",
-          link: "https://www.zabursaries.co.za/transnet-bursary/",
-          provider: "Transnet",
-          value: "Full tuition + stipend",
-        },
-        {
-          title: "Eskom Tertiary Education Support Programme (TESP)",
-          description: "Bursaries for engineering, technology, and science students willing to work for Eskom.",
-          deadline: "July 15, 2024",
-          link: "https://www.zabursaries.co.za/eskom-bursary/",
-          provider: "Eskom",
-          value: "Up to R80,000 per year",
-        },
-        {
-          title: "Allan Gray Orbis Foundation Scholarship",
-          description:
-            "Comprehensive scholarship for entrepreneurial students covering undergraduate and postgraduate studies.",
-          deadline: "July 31, 2024",
-          link: "https://www.zabursaries.co.za/allan-gray-bursary/",
-          provider: "Allan Gray Orbis Foundation",
-          value: "Full undergraduate + postgraduate",
-        },
-        {
-          title: "Momentum Metropolitan Bursary",
-          description: "Financial assistance for students studying actuarial science, IT, finance, or related fields.",
-          deadline: "August 31, 2024",
-          link: "https://www.zabursaries.co.za/momentum-bursary/",
-          provider: "Momentum Metropolitan",
-          value: "Up to R100,000 per year",
-        },
-      )
-    }
-
-    // Filter by search term if provided
-    let filteredBursaries = bursaries
-    if (search) {
-      filteredBursaries = bursaries.filter(
-        (b) =>
-          b.title.toLowerCase().includes(search) ||
-          b.description.toLowerCase().includes(search) ||
-          b.provider.toLowerCase().includes(search),
-      )
-    }
-
-    return NextResponse.json({
-      success: true,
-      bursaries: filteredBursaries,
-      total: filteredBursaries.length,
-    })
+      },
+    )
   } catch (error) {
-    console.error("Error fetching bursaries:", error)
-
-    // Return fallback data
-    return NextResponse.json({
-      success: true,
-      bursaries: [
-        {
-          title: "NSFAS Bursary",
-          description: "Financial aid for students from low-income households",
-          deadline: "Check website",
-          link: "https://www.zabursaries.co.za/",
-          provider: "Government",
-        },
-      ],
-      total: 1,
-    })
+    console.error("Bursaries API Error:", error)
+    return NextResponse.json(
+      {
+        success: false,
+        error: "Failed to fetch bursaries",
+      },
+      { status: 500 },
+    )
   }
 }

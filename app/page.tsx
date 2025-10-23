@@ -9,11 +9,44 @@ import { BookOpen, Calculator, GraduationCap, Users, TrendingUp, AlertCircle } f
 import SubjectsForm from "@/components/SubjectsForm"
 import QualifyingCourses from "@/components/QualifyingCourses"
 import APSScoreDisplay from "@/components/APSScoreDisplay"
-import { calculateAPS } from "@/lib/aps-calculator"
 import type { SubjectEntry } from "@/lib/types"
 import { AppSidebar } from "@/components/app-sidebar"
-import { SidebarInset, SidebarTrigger } from "@/components/ui/sidebar"
-import { Chatbot } from "@/components/chatbot"
+import { SidebarInset, SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar"
+import { NewsGrid } from "@/components/news-grid"
+import { PassRateCharts } from "@/components/pass-rate-charts"
+
+// Simple APS calculation function
+function calculateSimpleAPS(subjects: SubjectEntry[]): number {
+  const validSubjects = subjects.filter(
+    (s) => s.name && s.percentage !== undefined && s.percentage !== null && s.percentage > 0,
+  )
+
+  if (validSubjects.length === 0) return 0
+
+  // Exclude Life Orientation
+  const subjectsWithoutLO = validSubjects.filter((s) => s.name.toLowerCase() !== "life orientation")
+
+  // Sort by percentage descending
+  subjectsWithoutLO.sort((a, b) => Number(b.percentage) - Number(a.percentage))
+
+  // Take top 6 subjects
+  const top6 = subjectsWithoutLO.slice(0, 6)
+
+  // Convert percentages to APS points (1-7 scale)
+  const apsPoints = top6.map((subject) => {
+    const percentage = Number(subject.percentage)
+    if (percentage >= 80) return 7
+    if (percentage >= 70) return 6
+    if (percentage >= 60) return 5
+    if (percentage >= 50) return 4
+    if (percentage >= 40) return 3
+    if (percentage >= 30) return 2
+    return 1
+  })
+
+  // Sum up the points
+  return apsPoints.reduce((sum, points) => sum + points, 0)
+}
 
 export default function Home() {
   const [subjects, setSubjects] = useState<SubjectEntry[]>([])
@@ -22,7 +55,7 @@ export default function Home() {
 
   useEffect(() => {
     if (subjects.length > 0) {
-      const score = calculateAPS(subjects)
+      const score = calculateSimpleAPS(subjects)
       setApsScore(score)
       setShowResults(true)
     } else {
@@ -42,7 +75,7 @@ export default function Home() {
   }
 
   return (
-    <>
+    <SidebarProvider>
       <AppSidebar />
       <SidebarInset>
         <header className="bg-white/80 backdrop-blur-sm border-b border-gray-200 sticky top-0 z-50 flex h-16 shrink-0 items-center gap-2">
@@ -203,8 +236,52 @@ export default function Home() {
                 </CardContent>
               </Card>
             </div>
+
+            {/* Latest News Section */}
+            <section className="space-y-4 mt-12">
+              <div>
+                <h3 className="text-2xl font-semibold">Latest Education News</h3>
+                <p className="text-sm text-gray-600">Stay updated with the latest from South African education</p>
+              </div>
+              <NewsGrid />
+            </section>
+
+            {/* Pass Rate Statistics Section */}
+            <section className="space-y-4 mt-12">
+              <div>
+                <h3 className="text-2xl font-semibold">Matric Pass Rates 2023</h3>
+                <p className="text-sm text-gray-600">View national and provincial statistics</p>
+              </div>
+              <PassRateCharts />
+            </section>
           </div>
         </main>
+
+        {/* Dashboard Section */}
+        <div className="flex-1 space-y-8 p-8 pt-6">
+          <div className="flex items-center justify-between">
+            <div>
+              <h1 className="text-3xl font-bold tracking-tight">Dashboard</h1>
+              <p className="text-muted-foreground">Stay updated with the latest education news and statistics</p>
+            </div>
+          </div>
+
+          <Separator />
+
+          {/* Pass Rate Charts */}
+          <div>
+            <h2 className="text-2xl font-bold mb-4">Matric Pass Rates</h2>
+            <PassRateCharts />
+          </div>
+
+          <Separator />
+
+          {/* Latest News */}
+          <div>
+            <h2 className="text-2xl font-bold mb-4">Latest Education News</h2>
+            <NewsGrid />
+          </div>
+        </div>
 
         {/* Footer */}
         <footer className="bg-gray-50 border-t border-gray-200 mt-16">
@@ -215,8 +292,7 @@ export default function Home() {
             </div>
           </div>
         </footer>
-        <Chatbot />
       </SidebarInset>
-    </>
+    </SidebarProvider>
   )
 }

@@ -1,101 +1,66 @@
+import { NextResponse } from "next/server"
 import { GoogleGenerativeAI } from "@google/generative-ai"
-import { type NextRequest, NextResponse } from "next/server"
-import { universities } from "@/data/universities"
 
 const genAI = new GoogleGenerativeAI("AIzaSyDgwD-lxpnCK3Q0YgYwWig9KCJJA6NCWQg")
 
-export async function POST(request: NextRequest) {
+export async function POST(request: Request) {
   try {
-    const { messages } = await request.json()
+    const { message, conversationHistory = [] } = await request.json()
 
-    // Get all courses from all universities
-    const allCourses = universities.flatMap((uni) =>
-      uni.courses.map((course) => ({
-        university: uni.name,
-        course: course.name,
-        faculty: course.faculty,
-        apsMin: course.apsMin,
-        duration: course.duration,
-        requirements: course.subjectRequirements,
-      })),
-    )
+    if (!message) {
+      return NextResponse.json({ error: "Message is required" }, { status: 400 })
+    }
 
-    // Create context about universities
-    const universitiesContext = universities.map((uni) => ({
-      name: uni.name,
-      location: `${uni.location.city}, ${uni.location.province}`,
-      faculties: uni.faculties,
-      totalCourses: uni.courses.length,
-    }))
+    const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" })
 
-    const systemPrompt = `You are a helpful assistant for South African university admissions. You have access to information about ${universities.length} South African universities and their courses.
+    const systemPrompt = `You are an expert educational advisor specializing in South African universities and their admission requirements. 
 
-Available Universities:
-${universitiesContext.map((u) => `- ${u.name} (${u.location}) - ${u.totalCourses} courses across ${u.faculties.length} faculties`).join("\n")}
+You have comprehensive knowledge about:
+- All 26 South African universities (Wits, UCT, UP, Stellenbosch, UJ, UKZN, etc.)
+- APS (Admission Point Score) calculation and requirements
+- Faculty programs and courses at each university
+- Admission requirements including minimum APS, subject requirements, and NBT scores
+- Application processes and deadlines
+- Bursary and financial aid options
+- Career paths and course outcomes
 
 Your role is to:
-1. Help students find suitable courses based on their APS scores and interests
-2. Explain admission requirements for specific courses
-3. Provide information about different universities and their programs
-4. Guide students through the APS calculation process
-5. Answer questions about subjects, faculties, and career paths
+1. Help students understand APS calculations and requirements
+2. Guide them in choosing suitable courses based on their scores
+3. Provide accurate information about university requirements
+4. Suggest alternative options when students don't meet requirements
+5. Explain the differences between universities and their programs
+6. Be encouraging and supportive while being realistic about requirements
 
-Key Information:
-- APS (Admission Point Score) ranges from 0-84 points
-- Students need to achieve at least level 4 (50-59%) in 4 subjects
-- Life Orientation is counted at 50% of the mark
-- Different courses have different APS minimums and subject requirements
+Always provide specific, actionable advice. When discussing APS requirements, be precise. If you don't have exact information, say so rather than guessing.
 
-When answering:
-- Be specific about APS requirements
-- Mention relevant subject requirements
-- Suggest multiple university options when possible
-- Be encouraging and informative
-- If you don't have specific information, suggest using the "Find Course" feature on the platform
+Keep responses concise but informative. Use a friendly, supportive tone.`
 
-Sample courses available (showing diversity):
-${allCourses
-  .slice(0, 10)
-  .map((c) => `- ${c.course} at ${c.university} (APS: ${c.apsMin})`)
-  .join("\n")}
-
-Always format your responses clearly with bullet points or numbered lists when listing multiple items.`
-
-    const model = genAI.getGenerativeModel({
-      model: "gemini-pro",
-      generationConfig: {
-        temperature: 0.7,
-        topK: 40,
-        topP: 0.95,
-        maxOutputTokens: 1024,
-      },
-    })
-
-    // Convert messages to Gemini format
     const chat = model.startChat({
-      history: messages.slice(0, -1).map((msg: any) => ({
-        role: msg.role === "user" ? "user" : "model",
+      history: conversationHistory.map((msg: any) => ({
+        role: msg.role === "assistant" ? "model" : "user",
         parts: [{ text: msg.content }],
       })),
       generationConfig: {
+        maxOutputTokens: 1000,
         temperature: 0.7,
-        topK: 40,
-        topP: 0.95,
-        maxOutputTokens: 1024,
       },
     })
 
-    // Add system context as first message
-    const userMessage = messages[messages.length - 1].content
-    const contextualMessage = `${systemPrompt}\n\nUser question: ${userMessage}`
-
-    const result = await chat.sendMessage(contextualMessage)
+    const result = await chat.sendMessage(systemPrompt + "\n\nUser: " + message)
     const response = await result.response
     const text = response.text()
 
-    return NextResponse.json({ message: text })
+    return NextResponse.json({
+      response: text,
+    })
   } catch (error) {
     console.error("Chat API Error:", error)
-    return NextResponse.json({ error: "Failed to process chat message" }, { status: 500 })
+    return NextResponse.json(
+      {
+        error: "Failed to generate response. Please try again.",
+      },
+      { status: 500 },
+    )
   }
 }
