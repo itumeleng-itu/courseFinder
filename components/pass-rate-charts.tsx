@@ -2,201 +2,173 @@
 
 import { useEffect, useState } from "react"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Skeleton } from "@/components/ui/skeleton"
-import { Button } from "@/components/ui/button"
-import { Bar, BarChart, CartesianGrid, XAxis, YAxis, ResponsiveContainer } from "recharts"
-import { ChartContainer, ChartTooltip, ChartTooltipContent } from "@/components/ui/chart"
-import { TrendingUp, RefreshCw } from "lucide-react"
+import { TrendingUp, Users } from "lucide-react"
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 
-interface ProvinceData {
-  province: string
+interface ProvinceStats {
+  name: string
   passRate: number
-  rank: number
+  candidates: number
 }
 
-interface StatsData {
-  nationalPassRate: number
-  provinces: ProvinceData[]
-  year: number
+interface MatricStats {
+  national: {
+    passRate: number
+    totalCandidates: number
+    year: number
+  }
+  provinces: ProvinceStats[]
 }
-
-const provinces = [
-  "Gauteng",
-  "Western Cape",
-  "KwaZulu-Natal",
-  "Eastern Cape",
-  "Limpopo",
-  "Mpumalanga",
-  "North West",
-  "Free State",
-  "Northern Cape",
-]
 
 export function PassRateCharts() {
-  const [stats, setStats] = useState<StatsData | null>(null)
+  const [stats, setStats] = useState<MatricStats | null>(null)
   const [loading, setLoading] = useState(true)
-  const [error, setError] = useState<string | null>(null)
-  const [selectedProvince, setSelectedProvince] = useState<string>("")
-
-  const fetchStats = async () => {
-    setLoading(true)
-    setError(null)
-    try {
-      const response = await fetch("/api/matric-stats")
-      if (!response.ok) throw new Error("Failed to fetch statistics")
-      const data = await response.json()
-      setStats(data)
-
-      // Auto-detect user's province from localStorage or default to first
-      const savedProvince = localStorage.getItem("userProvince")
-      if (savedProvince && provinces.includes(savedProvince)) {
-        setSelectedProvince(savedProvince)
-      } else if (data.provinces && data.provinces.length > 0) {
-        setSelectedProvince(data.provinces[0].province)
-      }
-    } catch (err) {
-      setError(err instanceof Error ? err.message : "Failed to load statistics")
-    } finally {
-      setLoading(false)
-    }
-  }
+  const [selectedProvince, setSelectedProvince] = useState<string>("national")
 
   useEffect(() => {
+    async function fetchStats() {
+      try {
+        const response = await fetch("/api/matric-stats")
+        const data = await response.json()
+
+        if (data.success) {
+          setStats(data.stats)
+        }
+      } catch (err) {
+        console.error("Error fetching stats:", err)
+      } finally {
+        setLoading(false)
+      }
+    }
+
     fetchStats()
   }, [])
 
-  useEffect(() => {
-    if (selectedProvince) {
-      localStorage.setItem("userProvince", selectedProvince)
-    }
-  }, [selectedProvince])
-
   if (loading) {
     return (
-      <div className="grid gap-4 md:grid-cols-2">
-        <Card>
-          <CardHeader>
-            <Skeleton className="h-6 w-32" />
-            <Skeleton className="h-4 w-48" />
-          </CardHeader>
-          <CardContent>
-            <Skeleton className="h-32 w-full" />
-          </CardContent>
-        </Card>
-        <Card>
-          <CardHeader>
-            <Skeleton className="h-6 w-32" />
-            <Skeleton className="h-4 w-48" />
-          </CardHeader>
-          <CardContent>
-            <Skeleton className="h-64 w-full" />
-          </CardContent>
-        </Card>
+      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+        {[1, 2, 3].map((i) => (
+          <Card key={i}>
+            <CardHeader>
+              <Skeleton className="h-4 w-1/2" />
+            </CardHeader>
+            <CardContent>
+              <Skeleton className="h-16 w-full" />
+            </CardContent>
+          </Card>
+        ))}
       </div>
     )
   }
 
-  if (error || !stats) {
+  if (!stats) {
     return (
       <Card>
         <CardContent className="pt-6">
-          <div className="text-center space-y-4">
-            <p className="text-muted-foreground">{error || "No statistics available"}</p>
-            <Button onClick={fetchStats} variant="outline">
-              <RefreshCw className="h-4 w-4 mr-2" />
-              Try Again
-            </Button>
-          </div>
+          <p className="text-center text-muted-foreground">Unable to load statistics</p>
         </CardContent>
       </Card>
     )
   }
 
-  const selectedProvinceData = stats.provinces.find((p) => p.province === selectedProvince)
+  const selectedStats =
+    selectedProvince === "national"
+      ? { name: "National", passRate: stats.national.passRate, candidates: stats.national.totalCandidates }
+      : stats.provinces.find((p) => p.name === selectedProvince)
 
   return (
-    <div className="grid gap-4 md:grid-cols-2">
-      {/* National Pass Rate */}
-      <Card>
-        <CardHeader>
-          <CardTitle>National Pass Rate {stats.year}</CardTitle>
-          <CardDescription>Overall matric performance across South Africa</CardDescription>
-        </CardHeader>
-        <CardContent>
-          <div className="space-y-4">
-            <div className="flex items-center justify-center">
-              <div className="text-center">
-                <div className="text-6xl font-bold text-primary">{stats.nationalPassRate}%</div>
-                <p className="text-sm text-muted-foreground mt-2">National Average</p>
-              </div>
-            </div>
-            <div className="flex items-center gap-2 text-sm text-green-600 bg-green-50 p-3 rounded-lg">
-              <TrendingUp className="h-4 w-4" />
-              <span>Strong performance compared to previous years</span>
-            </div>
-          </div>
-        </CardContent>
-      </Card>
+    <div className="space-y-4">
+      {/* Province Selector */}
+      <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-4">
+        <Select value={selectedProvince} onValueChange={setSelectedProvince}>
+          <SelectTrigger className="w-full sm:w-[280px]">
+            <SelectValue placeholder="Select province" />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value="national">National Overview</SelectItem>
+            {stats.provinces.map((province) => (
+              <SelectItem key={province.name} value={province.name}>
+                {province.name}
+              </SelectItem>
+            ))}
+          </SelectContent>
+        </Select>
+      </div>
 
-      {/* Provincial Comparison */}
-      <Card>
-        <CardHeader>
-          <div className="flex items-center justify-between">
-            <div>
-              <CardTitle>Provincial Pass Rates</CardTitle>
-              <CardDescription>Compare performance across provinces</CardDescription>
-            </div>
-            <Select value={selectedProvince} onValueChange={setSelectedProvince}>
-              <SelectTrigger className="w-[180px]">
-                <SelectValue placeholder="Select province" />
-              </SelectTrigger>
-              <SelectContent>
-                {provinces.map((province) => (
-                  <SelectItem key={province} value={province}>
-                    {province}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
-          </div>
-        </CardHeader>
-        <CardContent>
-          {selectedProvinceData && (
-            <div className="mb-4 p-4 bg-blue-50 rounded-lg">
-              <div className="flex items-center justify-between">
-                <div>
-                  <p className="text-sm font-medium">{selectedProvinceData.province}</p>
-                  <p className="text-2xl font-bold text-primary">{selectedProvinceData.passRate}%</p>
-                </div>
-                <div className="text-right">
-                  <p className="text-sm text-muted-foreground">Rank</p>
-                  <p className="text-2xl font-bold">#{selectedProvinceData.rank}</p>
-                </div>
+      {/* Stats Cards */}
+      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+        {/* Pass Rate Card */}
+        <Card>
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+            <CardTitle className="text-sm font-medium">Pass Rate</CardTitle>
+            <TrendingUp className="h-4 w-4 text-muted-foreground" />
+          </CardHeader>
+          <CardContent>
+            <div className="text-2xl font-bold">{selectedStats?.passRate.toFixed(1)}%</div>
+            <p className="text-xs text-muted-foreground">{selectedStats?.name}</p>
+          </CardContent>
+        </Card>
+
+        {/* Candidates Card */}
+        <Card>
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+            <CardTitle className="text-sm font-medium">Total Candidates</CardTitle>
+            <Users className="h-4 w-4 text-muted-foreground" />
+          </CardHeader>
+          <CardContent>
+            <div className="text-2xl font-bold">{selectedStats?.candidates.toLocaleString()}</div>
+            <p className="text-xs text-muted-foreground">Wrote exams in {stats.national.year}</p>
+          </CardContent>
+        </Card>
+
+        {/* Ranking Card (only for provinces) */}
+        {selectedProvince !== "national" && (
+          <Card>
+            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+              <CardTitle className="text-sm font-medium">Provincial Ranking</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="text-2xl font-bold">
+                #
+                {stats.provinces.sort((a, b) => b.passRate - a.passRate).findIndex((p) => p.name === selectedProvince) +
+                  1}
               </div>
+              <p className="text-xs text-muted-foreground">Out of 9 provinces</p>
+            </CardContent>
+          </Card>
+        )}
+      </div>
+
+      {/* Provincial Comparison - Only show on national view */}
+      {selectedProvince === "national" && (
+        <Card>
+          <CardHeader>
+            <CardTitle className="text-base">Provincial Pass Rates</CardTitle>
+            <CardDescription>Comparison across all provinces</CardDescription>
+          </CardHeader>
+          <CardContent>
+            <div className="space-y-3">
+              {stats.provinces
+                .sort((a, b) => b.passRate - a.passRate)
+                .map((province) => (
+                  <div key={province.name} className="flex flex-col sm:flex-row sm:items-center gap-2">
+                    <div className="flex-1 flex items-center justify-between">
+                      <span className="text-sm font-medium">{province.name}</span>
+                      <span className="text-sm text-muted-foreground ml-2">{province.passRate.toFixed(1)}%</span>
+                    </div>
+                    <div className="w-full sm:w-48 bg-secondary rounded-full h-2 overflow-hidden">
+                      <div
+                        className="bg-primary h-full rounded-full transition-all"
+                        style={{ width: `${province.passRate}%` }}
+                      />
+                    </div>
+                  </div>
+                ))}
             </div>
-          )}
-          <ChartContainer
-            config={{
-              passRate: {
-                label: "Pass Rate",
-                color: "hsl(var(--chart-1))",
-              },
-            }}
-            className="h-[250px]"
-          >
-            <ResponsiveContainer width="100%" height="100%">
-              <BarChart data={stats.provinces}>
-                <CartesianGrid strokeDasharray="3 3" />
-                <XAxis dataKey="province" angle={-45} textAnchor="end" height={80} fontSize={11} />
-                <YAxis domain={[0, 100]} fontSize={12} />
-                <ChartTooltip content={<ChartTooltipContent />} />
-                <Bar dataKey="passRate" fill="var(--color-passRate)" radius={[4, 4, 0, 0]} name="Pass Rate (%)" />
-              </BarChart>
-            </ResponsiveContainer>
-          </ChartContainer>
-        </CardContent>
-      </Card>
+          </CardContent>
+        </Card>
+      )}
     </div>
   )
 }

@@ -1,13 +1,14 @@
 "use client"
 
 import { useState, useRef, useEffect } from "react"
-import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
+import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
+import { ScrollArea } from "@/components/ui/scroll-area"
 import { MessageCircle, X, Send, Loader2 } from "lucide-react"
 
 interface Message {
-  role: "user" | "bot"
+  role: "user" | "assistant"
   content: string
 }
 
@@ -15,135 +16,124 @@ export function Chatbot() {
   const [isOpen, setIsOpen] = useState(false)
   const [messages, setMessages] = useState<Message[]>([
     {
-      role: "bot",
+      role: "assistant",
       content:
-        "Hi! I'm your South African university admissions assistant. I can help you find courses, understand APS requirements, and answer questions about admissions. How can I assist you today?",
+        "Hi! I'm here to help you with information about South African universities and courses. Ask me anything!",
     },
   ])
   const [input, setInput] = useState("")
   const [isLoading, setIsLoading] = useState(false)
-  const messagesEndRef = useRef<HTMLDivElement>(null)
-
-  const scrollToBottom = () => {
-    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" })
-  }
+  const scrollRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
-    scrollToBottom()
+    if (scrollRef.current) {
+      scrollRef.current.scrollTop = scrollRef.current.scrollHeight
+    }
   }, [messages])
 
   const handleSend = async () => {
     if (!input.trim() || isLoading) return
 
-    const userMessage: Message = { role: "user", content: input }
-    const newMessages = [...messages, userMessage]
-    setMessages(newMessages)
+    const userMessage = input.trim()
     setInput("")
+    setMessages((prev) => [...prev, { role: "user", content: userMessage }])
     setIsLoading(true)
 
     try {
       const response = await fetch("/api/chat", {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          messages: newMessages,
-        }),
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ message: userMessage, history: messages }),
       })
 
-      if (!response.ok) {
-        throw new Error("Failed to get response")
-      }
-
       const data = await response.json()
-      const botMessage: Message = {
-        role: "bot",
-        content: data.message,
-      }
 
-      setMessages([...newMessages, botMessage])
+      if (data.success) {
+        setMessages((prev) => [...prev, { role: "assistant", content: data.response }])
+      } else {
+        setMessages((prev) => [
+          ...prev,
+          { role: "assistant", content: "Sorry, I encountered an error. Please try again." },
+        ])
+      }
     } catch (error) {
       console.error("Chat error:", error)
-      const errorMessage: Message = {
-        role: "bot",
-        content:
-          "I apologize, but I'm having trouble responding right now. Please try again or use the 'Find Course' feature to search for programs.",
-      }
-      setMessages([...newMessages, errorMessage])
+      setMessages((prev) => [
+        ...prev,
+        { role: "assistant", content: "Sorry, I'm having trouble connecting. Please try again later." },
+      ])
     } finally {
       setIsLoading(false)
     }
   }
 
   const quickQuestions = [
-    "What APS score do I need for Medicine?",
-    "Which universities offer Engineering?",
-    "How is APS calculated?",
-    "What are the requirements for BSc Computer Science?",
+    "What APS do I need for Medicine?",
+    "Tell me about Computer Science courses",
+    "How do I calculate my APS?",
   ]
-
-  const handleQuickQuestion = (question: string) => {
-    setInput(question)
-  }
 
   return (
     <>
-      {/* Chatbot Toggle Button */}
-      <Button
-        onClick={() => setIsOpen(!isOpen)}
-        className="fixed bottom-4 right-4 h-14 w-14 rounded-full shadow-lg z-50"
-        size="icon"
-      >
-        {isOpen ? <X className="h-6 w-6" /> : <MessageCircle className="h-6 w-6" />}
-      </Button>
+      {/* Floating Button */}
+      {!isOpen && (
+        <Button
+          onClick={() => setIsOpen(true)}
+          className="fixed bottom-4 right-4 md:bottom-6 md:right-6 h-12 w-12 md:h-14 md:w-14 rounded-full shadow-lg z-50"
+          size="icon"
+        >
+          <MessageCircle className="h-5 w-5 md:h-6 md:w-6" />
+        </Button>
+      )}
 
-      {/* Chatbot Window */}
+      {/* Chat Window */}
       {isOpen && (
-        <Card className="fixed bottom-20 right-4 w-[400px] h-[600px] shadow-xl flex flex-col z-50">
-          <CardHeader className="border-b pb-3">
-            <CardTitle className="flex items-center gap-2 text-lg">
-              <MessageCircle className="h-5 w-5" />
-              University Assistant
-            </CardTitle>
-            <p className="text-xs text-muted-foreground mt-1">Powered by AI • Ask about SA universities & courses</p>
+        <Card className="fixed bottom-4 right-4 md:bottom-6 md:right-6 w-[calc(100vw-2rem)] sm:w-96 h-[500px] md:h-[600px] shadow-2xl z-50 flex flex-col">
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-3 border-b">
+            <CardTitle className="text-base md:text-lg">Course Assistant</CardTitle>
+            <Button variant="ghost" size="icon" onClick={() => setIsOpen(false)} className="h-8 w-8">
+              <X className="h-4 w-4" />
+            </Button>
           </CardHeader>
-          <CardContent className="flex-1 flex flex-col p-4 gap-4 overflow-hidden">
-            <div className="flex-1 overflow-y-auto space-y-4 pr-2">
-              {messages.map((message, index) => (
-                <div key={index} className={`flex ${message.role === "user" ? "justify-end" : "justify-start"}`}>
-                  <div
-                    className={`max-w-[85%] rounded-lg p-3 ${
-                      message.role === "user" ? "bg-primary text-primary-foreground" : "bg-muted text-muted-foreground"
-                    }`}
-                  >
-                    <p className="text-sm whitespace-pre-wrap">{message.content}</p>
+          <CardContent className="flex-1 flex flex-col p-0 overflow-hidden">
+            <ScrollArea className="flex-1 p-4" ref={scrollRef}>
+              <div className="space-y-4">
+                {messages.map((message, index) => (
+                  <div key={index} className={`flex ${message.role === "user" ? "justify-end" : "justify-start"}`}>
+                    <div
+                      className={`max-w-[80%] rounded-lg p-3 text-sm ${
+                        message.role === "user"
+                          ? "bg-primary text-primary-foreground"
+                          : "bg-secondary text-secondary-foreground"
+                      }`}
+                    >
+                      {message.content}
+                    </div>
                   </div>
-                </div>
-              ))}
-              {isLoading && (
-                <div className="flex justify-start">
-                  <div className="bg-muted rounded-lg p-3 flex items-center gap-2">
-                    <Loader2 className="h-4 w-4 animate-spin" />
-                    <span className="text-sm text-muted-foreground">Thinking...</span>
+                ))}
+                {isLoading && (
+                  <div className="flex justify-start">
+                    <div className="bg-secondary rounded-lg p-3">
+                      <Loader2 className="h-4 w-4 animate-spin" />
+                    </div>
                   </div>
-                </div>
-              )}
-              <div ref={messagesEndRef} />
-            </div>
+                )}
+              </div>
+            </ScrollArea>
 
-            {/* Quick Questions */}
             {messages.length === 1 && (
-              <div className="space-y-2">
-                <p className="text-xs text-muted-foreground font-medium">Quick questions:</p>
-                <div className="grid grid-cols-1 gap-2">
-                  {quickQuestions.map((question, idx) => (
+              <div className="p-4 border-t border-b bg-muted/30">
+                <p className="text-xs text-muted-foreground mb-2">Quick questions:</p>
+                <div className="flex flex-wrap gap-2">
+                  {quickQuestions.map((question, index) => (
                     <Button
-                      key={idx}
+                      key={index}
                       variant="outline"
                       size="sm"
-                      onClick={() => handleQuickQuestion(question)}
-                      className="text-xs h-auto py-2 px-3 justify-start text-left whitespace-normal"
+                      onClick={() => {
+                        setInput(question)
+                      }}
+                      className="text-xs h-auto py-1.5 bg-transparent"
                     >
                       {question}
                     </Button>
@@ -152,19 +142,25 @@ export function Chatbot() {
               </div>
             )}
 
-            {/* Input Area */}
-            <div className="flex gap-2 pt-2 border-t">
-              <Input
-                placeholder="Ask about courses, APS, or universities..."
-                value={input}
-                onChange={(e) => setInput(e.target.value)}
-                onKeyPress={(e) => e.key === "Enter" && !e.shiftKey && handleSend()}
-                disabled={isLoading}
-                className="text-sm"
-              />
-              <Button onClick={handleSend} size="icon" disabled={isLoading || !input.trim()}>
-                {isLoading ? <Loader2 className="h-4 w-4 animate-spin" /> : <Send className="h-4 w-4" />}
-              </Button>
+            <div className="p-4 border-t">
+              <div className="flex gap-2">
+                <Input
+                  value={input}
+                  onChange={(e) => setInput(e.target.value)}
+                  onKeyPress={(e) => e.key === "Enter" && handleSend()}
+                  placeholder="Ask about courses..."
+                  disabled={isLoading}
+                  className="text-sm"
+                />
+                <Button
+                  onClick={handleSend}
+                  disabled={isLoading || !input.trim()}
+                  size="icon"
+                  className="flex-shrink-0"
+                >
+                  <Send className="h-4 w-4" />
+                </Button>
+              </div>
             </div>
           </CardContent>
         </Card>
