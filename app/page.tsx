@@ -257,32 +257,6 @@ export default function Home() {
           </div>
         </main>
 
-        {/* Dashboard Section */}
-        <div className="flex-1 space-y-8 p-8 pt-6">
-          <div className="flex items-center justify-between">
-            <div>
-              <h1 className="text-3xl font-bold tracking-tight">Dashboard</h1>
-              <p className="text-muted-foreground">Stay updated with the latest education news and statistics</p>
-            </div>
-          </div>
-
-          <Separator />
-
-          {/* Pass Rate Charts */}
-          <div>
-            <h2 className="text-2xl font-bold mb-4">Matric Pass Rates</h2>
-            <PassRateCharts />
-          </div>
-
-          <Separator />
-
-          {/* Latest News */}
-          <div>
-            <h2 className="text-2xl font-bold mb-4">Latest Education News</h2>
-            <NewsGrid />
-          </div>
-        </div>
-
         {/* Footer */}
         <footer className="bg-gray-50 border-t border-gray-200 mt-16">
           <div className="container mx-auto px-4 py-8">
