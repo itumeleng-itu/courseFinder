@@ -43,7 +43,7 @@ export function Chatbot() {
       const response = await fetch("/api/chat", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ message: userMessage, history: messages }),
+        body: JSON.stringify({ message: userMessage, conversationHistory: messages }),
       })
 
       const data = await response.json()
@@ -51,9 +51,10 @@ export function Chatbot() {
       if (data.success) {
         setMessages((prev) => [...prev, { role: "assistant", content: data.response }])
       } else {
+        const errMsg = typeof data.error === "string" ? data.error : "Sorry, I encountered an error. Please try again."
         setMessages((prev) => [
           ...prev,
-          { role: "assistant", content: "Sorry, I encountered an error. Please try again." },
+          { role: "assistant", content: errMsg },
         ])
       }
     } catch (error) {
@@ -88,15 +89,15 @@ export function Chatbot() {
 
       {/* Chat Window */}
       {isOpen && (
-        <Card className="fixed bottom-4 right-4 md:bottom-6 md:right-6 w-[calc(100vw-2rem)] sm:w-96 h-[500px] md:h-[600px] shadow-2xl z-50 flex flex-col">
+        <Card className="fixed bottom-4 right-4 md:bottom-6 md:right-6 w-[calc(100vw-2rem)] max-w-sm sm:w-96 h-[70vh] sm:h-[500px] md:h-[600px] shadow-2xl z-50 flex flex-col">
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-3 border-b">
-            <CardTitle className="text-base md:text-lg">Course Assistant</CardTitle>
+            <CardTitle className="text-sm sm:text-base md:text-lg">Course Assistant</CardTitle>
             <Button variant="ghost" size="icon" onClick={() => setIsOpen(false)} className="h-8 w-8">
               <X className="h-4 w-4" />
             </Button>
           </CardHeader>
           <CardContent className="flex-1 flex flex-col p-0 overflow-hidden">
-            <ScrollArea className="flex-1 p-4" ref={scrollRef}>
+            <ScrollArea className="flex-1 p-3 sm:p-4" ref={scrollRef}>
               <div className="space-y-4">
                 {messages.map((message, index) => (
                   <div key={index} className={`flex ${message.role === "user" ? "justify-end" : "justify-start"}`}>
@@ -122,9 +123,9 @@ export function Chatbot() {
             </ScrollArea>
 
             {messages.length === 1 && (
-              <div className="p-4 border-t border-b bg-muted/30">
+              <div className="p-3 sm:p-4 border-t border-b bg-muted/30">
                 <p className="text-xs text-muted-foreground mb-2">Quick questions:</p>
-                <div className="flex flex-wrap gap-2">
+                <div className="flex flex-col sm:flex-row sm:flex-wrap gap-2">
                   {quickQuestions.map((question, index) => (
                     <Button
                       key={index}
@@ -133,7 +134,7 @@ export function Chatbot() {
                       onClick={() => {
                         setInput(question)
                       }}
-                      className="text-xs h-auto py-1.5 bg-transparent"
+                      className="text-xs h-auto py-1.5 bg-transparent text-left justify-start"
                     >
                       {question}
                     </Button>
@@ -142,7 +143,7 @@ export function Chatbot() {
               </div>
             )}
 
-            <div className="p-4 border-t">
+            <div className="p-3 sm:p-4 border-t">
               <div className="flex gap-2">
                 <Input
                   value={input}

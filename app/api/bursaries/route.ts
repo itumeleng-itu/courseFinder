@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server"
 
-export const dynamic = "force-dynamic"
+// Removed dynamic export due to conflict with output: "export" in next.config.js
+// export const dynamic = "force-dynamic"
 export const revalidate = 3600 // 1 hour
 
 const BURSARIES_DATA = [

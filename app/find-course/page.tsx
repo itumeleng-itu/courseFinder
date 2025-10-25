@@ -1,8 +1,8 @@
 "use client"
 
 import { useState } from "react"
-import { AppSidebar } from "@/components/app-sidebar"
-import { SidebarInset, SidebarTrigger } from "@/components/ui/sidebar"
+import { DashboardSidebar } from "@/components/app-sidebar"
+import { SidebarInset } from "@/components/ui/sidebar"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
@@ -10,6 +10,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Badge } from "@/components/ui/badge"
 import { ScrollArea } from "@/components/ui/scroll-area"
 import { Separator } from "@/components/ui/separator"
+import { BreadcrumbNavigation } from "@/components/breadcrumb-navigation"
 import { Search, GraduationCap, X, Plus, Calculator } from "lucide-react"
 import { getAllUniversities } from "@/data/universities"
 import type { Course, University } from "@/data/universities/base-university"
@@ -155,25 +156,29 @@ export default function FindCoursePage() {
 
   return (
     <>
-      <AppSidebar />
+      <DashboardSidebar />
       <SidebarInset>
-        <header className="flex h-16 shrink-0 items-center gap-2 border-b">
-          <div className="flex items-center gap-2 px-4">
-            <SidebarTrigger className="-ml-1" />
-            <Separator orientation="vertical" className="mr-2 h-4" />
-            <Calculator className="h-5 w-5" />
-            <h1 className="text-lg font-semibold">Find Courses</h1>
+        <div className="container mx-auto px-4 pt-3">
+          <BreadcrumbNavigation />
+        </div>
+        <header className="flex h-16 shrink-0 items-center gap-2 border-b px-4">
+          <Separator orientation="vertical" className="mr-2 h-4" />
+          <div className="flex items-center gap-2">
+            <Search className="h-5 w-5 text-purple-600" />
+            <h1 className="text-lg font-semibold">Find a Course</h1>
           </div>
         </header>
 
         {/* Mobile/Desktop Layout */}
         <div className="flex flex-col lg:flex-row h-[calc(100vh-4rem)] overflow-hidden">
+
           {/* Left Panel - Stacks on mobile, side-by-side on desktop */}
           <div className="w-full lg:w-[400px] border-b lg:border-b-0 lg:border-r bg-card flex-shrink-0">
+
             <ScrollArea className="h-[50vh] lg:h-full">
-              <div className="p-4 md:p-6 space-y-4 md:space-y-6">
+              <div className="p-4 space-y-4">
                 <div>
-                  <h2 className="text-xl font-bold mb-2">Calculate Your APS</h2>
+                  <h2 className="text-lg md:text-xl font-bold mb-2">Calculate Your APS</h2>
                   <p className="text-sm text-muted-foreground">
                     Enter your matric subjects and marks to find qualifying courses
                   </p>
@@ -187,7 +192,7 @@ export default function FindCoursePage() {
                   </CardHeader>
                   <CardContent className="space-y-3">
                     <Select value={currentSubject} onValueChange={setCurrentSubject}>
-                      <SelectTrigger>
+                      <SelectTrigger className="text-sm">
                         <SelectValue placeholder="Select subject" />
                       </SelectTrigger>
                       <SelectContent>
@@ -206,14 +211,13 @@ export default function FindCoursePage() {
                       onChange={(e) => setCurrentPercentage(e.target.value)}
                       min="0"
                       max="100"
-                      onKeyPress={(e) => {
-                        if (e.key === "Enter") {
-                          addSubject()
-                        }
-                      }}
+                      className="text-sm"
                     />
-
-                    <Button onClick={addSubject} className="w-full" disabled={subjects.length >= 7}>
+                    <Button
+                      onClick={addSubject}
+                      disabled={!currentSubject || !currentPercentage}
+                      className="w-full text-sm"
+                    >
                       <Plus className="h-4 w-4 mr-2" />
                       Add Subject ({subjects.length}/7)
                     </Button>

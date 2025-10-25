@@ -5,9 +5,10 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Input } from "@/components/ui/input"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
-import { AppSidebar } from "@/components/app-sidebar"
-import { SidebarInset, SidebarTrigger } from "@/components/ui/sidebar"
+import { DashboardSidebar } from "@/components/app-sidebar"
+import { SidebarInset } from "@/components/ui/sidebar"
 import { Separator } from "@/components/ui/separator"
+import { BreadcrumbNavigation } from "@/components/breadcrumb-navigation"
 import { Search, ExternalLink, Calendar, DollarSign, GraduationCap, CheckCircle2 } from "lucide-react"
 import { Skeleton } from "@/components/ui/skeleton"
 
@@ -67,10 +68,12 @@ export default function BursariesPage() {
 
   return (
     <>
-      <AppSidebar />
+      <DashboardSidebar />
       <SidebarInset>
+        <div className="container mx-auto px-4 pt-3">
+          <BreadcrumbNavigation />
+        </div>
         <header className="flex h-16 shrink-0 items-center gap-2 border-b px-4">
-          <SidebarTrigger className="-ml-1" />
           <Separator orientation="vertical" className="mr-2 h-4" />
           <div className="flex items-center gap-2">
             <GraduationCap className="h-5 w-5 text-blue-600" />
@@ -79,11 +82,12 @@ export default function BursariesPage() {
         </header>
 
         <main className="flex-1 overflow-auto">
-          <div className="container mx-auto p-6 max-w-7xl">
+          <div className="container mx-auto p-4 max-w-7xl">
+
             {/* Header Section */}
-            <div className="mb-8">
-              <h2 className="text-3xl font-bold text-gray-900 mb-2">Available Bursaries</h2>
-              <p className="text-gray-600">Search and filter through available bursaries for South African students</p>
+            <div className="mb-6">
+              <h2 className="text-2xl md:text-3xl font-bold text-gray-900 mb-2">Available Bursaries</h2>
+              <p className="text-gray-600 text-sm md:text-base">Search and filter through available bursaries for South African students</p>
             </div>
 
             {/* Search Bar */}
@@ -110,7 +114,7 @@ export default function BursariesPage() {
 
             {/* Bursaries Grid */}
             {loading ? (
-              <div className="grid gap-6 md:grid-cols-2">
+              <div className="grid gap-6 grid-cols-1 md:grid-cols-2">
                 {[1, 2, 3, 4].map((i) => (
                   <Card key={i}>
                     <CardHeader>
@@ -140,7 +144,7 @@ export default function BursariesPage() {
                 </CardContent>
               </Card>
             ) : (
-              <div className="grid gap-6 md:grid-cols-2">
+              <div className="grid gap-6 grid-cols-1 md:grid-cols-2">
                 {filteredBursaries.map((bursary) => (
                   <Card key={bursary.id} className="hover:shadow-lg transition-shadow">
                     <CardHeader>

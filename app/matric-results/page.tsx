@@ -3,14 +3,15 @@
 import type React from "react"
 
 import { useState } from "react"
-import { AppSidebar } from "@/components/app-sidebar"
-import { SidebarInset, SidebarTrigger } from "@/components/ui/sidebar"
+import { DashboardSidebar } from "@/components/app-sidebar"
+import { SidebarInset } from "@/components/ui/sidebar"
 import { Separator } from "@/components/ui/separator"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
+import { BreadcrumbNavigation } from "@/components/breadcrumb-navigation"
 import { ExternalLink, Search, Phone, Mail, AlertCircle, FileText, CheckCircle } from "lucide-react"
 import { Chatbot } from "@/components/chatbot"
 
@@ -50,17 +51,21 @@ export default function MatricResultsPage() {
 
   return (
     <>
-      <AppSidebar />
+      <DashboardSidebar />
       <SidebarInset>
-        <header className="flex h-16 shrink-0 items-center gap-2 border-b">
-          <div className="flex items-center gap-2 px-4">
-            <SidebarTrigger className="-ml-1" />
-            <Separator orientation="vertical" className="mr-2 h-4" />
-            <h1 className="text-lg font-semibold">View Matric Results</h1>
+        <div className="container mx-auto px-4 pt-3">
+          <BreadcrumbNavigation />
+        </div>
+        <header className="flex h-16 shrink-0 items-center gap-2 border-b px-4">
+          <Separator orientation="vertical" className="mr-2 h-4" />
+          <div className="flex items-center gap-2">
+            <CheckCircle className="h-5 w-5 text-green-600" />
+            <h1 className="text-lg font-semibold">Matric Results</h1>
           </div>
         </header>
 
         <div className="flex flex-1 flex-col gap-6 p-4 max-w-4xl mx-auto">
+
           {/* Official Portal Link */}
           <Alert>
             <FileText className="h-4 w-4" />
