@@ -34,7 +34,8 @@ import { Logo } from "@/components/logo";
 import type { Route } from "./nav-main";
 import DashboardNavigation from "@/components/nav-main";
 import { NotificationsPopover } from "@/components/nav-notifications";
-import { TeamSwitcher } from "@/components/team-switcher";
+import { Personalise } from "@/components/personalise";
+import { ThemeToggle } from "@/components/theme-toggle"
 
 
 const sampleNotifications = [
@@ -94,11 +95,7 @@ const dashboardRoutes: Route[] = [
   },
 ];
 
-const teams = [
-  { id: "1", name: "Alpha Inc.", logo: Logo, plan: "Free" },
-  { id: "2", name: "Beta Corp.", logo: Logo, plan: "Free" },
-  { id: "3", name: "Gamma Tech", logo: Logo, plan: "Free" },
-];
+// ... existing code ...
 
 export function DashboardSidebar() {
   const { state } = useSidebar();
@@ -129,19 +126,20 @@ export function DashboardSidebar() {
             "flex items-center gap-2",
             isCollapsed ? "flex-row md:flex-col-reverse" : "flex-row"
           )}
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ duration: 0.8 }}
+          initial={{ opacity: 0, scale: 0.5 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ duration: 0.5 }}
         >
           <NotificationsPopover notifications={sampleNotifications} />
-          <SidebarTrigger />
+          <ThemeToggle />
+          <SidebarTrigger className="ml-auto" />
         </motion.div>
       </SidebarHeader>
       <SidebarContent className="gap-4 px-2 py-4">
         <DashboardNavigation routes={dashboardRoutes} />
       </SidebarContent>
       <SidebarFooter className="px-2">
-        <TeamSwitcher teams={teams} />
+        <Personalise />
       </SidebarFooter>
     </Sidebar>
   );

@@ -5,6 +5,7 @@ import { Toaster } from "@/components/ui/toaster"
 import { GoogleAnalytics } from "@/components/GoogleAnalytics"
 import { Suspense } from "react"
 import { SidebarProvider } from "@/components/ui/sidebar"
+import { ThemeProvider } from "@/components/theme-provider"
 
 const inter = Inter({ 
   subsets: ["latin"],
@@ -69,7 +70,7 @@ export default function RootLayout({
           dangerouslySetInnerHTML={{
             __html: `
               window.dataLayer = window.dataLayer || [];
-              function gtag(){dataLayer.push(arguments);}
+              function gtag(){dataLayer.push(arguments);} 
               gtag('js', new Date());
               gtag('config', 'G-3C11RRX3FV');
 
@@ -97,11 +98,13 @@ export default function RootLayout({
             style={{ display: "none", visibility: "hidden" }}
           ></iframe>
         </noscript>
-        <GoogleAnalytics />
-        <SidebarProvider>
-          <Suspense>{children}</Suspense>
-        </SidebarProvider>
-        <Toaster />
+        <ThemeProvider attribute="class" defaultTheme="system" enableSystem storageKey="cf-theme" disableTransitionOnChange>
+          <GoogleAnalytics />
+          <SidebarProvider>
+            <Suspense>{children}</Suspense>
+          </SidebarProvider>
+          <Toaster />
+        </ThemeProvider>
       </body>
     </html>
   )
