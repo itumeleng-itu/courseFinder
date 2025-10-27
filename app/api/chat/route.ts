@@ -8,14 +8,35 @@ const OPENROUTER_API_URL = "https://openrouter.ai/api/v1/chat/completions"
 
 export async function POST(request: Request) {
   try {
-    const { message, conversationHistory = [], model } = await request.json()
+    // Validate request body
+    let requestBody;
+    try {
+      requestBody = await request.json();
+    } catch (error) {
+      console.error("Failed to parse request body:", error);
+      return NextResponse.json({ 
+        error: "Invalid request body format", 
+        details: "Request body must be valid JSON" 
+      }, { status: 400 });
+    }
+    
+    const { message, conversationHistory = [], model } = requestBody;
 
-    if (!message) {
-      return NextResponse.json({ error: "Message is required" }, { status: 400 })
+    // Validate required fields
+    if (!message || typeof message !== 'string' || message.trim() === '') {
+      return NextResponse.json({ 
+        error: "Message is required", 
+        details: "Message must be a non-empty string" 
+      }, { status: 400 });
     }
 
+    // Check API configuration
     if (!OPENROUTER_API_KEY) {
-      return NextResponse.json({ error: "Server is not configured with OpenRouter API key" }, { status: 500 })
+      console.error("OpenRouter API key is not configured");
+      return NextResponse.json({ 
+        error: "Server configuration error", 
+        details: "Chat service is currently unavailable" 
+      }, { status: 500 });
     }
 
     const selectedModel = model || "google/gemini-2.0-flash-exp:free"
@@ -66,21 +87,32 @@ Keep responses concise but informative. Use a friendly, supportive tone.`
 
     const start = Date.now()
     // Make request to OpenRouter API
-    const response = await fetch(OPENROUTER_API_URL, {
-      method: "POST",
-      headers: {
-        "Authorization": `Bearer ${OPENROUTER_API_KEY}`,
-        "HTTP-Referer": "https://coursefinder-sa.vercel.app", // Your site URL
-        "X-Title": "CourseFinder SA", // Your site name
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify({
-        model: selectedModel,
-        messages,
-        temperature: 0.7,
-        max_tokens: 4096
-      })
-    })
+    let response;
+    try {
+      response = await fetch(OPENROUTER_API_URL, {
+        method: "POST",
+        headers: {
+          "Authorization": `Bearer ${OPENROUTER_API_KEY}`,
+          "HTTP-Referer": "https://coursefinder-sa.vercel.app", // Your site URL
+          "X-Title": "CourseFinder SA", // Your site name
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+          model: selectedModel,
+          messages,
+          temperature: 0.7,
+          max_tokens: 4096
+        }),
+        // Add timeout to prevent hanging requests
+        signal: AbortSignal.timeout(15000) // 15 second timeout
+      });
+    } catch (error) {
+      console.error("Failed to connect to OpenRouter API:", error);
+      return NextResponse.json({ 
+        success: false, 
+        error: "Failed to connect to chat service. Please try again later." 
+      }, { status: 503 });
+    }
 
     // Rate limit / error handling
     if (response.status === 429) {
@@ -130,19 +162,11 @@ Keep responses concise but informative. Use a friendly, supportive tone.`
       }
     })
   } catch (error) {
-    console.error("Chat API Error:", error)
-    
-    return NextResponse.json(
-      {
-        success: false,
-        error: "Failed to generate response. Please try again.",
-        _metadata: {
-          timestamp: new Date().toISOString(),
-          errorType: error instanceof Error ? error.name : "Unknown",
-          errorMessage: error instanceof Error ? error.message : "Unknown error"
-        }
-      },
-      { status: 500 },
-    )
+    console.error("Unhandled error in chat API:", error);
+    return NextResponse.json({
+      success: false,
+      error: "An unexpected error occurred. Please try again later.",
+      errorId: Date.now().toString(36)
+    }, { status: 500 });
   }
 }

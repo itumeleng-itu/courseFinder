@@ -4,11 +4,9 @@ import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuLabel,
-  DropdownMenuSeparator,
   DropdownMenuTrigger,
   DropdownMenuRadioGroup,
   DropdownMenuRadioItem,
-  DropdownMenuItem,
 } from "@/components/ui/dropdown-menu"
 import {
   SidebarMenu,
@@ -16,19 +14,25 @@ import {
   SidebarMenuItem,
   useSidebar,
 } from "@/components/ui/sidebar"
-import { Settings } from "lucide-react"
+import { Settings, ChevronDown } from "lucide-react"
 import { useTheme } from "next-themes"
 import * as React from "react"
 
 export function Personalise() {
   const { isMobile } = useSidebar()
   const { theme, setTheme } = useTheme()
+  const [menuOpen, setMenuOpen] = React.useState(false)
 
   return (
     <SidebarMenu>
       <SidebarMenuItem>
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
+        <DropdownMenu open={menuOpen} onOpenChange={setMenuOpen}>
+          <DropdownMenuTrigger
+            asChild
+            aria-haspopup="menu"
+            aria-expanded={menuOpen}
+            aria-controls="personalise-menu"
+          >
             <SidebarMenuButton
               size="lg"
               className="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground"
@@ -40,9 +44,14 @@ export function Personalise() {
                 <span className="truncate font-semibold">Personalise</span>
                 <span className="truncate text-xs">App settings</span>
               </div>
+              <ChevronDown
+                className={`ml-auto size-4 transition-transform ${menuOpen ? "rotate-180" : "rotate-0"}`}
+                aria-hidden="true"
+              />
             </SidebarMenuButton>
           </DropdownMenuTrigger>
           <DropdownMenuContent
+            id="personalise-menu"
             className="w-[--radix-dropdown-menu-trigger-width] min-w-56 rounded-lg"
             align="start"
             side={isMobile ? "bottom" : "right"}
@@ -60,17 +69,6 @@ export function Personalise() {
               <DropdownMenuRadioItem value="dark">Dark</DropdownMenuRadioItem>
             </DropdownMenuRadioGroup>
 
-            <DropdownMenuSeparator />
-
-            <DropdownMenuLabel className="text-xs text-muted-foreground">
-              About
-            </DropdownMenuLabel>
-            <DropdownMenuItem className="whitespace-normal leading-snug text-sm">
-              CourseFinder helps you discover South African university courses you
-              qualify for based on your NSC subjects and APS. It aggregates
-              program requirements, provides APS calculators, and surfaces
-              bursary information.
-            </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
       </SidebarMenuItem>

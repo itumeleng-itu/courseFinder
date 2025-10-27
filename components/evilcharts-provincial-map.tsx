@@ -1,4 +1,4 @@
-﻿"use client"
+"use client"
 
 import { useEffect, useMemo, useRef, useState, useCallback } from "react"
 import * as echarts from "echarts"
@@ -27,6 +27,7 @@ const COLOR_SCHEMES: Record<string, string[]> = {
   Warm: ["#5b1a18", "#8c2d04", "#cc4c02", "#ec7014", "#fe9929", "#fec44f", "#fee391", "#fff7bc"],
   Cool: ["#023858", "#045a8d", "#0570b0", "#3690c0", "#74a9cf", "#a6bddb", "#d0d1e6", "#e0e9f3"],
   HighContrast: ["#0b1026", "#193170", "#2657a6", "#2ea3f2", "#58d5ff", "#95e8ff", "#c2f3ff"],
+  Grayscale: ["#f5f5f5", "#e5e5e5", "#d4d4d4", "#a3a3a3", "#737373", "#525252", "#404040", "#262626", "#171717", "#0a0a0a"],
 }
 
 // Session cache helpers
@@ -121,7 +122,7 @@ export function EvilChartsProvincialMap() {
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
 
-  const [colorScheme, setColorScheme] = useState<keyof typeof COLOR_SCHEMES>("Viridis")
+  const [colorScheme, setColorScheme] = useState<keyof typeof COLOR_SCHEMES>("Grayscale")
   const [threshold, setThreshold] = useState<number>(60)
   const [selectedProvince, setSelectedProvince] = useState<(typeof PROVINCES)[number] | null>(null)
 
@@ -258,7 +259,7 @@ export function EvilChartsProvincialMap() {
         },
         emphasis: {
           label: { show: true, color: "#111827", fontWeight: "bold" },
-          itemStyle: { areaColor: "#fde68a" },
+          itemStyle: { areaColor: "#d1d5db" },
         },
       },
       series: [

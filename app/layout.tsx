@@ -1,21 +1,16 @@
 import type React from "react"
 import "@/app/globals.css"
-import { Inter, JetBrains_Mono } from "next/font/google"
+import { Poppins } from "next/font/google"
 import { Toaster } from "@/components/ui/toaster"
 import { GoogleAnalytics } from "@/components/GoogleAnalytics"
 import { Suspense } from "react"
 import { SidebarProvider } from "@/components/ui/sidebar"
 import { ThemeProvider } from "@/components/theme-provider"
 
-const inter = Inter({ 
+const poppins = Poppins({
   subsets: ["latin"],
-  variable: "--font-inter",
-  display: "swap",
-})
-
-const jetbrainsMono = JetBrains_Mono({
-  subsets: ["latin"],
-  variable: "--font-mono",
+  weight: ["100","200","300","400","500","600","700","800","900"],
+  variable: "--font-poppins",
   display: "swap",
 })
 
@@ -89,7 +84,7 @@ export default function RootLayout({
           }}
         />
       </head>
-      <body className={`${inter.variable} ${jetbrainsMono.variable} font-sans antialiased`}>
+      <body className={`${poppins.variable} font-sans antialiased`}>
         <noscript>
           <iframe
             src="https://www.googletagmanager.com/ns.html?id=GTM-PVJ9QBLV"

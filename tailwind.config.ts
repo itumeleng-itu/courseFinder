@@ -11,19 +11,19 @@ const config: Config = {
   theme: {
   	extend: {
   		fontFamily: {
-  			sans: [
-  				'var(--font-inter)',
-  				'Inter',
-  				'system-ui',
-  				'sans-serif'
-  			],
-  			mono: [
-  				'var(--font-mono)',
-  				'JetBrains Mono',
-  				'Consolas',
-  				'monospace'
-  			]
-  		},
+				sans: [
+					'var(--font-poppins)',
+					'Poppins',
+					'system-ui',
+					'sans-serif'
+				],
+				mono: [
+					'var(--font-mono)',
+					'JetBrains Mono',
+					'Consolas',
+					'monospace'
+				]
+			},
   		fontSize: {
   			xs: [
   				'0.75rem',

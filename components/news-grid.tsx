@@ -4,7 +4,7 @@ import { useEffect, useState, useCallback } from "react"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { Skeleton } from "@/components/ui/skeleton"
-import { Calendar, ExternalLink, RefreshCw, AlertCircle } from "lucide-react"
+import { ExternalLink, RefreshCw, AlertCircle } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import Image from "next/image"
 

@@ -1,12 +1,15 @@
 "use client"
 
-import { useEffect, useRef, useState } from "react"
+import { useEffect, useRef, useState, useTransition } from "react"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Skeleton } from "@/components/ui/skeleton"
 import { Badge } from "@/components/ui/badge"
-import { TrendingUp, Users } from "lucide-react"
+import { TrendingUp, Users, RefreshCw, Clock } from "lucide-react"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import * as echarts from "echarts"
+import { useAutoRefresh } from "@/hooks/use-auto-refresh"
+import { useTimeSync, formatInTimeZone } from "@/hooks/use-time-sync"
+import { logEvent } from "@/lib/logger"
 
 interface ProvinceStats {
   name: string
@@ -29,21 +32,39 @@ export function PassRateCharts() {
   const [selectedProvince, setSelectedProvince] = useState<string>("national")
   const [error, setError] = useState<string | null>(null)
   const [passedFailed, setPassedFailed] = useState<{ passed: number; failed: number } | null>(null)
+  const [bachelor, setBachelor] = useState<{ percent: number; count: number } | null>(null)
+  const [diploma, setDiploma] = useState<{ percent: number; count: number } | null>(null)
+  const [higherCert, setHigherCert] = useState<{ percent: number; count: number } | null>(null)
   const pieRef = useRef<HTMLDivElement | null>(null)
   const pieChartRef = useRef<echarts.ECharts | null>(null)
 
-  useEffect(() => {
-    async function fetchStats() {
-      setLoading(true)
-      try {
+  const REFRESH_INTERVAL_MS = Number(process.env.NEXT_PUBLIC_STATS_REFRESH_INTERVAL_MS ?? 60_000)
+  const [isPending, startTransition] = useTransition()
+  const { syncing: timeSyncing, error: timeError, networkTime, driftMs, timezone } = useTimeSync(Number(process.env.NEXT_PUBLIC_NTP_SYNC_INTERVAL_MS ?? 300_000))
+
+  const fetchStats = async (signal?: AbortSignal) => {
+    setLoading(true)
+    try {
         const [statsRes, passRes, nscRes] = await Promise.allSettled([
-          fetch("/api/matric-stats"),
-          fetch("/api/matric-pass-rate"),
-          fetch("/api/nsc-2024"),
+          fetch("/api/matric-stats", { cache: "no-store", signal }),
+          fetch("/api/matric-pass-rate", { cache: "no-store", signal }),
+          fetch("/api/nsc-2024", { cache: "no-store", signal }),
         ])
 
         let nextStats: MatricStats | null = null
-        let nsc2024: { year: number; passRate: number; passes: number; wrote: number; failed: number } | null = null
+        let nsc2024: { 
+          year: number; 
+          passRate: number; 
+          passes: number; 
+          wrote: number; 
+          failed: number; 
+          bachelorPercent?: number; 
+          bachelorPasses?: number;
+          diplomaPercent?: number;
+          diplomaPasses?: number;
+          hcPercent?: number;
+          hcPasses?: number;
+        } | null = null
 
         if (statsRes.status === "fulfilled") {
           try {
@@ -91,6 +112,12 @@ export function PassRateCharts() {
                 passes: Number(nscJson.passes),
                 wrote: Number(nscJson.wrote),
                 failed: Number(nscJson.failed),
+                bachelorPercent: nscJson.bachelorPercent !== undefined ? Number(nscJson.bachelorPercent) : undefined,
+                bachelorPasses: nscJson.bachelorPasses !== undefined ? Number(nscJson.bachelorPasses) : undefined,
+                diplomaPercent: nscJson.diplomaPercent !== undefined ? Number(nscJson.diplomaPercent) : undefined,
+                diplomaPasses: nscJson.diplomaPasses !== undefined ? Number(nscJson.diplomaPasses) : undefined,
+                hcPercent: nscJson.hcPercent !== undefined ? Number(nscJson.hcPercent) : undefined,
+                hcPasses: nscJson.hcPasses !== undefined ? Number(nscJson.hcPasses) : undefined,
               }
               // Prefer official 2024 figures for national section
               if (nextStats) {
@@ -127,19 +154,85 @@ export function PassRateCharts() {
 
         if (nsc2024) {
           setPassedFailed({ passed: nsc2024.passes, failed: nsc2024.failed })
+          if (typeof nsc2024.bachelorPercent === "number" && typeof nsc2024.bachelorPasses === "number") {
+            setBachelor({ percent: nsc2024.bachelorPercent, count: nsc2024.bachelorPasses })
+          }
+          if (typeof nsc2024.diplomaPercent === "number" && typeof nsc2024.diplomaPasses === "number") {
+            setDiploma({ percent: nsc2024.diplomaPercent, count: nsc2024.diplomaPasses })
+          }
+          if (typeof nsc2024.hcPercent === "number" && typeof nsc2024.hcPasses === "number") {
+            setHigherCert({ percent: nsc2024.hcPercent, count: nsc2024.hcPasses })
+          }
         }
 
-        setStats(nextStats)
+        // Build provincial pass rates using the provincial-pass-rates API
+        try {
+          const PROVINCES = [
+            "Gauteng",
+            "Western Cape",
+            "KwaZulu-Natal",
+            "Eastern Cape",
+            "Limpopo",
+            "Mpumalanga",
+            "North West",
+            "Free State",
+            "Northern Cape",
+          ]
+
+          const results = await Promise.allSettled(
+            PROVINCES.map(async (prov) => {
+              const res = await fetch(`/api/provincial-pass-rates?province=${encodeURIComponent(prov)}&years=5`, { cache: "no-store", signal })
+              const json = await res.json()
+              return json
+            })
+          )
+
+          const provinces: ProvinceStats[] = results
+            .filter((r): r is PromiseFulfilledResult<any> => r.status === "fulfilled" && r.value?.success)
+            .map((r) => {
+              const data = r.value
+              const latest = Array.isArray(data?.provinceSeries)
+                ? data.provinceSeries.find((sp: any) => sp.year === data.endYear) ?? data.provinceSeries[data.provinceSeries.length - 1]
+                : null
+              const passRate = typeof latest?.passRate === "number" ? Number(latest.passRate) : 0
+              return { name: String(data.province || ""), passRate, candidates: 0 }
+            })
+            .sort((a, b) => b.passRate - a.passRate)
+
+          if (nextStats) {
+            nextStats = { ...nextStats, provinces }
+          }
+        } catch (e) {
+          // Silently ignore provincial errors to avoid breaking national view
+        }
+
+        startTransition(() => {
+          setStats(nextStats)
+        })
       } catch (err) {
         console.error("Error fetching stats:", err)
         setError("Something went wrong while loading pass rates.")
       } finally {
         setLoading(false)
       }
-    }
+  }
 
-    fetchStats()
+  useEffect(() => {
+    void fetchStats()
   }, [])
+
+  // Log time sync results at top-level to preserve hook order
+  useEffect(() => {
+    if (timeError) logEvent("timeSync:error", { message: timeError })
+    else if (driftMs != null) logEvent("timeSync:success", { driftMs, timezone })
+  }, [timeError, driftMs, timezone])
+
+  const { refreshing, lastUpdated, start, stop } = useAutoRefresh(fetchStats, REFRESH_INTERVAL_MS, { immediate: false, onEvent: (event, detail) => logEvent(event, detail) })
+
+  useEffect(() => {
+    start()
+    return () => stop()
+  }, [start, stop])
 
   useEffect(() => {
     // Initialize or update the pie chart when data is ready
@@ -206,9 +299,31 @@ export function PassRateCharts() {
       ? { name: "National", passRate: stats.national.passRate, candidates: stats.national.totalCandidates }
       : stats.provinces.find((p) => p.name === selectedProvince)
 
+
   return (
     <div className="space-y-4">
-      <div className="flex items-center"><Badge variant="outline">Current Year: 2024</Badge></div>
+      <div className="flex items-center gap-2">
+        <Badge variant="outline">Current Year: 2024</Badge>
+        {refreshing && (
+          <Badge variant="outline" aria-live="polite"><RefreshCw className="mr-1 h-3 w-3 animate-spin" /> Updating…</Badge>
+        )}
+        {lastUpdated && (
+          <Badge variant="outline" title="Last data refresh time">
+            Last updated: {formatInTimeZone(lastUpdated, Intl.DateTimeFormat().resolvedOptions().timeZone || "Africa/Johannesburg", { hour: "2-digit", minute: "2-digit", second: "2-digit" })}
+          </Badge>
+        )}
+        {timeSyncing && (
+          <Badge variant="outline" aria-live="polite"><Clock className="mr-1 h-3 w-3 animate-spin" /> Syncing time…</Badge>
+        )}
+        {!timeSyncing && timeError && (
+          <Badge variant="outline" className="text-red-600" title={timeError}>Time sync error</Badge>
+        )}
+        {!timeError && networkTime && (
+          <Badge variant="outline" title={`Timezone: ${timezone} • Drift: ${driftMs ?? 0}ms`}>
+            Network time: {formatInTimeZone(networkTime, timezone)}
+          </Badge>
+        )}
+      </div>
       {/* Province Selector */}
       <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-4">
         <Select value={selectedProvince} onValueChange={setSelectedProvince}>
@@ -227,7 +342,7 @@ export function PassRateCharts() {
       </div>
 
       {/* Stats Cards */}
-      <div className="grid gap-4 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3">
+      <div className="grid gap-4 grid-cols-1 sm:grid-cols-2 lg:grid-cols-5">
         {/* Pass Rate Card */}
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
@@ -262,6 +377,71 @@ export function PassRateCharts() {
           </CardContent>
         </Card>
 
+        {/* Bachelor Passes Card (National Only) */}
+        {selectedProvince === "national" && bachelor && (
+          <Card>
+            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+              <CardTitle className="text-xs sm:text-sm font-medium">Bachelor Passes</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="text-xl sm:text-2xl font-bold">{bachelor.percent.toFixed(1)}%</div>
+              <p className="text-xs text-muted-foreground">Count: {bachelor.count.toLocaleString()}</p>
+              <div className="mt-2 space-y-1">
+                <p className="text-xs text-muted-foreground">Requirements:</p>
+                <ul className="text-[11px] text-muted-foreground list-disc pl-4">
+                  <li>Min. 50% in 4 subjects</li>
+                  <li>Min. 30% in language of learning</li>
+                  <li>Pass in 7 subjects</li>
+                </ul>
+              </div>
+              <p className="mt-1 text-[11px] text-muted-foreground">Source: education.gov.za; corroborated by gov.za</p>
+            </CardContent>
+          </Card>
+        )}
+
+        {/* Diploma Passes Card (National Only) */}
+        {selectedProvince === "national" && diploma && (
+          <Card>
+            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+              <CardTitle className="text-xs sm:text-sm font-medium">Diploma Passes</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="text-xl sm:text-2xl font-bold">{diploma.percent.toFixed(1)}%</div>
+              <p className="text-xs text-muted-foreground">Count: {diploma.count.toLocaleString()}</p>
+              <div className="mt-2 space-y-1">
+                <p className="text-xs text-muted-foreground">Requirements:</p>
+                <ul className="text-[11px] text-muted-foreground list-disc pl-4">
+                  <li>Min. 40% in 4 subjects</li>
+                  <li>Min. 30% in language of learning</li>
+                  <li>Pass in 6 subjects</li>
+                </ul>
+              </div>
+              <p className="mt-1 text-[11px] text-muted-foreground">Source: education.gov.za (2024 NSC)</p>
+            </CardContent>
+          </Card>
+        )}
+
+        {/* Higher Certificate Passes Card (National Only) */}
+        {selectedProvince === "national" && higherCert && (
+          <Card>
+            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+              <CardTitle className="text-xs sm:text-sm font-medium">Higher Certificate Passes</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="text-xl sm:text-2xl font-bold">{higherCert.percent.toFixed(1)}%</div>
+              <p className="text-xs text-muted-foreground">Count: {higherCert.count.toLocaleString()}</p>
+              <div className="mt-2 space-y-1">
+                <p className="text-xs text-muted-foreground">Requirements:</p>
+                <ul className="text-[11px] text-muted-foreground list-disc pl-4">
+                  <li>Min. 30% in language of learning</li>
+                  <li>Pass in 6 subjects</li>
+                </ul>
+              </div>
+              <p className="mt-1 text-[11px] text-muted-foreground">Source: education.gov.za (2024 NSC)</p>
+            </CardContent>
+          </Card>
+        )}
+
         {/* Ranking Card (only for provinces) */}
         {selectedProvince !== "national" && (
           <Card>
@@ -279,6 +459,8 @@ export function PassRateCharts() {
           </Card>
         )}
       </div>
+
+
 
       {/* Provincial Comparison - Only show on national view */}
       {selectedProvince === "national" && (
