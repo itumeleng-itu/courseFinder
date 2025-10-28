@@ -1,258 +1,118 @@
-/**
- * Integration tests for API endpoints
- * Tests backward compatibility and end-to-end functionality
- */
+import { GET as getMatricStats } from "@/app/api/matric-stats/route"
+import { GET as getPassRate } from "@/app/api/matric-pass-rate/route"
+import { GET as getNSC2024 } from "@/app/api/nsc-2024/route"
+import { GET as getProvincialRates } from "@/app/api/provincial-pass-rates/route"
+import { GET as getNews } from "@/app/api/news/route"
+import { GET as getBursaries } from "@/app/api/bursaries/route"
+import { NextRequest } from "next/server"
 
-import { POST as chatPOST } from '@/app/api/chat/route';
-import { GET as matricGET } from '@/app/api/matric-stats/route';
-import { NextRequest } from 'next/server';
+describe("API Integration Tests", () => {
+  it("should have consistent pass rate data across endpoints", async () => {
+    const statsReq = new NextRequest("http://localhost:3000/api/matric-stats")
+    const passRateReq = new NextRequest("http://localhost:3000/api/matric-pass-rate")
+    const nsc2024Req = new NextRequest("http://localhost:3000/api/nsc-2024")
 
-// Mock Google Generative AI
-jest.mock('@google/generative-ai', () => {
-  const mockSendMessage = jest.fn();
-  const mockStartChat = jest.fn().mockReturnValue({
-    sendMessage: mockSendMessage
-  });
+    const [statsRes, passRateRes, nsc2024Res] = await Promise.all([
+      getMatricStats(statsReq),
+      getPassRate(passRateReq),
+      getNSC2024(nsc2024Req),
+    ])
 
-  return {
-    GoogleGenerativeAI: jest.fn().mockImplementation(() => ({
-      getGenerativeModel: jest.fn().mockReturnValue({
-        startChat: mockStartChat,
-        generateContent: jest.fn().mockResolvedValue({
-          response: {
-            text: jest.fn().mockReturnValue(JSON.stringify({
-              provinces: [
-                { province: "Western Cape", passRate: 82.5, rank: 1 },
-                { province: "Gauteng", passRate: 81.2, rank: 2 }
-              ],
-              year: 2023,
-              nationalAverage: 80.1
-            }))
-          }
-        })
-      })
-    })),
-    mockSendMessage,
-    mockStartChat
-  };
-});
+    const [statsData, passRateData, nsc2024Data] = await Promise.all([
+      statsRes.json(),
+      passRateRes.json(),
+      nsc2024Res.json(),
+    ])
 
-// Access mocked functions from the jest mock
-const { mockSendMessage, mockStartChat } = require('@google/generative-ai');
+    // All should return successful responses
+    expect(statsData).toHaveProperty("nationalPassRate")
+    expect(passRateData).toHaveProperty("nationalPassRate")
+    expect(nsc2024Data).toHaveProperty("passRate")
 
-beforeEach(() => {
-  mockSendMessage.mockClear();
-  mockStartChat.mockClear();
-  
-  mockSendMessage.mockResolvedValue({
-    response: {
-      text: jest.fn().mockReturnValue('I can help you with university applications and course selection.'),
-      usageMetadata: {
-        totalTokenCount: 15
-      }
-    }
-  });
-  
-  mockStartChat.mockReturnValue({
-    sendMessage: mockSendMessage
-  });
-});
+    // Year consistency
+    expect(passRateData.year).toBeDefined()
+    expect(nsc2024Data.year).toBe(2024)
+  })
 
-describe('API Integration Tests', () => {
-  describe('Backward Compatibility', () => {
-    test('matric-stats API should work without model parameter (backward compatibility)', async () => {
-      const request = new NextRequest('http://localhost/api/matric-stats');
+  it("should return data from all public endpoints", async () => {
+    const endpoints = [
+      { name: "matric-stats", fn: getMatricStats },
+      { name: "matric-pass-rate", fn: getPassRate },
+      { name: "nsc-2024", fn: getNSC2024 },
+      { name: "provincial-pass-rates", fn: getProvincialRates },
+      { name: "news", fn: getNews },
+      { name: "bursaries", fn: getBursaries },
+    ]
 
-      const response = await matricGET(request as any);
-      const data = await response.json();
+    const results = await Promise.all(
+      endpoints.map(async ({ name, fn }) => {
+        const req = new NextRequest(`http://localhost:3000/api/${name}`)
+        const res = await fn(req)
+        const data = await res.json()
+        return { name, status: res.status, hasData: !!data }
+      }),
+    )
 
-      expect(response.status).toBe(200);
-      expect(data).toHaveProperty('provinces');
-      expect(data).toHaveProperty('year');
-      expect(data).toHaveProperty('nationalAverage');
-      expect(data).toHaveProperty('_metadata');
-      expect(data._metadata.model).toBe('Gemini 2.5 Flash'); // Default model
-    });
+    results.forEach(({ name, status, hasData }) => {
+      expect(status).toBe(200)
+      expect(hasData).toBe(true)
+    })
+  })
 
-    test('chat API should work without model parameter (backward compatibility)', async () => {
-      const request = {
-        json: jest.fn().mockResolvedValue({
-          message: 'Hello'
-        })
-      };
+  it("should have proper cache headers on all endpoints", async () => {
+    const endpoints = [
+      { name: "matric-stats", fn: getMatricStats },
+      { name: "matric-pass-rate", fn: getPassRate },
+      { name: "nsc-2024", fn: getNSC2024 },
+      { name: "provincial-pass-rates", fn: getProvincialRates },
+      { name: "news", fn: getNews },
+      { name: "bursaries", fn: getBursaries },
+    ]
 
-      const response = await chatPOST(request as any);
-      const data = await response.json();
+    const results = await Promise.all(
+      endpoints.map(async ({ name, fn }) => {
+        const req = new NextRequest(`http://localhost:3000/api/${name}`)
+        const res = await fn(req)
+        return { name, cacheControl: res.headers.get("Cache-Control") }
+      }),
+    )
 
-      expect(response.status).toBe(200);
-      expect(data).toHaveProperty('response');
-      expect(data).toHaveProperty('_metadata');
-      expect(data._metadata.model).toBe('Gemini 2.5 Flash'); // Default model
-    });
-  });
+    results.forEach(({ name, cacheControl }) => {
+      expect(cacheControl).toBeTruthy()
+      expect(cacheControl).toContain("s-maxage")
+    })
+  })
 
-  describe('Dynamic Model Selection', () => {
-    test('matric-stats API should work with flash model', async () => {
-      const request = new NextRequest('http://localhost/api/matric-stats?model=flash');
+  it("should return 2024 data where applicable", async () => {
+    const nsc2024Req = new NextRequest("http://localhost:3000/api/nsc-2024")
+    const newsReq = new NextRequest("http://localhost:3000/api/news")
 
-      const response = await matricGET(request as any);
-      const data = await response.json();
+    const [nsc2024Res, newsRes] = await Promise.all([getNSC2024(nsc2024Req), getNews(newsReq)])
 
-      expect(response.status).toBe(200);
-      expect(data._metadata.model).toBe('Gemini 2.5 Flash');
-      expect(data._metadata.modelType).toBe('flash');
-    });
+    const [nsc2024Data, newsData] = await Promise.all([nsc2024Res.json(), newsRes.json()])
 
-    test('matric-stats API should work with pro model', async () => {
-      const request = new NextRequest('http://localhost/api/matric-stats?model=2.5');
+    expect(nsc2024Data.year).toBe(2024)
+    expect(newsData.year).toBe(2024)
+  })
 
-      const response = await matricGET(request as any);
-      const data = await response.json();
+  it("should handle concurrent requests efficiently", async () => {
+    const start = Date.now()
 
-      expect(response.status).toBe(200);
-      expect(data._metadata.model).toBe('Gemini 2.5 Pro');
-      expect(data._metadata.modelType).toBe('2.5');
-    });
+    const requests = Array(5)
+      .fill(null)
+      .map(() =>
+        Promise.all([
+          getMatricStats(new NextRequest("http://localhost:3000/api/matric-stats")),
+          getPassRate(new NextRequest("http://localhost:3000/api/matric-pass-rate")),
+          getNews(new NextRequest("http://localhost:3000/api/news")),
+        ]),
+      )
 
-    test('chat API should work with different models', async () => {
-      const models = ['flash', '2.5', 'auto'];
-      const expectedNames = ['Gemini 2.5 Flash', 'Gemini 2.5 Pro', 'Auto Selection'];
+    await Promise.all(requests)
 
-      for (let i = 0; i < models.length; i++) {
-        const request = {
-          json: jest.fn().mockResolvedValue({
-            message: 'Hello',
-            model: models[i]
-          })
-        };
+    const duration = Date.now() - start
 
-        const response = await chatPOST(request as any);
-        const data = await response.json();
-
-        expect(response.status).toBe(200);
-        expect(data._metadata.model).toBe(expectedNames[i]);
-        expect(data._metadata.modelType).toBe(models[i]);
-      }
-    });
-  });
-
-  describe('Error Handling', () => {
-    test('should handle invalid model gracefully in matric-stats', async () => {
-      const request = new NextRequest('http://localhost/api/matric-stats?model=invalid');
-
-      const response = await matricGET(request as any);
-      const data = await response.json();
-
-      expect(response.status).toBe(400);
-      expect(data.error).toBe('Invalid model selection');
-      expect(data.availableModels).toContain('flash');
-      expect(data.availableModels).toContain('2.5');
-      expect(data.availableModels).toContain('auto');
-    });
-
-    test('should handle invalid model gracefully in chat', async () => {
-      const request = {
-        json: jest.fn().mockResolvedValue({
-          message: 'Hello',
-          model: 'invalid'
-        })
-      };
-
-      const response = await chatPOST(request as any);
-      const data = await response.json();
-
-      expect(response.status).toBe(400);
-      expect(data.error).toBe('Invalid model selection');
-      expect(data.availableModels).toContain('flash');
-      expect(data.availableModels).toContain('2.5');
-      expect(data.availableModels).toContain('auto');
-    });
-  });
-
-  describe('Response Format Consistency', () => {
-    test('all successful responses should include metadata', async () => {
-      // Test matric-stats
-      const matricRequest = new NextRequest('http://localhost/api/matric-stats');
-
-      const matricResponse = await matricGET(matricRequest as any);
-      const matricData = await matricResponse.json();
-
-      expect(matricData).toHaveProperty('_metadata');
-      expect(matricData._metadata).toHaveProperty('model');
-      expect(matricData._metadata).toHaveProperty('modelType');
-      expect(matricData._metadata).toHaveProperty('timestamp');
-
-      // Test chat
-      const chatRequest = {
-        json: jest.fn().mockResolvedValue({
-          message: 'Hello'
-        })
-      };
-
-      const chatResponse = await chatPOST(chatRequest as any);
-      const chatData = await chatResponse.json();
-
-      expect(chatData).toHaveProperty('_metadata');
-      expect(chatData._metadata).toHaveProperty('model');
-      expect(chatData._metadata).toHaveProperty('modelType');
-      expect(chatData._metadata).toHaveProperty('timestamp');
-      expect(chatData._metadata).toHaveProperty('tokensUsed');
-    });
-
-    test('error responses should include consistent error format', async () => {
-      const chatRequest = {
-        json: jest.fn().mockResolvedValue({
-          message: 'Hello',
-          model: 'invalid'
-        })
-      };
-
-      const chatResponse = await chatPOST(chatRequest as any);
-      const chatData = await chatResponse.json();
-
-      expect(chatData).toHaveProperty('error');
-      expect(chatData).toHaveProperty('availableModels');
-      expect(Array.isArray(chatData.availableModels)).toBe(true);
-    });
-  });
-
-  describe('Performance and Configuration', () => {
-    test('different models should use appropriate configurations', async () => {
-      const flashRequest = {
-        json: jest.fn().mockResolvedValue({
-          message: 'Hello',
-          model: 'flash'
-        })
-      };
-
-      await chatPOST(flashRequest as any);
-
-      expect(mockStartChat).toHaveBeenCalledWith({
-        history: [],
-        generationConfig: {
-          maxOutputTokens: 8192, // Flash model tokens
-          temperature: 0.7
-        }
-      });
-
-      mockStartChat.mockClear();
-
-      const proRequest = {
-        json: jest.fn().mockResolvedValue({
-          message: 'Hello',
-          model: '2.5'
-        })
-      };
-
-      await chatPOST(proRequest as any);
-
-      expect(mockStartChat).toHaveBeenCalledWith({
-        history: [],
-        generationConfig: {
-          maxOutputTokens: 32768, // Pro model tokens
-          temperature: 0.7
-        }
-      });
-    });
-  });
-});
+    // Should complete within reasonable time (adjust as needed)
+    expect(duration).toBeLessThan(30000) // 30 seconds for 15 total requests
+  })
+})

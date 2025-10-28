@@ -47,7 +47,7 @@ The CourseFinder API now supports dynamic model selection between different Goog
 - `model` (optional): Model type to use (`flash`, `2.5`, `auto`)
 
 **Examples**:
-```bash
+\`\`\`bash
 # Use default model (flash)
 GET /api/matric-stats/
 
@@ -59,10 +59,10 @@ GET /api/matric-stats/?model=2.5
 
 # Use auto selection
 GET /api/matric-stats/?model=auto
-```
+\`\`\`
 
 **Response Format**:
-```json
+\`\`\`json
 {
   "nationalPassRate": 82.9,
   "provinces": [
@@ -79,7 +79,7 @@ GET /api/matric-stats/?model=auto
     "timestamp": "2024-01-15T10:30:00.000Z"
   }
 }
-```
+\`\`\`
 
 **Headers**:
 - `X-Model-Used`: The display name of the model used
@@ -90,13 +90,13 @@ GET /api/matric-stats/?model=auto
 **Endpoint**: `POST /api/chat`
 
 **Request Body**:
-```json
+\`\`\`json
 {
   "message": "What are the APS requirements for Computer Science at Wits?",
   "conversationHistory": [],
   "model": "flash"
 }
-```
+\`\`\`
 
 **Parameters**:
 - `message` (required): The user's message
@@ -104,7 +104,7 @@ GET /api/matric-stats/?model=auto
 - `model` (optional): Model type to use (`flash`, `2.5`, `auto`)
 
 **Examples**:
-```bash
+\`\`\`bash
 # Use default model
 POST /api/chat
 {
@@ -124,10 +124,10 @@ POST /api/chat
   "message": "What are my options with a 35 APS score?",
   "model": "auto"
 }
-```
+\`\`\`
 
 **Response Format**:
-```json
+\`\`\`json
 {
   "response": "Based on your APS score of 35, here are your university options...",
   "_metadata": {
@@ -137,7 +137,7 @@ POST /api/chat
     "tokensUsed": 245
   }
 }
-```
+\`\`\`
 
 ## Error Handling
 
@@ -146,20 +146,20 @@ POST /api/chat
 **Status Code**: `400 Bad Request`
 
 **Response Format**:
-```json
+\`\`\`json
 {
   "error": "Invalid model selection",
   "message": "Unsupported model type: invalid_model. Supported types: flash, 2.5, auto",
   "availableModels": ["flash", "2.5", "auto"]
 }
-```
+\`\`\`
 
 ### API Errors
 
 **Status Code**: `500 Internal Server Error`
 
 **Response Format**:
-```json
+\`\`\`json
 {
   "error": "Failed to generate response. Please try again.",
   "_metadata": {
@@ -167,7 +167,7 @@ POST /api/chat
     "errorType": "GoogleGenerativeAIError"
   }
 }
-```
+\`\`\`
 
 ## Performance Considerations
 
@@ -199,13 +199,13 @@ POST /api/chat
 
 ### Environment Variables
 
-```bash
+\`\`\`bash
 # Required
 GOOGLE_API_KEY=your_google_api_key
 
 # Optional - Set default model
 GOOGLE_AI_DEFAULT_MODEL=flash  # Options: flash, 2.5, auto
-```
+\`\`\`
 
 ### Model Configuration
 
@@ -228,15 +228,15 @@ The API maintains full backward compatibility:
 
 Run the test suite to verify all models work correctly:
 
-```bash
+\`\`\`bash
 npm test -- --testPathPattern=api
-```
+\`\`\`
 
 ### Integration Testing
 
 Test all model combinations:
 
-```bash
+\`\`\`bash
 # Test flash model
 curl "http://localhost:3000/api/matric-stats/?model=flash"
 
@@ -250,7 +250,7 @@ curl "http://localhost:3000/api/matric-stats/?model=auto"
 curl -X POST "http://localhost:3000/api/chat" \
   -H "Content-Type: application/json" \
   -d '{"message": "Hello", "model": "flash"}'
-```
+\`\`\`
 
 ## Migration Guide
 
@@ -264,15 +264,15 @@ curl -X POST "http://localhost:3000/api/chat" \
 ### Example Migration
 
 **Before**:
-```javascript
+\`\`\`javascript
 const response = await fetch('/api/chat', {
   method: 'POST',
   body: JSON.stringify({ message: 'Hello' })
 });
-```
+\`\`\`
 
 **After** (optional enhancement):
-```javascript
+\`\`\`javascript
 const response = await fetch('/api/chat', {
   method: 'POST',
   body: JSON.stringify({ 
@@ -284,7 +284,7 @@ const response = await fetch('/api/chat', {
 // Access model information
 const data = await response.json();
 console.log('Model used:', data._metadata.model);
-```
+\`\`\`
 
 ## Support
 
@@ -301,14 +301,14 @@ For issues or questions regarding the dynamic model selection feature:
 
 ### Environment Variables (OpenRouter)
 
-```bash
+\`\`\`bash
 # Required for OpenRouter
 OPENROUTER_API_KEY=your_openrouter_api_key
 
 # Optional site identification for OpenRouter
 SITE_URL=https://coursefinder-sa.vercel.app
 SITE_NAME=CourseFinder SA
-```
+\`\`\`
 
 ### Headers (OpenRouter)
 - `Authorization`: `Bearer ${OPENROUTER_API_KEY}`
@@ -322,7 +322,7 @@ SITE_NAME=CourseFinder SA
 **Description**: Returns the latest national matric pass rate (previous completed exam year). Uses OpenRouter with strict JSON output and includes a 24h cache.
 
 **Response Format**:
-```json
+\`\`\`json
 {
   "success": true,
   "nationalPassRate": 83.7,
@@ -333,7 +333,7 @@ SITE_NAME=CourseFinder SA
     "timestamp": "2025-01-15T10:30:00.000Z"
   }
 }
-```
+\`\`\`
 
 **Headers**:
 - `X-Model-Used`: Model identifier
@@ -341,7 +341,7 @@ SITE_NAME=CourseFinder SA
 
 **Fallbacks**:
 - If the API key is missing, rate-limited, or a parse error occurs, returns cached or fallback data:
-```json
+\`\`\`json
 {
   "success": true,
   "nationalPassRate": 82.9,
@@ -349,12 +349,12 @@ SITE_NAME=CourseFinder SA
   "source": "Department of Basic Education (DBE) 2023 Results",
   "_metadata": { "model": "fallback" }
 }
-```
+\`\`\`
 
 **Example**:
-```bash
+\`\`\`bash
 curl -s "http://localhost:3000/api/matric-pass-rate" | jq
-```
+\`\`\`
 
 ### Chat API (OpenRouter)
 
@@ -363,7 +363,7 @@ curl -s "http://localhost:3000/api/matric-pass-rate" | jq
 - Returns structured metadata including `tokensUsed`, duration, and model info.
 
 **Example**:
-```bash
+\`\`\`bash
 curl -X POST "http://localhost:3000/api/chat" \
   -H "Content-Type: application/json" \
   -d '{
@@ -371,4 +371,4 @@ curl -X POST "http://localhost:3000/api/chat" \
     "conversationHistory": [],
     "model": "google/gemini-2.0-flash-exp:free"
   }'
-```
+\`\`\`

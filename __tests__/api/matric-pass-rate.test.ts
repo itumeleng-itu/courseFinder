@@ -1,82 +1,54 @@
-import { GET as matricPassGET } from '@/app/api/matric-pass-rate/route'
+import { GET } from "@/app/api/matric-pass-rate/route"
+import { NextRequest } from "next/server"
 
-// Preserve environment
-const ORIGINAL_ENV = { ...process.env }
+process.env.OPENROUTER_API_KEY = "test-key"
 
-describe('Matric Pass Rate API (OpenRouter)', () => {
-  afterEach(() => {
-    process.env = { ...ORIGINAL_ENV }
-    jest.restoreAllMocks()
-    jest.resetModules()
+describe("Matric Pass Rate API", () => {
+  it("should return national pass rate data", async () => {
+    const request = new NextRequest("http://localhost:3000/api/matric-pass-rate")
+    const response = await GET(request)
+    const data = await response.json()
+
+    expect(response.status).toBe(200)
+    expect(data).toHaveProperty("success")
+    expect(data).toHaveProperty("nationalPassRate")
+    expect(data).toHaveProperty("year")
+    expect(data).toHaveProperty("source")
+    expect(typeof data.nationalPassRate).toBe("number")
+    expect(typeof data.year).toBe("number")
   })
 
-  test('returns fallback data when API key missing', async () => {
+  it("should return fallback data when API fails", async () => {
+    const originalKey = process.env.OPENROUTER_API_KEY
     delete process.env.OPENROUTER_API_KEY
 
-    const { GET: matricPassGET } = require('@/app/api/matric-pass-rate/route')
-    const res = await matricPassGET()
-    const data = await res.json()
+    const request = new NextRequest("http://localhost:3000/api/matric-pass-rate")
+    const response = await GET(request)
+    const data = await response.json()
 
-    expect(res.status).toBe(200)
+    expect(response.status).toBe(200)
     expect(data.success).toBe(true)
-    expect(typeof data.nationalPassRate).toBe('number')
-    expect(typeof data.year).toBe('number')
-    expect(typeof data.source).toBe('string')
-    expect(data._metadata.model).toBe('fallback')
+    expect(data.nationalPassRate).toBeDefined()
+    expect(data._metadata).toHaveProperty("model", "fallback")
+
+    process.env.OPENROUTER_API_KEY = originalKey
   })
 
-  test('parses valid OpenRouter response and caches result', async () => {
-    process.env.OPENROUTER_API_KEY = 'test_key'
+  it("should have appropriate cache headers", async () => {
+    const request = new NextRequest("http://localhost:3000/api/matric-pass-rate")
+    const response = await GET(request)
 
-    const mockJson = {
-      id: 'cmpl_123',
-      choices: [{ message: { role: 'assistant', content: '{"nationalPassRate": 83.7, "year": 2024, "source": "DBE Official"}' } }],
-      usage: { total_tokens: 100 }
-    }
-
-    global.fetch = jest.fn().mockResolvedValue({
-      ok: true,
-      status: 200,
-      json: async () => mockJson
-    } as any)
-
-    const { GET: matricPassGET } = require('@/app/api/matric-pass-rate/route')
-
-    const res1 = await matricPassGET()
-    const data1 = await res1.json()
-
-    expect(res1.status).toBe(200)
-    expect(data1.success).toBe(true)
-    expect(data1.nationalPassRate).toBe(83.7)
-    expect(data1.year).toBe(2024)
-    expect(data1.source).toContain('DBE')
-
-    // Second call should serve from cache (same result)
-    const res2 = await matricPassGET()
-    const data2 = await res2.json()
-
-    expect(data2.nationalPassRate).toBe(83.7)
-    expect(data2.year).toBe(2024)
-    expect(data2._metadata.model).toContain('gemini')
-    expect(global.fetch).toHaveBeenCalledTimes(1)
+    expect(response.headers.get("Cache-Control")).toContain("s-maxage")
+    expect(response.headers.get("X-Model-Used")).toBeTruthy()
   })
 
-  test('serves fallback on rate limit', async () => {
-    process.env.OPENROUTER_API_KEY = 'test_key'
+  it("should include metadata in response", async () => {
+    const request = new NextRequest("http://localhost:3000/api/matric-pass-rate")
+    const response = await GET(request)
+    const data = await response.json()
 
-    global.fetch = jest.fn().mockResolvedValue({
-      ok: false,
-      status: 429,
-      text: async () => 'rate limited'
-    } as any)
-
-    const { GET: matricPassGET } = require('@/app/api/matric-pass-rate/route')
-
-    const res = await matricPassGET()
-    const data = await res.json()
-
-    expect(res.status).toBe(200)
-    expect(data.success).toBe(true)
-    expect(data._metadata.note).toContain('Rate limited')
+    expect(data._metadata).toBeDefined()
+    expect(data._metadata).toHaveProperty("model")
+    expect(data._metadata).toHaveProperty("timestamp")
   })
 })

@@ -236,8 +236,8 @@ export function GeoProvincialPass() {
               <YAxis domain={[60, 95]} tickFormatter={(v) => `${v}%`} tick={{ fontSize: 12 }} />
               <ReTooltip formatter={(v: any) => rateFormat(Number(v))} />
               <Legend wrapperStyle={{ fontSize: 12 }} />
-              <Line type="monotone" dataKey="province" name={province || "Province"} stroke="#111111" strokeWidth={2} dot={{ r: 2 }} />
-              <Line type="monotone" dataKey="national" name="National" stroke="#666666" strokeWidth={2} dot={{ r: 2 }} />
+              <Line type="monotone" dataKey="province" name={province || "Province"} stroke="#0ea5e9" strokeWidth={2} dot={{ r: 2 }} />
+              <Line type="monotone" dataKey="national" name="National" stroke="#10b981" strokeWidth={2} dot={{ r: 2 }} />
             </LineChart>
           </ResponsiveContainer>
         </div>
@@ -268,7 +268,7 @@ export function GeoProvincialPass() {
           {yoy.map((y) => (
             <div key={y.year} className="p-2 rounded-md border flex items-center justify-between">
               <span className="text-sm">{y.year}</span>
-              <span className={"text-sm font-medium text-foreground"}>
+              <span className={"text-sm font-medium " + (y.delta >= 0 ? "text-green-600" : "text-red-600")}>
                 {y.delta >= 0 ? "↑" : "↓"} {Math.abs(y.delta).toFixed(1)}%
               </span>
             </div>

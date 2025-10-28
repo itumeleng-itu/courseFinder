@@ -6,9 +6,6 @@ export const dynamic = "force-dynamic"
 // https://www.education.gov.za/ArchivedDocuments/ArchivedArticles/HistoricNSCpassrate.aspx
 const DBE_ARTICLE_URL = "https://www.education.gov.za/ArchivedDocuments/ArchivedArticles/HistoricNSCpassrate.aspx"
 
-// Optional corroborating source (Minister's speech on gov.za)
-const GOVZA_SPEECH_URL = "https://www.gov.za/speeches/minister-siviwe-gwarube-release-2024-national-senior-certificate-results-13-jan-2025"
-
 // 24h cache
 const cache: { data?: any; ts?: number } = {}
 const TTL_MS = 24 * 60 * 60 * 1000
@@ -20,16 +17,6 @@ const FALLBACK = {
   passes: 615_429,
   wrote: Math.round(615_429 / 0.873),
   failed: Math.round(615_429 / 0.873) - 615_429,
-  registered: Math.round(615_429 / 0.873),
-  bachelorPercent: 47.8,
-  bachelorPasses: 337_158,
-  // Diploma pass data (estimated based on typical distribution)
-  diplomaPercent: 26.4,
-  diplomaPasses: 186_000,
-  // Higher Certificate pass data (estimated based on typical distribution)
-  hcPercent: 13.1,
-  hcPasses: 92_271,
-  // Source information
   source: DBE_ARTICLE_URL
 }
 
@@ -63,14 +50,16 @@ export async function GET() {
 
     // Compute wrote using passRate and passes. If page later exposes wrote explicitly, prefer that.
     let wrote = Math.round(passes / (passRate / 100))
-    let registered = wrote
 
     // If the article contains an explicit "registered learners who sat" number that is clearly the wrote count, try to use it.
+    // Pattern example: "registered learners who sat for the 2024 NSC examination, 697,502 are social grant beneficiaries, representing 79% of registered learners"
+    // The first figure (e.g., 697,502) is beneficiaries; the denominator may also appear (e.g., 882,336), but is "registered" not necessarily "wrote".
     const satDenominatorMatch = html.match(/representing\s+(\d{1,3})%\s+of\s+registered\s+learners\s*\((?:i\.e\.)?\s*([\d,]+)\)/i)
     const explicitRegisteredMatch = html.match(/registered\s+learners\s+who\s+sat[^\d]*([\d,]+)/i)
 
     if (explicitRegisteredMatch) {
       const val = parseInt(explicitRegisteredMatch[1].replace(/,/g, ""), 10)
+      // Use only if it does not wildly contradict passes/passRate (guard with 10% tolerance)
       const derived = wrote
       const diff = Math.abs(val - derived) / derived
       if (diff < 0.1) {
@@ -78,55 +67,9 @@ export async function GET() {
       }
     }
 
-    // Try to capture total registered learners from the denominator, if present
-    if (satDenominatorMatch && satDenominatorMatch[2]) {
-      const denom = parseInt(satDenominatorMatch[2].replace(/,/g, ""), 10)
-      if (Number.isFinite(denom) && denom > 0) {
-        registered = denom
-      }
-    }
-
     const failed = wrote - passes
 
-    // Attempt to extract Bachelor percentage (e.g., "47.8% qualified for admission to Bachelor")
-    const bachelorPctMatch = html.match(/(\d{1,2}\.\d)\s*%[^%]*Bachelor/i)
-    const bachelorPercent = bachelorPctMatch ? parseFloat(bachelorPctMatch[1]) : FALLBACK.bachelorPercent
-
-    // Attempt to extract Diploma percentage (e.g., "26.4% achieved a Diploma pass")
-    const diplomaPctMatch = html.match(/(\d{1,2}\.\d)\s*%[^%]*Diploma/i)
-    const diplomaPercent = diplomaPctMatch ? parseFloat(diplomaPctMatch[1]) : FALLBACK.diplomaPercent
-
-    // Attempt to extract Higher Certificate percentage (e.g., "13.1% achieved a Higher Certificate pass")
-    const hcPctMatch = html.match(/(\d{1,2}\.\d)\s*%[^%]*Higher Certificate/i)
-    const hcPercent = hcPctMatch ? parseFloat(hcPctMatch[1]) : FALLBACK.hcPercent
-
-    // Compute passes where possible from wrote
-    const bachelorPasses = typeof bachelorPercent === "number" && Number.isFinite(wrote)
-      ? Math.round((bachelorPercent / 100) * wrote)
-      : FALLBACK.bachelorPasses
-    const diplomaPasses = typeof diplomaPercent === "number" && Number.isFinite(wrote)
-      ? Math.round((diplomaPercent / 100) * wrote)
-      : FALLBACK.diplomaPasses
-    const hcPasses = typeof hcPercent === "number" && Number.isFinite(wrote)
-      ? Math.round((hcPercent / 100) * wrote)
-      : FALLBACK.hcPasses
-
-    const data = {
-      year: 2024,
-      passRate,
-      passes,
-      wrote,
-      failed,
-      registered,
-      bachelorPercent,
-      bachelorPasses,
-      diplomaPercent,
-      diplomaPasses,
-      hcPercent,
-      hcPasses,
-      source: DBE_ARTICLE_URL,
-      _corroborating: GOVZA_SPEECH_URL
-    }
+    const data = { year: 2024, passRate, passes, wrote, failed, source: DBE_ARTICLE_URL }
     cache.data = data
     cache.ts = Date.now()
 

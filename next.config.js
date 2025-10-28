@@ -12,7 +12,6 @@ const nextConfig = {
   typescript: {
     ignoreBuildErrors: true,
   },
-  distDir: process.env.NODE_ENV === "production" ? ".next" : ".next-dev",
   // Force cache busting
   generateBuildId: async () => {
     return `build-${Date.now()}`

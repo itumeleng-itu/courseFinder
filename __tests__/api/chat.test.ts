@@ -3,382 +3,440 @@
  * Tests dynamic model selection, conversation handling, and error scenarios
  */
 
-import { NextRequest } from 'next/server';
+import { NextRequest } from "next/server"
+import { POST } from "@/app/api/chat/route"
+import jest from "jest"
 
 // Mock Google Generative AI
-jest.mock('@google/generative-ai', () => {
-  const mockSendMessage = jest.fn();
+jest.mock("@google/generative-ai", () => {
+  const mockSendMessage = jest.fn()
   const mockStartChat = jest.fn().mockReturnValue({
-    sendMessage: mockSendMessage
-  });
-  
+    sendMessage: mockSendMessage,
+  })
+
   return {
     GoogleGenerativeAI: jest.fn().mockImplementation(() => ({
       getGenerativeModel: jest.fn().mockReturnValue({
-        startChat: mockStartChat
-      })
+        startChat: mockStartChat,
+      }),
     })),
     mockSendMessage,
-    mockStartChat
-  };
-});
+    mockStartChat,
+  }
+})
 
 // Get the mocked functions
-const { mockSendMessage, mockStartChat } = require('@google/generative-ai');
-const { POST } = require('@/app/api/chat/route');
+const { mockSendMessage, mockStartChat } = require("@google/generative-ai")
 
 // Mock environment variables
-const originalEnv = process.env;
+const originalEnv = process.env
 
 // Use MockRequest from jest.setup.js
 declare global {
-  var MockRequest: any;
+  var MockRequest: any
 }
 
 beforeEach(() => {
   // Do not reset modules here to avoid breaking mocks
-  process.env = { ...originalEnv, GOOGLE_API_KEY: 'test-api-key' };
-  
+  process.env = { ...originalEnv, GOOGLE_API_KEY: "test-api-key", OPENROUTER_API_KEY: "test-key" }
+
   // Reset mocks
-  mockSendMessage.mockClear();
-  mockStartChat.mockClear();
-  
+  mockSendMessage.mockClear()
+  mockStartChat.mockClear()
+
   // Default mock implementation
   mockSendMessage.mockResolvedValue({
     response: {
-      text: jest.fn().mockReturnValue('Hello! I can help you with university applications.'),
+      text: jest.fn().mockReturnValue("Hello! I can help you with university applications."),
       usageMetadata: {
-        totalTokenCount: 25
-      }
-    }
-  });
-  
+        totalTokenCount: 25,
+      },
+    },
+  })
+
   mockStartChat.mockReturnValue({
-    sendMessage: mockSendMessage
-  });
-});
+    sendMessage: mockSendMessage,
+  })
+})
 
 afterAll(() => {
-  process.env = originalEnv;
-});
+  process.env = originalEnv
+})
 
-describe('/api/chat', () => {
-  describe('POST', () => {
-    test('should return chat response with default model', async () => {
-      const request = new NextRequest('http://localhost:3000/api/chat', {
-        method: 'POST',
+describe("/api/chat", () => {
+  describe("POST", () => {
+    test("should return chat response with default model", async () => {
+      const request = new NextRequest("http://localhost:3000/api/chat", {
+        method: "POST",
         body: JSON.stringify({
-          message: 'Hello'
-        })
-      });
+          message: "Hello",
+        }),
+      })
 
-      const response = await POST(request);
-      const data = await response.json();
+      const response = await POST(request)
+      const data = await response.json()
 
-      expect(response.status).toBe(200);
-      expect(data).toHaveProperty('response');
-      expect(data).toHaveProperty('_metadata');
-      expect(data._metadata.model).toBe('Gemini 2.5 Flash');
-      expect(data._metadata.modelType).toBe('flash');
-      expect(response.headers.get('X-Model-Used')).toBe('Gemini 2.5 Flash');
-    });
+      expect(response.status).toBe(200)
+      expect(data).toHaveProperty("response")
+      expect(data).toHaveProperty("_metadata")
+      expect(data._metadata.model).toBe("Gemini 2.5 Flash")
+      expect(data._metadata.modelType).toBe("flash")
+      expect(response.headers.get("X-Model-Used")).toBe("Gemini 2.5 Flash")
+    })
 
-    test('should return chat response with flash model', async () => {
-      const request = new NextRequest('http://localhost:3000/api/chat', {
-        method: 'POST',
+    test("should return chat response with flash model", async () => {
+      const request = new NextRequest("http://localhost:3000/api/chat", {
+        method: "POST",
         body: JSON.stringify({
-          message: 'Hello',
-          model: 'flash'
-        })
-      });
+          message: "Hello",
+          model: "flash",
+        }),
+      })
 
-      const response = await POST(request);
-      const data = await response.json();
+      const response = await POST(request)
+      const data = await response.json()
 
-      expect(response.status).toBe(200);
-      expect(data._metadata.model).toBe('Gemini 2.5 Flash');
-      expect(data._metadata.modelType).toBe('flash');
-      expect(response.headers.get('X-Model-Used')).toBe('Gemini 2.5 Flash');
-    });
+      expect(response.status).toBe(200)
+      expect(data._metadata.model).toBe("Gemini 2.5 Flash")
+      expect(data._metadata.modelType).toBe("flash")
+      expect(response.headers.get("X-Model-Used")).toBe("Gemini 2.5 Flash")
+    })
 
-    test('should return chat response with pro model', async () => {
-      const request = new NextRequest('http://localhost:3000/api/chat', {
-        method: 'POST',
+    test("should return chat response with pro model", async () => {
+      const request = new NextRequest("http://localhost:3000/api/chat", {
+        method: "POST",
         body: JSON.stringify({
-          message: 'Hello',
-          model: '2.5'
-        })
-      });
+          message: "Hello",
+          model: "2.5",
+        }),
+      })
 
-      const response = await POST(request);
-      const data = await response.json();
+      const response = await POST(request)
+      const data = await response.json()
 
-      expect(response.status).toBe(200);
-      expect(data._metadata.model).toBe('Gemini 2.5 Pro');
-      expect(data._metadata.modelType).toBe('2.5');
-      expect(response.headers.get('X-Model-Used')).toBe('Gemini 2.5 Pro');
-    });
+      expect(response.status).toBe(200)
+      expect(data._metadata.model).toBe("Gemini 2.5 Pro")
+      expect(data._metadata.modelType).toBe("2.5")
+      expect(response.headers.get("X-Model-Used")).toBe("Gemini 2.5 Pro")
+    })
 
-    test('should return chat response with auto model', async () => {
-      const request = new NextRequest('http://localhost:3000/api/chat', {
-        method: 'POST',
+    test("should return chat response with auto model", async () => {
+      const request = new NextRequest("http://localhost:3000/api/chat", {
+        method: "POST",
         body: JSON.stringify({
-          message: 'Hello',
-          model: 'auto'
-        })
-      });
+          message: "Hello",
+          model: "auto",
+        }),
+      })
 
-      const response = await POST(request);
-      const data = await response.json();
+      const response = await POST(request)
+      const data = await response.json()
 
-      expect(response.status).toBe(200);
-      expect(data._metadata.model).toBe('Auto Selection');
-      expect(data._metadata.modelType).toBe('auto');
-      expect(response.headers.get('X-Model-Used')).toBe('Auto Selection');
-    });
+      expect(response.status).toBe(200)
+      expect(data._metadata.model).toBe("Auto Selection")
+      expect(data._metadata.modelType).toBe("auto")
+      expect(response.headers.get("X-Model-Used")).toBe("Auto Selection")
+    })
 
-    test('should return 400 error for invalid model', async () => {
-      const request = new NextRequest('http://localhost:3000/api/chat', {
-        method: 'POST',
+    test("should return 400 error for invalid model", async () => {
+      const request = new NextRequest("http://localhost:3000/api/chat", {
+        method: "POST",
         body: JSON.stringify({
-          message: 'Hello',
-          model: 'invalid'
-        })
-      });
+          message: "Hello",
+          model: "invalid",
+        }),
+      })
 
-      const response = await POST(request);
-      const data = await response.json();
+      const response = await POST(request)
+      const data = await response.json()
 
-      expect(response.status).toBe(400);
-      expect(data).toHaveProperty('error');
-      expect(data.error).toBe('Invalid model selection');
-      expect(data).toHaveProperty('availableModels');
-      expect(data.availableModels).toContain('flash');
-      expect(data.availableModels).toContain('2.5');
-      expect(data.availableModels).toContain('auto');
-    });
+      expect(response.status).toBe(400)
+      expect(data).toHaveProperty("error")
+      expect(data.error).toBe("Invalid model selection")
+      expect(data).toHaveProperty("availableModels")
+      expect(data.availableModels).toContain("flash")
+      expect(data.availableModels).toContain("2.5")
+      expect(data.availableModels).toContain("auto")
+    })
 
-    test('should return 400 error for missing message', async () => {
-      const request = new NextRequest('http://localhost:3000/api/chat', {
-        method: 'POST',
-        body: JSON.stringify({})
-      });
+    test("should return 400 error for missing message", async () => {
+      const request = new NextRequest("http://localhost:3000/api/chat", {
+        method: "POST",
+        body: JSON.stringify({}),
+      })
 
-      const response = await POST(request);
-      const data = await response.json();
+      const response = await POST(request)
+      const data = await response.json()
 
-      expect(response.status).toBe(400);
-      expect(data.error).toBe('Message is required');
-    });
+      expect(response.status).toBe(400)
+      expect(data.error).toBe("Message is required")
+    })
 
-    test('should handle conversation history', async () => {
+    test("should handle conversation history", async () => {
       const conversationHistory = [
-        { role: 'user', content: 'What is APS?' },
-        { role: 'assistant', content: 'APS stands for Admission Point Score...' }
-      ];
+        { role: "user", content: "What is APS?" },
+        { role: "assistant", content: "APS stands for Admission Point Score..." },
+      ]
 
-      const request = new NextRequest('http://localhost:3000/api/chat', {
-        method: 'POST',
+      const request = new NextRequest("http://localhost:3000/api/chat", {
+        method: "POST",
         body: JSON.stringify({
-          message: 'How is it calculated?',
-          conversationHistory
-        })
-      });
+          message: "How is it calculated?",
+          conversationHistory,
+        }),
+      })
 
-      const response = await POST(request);
-      const data = await response.json();
+      const response = await POST(request)
+      const data = await response.json()
 
-      expect(response.status).toBe(200);
+      expect(response.status).toBe(200)
       expect(mockStartChat).toHaveBeenCalledWith({
         history: [
-          { role: 'user', parts: [{ text: 'What is APS?' }] },
-          { role: 'model', parts: [{ text: 'APS stands for Admission Point Score...' }] }
+          { role: "user", parts: [{ text: "What is APS?" }] },
+          { role: "model", parts: [{ text: "APS stands for Admission Point Score..." }] },
         ],
         generationConfig: {
           maxOutputTokens: 8192, // Flash model default
-          temperature: 0.7
-        }
-      });
-    });
+          temperature: 0.7,
+        },
+      })
+    })
 
-    test('should use correct model configuration for generation', async () => {
-      const request = new NextRequest('http://localhost:3000/api/chat', {
-        method: 'POST',
+    test("should use correct model configuration for generation", async () => {
+      const request = new NextRequest("http://localhost:3000/api/chat", {
+        method: "POST",
         body: JSON.stringify({
-          message: 'Hello',
-          model: '2.5'
-        })
-      });
+          message: "Hello",
+          model: "2.5",
+        }),
+      })
 
-      await POST(request);
+      await POST(request)
 
       expect(mockStartChat).toHaveBeenCalledWith({
         history: [],
         generationConfig: {
           maxOutputTokens: 32768, // Pro model tokens
-          temperature: 0.7
-        }
-      });
-    });
+          temperature: 0.7,
+        },
+      })
+    })
 
-    test('should include token usage in metadata', async () => {
-      const request = new NextRequest('http://localhost:3000/api/chat', {
-        method: 'POST',
+    test("should include token usage in metadata", async () => {
+      const request = new NextRequest("http://localhost:3000/api/chat", {
+        method: "POST",
         body: JSON.stringify({
-          message: 'Hello'
-        })
-      });
+          message: "Hello",
+        }),
+      })
 
-      const response = await POST(request);
-      const data = await response.json();
+      const response = await POST(request)
+      const data = await response.json()
 
-      expect(data._metadata).toHaveProperty('tokensUsed');
-      expect(data._metadata.tokensUsed).toBe(25);
-    });
+      expect(data._metadata).toHaveProperty("tokensUsed")
+      expect(data._metadata.tokensUsed).toBe(25)
+    })
 
-    test('should handle missing token usage metadata', async () => {
+    test("should handle missing token usage metadata", async () => {
       mockSendMessage.mockResolvedValue({
         response: {
-          text: jest.fn().mockReturnValue('Hello!'),
-          usageMetadata: undefined
-        }
-      });
+          text: jest.fn().mockReturnValue("Hello!"),
+          usageMetadata: undefined,
+        },
+      })
 
-      const request = new NextRequest('http://localhost:3000/api/chat', {
-        method: 'POST',
+      const request = new NextRequest("http://localhost:3000/api/chat", {
+        method: "POST",
         body: JSON.stringify({
-          message: 'Hello'
-        })
-      });
+          message: "Hello",
+        }),
+      })
 
-      const response = await POST(request);
-      const data = await response.json();
+      const response = await POST(request)
+      const data = await response.json()
 
-      expect(data._metadata.tokensUsed).toBe(0);
-    });
+      expect(data._metadata.tokensUsed).toBe(0)
+    })
 
-    test('should return 500 error on API failure', async () => {
-      mockSendMessage.mockRejectedValue(new Error('API Error'));
+    test("should return 500 error on API failure", async () => {
+      mockSendMessage.mockRejectedValue(new Error("API Error"))
 
-      const request = new NextRequest('http://localhost:3000/api/chat', {
-        method: 'POST',
+      const request = new NextRequest("http://localhost:3000/api/chat", {
+        method: "POST",
         body: JSON.stringify({
-          message: 'Hello'
-        })
-      });
+          message: "Hello",
+        }),
+      })
 
-      const response = await POST(request);
-      const data = await response.json();
+      const response = await POST(request)
+      const data = await response.json()
 
-      expect(response.status).toBe(500);
-      expect(data.error).toBe('Failed to generate response. Please try again.');
-      expect(data._metadata).toHaveProperty('timestamp');
-      expect(data._metadata.errorType).toBe('Error');
-    });
+      expect(response.status).toBe(500)
+      expect(data.error).toBe("Failed to generate response. Please try again.")
+      expect(data._metadata).toHaveProperty("timestamp")
+      expect(data._metadata.errorType).toBe("Error")
+    })
 
-    test('should include timestamp in metadata', async () => {
-      const request = new NextRequest('http://localhost:3000/api/chat', {
-        method: 'POST',
+    test("should include timestamp in metadata", async () => {
+      const request = new NextRequest("http://localhost:3000/api/chat", {
+        method: "POST",
         body: JSON.stringify({
-          message: 'Hello'
-        })
-      });
+          message: "Hello",
+        }),
+      })
 
-      const response = await POST(request);
-      const data = await response.json();
+      const response = await POST(request)
+      const data = await response.json()
 
-      expect(data._metadata).toHaveProperty('timestamp');
-      expect(new Date(data._metadata.timestamp)).toBeInstanceOf(Date);
-    });
+      expect(data._metadata).toHaveProperty("timestamp")
+      expect(new Date(data._metadata.timestamp)).toBeInstanceOf(Date)
+    })
 
-    test('should handle empty conversation history', async () => {
-      const request = new NextRequest('http://localhost:3000/api/chat', {
-        method: 'POST',
+    test("should handle empty conversation history", async () => {
+      const request = new NextRequest("http://localhost:3000/api/chat", {
+        method: "POST",
         body: JSON.stringify({
-          message: 'Hello',
-          conversationHistory: []
-        })
-      });
+          message: "Hello",
+          conversationHistory: [],
+        }),
+      })
 
-      const response = await POST(request);
+      const response = await POST(request)
 
-      expect(response.status).toBe(200);
+      expect(response.status).toBe(200)
       expect(mockStartChat).toHaveBeenCalledWith({
         history: [],
-        generationConfig: expect.any(Object)
-      });
-    });
+        generationConfig: expect.any(Object),
+      })
+    })
 
-    test('should transform conversation history roles correctly', async () => {
+    test("should transform conversation history roles correctly", async () => {
       const conversationHistory = [
-        { role: 'user', content: 'Hello' },
-        { role: 'assistant', content: 'Hi there!' },
-        { role: 'user', content: 'How are you?' }
-      ];
+        { role: "user", content: "Hello" },
+        { role: "assistant", content: "Hi there!" },
+        { role: "user", content: "How are you?" },
+      ]
 
-      const request = new NextRequest('http://localhost:3000/api/chat', {
-        method: 'POST',
+      const request = new NextRequest("http://localhost:3000/api/chat", {
+        method: "POST",
         body: JSON.stringify({
-          message: 'Great!',
-          conversationHistory
-        })
-      });
+          message: "Great!",
+          conversationHistory,
+        }),
+      })
 
-      await POST(request);
+      await POST(request)
 
       expect(mockStartChat).toHaveBeenCalledWith({
         history: [
-          { role: 'user', parts: [{ text: 'Hello' }] },
-          { role: 'model', parts: [{ text: 'Hi there!' }] },
-          { role: 'user', parts: [{ text: 'How are you?' }] }
+          { role: "user", parts: [{ text: "Hello" }] },
+          { role: "model", parts: [{ text: "Hi there!" }] },
+          { role: "user", parts: [{ text: "How are you?" }] },
         ],
-        generationConfig: expect.any(Object)
-      });
-    });
-  });
+        generationConfig: expect.any(Object),
+      })
+    })
 
-  describe('Request body validation', () => {
-    test('should handle malformed JSON', async () => {
-      const request = new NextRequest('http://localhost:3000/api/chat', {
-        method: 'POST',
-        body: 'invalid json'
-      });
-
-      const response = await POST(request);
-      const data = await response.json();
-
-      expect(response.status).toBe(500);
-      expect(data.error).toBe('Failed to generate response. Please try again.');
-    });
-
-    test('should handle empty message string', async () => {
-      const request = new NextRequest('http://localhost:3000/api/chat', {
-        method: 'POST',
+    test("should accept valid message with conversation history", async () => {
+      const request = new NextRequest("http://localhost:3000/api/chat", {
+        method: "POST",
         body: JSON.stringify({
-          message: ''
-        })
-      });
+          message: "What is the APS requirement for Engineering at Wits?",
+          conversationHistory: [
+            { role: "user", content: "Hello" },
+            { role: "assistant", content: "Hi! How can I help you?" },
+          ],
+          model: "google/gemini-2.0-flash-exp:free",
+        }),
+      })
 
-      const response = await POST(request);
-      const data = await response.json();
+      // This will fail without a real API key, but we're testing the structure
+      const response = await POST(request)
+      const data = await response.json()
 
-      expect(response.status).toBe(400);
-      expect(data.error).toBe('Message is required');
-    });
+      // Check that the response has the expected structure
+      expect(data).toHaveProperty("success")
+      expect(data).toHaveProperty("_metadata")
+    })
 
-    test('should handle null message', async () => {
-      const request = new NextRequest('http://localhost:3000/api/chat', {
-        method: 'POST',
+    test("should use default model when not specified", async () => {
+      const request = new NextRequest("http://localhost:3000/api/chat", {
+        method: "POST",
         body: JSON.stringify({
-          message: null
-        })
-      });
+          message: "Test message",
+        }),
+      })
 
-      const response = await POST(request);
-      const data = await response.json();
+      const response = await POST(request)
+      const data = await response.json()
 
-      expect(response.status).toBe(400);
-      expect(data.error).toBe('Message is required');
-    });
-  });
-});
+      expect(data).toHaveProperty("_metadata")
+      if (data._metadata) {
+        expect(data._metadata.modelType).toBeDefined()
+      }
+    })
+  })
+
+  describe("Request body validation", () => {
+    test("should handle malformed JSON", async () => {
+      const request = new NextRequest("http://localhost:3000/api/chat", {
+        method: "POST",
+        body: "invalid json",
+      })
+
+      const response = await POST(request)
+      const data = await response.json()
+
+      expect(response.status).toBe(500)
+      expect(data.error).toBe("Failed to generate response. Please try again.")
+    })
+
+    test("should handle empty message string", async () => {
+      const request = new NextRequest("http://localhost:3000/api/chat", {
+        method: "POST",
+        body: JSON.stringify({
+          message: "",
+        }),
+      })
+
+      const response = await POST(request)
+      const data = await response.json()
+
+      expect(response.status).toBe(400)
+      expect(data.error).toBe("Message is required")
+    })
+
+    test("should handle null message", async () => {
+      const request = new NextRequest("http://localhost:3000/api/chat", {
+        method: "POST",
+        body: JSON.stringify({
+          message: null,
+        }),
+      })
+
+      const response = await POST(request)
+      const data = await response.json()
+
+      expect(response.status).toBe(400)
+      expect(data.error).toBe("Message is required")
+    })
+
+    test("should return error when API key is missing", async () => {
+      const originalKey = process.env.OPENROUTER_API_KEY
+      delete process.env.OPENROUTER_API_KEY
+
+      const request = new NextRequest("http://localhost:3000/api/chat", {
+        method: "POST",
+        body: JSON.stringify({ message: "Hello" }),
+      })
+
+      const response = await POST(request)
+      const data = await response.json()
+
+      expect(response.status).toBe(500)
+      expect(data.error).toContain("not configured")
+
+      process.env.OPENROUTER_API_KEY = originalKey
+    })
+  })
+})

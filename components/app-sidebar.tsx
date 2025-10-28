@@ -29,19 +29,13 @@ import {
   Search,
   FileText,
   Building2,
-  BookOpen,
-  Lightbulb,
-  FlaskConical,
-  Notebook,
-  BookMarked,
-  BadgeHelp,
-  Calendar,
 } from "lucide-react";
 import { Logo } from "@/components/logo";
 import type { Route } from "./nav-main";
 import DashboardNavigation from "@/components/nav-main";
 import { NotificationsPopover } from "@/components/nav-notifications";
 import { Personalise } from "@/components/personalise";
+import { ThemeToggle } from "@/components/theme-toggle"
 
 
 const sampleNotifications = [
@@ -88,39 +82,6 @@ const dashboardRoutes: Route[] = [
     link: "/matric-results",
   },
   {
-    id: "study-tools",
-    title: "Study Tools",
-    icon: <BookOpen className="size-4" />,
-    link: "/study-tools",
-    subs: [
-      {
-        title: "Past Question Papers",
-        link: "/study-tools/papers",
-        icon: <FileText className="size-4" />,
-        badge: "New",
-        description: "Access past examination papers by subject",
-      },
-      {
-        title: "Calendar",
-        link: "/study-tools/calendar",
-        icon: <Calendar className="size-4" />,
-        description: "Track examination dates and deadlines",
-      },
-      {
-        title: "Study Tips",
-        link: "/study-tools/tips",
-        icon: <Lightbulb className="size-4" />,
-        description: "Discover effective study techniques",
-      },
-      {
-        title: "Help Center",
-        link: "/study-tools/help",
-        icon: <BadgeHelp className="size-4" />,
-        description: "Get assistance with study resources",
-      },
-    ],
-  },
-  {
     id: "bursaries",
     title: "Bursaries",
     icon: <DollarSign className="size-4" />,
@@ -133,6 +94,8 @@ const dashboardRoutes: Route[] = [
     link: "/universities",
   },
 ];
+
+// ... existing code ...
 
 export function DashboardSidebar() {
   const { state } = useSidebar();
@@ -168,6 +131,7 @@ export function DashboardSidebar() {
           transition={{ duration: 0.5 }}
         >
           <NotificationsPopover notifications={sampleNotifications} />
+          <ThemeToggle />
           <SidebarTrigger className="ml-auto" />
         </motion.div>
       </SidebarHeader>

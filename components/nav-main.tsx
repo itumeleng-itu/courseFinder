@@ -18,18 +18,7 @@ import { cn } from "@/lib/utils";
 import { ChevronDown, ChevronUp } from "lucide-react";
 import Link from "next/link";
 import type React from "react";
-import { useState, useEffect } from "react";
-
-// Analytics tracking function
-const trackNavigation = (itemId: string, itemTitle: string, category?: string) => {
-  if (typeof window !== 'undefined' && window.gtag) {
-    window.gtag('event', 'navigation_click', {
-      event_category: category || 'sidebar_navigation',
-      event_label: itemTitle,
-      item_id: itemId
-    });
-  }
-};
+import { useState } from "react";
 
 export type Route = {
   id: string;
@@ -40,8 +29,6 @@ export type Route = {
     title: string;
     link: string;
     icon?: React.ReactNode;
-    badge?: string;
-    description?: string;
   }[];
 };
 
@@ -107,17 +94,8 @@ export default function DashboardNavigation({ routes }: { routes: Route[] }) {
                               href={subRoute.link}
                               prefetch={true}
                               className="flex items-center rounded-md px-5 py-2 text-base font-medium text-muted-foreground hover:bg-sidebar-muted hover:text-foreground"
-                              aria-label={`${subRoute.title} - ${route.title}`}
-                              title={subRoute.description}
-                              onClick={() => trackNavigation(`${route.id}-${subRoute.title}`, subRoute.title, route.title)}
                             >
-                              {subRoute.icon && <span className="mr-2">{subRoute.icon}</span>}
                               {subRoute.title}
-                              {subRoute.badge && (
-                                <span className="ml-auto inline-flex items-center rounded-full bg-primary/10 px-2 py-0.5 text-xs font-medium text-primary">
-                                  {subRoute.badge}
-                                </span>
-                              )}
                             </Link>
                           </SidebarMenuSubButton>
                         </SidebarMenuSubItem>
@@ -135,8 +113,6 @@ export default function DashboardNavigation({ routes }: { routes: Route[] }) {
                     "flex items-center rounded-lg px-3 transition-colors text-muted-foreground hover:bg-sidebar-muted hover:text-foreground",
                     isCollapsed && "justify-center"
                   )}
-                  onClick={() => trackNavigation(route.id, route.title)}
-                  aria-label={route.title}
                 >
                   {route.icon}
                   {!isCollapsed && (

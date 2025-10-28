@@ -1,5 +1,4 @@
 import { NextResponse } from "next/server"
-import { scrapeDbeNews } from "@/lib/scraper/dbe-news"
 
 // Removed dynamic export due to conflict with output: "export" in next.config.js
 // export const dynamic = "force-dynamic"
@@ -174,39 +173,8 @@ export async function GET() {
       )
     }
 
-    const NEWSDATA_API_KEY = process.env.NEWSDATA_API_KEY
-    if (!NEWSDATA_API_KEY) {
-      console.error("NEWSDATA_API_KEY environment variable is not set")
-      // Return fallback news instead of making API call with hardcoded key
-      const processedFallbackNews = FALLBACK_NEWS.map(article => ({
-        ...article,
-        alt_text: article.alt_text || generateAltText(article)
-      }))
-      
-      // Update cache with fallback data
-      newsCache.set(cacheKey, {
-        data: processedFallbackNews,
-        timestamp: Date.now()
-      })
-      
-      return NextResponse.json(
-        {
-          success: true,
-          articles: processedFallbackNews,
-          cached: false,
-          fallback: true,
-          year: 2024,
-        },
-        {
-          headers: {
-            "Cache-Control": "public, s-maxage=900, stale-while-revalidate=450",
-          },
-        }
-      )
-    }
-    
     const response = await fetch(
-      `https://newsdata.io/api/1/news?apikey=${NEWSDATA_API_KEY}&country=za&category=education&language=en`,
+      "https://newsdata.io/api/1/news?apikey=pub_8a9b800f8fab404c9b5c0e08708897b3&country=za&category=education&language=en",
       {
         next: { revalidate: 900 },
       },
@@ -241,19 +209,7 @@ export async function GET() {
 
       const start = new Date(Date.UTC(2024, 0, 1, 0, 0, 0)).getTime()
       const end = new Date(Date.UTC(2024, 11, 31, 23, 59, 59)).getTime()
-      // Also scrape DBE newsroom for official updates
-      let dbeArticles: NewsArticle[] = []
-      try {
-        dbeArticles = await scrapeDbeNews(12)
-      } catch (e) {
-        console.warn("DBE scraping failed:", e)
-      }
-
-      // Merge and de-duplicate by link
-      const merged = [...processedArticles, ...dbeArticles]
-      const uniqueByLink = Array.from(new Map(merged.map(a => [a.link, a])).values())
-
-      const filteredArticles = uniqueByLink
+      const filteredArticles = processedArticles
         .filter(a => {
           const t = new Date(a.pubDate).getTime()
           return !isNaN(t) && t >= start && t <= end

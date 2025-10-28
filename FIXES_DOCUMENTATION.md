@@ -73,13 +73,13 @@ This document outlines the root cause analysis and fixes implemented for the Cou
 ## Testing Procedures
 
 ### API Endpoint Testing
-```powershell
+\`\`\`powershell
 # Test matric-stats endpoint
 Invoke-WebRequest -Uri "http://localhost:3000/api/matric-stats/" -Method GET
 
 # Test chat endpoint
 Invoke-WebRequest -Uri "http://localhost:3000/api/chat/" -Method POST -ContentType "application/json" -Body '{"message":"Hello","history":[]}'
-```
+\`\`\`
 
 ### Mobile Responsiveness Testing
 1. Open application in browser developer tools

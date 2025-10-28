@@ -9,69 +9,57 @@ import { GeoProvincialPass } from "@/components/geo-provincial-pass"
 import { Chatbot } from "@/components/chatbot"
 import { BreadcrumbNavigation } from "@/components/breadcrumb-navigation"
 import { LayoutDashboard } from "lucide-react"
-import { cn } from "@/lib/utils"
 
 export default function DashboardPage() {
   return (
     <>
       <DashboardSidebar />
-      <SidebarInset className="transition-all duration-300 ease-in-out">
-        <div className="container mx-auto px-4 pt-3">
-          <BreadcrumbNavigation />
-        </div>
-        <header className={cn(
-          "flex h-16 shrink-0 items-center gap-2 border-b px-4",
-          "bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60",
-          "border-border/40 shadow-sm"
-        )}>
-          <Separator orientation="vertical" className="mr-2 h-4 bg-border/60" />
-          <div className="flex items-center gap-2">
-            <div className="flex items-center justify-center w-8 h-8 rounded-md bg-gradient-to-r from-zinc-900 to-slate-700 text-white shadow-sm">
+      <SidebarInset>
+        <div className="flex flex-col h-full">
+          {/* Header */}
+          <header className="sticky top-0 z-10 flex h-14 items-center gap-4 border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 px-6">
+            <div className="flex items-center gap-2 text-sm">
               <LayoutDashboard className="h-4 w-4" />
+              <span className="font-semibold">Dashboard</span>
             </div>
-            <h1 className="text-lg font-semibold text-foreground">Dashboard</h1>
-          </div>
-        </header>
+            <Separator orientation="vertical" className="h-4" />
+            <BreadcrumbNavigation />
+          </header>
 
-        <div className="flex-1 overflow-auto bg-background">
-          <div className="container mx-auto p-6 space-y-8 max-w-7xl main-content content-transition">
-
-            {/* Welcome Section */}
-            <div className={cn(
-              "space-y-3 p-6 rounded-xl border border-border/50",
-              "bg-white",
-              "dark:from-blue-950/20 dark:to-indigo-950/20",
-              "shadow-sm"
-            )}>
-              <h2 className="text-3xl md:text-4xl font-bold tracking-tight bg-black bg-clip-text text-transparent">
-                Welcome to CourseFinder
-              </h2>
-              <p className="text-muted-foreground text-base md:text-lg leading-relaxed">
-                Your gateway to South African university courses and educational resources
-              </p>
-            </div>
-
-            {/* Latest News Section */}
-            <div className="space-y-6">
-              <div className="flex items-center gap-3">
-                <div className="w-1 h-8 bg-black rounded-full"></div>
-                <h3 className="text-2xl font-semibold text-foreground">Latest Education News</h3>
+          {/* Main Content */}
+          <main className="flex-1 overflow-auto">
+            <div className="mx-auto max-w-7xl p-6 space-y-8 animate-fadeIn">
+              {/* Welcome Section */}
+              <div className="space-y-2">
+                <h1 className="text-3xl font-semibold tracking-tight">Welcome back</h1>
+                <p className="text-muted-foreground">Here's an overview of your university search dashboard</p>
               </div>
-              <NewsGrid />
-            </div>
 
-            <Separator className="my-8 bg-border/60" />
+              {/* Pass Rate Charts */}
+              <section className="space-y-4">
+                <div className="flex items-center justify-between">
+                  <h2 className="text-xl font-semibold">Matric Pass Rates</h2>
+                </div>
+                <PassRateCharts />
+              </section>
 
-            {/* Matric Pass Rate Statistics */}
-            <div className="space-y-6">
-              <div className="flex items-center gap-3">
-                <div className="w-1 h-8 bg-black rounded-full"></div>
-                <h3 className="text-2xl font-semibold text-foreground">Matric Pass Rates</h3>
-              </div>
-              <PassRateCharts />
-              <GeoProvincialPass />
+              <Separator />
+
+              {/* Provincial Map */}
+              <section className="space-y-4">
+                <h2 className="text-xl font-semibold">Provincial Performance</h2>
+                <GeoProvincialPass />
+              </section>
+
+              <Separator />
+
+              {/* News Section */}
+              <section className="space-y-4">
+                <h2 className="text-xl font-semibold">Latest Education News</h2>
+                <NewsGrid />
+              </section>
             </div>
-          </div>
+          </main>
         </div>
         <Chatbot />
       </SidebarInset>
