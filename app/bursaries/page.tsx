@@ -8,8 +8,8 @@ import { Button } from "@/components/ui/button"
 import { DashboardSidebar } from "@/components/app-sidebar"
 import { SidebarInset } from "@/components/ui/sidebar"
 import { Separator } from "@/components/ui/separator"
-import { BreadcrumbNavigation } from "@/components/breadcrumb-navigation"
-import { Search, ExternalLink, Calendar, DollarSign, GraduationCap, CheckCircle2 } from "lucide-react"
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
+import { DollarSign, Search, Filter, ExternalLink, CheckCircle2, Calendar } from "lucide-react"
 import { Skeleton } from "@/components/ui/skeleton"
 
 interface Bursary {
@@ -70,13 +70,10 @@ export default function BursariesPage() {
     <>
       <DashboardSidebar />
       <SidebarInset>
-        <div className="container mx-auto px-4 pt-3">
-          <BreadcrumbNavigation />
-        </div>
         <header className="flex h-16 shrink-0 items-center gap-2 border-b px-4">
           <Separator orientation="vertical" className="mr-2 h-4" />
           <div className="flex items-center gap-2">
-            <GraduationCap className="h-5 w-5 text-blue-600" />
+            <DollarSign className="h-5 w-5 text-blue-600" />
             <h1 className="text-lg font-semibold">Bursaries</h1>
           </div>
         </header>

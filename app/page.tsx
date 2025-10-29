@@ -7,7 +7,6 @@ import { NewsGrid } from "@/components/news-grid"
 import { PassRateCharts } from "@/components/pass-rate-charts"
 import { GeoProvincialPass } from "@/components/geo-provincial-pass"
 import { Chatbot } from "@/components/chatbot"
-import { BreadcrumbNavigation } from "@/components/breadcrumb-navigation"
 import { LayoutDashboard } from "lucide-react"
 
 export default function DashboardPage() {
@@ -22,8 +21,6 @@ export default function DashboardPage() {
               <LayoutDashboard className="h-4 w-4" />
               <span className="font-semibold">Dashboard</span>
             </div>
-            <Separator orientation="vertical" className="h-4" />
-            <BreadcrumbNavigation />
           </header>
 
           {/* Main Content */}
@@ -35,7 +32,15 @@ export default function DashboardPage() {
                 <p className="text-muted-foreground">Here's an overview of your university search dashboard</p>
               </div>
 
-              {/* Pass Rate Charts */}
+              {/* News Section - First Priority */}
+              <section className="space-y-4">
+                <h2 className="text-xl font-semibold">Latest Education News</h2>
+                <NewsGrid />
+              </section>
+
+              <Separator />
+
+              {/* Pass Rate Charts - Second Priority */}
               <section className="space-y-4">
                 <div className="flex items-center justify-between">
                   <h2 className="text-xl font-semibold">Matric Pass Rates</h2>
@@ -45,18 +50,10 @@ export default function DashboardPage() {
 
               <Separator />
 
-              {/* Provincial Map */}
+              {/* Provincial Map - Third Priority */}
               <section className="space-y-4">
                 <h2 className="text-xl font-semibold">Provincial Performance</h2>
                 <GeoProvincialPass />
-              </section>
-
-              <Separator />
-
-              {/* News Section */}
-              <section className="space-y-4">
-                <h2 className="text-xl font-semibold">Latest Education News</h2>
-                <NewsGrid />
               </section>
             </div>
           </main>

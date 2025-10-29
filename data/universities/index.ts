@@ -26,6 +26,8 @@ import { UFS } from "./ufs"
 import { SMU } from "./smu"
 import { UL } from "./ul"
 import { WSU } from "./wsu"
+import { TUT } from "./tut"
+import { SPU } from "./spu"
 
 // Helper to normalize APS field across varying course shapes
 function normalizeAps(course: any): number {
@@ -75,6 +77,8 @@ const instances: BaseUniversity[] = [
   new SMU(),
   new UL(),
   new WSU(),
+  new TUT(),
+  new SPU(),
 ]
 
 // Aggregate to simple index format

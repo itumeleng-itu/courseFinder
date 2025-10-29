@@ -14,9 +14,6 @@ const customJestConfig = {
   },
   testMatch: ["**/__tests__/**/*.test.ts", "**/__tests__/**/*.test.tsx"],
   collectCoverageFrom: ["app/api/**/*.ts", "lib/**/*.ts", "!**/*.d.ts", "!**/node_modules/**", "!**/.next/**"],
-  transform: {
-    "^.+\\.(ts|tsx)$": "ts-jest",
-  },
   moduleFileExtensions: ["ts", "tsx", "js", "jsx", "json"],
 }
 

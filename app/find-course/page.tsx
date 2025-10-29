@@ -10,7 +10,6 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Badge } from "@/components/ui/badge"
 import { ScrollArea } from "@/components/ui/scroll-area"
 import { Separator } from "@/components/ui/separator"
-import { BreadcrumbNavigation } from "@/components/breadcrumb-navigation"
 import { Search, GraduationCap, X, Plus, Calculator } from "lucide-react"
 import { getAllUniversities } from "@/data/universities"
 import type { Course, University } from "@/data/universities/base-university"
@@ -158,9 +157,6 @@ export default function FindCoursePage() {
     <>
       <DashboardSidebar />
       <SidebarInset>
-        <div className="container mx-auto px-4 pt-3">
-          <BreadcrumbNavigation />
-        </div>
         <header className="flex h-16 shrink-0 items-center gap-2 border-b px-4">
           <Separator orientation="vertical" className="mr-2 h-4" />
           <div className="flex items-center gap-2">

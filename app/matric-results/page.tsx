@@ -7,12 +7,14 @@ import { DashboardSidebar } from "@/components/app-sidebar"
 import { SidebarInset } from "@/components/ui/sidebar"
 import { Separator } from "@/components/ui/separator"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
+import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
+import { Textarea } from "@/components/ui/textarea"
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
-import { BreadcrumbNavigation } from "@/components/breadcrumb-navigation"
-import { ExternalLink, Search, Phone, Mail, AlertCircle, FileText, CheckCircle } from "lucide-react"
+import { FileText, Download, Search, Calculator, AlertCircle, ExternalLink, CheckCircle, Phone, Mail } from "lucide-react"
 import { Chatbot } from "@/components/chatbot"
 
 export default function MatricResultsPage() {
@@ -42,24 +44,39 @@ export default function MatricResultsPage() {
       return
     }
 
-    // Redirect to official DBE website with parameters
-    window.open(
-      `https://www.education.gov.za/MatricResults/ExamResults.aspx?exam=${examNumber}&id=${idNumber}`,
-      "_blank",
-    )
+    // Create a form and submit it via POST to avoid exposing sensitive data in URL
+    const form = document.createElement('form')
+    form.method = 'POST'
+    form.action = 'https://www.education.gov.za/MatricResults/ExamResults.aspx'
+    form.target = '_blank'
+    
+    // Create hidden input fields for the data
+    const examInput = document.createElement('input')
+    examInput.type = 'hidden'
+    examInput.name = 'exam'
+    examInput.value = examNumber
+    
+    const idInput = document.createElement('input')
+    idInput.type = 'hidden'
+    idInput.name = 'id'
+    idInput.value = idNumber
+    
+    // Append inputs to form and submit
+    form.appendChild(examInput)
+    form.appendChild(idInput)
+    document.body.appendChild(form)
+    form.submit()
+    document.body.removeChild(form)
   }
 
   return (
     <>
       <DashboardSidebar />
       <SidebarInset>
-        <div className="container mx-auto px-4 pt-3">
-          <BreadcrumbNavigation />
-        </div>
         <header className="flex h-16 shrink-0 items-center gap-2 border-b px-4">
           <Separator orientation="vertical" className="mr-2 h-4" />
           <div className="flex items-center gap-2">
-            <CheckCircle className="h-5 w-5 text-green-600" />
+            <FileText className="h-5 w-5 text-green-600" />
             <h1 className="text-lg font-semibold">Matric Results</h1>
           </div>
         </header>

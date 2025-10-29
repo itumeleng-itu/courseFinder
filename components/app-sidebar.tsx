@@ -29,13 +29,15 @@ import {
   Search,
   FileText,
   Building2,
+  BookOpen,
+  Calendar,
+  Lightbulb,
 } from "lucide-react";
 import { Logo } from "@/components/logo";
 import type { Route } from "./nav-main";
 import DashboardNavigation from "@/components/nav-main";
 import { NotificationsPopover } from "@/components/nav-notifications";
 import { Personalise } from "@/components/personalise";
-import { ThemeToggle } from "@/components/theme-toggle"
 
 
 const sampleNotifications = [
@@ -80,6 +82,29 @@ const dashboardRoutes: Route[] = [
     title: "Matric Results",
     icon: <FileText className="size-4" />,
     link: "/matric-results",
+  },
+  {
+    id: "study-tools",
+    title: "Study Tools",
+    icon: <BookOpen className="size-4" />,
+    link: "/study-tools",
+    subs: [
+      {
+        title: "Past Question Papers",
+        icon: <FileText className="size-4" />,
+        link: "/past-papers",
+      },
+      {
+        title: "Calendar",
+        icon: <Calendar className="size-4" />,
+        link: "/calendar",
+      },
+      {
+        title: "Study Tips",
+        icon: <Lightbulb className="size-4" />,
+        link: "/study-tips",
+      },
+    ],
   },
   {
     id: "bursaries",
@@ -131,7 +156,6 @@ export function DashboardSidebar() {
           transition={{ duration: 0.5 }}
         >
           <NotificationsPopover notifications={sampleNotifications} />
-          <ThemeToggle />
           <SidebarTrigger className="ml-auto" />
         </motion.div>
       </SidebarHeader>

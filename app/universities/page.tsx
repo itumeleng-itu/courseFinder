@@ -5,9 +5,8 @@ import { SidebarInset } from "@/components/ui/sidebar"
 import { Separator } from "@/components/ui/separator"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
-import { BreadcrumbNavigation } from "@/components/breadcrumb-navigation"
 import { universities } from "@/data/universities"
-import { Building2, ExternalLink, School } from "lucide-react"
+import { Building2, ExternalLink, School, GraduationCap } from "lucide-react"
 import { Chatbot } from "@/components/chatbot"
 
 export default function UniversitiesPage() {
@@ -15,9 +14,6 @@ export default function UniversitiesPage() {
     <>
       <DashboardSidebar />
       <SidebarInset>
-        <div className="container mx-auto px-4 pt-3">
-          <BreadcrumbNavigation />
-        </div>
         <header className="flex h-16 shrink-0 items-center gap-2 border-b px-4">
           <Separator orientation="vertical" className="mr-2 h-4" />
           <div className="flex items-center gap-2">
