@@ -1,30 +1,16 @@
-'use client'
+"use client"
 
-import { useState, useMemo } from 'react'
-import { Search, Download, BookOpen, FileText, AlertCircle, CheckCircle2, Filter } from 'lucide-react'
-import { Button } from '@/components/ui/button'
-import { Input } from '@/components/ui/input'
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
-import { Badge } from '@/components/ui/badge'
-import { DashboardSidebar } from '@/components/app-sidebar'
-import { SidebarInset, SidebarProvider } from '@/components/ui/sidebar'
-import { Chatbot } from '@/components/chatbot'
-import { getDownloadUrl, type QuestionPaper } from '@/lib/appwrite'
-
-// Types
-interface PastPaper {
-  id: string
-  file_id: string
-  bucket_id: string
-  subject: string
-  year: number
-  paper_type: string
-  session: string
-  language: string
-  filename: string
-  url?: string
-}
+import { useState, useMemo } from "react"
+import { Search, Download, BookOpen, FileText, AlertCircle } from "lucide-react"
+import { Button } from "@/components/ui/button"
+import { Input } from "@/components/ui/input"
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
+import { Badge } from "@/components/ui/badge"
+import { DashboardSidebar } from "@/components/app-sidebar"
+import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar"
+import { Chatbot } from "@/components/chatbot"
+import { getDownloadUrl, type QuestionPaper } from "@/lib/appwrite"
 
 const SUBJECTS = [
   "Mathematics",
@@ -69,30 +55,43 @@ const SUBJECTS = [
   "Music",
   "Religion Studies",
   "Tourism",
-  "Visual Arts"
+  "Visual Arts",
 ]
 
 const YEARS = Array.from({ length: 15 }, (_, i) => 2024 - i)
-const LANGUAGES = ["English", "Afrikaans"]
+
+const getYearColor = (year: number): string => {
+  if (year >= 2023) return "bg-blue-500/10 border-blue-500/20 hover:border-blue-500/40"
+  if (year >= 2020) return "bg-green-500/10 border-green-500/20 hover:border-green-500/40"
+  if (year >= 2017) return "bg-yellow-500/10 border-yellow-500/20 hover:border-yellow-500/40"
+  if (year >= 2014) return "bg-orange-500/10 border-orange-500/20 hover:border-orange-500/40"
+  return "bg-red-500/10 border-red-500/20 hover:border-red-500/40"
+}
+
+const getYearBadgeColor = (year: number): string => {
+  if (year >= 2023) return "bg-blue-500 text-white"
+  if (year >= 2020) return "bg-green-500 text-white"
+  if (year >= 2017) return "bg-yellow-500 text-white"
+  if (year >= 2014) return "bg-orange-500 text-white"
+  return "bg-red-500 text-white"
+}
 
 export function PastPapersClient({ papers }: { papers: QuestionPaper[] }) {
   const [searchTerm, setSearchTerm] = useState("")
   const [selectedSubject, setSelectedSubject] = useState<string>("all")
   const [selectedYear, setSelectedYear] = useState<string>("all")
-  const [selectedLanguage, setSelectedLanguage] = useState<string>("all")
   const [downloadingIds, setDownloadingIds] = useState<Set<string>>(new Set())
 
-  const handleDownload = async (paper: PastPaper) => {
-    setDownloadingIds(prev => new Set(prev).add(paper.id))
-    
+  const handleDownload = async (paper: QuestionPaper) => {
+    setDownloadingIds((prev) => new Set(prev).add(paper.id))
+
     try {
-      // Get download URL from Appwrite
-      const downloadUrl = getDownloadUrl(paper.url!)
-      window.open(downloadUrl, '_blank')
+      const downloadUrl = getDownloadUrl(paper.file_id, paper.bucket_id)
+      window.open(downloadUrl, "_blank")
     } catch (error) {
-      console.error('Download error:', error)
+      console.error("Download error:", error)
     } finally {
-      setDownloadingIds(prev => {
+      setDownloadingIds((prev) => {
         const newSet = new Set(prev)
         newSet.delete(paper.id)
         return newSet
@@ -100,64 +99,56 @@ export function PastPapersClient({ papers }: { papers: QuestionPaper[] }) {
     }
   }
 
-  const filteredPapers = useMemo(() => {
-    return papers.filter(paper => {
-      const matchesSearch = paper.subject.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                           paper.paper_type.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                           paper.year.toString().includes(searchTerm)
-      
-      const matchesSubject = selectedSubject === "all" || paper.subject === selectedSubject
-      const matchesYear = selectedYear === "all" || paper.year.toString() === selectedYear
-      const matchesLanguage = selectedLanguage === "all" || paper.language === selectedLanguage
-      
-        return matchesSearch && matchesSubject && matchesYear && matchesLanguage
-      })
-    }, [papers, searchTerm, selectedSubject, selectedYear, selectedLanguage])
+  const hasActiveFilters = searchTerm !== "" || selectedSubject !== "all" || selectedYear !== "all"
 
-  const groupedPapers = filteredPapers.reduce((acc, paper) => {
-    const key = `${paper.subject}-${paper.year}-${paper.session}`
-    if (!acc[key]) {
-      acc[key] = []
-    }
-    acc[key].push(paper)
-    return acc
-  }, {} as Record<string, PastPaper[]>)
+  const filteredPapers = useMemo(() => {
+    if (!hasActiveFilters) return []
+
+    return papers.filter((paper) => {
+      const matchesSearch =
+        paper.subject.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        paper.paper_type.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        paper.filename.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        paper.year.toString().includes(searchTerm)
+
+      const matchesSubject =
+        selectedSubject === "all" || paper.subject.toLowerCase().includes(selectedSubject.toLowerCase())
+      const matchesYear = selectedYear === "all" || paper.year.toString() === selectedYear
+
+      return matchesSearch && matchesSubject && matchesYear
+    })
+  }, [papers, searchTerm, selectedSubject, selectedYear, hasActiveFilters])
 
   return (
     <SidebarProvider>
       <DashboardSidebar />
       <SidebarInset>
         <div className="flex flex-col h-full">
-
-          {/* Main Content */}
           <main className="flex-1 overflow-auto">
             <div className="container mx-auto px-6 py-8 space-y-8">
-              {/* Header Section */}
+              {/* Header */}
               <div className="space-y-4">
-                <h1 className="text-3xl font-bold">Past Question Papers</h1>
+                <h1 className="text-3xl font-bold tracking-tight">Past Question Papers</h1>
                 <p className="text-muted-foreground text-lg">
-                  Download past examination papers and memorandums from the Department of Basic Education and other sources
+                  Search and download past examination papers from the Department of Basic Education
                 </p>
-
               </div>
 
-              {/* Search and Filter Section */}
+              {/* Search and Filter */}
               <Card>
                 <CardHeader>
                   <CardTitle className="flex items-center gap-2">
                     <Search className="h-5 w-5" />
-                    Search & Filter
+                    Search Papers
                   </CardTitle>
-                  <CardDescription>
-                    Find specific papers by searching or using the filters below
-                  </CardDescription>
+                  <CardDescription>Use the search and filters below to find specific papers</CardDescription>
                 </CardHeader>
                 <CardContent>
-                  <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-5">
+                  <div className="grid gap-4 md:grid-cols-3">
                     <div className="space-y-2">
                       <label className="text-sm font-medium">Search</label>
                       <Input
-                        placeholder="Search papers..."
+                        placeholder="Search by subject, year, or filename..."
                         value={searchTerm}
                         onChange={(e) => setSearchTerm(e.target.value)}
                         className="w-full"
@@ -168,11 +159,11 @@ export function PastPapersClient({ papers }: { papers: QuestionPaper[] }) {
                       <label className="text-sm font-medium">Subject</label>
                       <Select value={selectedSubject} onValueChange={setSelectedSubject}>
                         <SelectTrigger>
-                          <SelectValue placeholder="Select subject" />
+                          <SelectValue placeholder="All subjects" />
                         </SelectTrigger>
                         <SelectContent>
                           <SelectItem value="all">All Subjects</SelectItem>
-                          {SUBJECTS.map(subject => (
+                          {SUBJECTS.map((subject) => (
                             <SelectItem key={subject} value={subject}>
                               {subject}
                             </SelectItem>
@@ -185,11 +176,11 @@ export function PastPapersClient({ papers }: { papers: QuestionPaper[] }) {
                       <label className="text-sm font-medium">Year</label>
                       <Select value={selectedYear} onValueChange={setSelectedYear}>
                         <SelectTrigger>
-                          <SelectValue placeholder="Select year" />
+                          <SelectValue placeholder="All years" />
                         </SelectTrigger>
                         <SelectContent>
                           <SelectItem value="all">All Years</SelectItem>
-                          {YEARS.map(year => (
+                          {YEARS.map((year) => (
                             <SelectItem key={year} value={year.toString()}>
                               {year}
                             </SelectItem>
@@ -197,156 +188,106 @@ export function PastPapersClient({ papers }: { papers: QuestionPaper[] }) {
                         </SelectContent>
                       </Select>
                     </div>
-
-                    <div className="space-y-2">
-                      <label className="text-sm font-medium">Language</label>
-                      <Select value={selectedLanguage} onValueChange={setSelectedLanguage}>
-                        <SelectTrigger>
-                          <SelectValue placeholder="Select language" />
-                        </SelectTrigger>
-                        <SelectContent>
-                          <SelectItem value="all">All Languages</SelectItem>
-                          {LANGUAGES.map(language => (
-                            <SelectItem key={language} value={language}>
-                              {language}
-                            </SelectItem>
-                          ))}
-                        </SelectContent>
-                      </Select>
-                    </div>
                   </div>
                 </CardContent>
               </Card>
 
-              {/* Results Section */}
+              {/* Results */}
               <div className="space-y-4">
-                <div className="flex items-center justify-between">
-                  <h2 className="text-xl font-semibold">
-                    Available Papers ({filteredPapers.length})
-                  </h2>
-                </div>
-
-                {Object.keys(groupedPapers).length === 0 ? (
+                {!hasActiveFilters ? (
+                  <Card className="border-dashed">
+                    <CardContent className="p-12 text-center">
+                      <BookOpen className="h-16 w-16 mx-auto text-muted-foreground/50 mb-4" />
+                      <h3 className="text-xl font-semibold mb-2">Search for Question Papers</h3>
+                      <p className="text-muted-foreground max-w-md mx-auto">
+                        Use the search bar or filters above to find past examination papers. You can search by subject,
+                        year, or keywords.
+                      </p>
+                    </CardContent>
+                  </Card>
+                ) : filteredPapers.length === 0 ? (
                   <Card>
                     <CardContent className="p-12 text-center">
                       <AlertCircle className="h-12 w-12 mx-auto text-muted-foreground mb-4" />
                       <h3 className="text-lg font-semibold mb-2">No Papers Found</h3>
                       <p className="text-muted-foreground mb-4">
-                        No papers match your current filters. Try adjusting your search criteria.
+                        No papers match your search criteria. Try adjusting your filters or search terms.
                       </p>
-                      <Button onClick={() => {
-                        setSearchTerm("")
-                        setSelectedSubject("all")
-                        setSelectedYear("all")
-                        setSelectedLanguage("all")
-                      }}>
+                      <Button
+                        onClick={() => {
+                          setSearchTerm("")
+                          setSelectedSubject("all")
+                          setSelectedYear("all")
+                        }}
+                        variant="outline"
+                      >
                         Clear Filters
                       </Button>
                     </CardContent>
                   </Card>
                 ) : (
-                  <div className="grid gap-6">
-                    {Object.entries(groupedPapers).map(([key, paperGroup]) => {
-                      const [subject, year, session] = key.split('-')
-                      return (
-                        <Card key={key}>
-                          <CardHeader>
-                            <CardTitle className="flex items-center gap-2">
-                              <BookOpen className="h-5 w-5" />
-                              {subject} - {session} ({year})
-                            </CardTitle>
-                            <CardDescription>
-                              Available papers and memorandums for {subject}
+                  <>
+                    <div className="flex items-center justify-between">
+                      <h2 className="text-xl font-semibold">
+                        Found {filteredPapers.length} {filteredPapers.length === 1 ? "paper" : "papers"}
+                      </h2>
+                      <Button
+                        onClick={() => {
+                          setSearchTerm("")
+                          setSelectedSubject("all")
+                          setSelectedYear("all")
+                        }}
+                        variant="ghost"
+                        size="sm"
+                      >
+                        Clear Filters
+                      </Button>
+                    </div>
+
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+                      {filteredPapers.map((paper) => (
+                        <Card
+                          key={paper.id}
+                          className={`transition-all duration-200 border-2 ${getYearColor(paper.year)}`}
+                        >
+                          <CardHeader className="pb-3">
+                            <div className="flex items-start justify-between gap-2 mb-2">
+                              <Badge className={`${getYearBadgeColor(paper.year)} text-xs font-semibold`}>
+                                {paper.year}
+                              </Badge>
+                              <FileText className="h-4 w-4 text-muted-foreground flex-shrink-0" />
+                            </div>
+                            <CardTitle className="text-base line-clamp-2 leading-tight">{paper.subject}</CardTitle>
+                            <CardDescription className="text-xs">
+                              {paper.paper_type} • {paper.session}
                             </CardDescription>
                           </CardHeader>
-                          <CardContent>
-                            <div className="grid gap-3">
-                              {paperGroup.map((paper) => (
-                                <div
-                                  key={paper.id}
-                                  className="flex items-center justify-between p-4 border rounded-lg hover:bg-accent/50 transition-colors"
-                                >
-                                  <div className="flex items-center gap-3">
-                                    <FileText className="h-5 w-5 text-muted-foreground" />
-                                    <div>
-                                      <div className="font-medium">
-                                        {paper.paper_type === 'memo' ? 'Memorandum' : `Paper ${paper.paper_type.replace('paper', '')}`} - {paper.session}
-                                      </div>
-                                      <div className="text-sm text-muted-foreground flex items-center gap-2">
-                                        <span>{paper.language}</span>
-                                        <Badge variant="outline" className="ml-2">
-                                          DBE
-                                        </Badge>
-                                      </div>
-                                    </div>
-                                  </div>
-                                  <Button
-                                    onClick={() => handleDownload(paper)}
-                                    disabled={downloadingIds.has(paper.id)}
-                                    size="sm"
-                                    className="flex items-center gap-2"
-                                  >
-                                    {downloadingIds.has(paper.id) ? (
-                                      <>
-                                        <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-current" />
-                                        Downloading...
-                                      </>
-                                    ) : (
-                                      <>
-                                        <Download className="h-4 w-4" />
-                                        Download
-                                      </>
-                                    )}
-                                  </Button>
-                                </div>
-                              ))}
-                            </div>
+                          <CardContent className="pt-0">
+                            <Button
+                              onClick={() => handleDownload(paper)}
+                              disabled={downloadingIds.has(paper.id)}
+                              size="sm"
+                              className="w-full"
+                            >
+                              {downloadingIds.has(paper.id) ? (
+                                <>
+                                  <div className="animate-spin rounded-full h-3 w-3 border-b-2 border-current mr-2" />
+                                  Downloading...
+                                </>
+                              ) : (
+                                <>
+                                  <Download className="h-3 w-3 mr-2" />
+                                  Download
+                                </>
+                              )}
+                            </Button>
                           </CardContent>
                         </Card>
-                      )
-                    })}
-                  </div>
+                      ))}
+                    </div>
+                  </>
                 )}
               </div>
-
-              {/* Info Section */}
-              <Card>
-                <CardHeader>
-                  <CardTitle className="flex items-center gap-2">
-                    <AlertCircle className="h-5 w-5" />
-                    Important Information
-                  </CardTitle>
-                </CardHeader>
-                <CardContent className="space-y-3">
-                  <div className="flex items-start gap-3">
-                    <CheckCircle2 className="h-5 w-5 text-green-500 mt-0.5" />
-                    <div>
-                      <p className="font-medium">Official Sources</p>
-                      <p className="text-sm text-muted-foreground">
-                        Papers are sourced from the Department of Basic Education and teachme2.com
-                      </p>
-                    </div>
-                  </div>
-                  <div className="flex items-start gap-3">
-                    <CheckCircle2 className="h-5 w-5 text-green-500 mt-0.5" />
-                    <div>
-                      <p className="font-medium">Free Downloads</p>
-                      <p className="text-sm text-muted-foreground">
-                        All papers are available for free download for educational purposes
-                      </p>
-                    </div>
-                  </div>
-                  <div className="flex items-start gap-3">
-                    <CheckCircle2 className="h-5 w-5 text-green-500 mt-0.5" />
-                    <div>
-                      <p className="font-medium">Regular Updates</p>
-                      <p className="text-sm text-muted-foreground">
-                        New papers are added as they become available from official sources
-                      </p>
-                    </div>
-                  </div>
-                </CardContent>
-              </Card>
             </div>
           </main>
         </div>
