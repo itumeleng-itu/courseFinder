@@ -62,6 +62,9 @@ importers:
       ai:
         specifier: ^4.0.38
         version: 4.0.38(react@19.0.0)(zod@3.24.1)
+      appwrite:
+        specifier: ^21.3.0
+        version: 21.3.0
       child_process:
         specifier: latest
         version: 1.0.2
@@ -101,6 +104,9 @@ importers:
       next-themes:
         specifier: latest
         version: 0.4.6(react-dom@19.0.0(react@19.0.0))(react@19.0.0)
+      node-appwrite:
+        specifier: ^20.2.1
+        version: 20.2.1
       node-notifier:
         specifier: latest
         version: 10.0.1
@@ -1656,6 +1662,9 @@ packages:
     resolution: {integrity: sha512-KMReFUr0B4t+D+OBkjR3KYqvocp2XaSzO55UcB6mgQMd3KbcE+mWTyvVV7D/zsdEbNnV6acZUutkiHQXvTr1Rw==}
     engines: {node: '>= 8'}
 
+  appwrite@21.3.0:
+    resolution: {integrity: sha512-b3apD2fiQ7g+2damLZ0Lk9SdCJb32wXKq1ijB7blAl0uItqMx0I34E0RVaC5aER5VTCXHFAlHRjZ1GQypdNt1A==}
+
   arg@5.0.2:
     resolution: {integrity: sha512-PYjyFOLKQ9y57JvQ6QLo8dAgNqswh8M1RMJYdQduT6xbWSgK36P/Z/v+p888pM69jMMfS8Xd8F6I1kQ/I9HUGg==}
 
@@ -3202,6 +3211,12 @@ packages:
         optional: true
       sass:
         optional: true
+
+  node-appwrite@20.2.1:
+    resolution: {integrity: sha512-RweIh+3RHjprsxhWaJzcQr/UDMBMsZCma50TIJ9t3onVgs5jAT9aqFnsMlaaC9QZn1sXpPUQV90W6uvtm64DnQ==}
+
+  node-fetch-native-with-agent@1.7.2:
+    resolution: {integrity: sha512-5MaOOCuJEvcckoz7/tjdx1M6OusOY6Xc5f459IaruGStWnKzlI1qpNgaAwmn4LmFYcsSlj+jBMk84wmmRxfk5g==}
 
   node-int64@0.4.0:
     resolution: {integrity: sha512-O5lz91xSOeoXP6DulyHfllpq+Eg00MWitZIbtPfoSEvqIHdl5gfcY6hYzDWnj0qD5tz52PI08u9qUvSVeUBeHw==}
@@ -5720,6 +5735,8 @@ snapshots:
       normalize-path: 3.0.0
       picomatch: 2.3.1
 
+  appwrite@21.3.0: {}
+
   arg@5.0.2: {}
 
   argparse@1.0.10:
@@ -7696,6 +7713,12 @@ snapshots:
     transitivePeerDependencies:
       - '@babel/core'
       - babel-plugin-macros
+
+  node-appwrite@20.2.1:
+    dependencies:
+      node-fetch-native-with-agent: 1.7.2
+
+  node-fetch-native-with-agent@1.7.2: {}
 
   node-int64@0.4.0: {}
 

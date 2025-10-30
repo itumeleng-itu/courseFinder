@@ -11,13 +11,156 @@
     "grade": 12
   },
   {
-    "id": "2024_november_1",
-    "filename": "Mathematics P1 Nov 2024 Memo Eng",
-    "url": "https://www.education.gov.za/Portals/0/CD/2024%20November%20past%20papers/Mathematics%20P1%20Nov%202024%20Memo%20Eng.pdf",
-    "year": 2024,
+    "id": "2021_november_0",
+    "filename": "Mathematics P1 Nov 2021 Eng",
+    "url": "https://www.education.gov.za/Portals/0/CD/2021%20November%20past%20papers/Mathematics%20P1%20Nov%202021%20Eng.pdf",
+    "year": 2021,
     "period": "November",
     "subject": "Mathematics",
-    "paper_type": "memo",
+    "paper_type": "paper1",
+    "language": "English",
+    "grade": 12
+  },
+  {
+    "id": "2021_november_1",
+    "filename": "Mathematics P2 Nov 2021 Eng",
+    "url": "https://www.education.gov.za/Portals/0/CD/2021%20November%20past%20papers/Mathematics%20P2%20Nov%202021%20Eng.pdf",
+    "year": 2021,
+    "period": "November",
+    "subject": "Mathematics",
+    "paper_type": "paper2",
+    "language": "English",
+    "grade": 12
+  },
+  {
+    "id": "2021_november_2",
+    "filename": "Physical Sciences P1 Nov 2021 Eng",
+    "url": "https://www.education.gov.za/Portals/0/CD/2021%20November%20past%20papers/Physical%20Sciences%20P1%20Nov%202021%20Eng.pdf",
+    "year": 2021,
+    "period": "November",
+    "subject": "Physical Sciences",
+    "paper_type": "paper1",
+    "language": "English",
+    "grade": 12
+  },
+  {
+    "id": "2021_november_3",
+    "filename": "Physical Sciences P2 Nov 2021 Eng",
+    "url": "https://www.education.gov.za/Portals/0/CD/2021%20November%20past%20papers/Physical%20Sciences%20P2%20Nov%202021%20Eng.pdf",
+    "year": 2021,
+    "period": "November",
+    "subject": "Physical Sciences",
+    "paper_type": "paper2",
+    "language": "English",
+    "grade": 12
+  },
+  {
+    "id": "2021_november_4",
+    "filename": "Life Sciences P1 Nov 2021 Eng",
+    "url": "https://www.education.gov.za/Portals/0/CD/2021%20November%20past%20papers/Life%20Sciences%20P1%20Nov%202021%20Eng.pdf",
+    "year": 2021,
+    "period": "November",
+    "subject": "Life Sciences",
+    "paper_type": "paper1",
+    "language": "English",
+    "grade": 12
+  },
+  {
+    "id": "2021_november_5",
+    "filename": "Life Sciences P2 Nov 2021 Eng",
+    "url": "https://www.education.gov.za/Portals/0/CD/2021%20November%20past%20papers/Life%20Sciences%20P2%20Nov%202021%20Eng.pdf",
+    "year": 2021,
+    "period": "November",
+    "subject": "Life Sciences",
+    "paper_type": "paper2",
+    "language": "English",
+    "grade": 12
+  },
+  {
+    "id": "2021_november_6",
+    "filename": "English Home Language P1 Nov 2021",
+    "url": "https://www.education.gov.za/Portals/0/CD/2021%20November%20past%20papers/English%20Home%20Language%20P1%20Nov%202021.pdf",
+    "year": 2021,
+    "period": "November",
+    "subject": "English Home Language",
+    "paper_type": "paper1",
+    "language": "English",
+    "grade": 12
+  },
+  {
+    "id": "2021_november_7",
+    "filename": "English Home Language P2 Nov 2021",
+    "url": "https://www.education.gov.za/Portals/0/CD/2021%20November%20past%20papers/English%20Home%20Language%20P2%20Nov%202021.pdf",
+    "year": 2021,
+    "period": "November",
+    "subject": "English Home Language",
+    "paper_type": "paper2",
+    "language": "English",
+    "grade": 12
+  },
+  {
+    "id": "2021_november_8",
+    "filename": "Accounting P1 Nov 2021 Eng",
+    "url": "https://www.education.gov.za/Portals/0/CD/2021%20November%20past%20papers/Accounting%20P1%20Nov%202021%20Eng.pdf",
+    "year": 2021,
+    "period": "November",
+    "subject": "Accounting",
+    "paper_type": "paper1",
+    "language": "English",
+    "grade": 12
+  },
+  {
+    "id": "2021_november_9",
+    "filename": "Business Studies Nov 2021 Eng",
+    "url": "https://www.education.gov.za/Portals/0/CD/2021%20November%20past%20papers/Business%20Studies%20Nov%202021%20Eng.pdf",
+    "year": 2021,
+    "period": "November",
+    "subject": "Business Studies",
+    "paper_type": "paper1",
+    "language": "English",
+    "grade": 12
+  },
+  {
+    "id": "2021_november_10",
+    "filename": "Geography P1 Nov 2021 Eng",
+    "url": "https://www.education.gov.za/Portals/0/CD/2021%20November%20past%20papers/Geography%20P1%20Nov%202021%20Eng.pdf",
+    "year": 2021,
+    "period": "November",
+    "subject": "Geography",
+    "paper_type": "paper1",
+    "language": "English",
+    "grade": 12
+  },
+  {
+    "id": "2021_november_11",
+    "filename": "Geography P2 Nov 2021 Eng",
+    "url": "https://www.education.gov.za/Portals/0/CD/2021%20November%20past%20papers/Geography%20P2%20Nov%202021%20Eng.pdf",
+    "year": 2021,
+    "period": "November",
+    "subject": "Geography",
+    "paper_type": "paper2",
+    "language": "English",
+    "grade": 12
+  },
+  {
+    "id": "2021_november_12",
+    "filename": "History P1 Nov 2021 Eng",
+    "url": "https://www.education.gov.za/Portals/0/CD/2021%20November%20past%20papers/History%20P1%20Nov%202021%20Eng.pdf",
+    "year": 2021,
+    "period": "November",
+    "subject": "History",
+    "paper_type": "paper1",
+    "language": "English",
+    "grade": 12
+  },
+  {
+    "id": "2021_november_13",
+    "filename": "History P2 Nov 2021 Eng",
+    "url": "https://www.education.gov.za/Portals/0/CD/2021%20November%20past%20papers/History%20P2%20Nov%202021%20Eng.pdf",
+    "year": 2021,
+    "period": "November",
+    "subject": "History",
+    "paper_type": "paper2",
     "language": "English",
     "grade": 12
   },
@@ -33,17 +176,6 @@
     "grade": 12
   },
   {
-    "id": "2024_november_3",
-    "filename": "Mathematics P2 Nov 2024 Memo Eng",
-    "url": "https://www.education.gov.za/Portals/0/CD/2024%20November%20past%20papers/Mathematics%20P2%20Nov%202024%20Memo%20Eng.pdf",
-    "year": 2024,
-    "period": "November",
-    "subject": "Mathematics",
-    "paper_type": "memo",
-    "language": "English",
-    "grade": 12
-  },
-  {
     "id": "2024_november_4",
     "filename": "Physical Sciences P1 Nov 2024 Eng",
     "url": "https://www.education.gov.za/Portals/0/CD/2024%20November%20past%20papers/Physical%20Sciences%20P1%20Nov%202024%20Eng.pdf",
@@ -51,17 +183,6 @@
     "period": "November",
     "subject": "Physical Sciences",
     "paper_type": "paper1",
-    "language": "English",
-    "grade": 12
-  },
-  {
-    "id": "2024_november_5",
-    "filename": "Physical Sciences P1 Nov 2024 Memo Eng",
-    "url": "https://www.education.gov.za/Portals/0/CD/2024%20November%20past%20papers/Physical%20Sciences%20P1%20Nov%202024%20Memo%20Eng.pdf",
-    "year": 2024,
-    "period": "November",
-    "subject": "Physical Sciences",
-    "paper_type": "memo",
     "language": "English",
     "grade": 12
   },
@@ -77,17 +198,6 @@
     "grade": 12
   },
   {
-    "id": "2024_november_7",
-    "filename": "Physical Sciences P2 Nov 2024 Memo Eng",
-    "url": "https://www.education.gov.za/Portals/0/CD/2024%20November%20past%20papers/Physical%20Sciences%20P2%20Nov%202024%20Memo%20Eng.pdf",
-    "year": 2024,
-    "period": "November",
-    "subject": "Physical Sciences",
-    "paper_type": "memo",
-    "language": "English",
-    "grade": 12
-  },
-  {
     "id": "2024_november_8",
     "filename": "Life Sciences P1 Nov 2024 Eng",
     "url": "https://www.education.gov.za/Portals/0/CD/2024%20November%20past%20papers/Life%20Sciences%20P1%20Nov%202024%20Eng.pdf",
@@ -95,17 +205,6 @@
     "period": "November",
     "subject": "Life Sciences",
     "paper_type": "paper1",
-    "language": "English",
-    "grade": 12
-  },
-  {
-    "id": "2024_november_9",
-    "filename": "Life Sciences P1 Nov 2024 Memo Eng",
-    "url": "https://www.education.gov.za/Portals/0/CD/2024%20November%20past%20papers/Life%20Sciences%20P1%20Nov%202024%20Memo%20Eng.pdf",
-    "year": 2024,
-    "period": "November",
-    "subject": "Life Sciences",
-    "paper_type": "memo",
     "language": "English",
     "grade": 12
   },
@@ -121,13 +220,46 @@
     "grade": 12
   },
   {
-    "id": "2024_november_11",
-    "filename": "English Home Language P1 Nov 2024 Memo",
-    "url": "https://www.education.gov.za/Portals/0/CD/2024%20November%20past%20papers/English%20Home%20Language%20P1%20Nov%202024%20Memo.pdf",
+    "id": "2024_november_12",
+    "filename": "Accounting P1 Nov 2024 Eng",
+    "url": "https://www.education.gov.za/Portals/0/CD/2024%20November%20past%20papers/Accounting%20P1%20Nov%202024%20Eng.pdf",
     "year": 2024,
     "period": "November",
-    "subject": "English Home Language",
-    "paper_type": "memo",
+    "subject": "Accounting",
+    "paper_type": "paper1",
+    "language": "English",
+    "grade": 12
+  },
+  {
+    "id": "2024_november_13",
+    "filename": "Business Studies Nov 2024 Eng",
+    "url": "https://www.education.gov.za/Portals/0/CD/2024%20November%20past%20papers/Business%20Studies%20Nov%202024%20Eng.pdf",
+    "year": 2024,
+    "period": "November",
+    "subject": "Business Studies",
+    "paper_type": "paper1",
+    "language": "English",
+    "grade": 12
+  },
+  {
+    "id": "2024_november_14",
+    "filename": "Geography P1 Nov 2024 Eng",
+    "url": "https://www.education.gov.za/Portals/0/CD/2024%20November%20past%20papers/Geography%20P1%20Nov%202024%20Eng.pdf",
+    "year": 2024,
+    "period": "November",
+    "subject": "Geography",
+    "paper_type": "paper1",
+    "language": "English",
+    "grade": 12
+  },
+  {
+    "id": "2024_november_15",
+    "filename": "History P1 Nov 2024 Eng",
+    "url": "https://www.education.gov.za/Portals/0/CD/2024%20November%20past%20papers/History%20P1%20Nov%202024%20Eng.pdf",
+    "year": 2024,
+    "period": "November",
+    "subject": "History",
+    "paper_type": "paper1",
     "language": "English",
     "grade": 12
   },
@@ -144,12 +276,12 @@
   },
   {
     "id": "2023_november_1",
-    "filename": "Mathematics P1 Nov 2023 Memo Eng",
-    "url": "https://www.education.gov.za/Portals/0/CD/2023%20November%20past%20papers/Mathematics%20P1%20Nov%202023%20Memo%20Eng.pdf",
+    "filename": "Mathematics P2 Nov 2023 Eng",
+    "url": "https://www.education.gov.za/Portals/0/CD/2023%20November%20past%20papers/Mathematics%20P2%20Nov%202023%20Eng.pdf",
     "year": 2023,
     "period": "November",
     "subject": "Mathematics",
-    "paper_type": "memo",
+    "paper_type": "paper2",
     "language": "English",
     "grade": 12
   },
@@ -166,6 +298,61 @@
   },
   {
     "id": "2023_november_3",
+    "filename": "Physical Sciences P2 Nov 2023 Eng",
+    "url": "https://www.education.gov.za/Portals/0/CD/2023%20November%20past%20papers/Physical%20Sciences%20P2%20Nov%202023%20Eng.pdf",
+    "year": 2023,
+    "period": "November",
+    "subject": "Physical Sciences",
+    "paper_type": "paper2",
+    "language": "English",
+    "grade": 12
+  },
+  {
+    "id": "2023_november_4",
+    "filename": "Life Sciences P1 Nov 2023 Eng",
+    "url": "https://www.education.gov.za/Portals/0/CD/2023%20November%20past%20papers/Life%20Sciences%20P1%20Nov%202023%20Eng.pdf",
+    "year": 2023,
+    "period": "November",
+    "subject": "Life Sciences",
+    "paper_type": "paper1",
+    "language": "English",
+    "grade": 12
+  },
+  {
+    "id": "2023_november_5",
+    "filename": "Life Sciences P2 Nov 2023 Eng",
+    "url": "https://www.education.gov.za/Portals/0/CD/2023%20November%20past%20papers/Life%20Sciences%20P2%20Nov%202023%20Eng.pdf",
+    "year": 2023,
+    "period": "November",
+    "subject": "Life Sciences",
+    "paper_type": "paper2",
+    "language": "English",
+    "grade": 12
+  },
+  {
+    "id": "2023_november_6",
+    "filename": "English Home Language P1 Nov 2023",
+    "url": "https://www.education.gov.za/Portals/0/CD/2023%20November%20past%20papers/English%20Home%20Language%20P1%20Nov%202023.pdf",
+    "year": 2023,
+    "period": "November",
+    "subject": "English Home Language",
+    "paper_type": "paper1",
+    "language": "English",
+    "grade": 12
+  },
+  {
+    "id": "2023_november_7",
+    "filename": "English Home Language P2 Nov 2023",
+    "url": "https://www.education.gov.za/Portals/0/CD/2023%20November%20past%20papers/English%20Home%20Language%20P2%20Nov%202023.pdf",
+    "year": 2023,
+    "period": "November",
+    "subject": "English Home Language",
+    "paper_type": "paper2",
+    "language": "English",
+    "grade": 12
+  },
+  {
+    "id": "2023_november_8",
     "filename": "Accounting P1 Nov 2023 Eng",
     "url": "https://www.education.gov.za/Portals/0/CD/2023%20November%20past%20papers/Accounting%20P1%20Nov%202023%20Eng.pdf",
     "year": 2023,
@@ -176,13 +363,57 @@
     "grade": 12
   },
   {
-    "id": "2023_november_4",
+    "id": "2023_november_9",
     "filename": "Business Studies Nov 2023 Eng",
     "url": "https://www.education.gov.za/Portals/0/CD/2023%20November%20past%20papers/Business%20Studies%20Nov%202023%20Eng.pdf",
     "year": 2023,
     "period": "November",
     "subject": "Business Studies",
     "paper_type": "paper1",
+    "language": "English",
+    "grade": 12
+  },
+  {
+    "id": "2023_november_10",
+    "filename": "Geography P1 Nov 2023 Eng",
+    "url": "https://www.education.gov.za/Portals/0/CD/2023%20November%20past%20papers/Geography%20P1%20Nov%202023%20Eng.pdf",
+    "year": 2023,
+    "period": "November",
+    "subject": "Geography",
+    "paper_type": "paper1",
+    "language": "English",
+    "grade": 12
+  },
+  {
+    "id": "2023_november_11",
+    "filename": "Geography P2 Nov 2023 Eng",
+    "url": "https://www.education.gov.za/Portals/0/CD/2023%20November%20past%20papers/Geography%20P2%20Nov%202023%20Eng.pdf",
+    "year": 2023,
+    "period": "November",
+    "subject": "Geography",
+    "paper_type": "paper2",
+    "language": "English",
+    "grade": 12
+  },
+  {
+    "id": "2023_november_12",
+    "filename": "History P1 Nov 2023 Eng",
+    "url": "https://www.education.gov.za/Portals/0/CD/2023%20November%20past%20papers/History%20P1%20Nov%202023%20Eng.pdf",
+    "year": 2023,
+    "period": "November",
+    "subject": "History",
+    "paper_type": "paper1",
+    "language": "English",
+    "grade": 12
+  },
+  {
+    "id": "2023_november_13",
+    "filename": "History P2 Nov 2023 Eng",
+    "url": "https://www.education.gov.za/Portals/0/CD/2023%20November%20past%20papers/History%20P2%20Nov%202023%20Eng.pdf",
+    "year": 2023,
+    "period": "November",
+    "subject": "History",
+    "paper_type": "paper2",
     "language": "English",
     "grade": 12
   },
@@ -199,6 +430,105 @@
   },
   {
     "id": "2022_november_1",
+    "filename": "Mathematics P2 Nov 2022 Eng",
+    "url": "https://www.education.gov.za/Portals/0/CD/2022%20November%20past%20papers/Mathematics%20P2%20Nov%202022%20Eng.pdf",
+    "year": 2022,
+    "period": "November",
+    "subject": "Mathematics",
+    "paper_type": "paper2",
+    "language": "English",
+    "grade": 12
+  },
+  {
+    "id": "2022_november_2",
+    "filename": "Physical Sciences P1 Nov 2022 Eng",
+    "url": "https://www.education.gov.za/Portals/0/CD/2022%20November%20past%20papers/Physical%20Sciences%20P1%20Nov%202022%20Eng.pdf",
+    "year": 2022,
+    "period": "November",
+    "subject": "Physical Sciences",
+    "paper_type": "paper1",
+    "language": "English",
+    "grade": 12
+  },
+  {
+    "id": "2022_november_3",
+    "filename": "Physical Sciences P2 Nov 2022 Eng",
+    "url": "https://www.education.gov.za/Portals/0/CD/2022%20November%20past%20papers/Physical%20Sciences%20P2%20Nov%202022%20Eng.pdf",
+    "year": 2022,
+    "period": "November",
+    "subject": "Physical Sciences",
+    "paper_type": "paper2",
+    "language": "English",
+    "grade": 12
+  },
+  {
+    "id": "2022_november_4",
+    "filename": "Life Sciences P1 Nov 2022 Eng",
+    "url": "https://www.education.gov.za/Portals/0/CD/2022%20November%20past%20papers/Life%20Sciences%20P1%20Nov%202022%20Eng.pdf",
+    "year": 2022,
+    "period": "November",
+    "subject": "Life Sciences",
+    "paper_type": "paper1",
+    "language": "English",
+    "grade": 12
+  },
+  {
+    "id": "2022_november_5",
+    "filename": "Life Sciences P2 Nov 2022 Eng",
+    "url": "https://www.education.gov.za/Portals/0/CD/2022%20November%20past%20papers/Life%20Sciences%20P2%20Nov%202022%20Eng.pdf",
+    "year": 2022,
+    "period": "November",
+    "subject": "Life Sciences",
+    "paper_type": "paper2",
+    "language": "English",
+    "grade": 12
+  },
+  {
+    "id": "2022_november_6",
+    "filename": "English Home Language P1 Nov 2022",
+    "url": "https://www.education.gov.za/Portals/0/CD/2022%20November%20past%20papers/English%20Home%20Language%20P1%20Nov%202022.pdf",
+    "year": 2022,
+    "period": "November",
+    "subject": "English Home Language",
+    "paper_type": "paper1",
+    "language": "English",
+    "grade": 12
+  },
+  {
+    "id": "2022_november_7",
+    "filename": "English Home Language P2 Nov 2022",
+    "url": "https://www.education.gov.za/Portals/0/CD/2022%20November%20past%20papers/English%20Home%20Language%20P2%20Nov%202022.pdf",
+    "year": 2022,
+    "period": "November",
+    "subject": "English Home Language",
+    "paper_type": "paper2",
+    "language": "English",
+    "grade": 12
+  },
+  {
+    "id": "2022_november_8",
+    "filename": "Accounting P1 Nov 2022 Eng",
+    "url": "https://www.education.gov.za/Portals/0/CD/2022%20November%20past%20papers/Accounting%20P1%20Nov%202022%20Eng.pdf",
+    "year": 2022,
+    "period": "November",
+    "subject": "Accounting",
+    "paper_type": "paper1",
+    "language": "English",
+    "grade": 12
+  },
+  {
+    "id": "2022_november_9",
+    "filename": "Business Studies Nov 2022 Eng",
+    "url": "https://www.education.gov.za/Portals/0/CD/2022%20November%20past%20papers/Business%20Studies%20Nov%202022%20Eng.pdf",
+    "year": 2022,
+    "period": "November",
+    "subject": "Business Studies",
+    "paper_type": "paper1",
+    "language": "English",
+    "grade": 12
+  },
+  {
+    "id": "2022_november_10",
     "filename": "Geography P1 Nov 2022 Eng",
     "url": "https://www.education.gov.za/Portals/0/CD/2022%20November%20past%20papers/Geography%20P1%20Nov%202022%20Eng.pdf",
     "year": 2022,
@@ -209,13 +539,35 @@
     "grade": 12
   },
   {
-    "id": "2022_november_2",
+    "id": "2022_november_11",
+    "filename": "Geography P2 Nov 2022 Eng",
+    "url": "https://www.education.gov.za/Portals/0/CD/2022%20November%20past%20papers/Geography%20P2%20Nov%202022%20Eng.pdf",
+    "year": 2022,
+    "period": "November",
+    "subject": "Geography",
+    "paper_type": "paper2",
+    "language": "English",
+    "grade": 12
+  },
+  {
+    "id": "2022_november_12",
     "filename": "History P1 Nov 2022 Eng",
     "url": "https://www.education.gov.za/Portals/0/CD/2022%20November%20past%20papers/History%20P1%20Nov%202022%20Eng.pdf",
     "year": 2022,
     "period": "November",
     "subject": "History",
     "paper_type": "paper1",
+    "language": "English",
+    "grade": 12
+  },
+  {
+    "id": "2022_november_13",
+    "filename": "History P2 Nov 2022 Eng",
+    "url": "https://www.education.gov.za/Portals/0/CD/2022%20November%20past%20papers/History%20P2%20Nov%202022%20Eng.pdf",
+    "year": 2022,
+    "period": "November",
+    "subject": "History",
+    "paper_type": "paper2",
     "language": "English",
     "grade": 12
   }

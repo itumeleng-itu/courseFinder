@@ -38,31 +38,10 @@ import type { Route } from "./nav-main";
 import DashboardNavigation from "@/components/nav-main";
 import { NotificationsPopover } from "@/components/nav-notifications";
 import { Personalise } from "@/components/personalise";
+import { getCalendarNotifications } from "@/lib/calendar-events";
 
-
-const sampleNotifications = [
-  {
-    id: "1",
-    avatar: "/avatars/01.png",
-    fallback: "OM",
-    text: "New order received.",
-    time: "10m ago",
-  },
-  {
-    id: "2",
-    avatar: "/avatars/02.png",
-    fallback: "JL",
-    text: "Server upgrade completed.",
-    time: "1h ago",
-  },
-  {
-    id: "3",
-    avatar: "/avatars/03.png",
-    fallback: "HH",
-    text: "New user signed up.",
-    time: "2h ago",
-  },
-];
+// No sample notifications - using only calendar events
+const sampleNotifications: never[] = [];
 
 const dashboardRoutes: Route[] = [
   {
@@ -126,6 +105,10 @@ export function DashboardSidebar() {
   const { state } = useSidebar();
   const isCollapsed = state === "collapsed";
 
+  // Combine regular notifications with calendar events
+  const calendarNotifications = getCalendarNotifications(1); // Get events for next 24 hours
+  const allNotifications = [...sampleNotifications, ...calendarNotifications];
+
   return (
     <Sidebar variant="inset" collapsible="icon">
       <SidebarHeader
@@ -155,7 +138,7 @@ export function DashboardSidebar() {
           animate={{ opacity: 1, scale: 1 }}
           transition={{ duration: 0.5 }}
         >
-          <NotificationsPopover notifications={sampleNotifications} />
+          <NotificationsPopover notifications={allNotifications} />
           <SidebarTrigger className="ml-auto" />
         </motion.div>
       </SidebarHeader>
