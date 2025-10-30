@@ -12,6 +12,7 @@ import { ScrollArea } from "@/components/ui/scroll-area"
 import { Separator } from "@/components/ui/separator"
 import { Skeleton } from "@/components/ui/skeleton"
 import { Chatbot } from "@/components/chatbot"
+import { usePapersCache } from "@/hooks/use-cache"
 import { 
   FileText, 
   Download, 
@@ -65,38 +66,15 @@ const GRADES = [10, 11, 12]
 const LANGUAGES = ["English", "Afrikaans"]
 
 export default function PastPapersPage() {
-  const [papers, setPapers] = useState<PastPaper[]>([])
-  const [loading, setLoading] = useState(true)
+  // Use the caching hook instead of manual state management
+  const { data: papers, loading, error, refresh } = usePapersCache()
+  
   const [searchTerm, setSearchTerm] = useState("")
   const [selectedSubject, setSelectedSubject] = useState<string>("all")
   const [selectedYear, setSelectedYear] = useState<string>("all")
   const [selectedGrade, setSelectedGrade] = useState<string>("12")
   const [selectedLanguage, setSelectedLanguage] = useState<string>("all")
   const [downloadingIds, setDownloadingIds] = useState<Set<string>>(new Set())
-
-  useEffect(() => {
-    fetchPapers()
-  }, [selectedSubject, selectedYear, selectedGrade, selectedLanguage])
-
-  const fetchPapers = async () => {
-    setLoading(true)
-    try {
-      // Fetch papers from the JSON database
-      const response = await fetch('/papers_database.json')
-      if (response.ok) {
-        const data = await response.json()
-        setPapers(data || [])
-      } else {
-        console.error('Failed to fetch papers')
-        setPapers([])
-      }
-    } catch (error) {
-      console.error('Error fetching papers:', error)
-      setPapers([])
-    } finally {
-      setLoading(false)
-    }
-  }
 
   const handleDownload = async (paper: PastPaper) => {
     setDownloadingIds(prev => new Set(prev).add(paper.id))
@@ -115,7 +93,7 @@ export default function PastPapersPage() {
     }
   }
 
-  const filteredPapers = papers.filter(paper => {
+  const filteredPapers = (papers || []).filter(paper => {
     const matchesSearch = paper.subject.toLowerCase().includes(searchTerm.toLowerCase()) ||
                          paper.filename.toLowerCase().includes(searchTerm.toLowerCase()) ||
                          paper.paper_type.toLowerCase().includes(searchTerm.toLowerCase())
@@ -160,6 +138,14 @@ export default function PastPapersPage() {
                 <p className="text-muted-foreground">
                   Download past examination papers and memorandums from the Department of Basic Education and other sources
                 </p>
+                {error && (
+                  <div className="flex items-center gap-2 p-3 bg-destructive/10 border border-destructive/20 rounded-md">
+                    <AlertCircle className="h-4 w-4 text-destructive" />
+                    <span className="text-sm text-destructive">
+                      Error loading papers: {error}. Try refreshing the page.
+                    </span>
+                  </div>
+                )}
               </div>
 
               {/* Filters Section */}
@@ -265,13 +251,6 @@ export default function PastPapersPage() {
                   <h2 className="text-xl font-semibold">
                     Available Papers ({filteredPapers.length})
                   </h2>
-                  <Button 
-                    variant="outline" 
-                    onClick={fetchPapers}
-                    disabled={loading}
-                  >
-                    Refresh
-                  </Button>
                 </div>
 
                 {loading ? (
@@ -388,7 +367,7 @@ export default function PastPapersPage() {
                     <div>
                       <p className="font-medium">Official Sources</p>
                       <p className="text-sm text-muted-foreground">
-                        Papers are sourced from the Department of Basic Education
+                        Papers are sourced from the Department of Basic Education and teachme2.com
                       </p>
                     </div>
                   </div>
