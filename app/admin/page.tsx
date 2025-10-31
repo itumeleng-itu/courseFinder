@@ -111,7 +111,7 @@ export default function AdminPage() {
       <DashboardSidebar />
       <SidebarInset>
         <div className="flex flex-col h-full">
-          <header className="sticky top-0 z-10 flex h-14 items-center gap-4 border-b bg-background px-4 sm:px-6">
+          <header className="sticky top-0 z-10 flex h-14 items-center gap-4 border-b bg-background px-4 sm:px-6 hidden lg:flex">
             <div className="flex items-center gap-2 text-sm">
               <FileText className="h-4 w-4" />
               <span className="font-semibold">Admin Panel</span>

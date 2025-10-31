@@ -15,7 +15,10 @@ import {
   Tooltip as ReTooltip,
   Legend,
   CartesianGrid,
+  BarChart,
+  Bar,
 } from "recharts"
+import { useIsMobile } from "@/hooks/use-mobile"
 
 interface SeriesPoint { year: number; passRate: number }
 interface ApiResponse {
@@ -64,6 +67,7 @@ function rateFormat(v: number) {
 }
 
 export function GeoProvincialPass() {
+  const isMobile = useIsMobile()
   const [loading, setLoading] = useState(true)
   const [phase, setPhase] = useState<"idle" | "locating" | "geocoding" | "fetching" | "done" | "error">("idle")
   const [error, setError] = useState<string | null>(null)
@@ -223,22 +227,41 @@ export function GeoProvincialPass() {
       <CardContent>
         <div className="w-full h-64">
           <ResponsiveContainer width="100%" height="100%">
-            <LineChart
-              data={data.provinceSeries.map((p, i) => ({
-                year: p.year,
-                province: p.passRate,
-                national: data.nationalSeries[i]?.passRate ?? null,
-              }))}
-              margin={{ top: 10, right: 24, left: 0, bottom: 0 }}
-            >
-              <CartesianGrid strokeDasharray="3 3" />
-              <XAxis dataKey="year" tick={{ fontSize: 12 }} />
-              <YAxis domain={[60, 95]} tickFormatter={(v) => `${v}%`} tick={{ fontSize: 12 }} />
-              <ReTooltip formatter={(v: any) => rateFormat(Number(v))} />
-              <Legend wrapperStyle={{ fontSize: 12 }} />
-              <Line type="monotone" dataKey="province" name={province || "Province"} stroke="#0ea5e9" strokeWidth={2} dot={{ r: 2 }} />
-              <Line type="monotone" dataKey="national" name="National" stroke="#10b981" strokeWidth={2} dot={{ r: 2 }} />
-            </LineChart>
+            {isMobile ? (
+              <BarChart
+                data={data.provinceSeries.map((p, i) => ({
+                  year: p.year,
+                  province: p.passRate,
+                  national: data.nationalSeries[i]?.passRate ?? null,
+                }))}
+                margin={{ top: 10, right: 24, left: 0, bottom: 0 }}
+              >
+                <CartesianGrid strokeDasharray="3 3" />
+                <XAxis dataKey="year" tick={{ fontSize: 12 }} />
+                <YAxis domain={[60, 95]} tickFormatter={(v) => `${v}%`} tick={{ fontSize: 12 }} />
+                <ReTooltip formatter={(v: any) => rateFormat(Number(v))} />
+                <Legend wrapperStyle={{ fontSize: 12 }} />
+                <Bar dataKey="province" name={province || "Province"} fill="#0ea5e9" />
+                <Bar dataKey="national" name="National" fill="#10b981" />
+              </BarChart>
+            ) : (
+              <LineChart
+                data={data.provinceSeries.map((p, i) => ({
+                  year: p.year,
+                  province: p.passRate,
+                  national: data.nationalSeries[i]?.passRate ?? null,
+                }))}
+                margin={{ top: 10, right: 24, left: 0, bottom: 0 }}
+              >
+                <CartesianGrid strokeDasharray="3 3" />
+                <XAxis dataKey="year" tick={{ fontSize: 12 }} />
+                <YAxis domain={[60, 95]} tickFormatter={(v) => `${v}%`} tick={{ fontSize: 12 }} />
+                <ReTooltip formatter={(v: any) => rateFormat(Number(v))} />
+                <Legend wrapperStyle={{ fontSize: 12 }} />
+                <Line type="monotone" dataKey="province" name={province || "Province"} stroke="#0ea5e9" strokeWidth={2} dot={{ r: 2 }} />
+                <Line type="monotone" dataKey="national" name="National" stroke="#10b981" strokeWidth={2} dot={{ r: 2 }} />
+              </LineChart>
+            )}
           </ResponsiveContainer>
         </div>
 

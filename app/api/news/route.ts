@@ -17,6 +17,47 @@ interface NewsArticle {
 let newsCache: { data: NewsArticle[]; timestamp: number } | null = null
 const CACHE_DURATION = 24 * 60 * 60 * 1000 // 24 hours
 const apiKey = process.env.OPENROUTER_API_KEY_NEWS;
+const FORTY_EIGHT_HOURS_MS = 48 * 60 * 60 * 1000
+
+function isWithin48Hours(pubDate: string): boolean {
+  const now = Date.now()
+  const date = new Date(pubDate).getTime()
+  if (isNaN(date)) return false
+  return now - date <= FORTY_EIGHT_HOURS_MS && date <= now
+}
+
+function buildImageForArticle(article: NewsArticle): { image_url: string; alt_text: string } {
+  const category = (article.category?.[0] || "news").toLowerCase()
+  const title = article.title.toLowerCase()
+
+  // Basic keyword/category mapping to keep images relevant to the article
+  const queryByCategory: Record<string, string> = {
+    politics: "south-africa,parliament,government",
+    business: "south-africa,business,stock-market",
+    sports: "south-africa,soccer,stadium",
+    entertainment: "south-africa,entertainment,concert",
+    technology: "south-africa,technology,innovation",
+    health: "south-africa,health,hospital",
+    crime: "south-africa,police,crime",
+    education: "south-africa,students,school",
+    news: "south-africa,city,people",
+  }
+
+  let query = queryByCategory[category] || queryByCategory["news"]
+
+  // Enhance query with title keywords where sensible
+  if (title.includes("matric") || title.includes("education")) {
+    query = "south-africa,students,graduation"
+  } else if (title.includes("university")) {
+    query = "south-africa,university,campus"
+  } else if (title.includes("load shedding") || title.includes("electricity")) {
+    query = "south-africa,power,energy"
+  }
+
+  const image_url = `https://source.unsplash.com/800x600/?${encodeURIComponent(query)}`
+  const alt_text = `Image related to ${category}: ${article.title}`
+  return { image_url, alt_text }
+}
 
 async function fetchNewsWithAI(): Promise<NewsArticle[]> {
   try {
@@ -95,6 +136,7 @@ export async function GET() {
           cached: true,
           cacheAge: Math.floor((Date.now() - newsCache.timestamp) / 1000 / 60), // minutes
           nextRefresh: Math.floor((CACHE_DURATION - (Date.now() - newsCache.timestamp)) / 1000 / 60), // minutes
+          year: new Date().getFullYear(),
         },
         {
           headers: {
@@ -105,20 +147,49 @@ export async function GET() {
     }
 
     // Fetch fresh news from AI
-    const articles = await fetchNewsWithAI()
+    const generated = await fetchNewsWithAI()
+
+    // Normalize, enforce images, and filter to last 48 hours
+    const now = new Date()
+    const normalized: NewsArticle[] = generated
+      .map((a) => {
+        // Ensure valid pubDate within last 48 hours; if invalid/missing, set to now
+        let pubDate = a.pubDate
+        if (!pubDate || isNaN(new Date(pubDate).getTime())) {
+          pubDate = now.toISOString()
+        }
+
+        const { image_url, alt_text } = buildImageForArticle(a)
+        const finalImage = a.image_url && a.image_url.trim().length > 0 ? a.image_url : image_url
+        const finalAlt = a.alt_text && a.alt_text.trim().length > 0 ? a.alt_text : alt_text
+
+        return {
+          title: a.title,
+          description: a.description,
+          link: a.link,
+          pubDate,
+          source_id: a.source_id,
+          category: a.category,
+          image_url: finalImage,
+          alt_text: finalAlt,
+        }
+      })
+      .filter((a) => isWithin48Hours(a.pubDate))
+      .slice(0, 8)
 
     // Update cache
     newsCache = {
-      data: articles,
+      data: normalized,
       timestamp: Date.now(),
     }
 
     return NextResponse.json(
       {
         success: true,
-        articles,
+        articles: normalized,
         cached: false,
         source: "AI Generated (OpenRouter)",
+        year: new Date().getFullYear(),
       },
       {
         headers: {
@@ -137,6 +208,7 @@ export async function GET() {
         cached: true,
         stale: true,
         message: "Using cached news due to API error",
+        year: new Date().getFullYear(),
       })
     }
 
@@ -145,6 +217,7 @@ export async function GET() {
         success: false,
         error: "Failed to fetch news",
         message: "Unable to load news at this time",
+        year: new Date().getFullYear(),
       },
       { status: 500 },
     )

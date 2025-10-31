@@ -4,6 +4,7 @@ import { useEffect, useState } from "react"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Skeleton } from "@/components/ui/skeleton"
 import { TrendingUp, Users, Target, GraduationCap, Award, ScrollText } from "lucide-react"
+import { useIsMobile } from "@/hooks/use-mobile"
 
 interface MatricStats {
   national: {
@@ -26,6 +27,7 @@ interface MatricStats {
 export function PassRateCharts() {
   const [stats, setStats] = useState<MatricStats | null>(null)
   const [loading, setLoading] = useState(true)
+  const isMobile = useIsMobile()
 
   useEffect(() => {
     async function fetchStats() {
@@ -81,7 +83,7 @@ export function PassRateCharts() {
 
   if (loading) {
     return (
-      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-6">
+      <div className={isMobile ? "grid gap-4 grid-cols-2" : "grid gap-4 md:grid-cols-2 lg:grid-cols-6"}>
         {[1, 2, 3, 4, 5, 6].map((i) => (
           <Card key={i}>
             <CardHeader className="pb-2">
@@ -104,7 +106,7 @@ export function PassRateCharts() {
   const failed = stats.national.totalCandidates - passed
 
   return (
-    <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-6">
+    <div className={isMobile ? "grid gap-4 grid-cols-2" : "grid gap-4 md:grid-cols-2 lg:grid-cols-6"}>
       <Card>
         <CardHeader className="flex flex-row items-center justify-between pb-2">
           <CardTitle className="text-sm font-medium">Pass Rate</CardTitle>

@@ -81,7 +81,7 @@ export function Chatbot() {
       {!isOpen && (
         <Button
           onClick={() => setIsOpen(true)}
-          className="fixed bottom-4 right-4 md:bottom-6 md:right-6 h-12 w-12 md:h-14 md:w-14 rounded-full shadow-lg z-50"
+          className="fixed bottom-20 right-4 lg:bottom-6 lg:right-6 h-12 w-12 md:h-14 md:w-14 rounded-full shadow-lg z-50"
           size="icon"
         >
           <MessageCircle className="h-5 w-5 md:h-6 md:w-6" />
@@ -90,7 +90,7 @@ export function Chatbot() {
 
       {/* Chat Window */}
       {isOpen && (
-        <Card className="fixed bottom-4 right-4 md:bottom-6 md:right-6 w-[calc(100vw-2rem)] max-w-sm sm:w-96 h-[70vh] sm:h-[500px] md:h-[600px] shadow-2xl z-50 flex flex-col">
+        <Card className="fixed bottom-20 right-4 lg:bottom-6 lg:right-6 w-[calc(100vw-2rem)] max-w-sm sm:w-96 h-[60vh] sm:h-[500px] md:h-[600px] shadow-2xl z-50 flex flex-col">
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-3 border-b">
             <CardTitle className="text-sm sm:text-base md:text-lg">Course Assistant</CardTitle>
             <Button variant="ghost" size="icon" onClick={() => setIsOpen(false)} className="h-8 w-8">
