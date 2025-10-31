@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { ScrollArea } from "@/components/ui/scroll-area"
 import { MessageCircle, X, Send, Loader2 } from "lucide-react"
+import { Response } from "@/components/ai-elements/elements/response"
 
 interface Message {
   role: "user" | "assistant"
@@ -101,15 +102,15 @@ export function Chatbot() {
               <div className="space-y-4">
                 {messages.map((message, index) => (
                   <div key={index} className={`flex ${message.role === "user" ? "justify-end" : "justify-start"}`}>
-                    <div
-                      className={`max-w-[80%] rounded-lg p-3 text-sm ${
-                        message.role === "user"
-                          ? "bg-primary text-primary-foreground"
-                          : "bg-secondary text-secondary-foreground"
-                      }`}
-                    >
-                      {message.content}
-                    </div>
+                    {message.role === "user" ? (
+                      <div className="max-w-[80%] rounded-lg p-3 text-sm bg-primary text-primary-foreground">
+                        {message.content}
+                      </div>
+                    ) : (
+                      <Response className="max-w-[80%] rounded-lg p-3 text-sm bg-secondary text-secondary-foreground">
+                        {message.content}
+                      </Response>
+                    )}
                   </div>
                 ))}
                 {isLoading && (
