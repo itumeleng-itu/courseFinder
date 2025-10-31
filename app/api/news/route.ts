@@ -16,13 +16,14 @@ interface NewsArticle {
 // Server-side cache with 24-hour TTL
 let newsCache: { data: NewsArticle[]; timestamp: number } | null = null
 const CACHE_DURATION = 24 * 60 * 60 * 1000 // 24 hours
+const apiKey = process.env.OPENROUTER_API_KEY_NEWS;
 
 async function fetchNewsWithAI(): Promise<NewsArticle[]> {
   try {
     const response = await fetch("https://openrouter.ai/api/v1/chat/completions", {
       method: "POST",
       headers: {
-        Authorization: "Bearer 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",
+        Authorization: `Bearer ${apiKey}`,
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
