@@ -48,6 +48,7 @@
     "@radix-ui/react-tooltip": "latest",
     "ai": "^4.0.38",
     "appwrite": "latest",
+    "cheerio": "1.1.2",
     "child_process": "latest",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",

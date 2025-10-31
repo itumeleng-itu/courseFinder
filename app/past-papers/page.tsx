@@ -1,6 +1,7 @@
 import { serverStorage } from "@/lib/appwrite-server"
 import type { QuestionPaper } from "@/lib/appwrite"
 import { PastPapersClient } from "@/components/past-papers-client"
+import { Query } from "node-appwrite"
 
 function parseFilename(filename: string): Partial<QuestionPaper> | null {
   // Remove .pdf extension
@@ -59,14 +60,62 @@ async function getPapers(): Promise<QuestionPaper[]> {
     const bucketId = process.env.APPWRITE_PAPERS_BUCKET_ID || process.env.NEXT_PUBLIC_APPWRITE_PAPERS_BUCKET_ID
 
     if (!bucketId) {
-      console.error("Bucket ID not configured")
+      console.error("[v0] APPWRITE ERROR: Bucket ID not configured")
+      console.error("[v0] Available env vars:", {
+        hasBucketId: !!process.env.APPWRITE_PAPERS_BUCKET_ID,
+        hasPublicBucketId: !!process.env.NEXT_PUBLIC_APPWRITE_PAPERS_BUCKET_ID,
+      })
       return []
     }
 
-    const response = await serverStorage.listFiles(bucketId, [])
+    console.log("[v0] Starting to fetch papers from Appwrite bucket:", bucketId)
 
-    const papers: QuestionPaper[] = response.files
-      .filter((file) => file.name.toLowerCase().endsWith(".pdf"))
+    // Appwrite free plan allows up to 5000 results per request
+    // We'll fetch in batches of 100 to be safe and track progress
+    const allFiles: any[] = []
+    let offset = 0
+    const limit = 100
+    let hasMore = true
+    let batchCount = 0
+
+    while (hasMore) {
+      batchCount++
+      console.log(`[v0] Fetching batch ${batchCount} (offset: ${offset}, limit: ${limit})`)
+
+      try {
+        const response = await serverStorage.listFiles(bucketId, [Query.limit(limit), Query.offset(offset)])
+
+        console.log(`[v0] Batch ${batchCount} fetched: ${response.files.length} files`)
+
+        allFiles.push(...response.files)
+
+        // Check if there are more files to fetch
+        if (response.files.length < limit) {
+          hasMore = false
+          console.log(`[v0] Reached end of files. Total fetched: ${allFiles.length}`)
+        } else {
+          offset += limit
+        }
+
+        // Safety check to prevent infinite loops
+        if (batchCount > 50) {
+          console.warn(
+            `[v0] WARNING: Stopped after 50 batches (${allFiles.length} files). This might indicate an issue.`,
+          )
+          hasMore = false
+        }
+      } catch (batchError) {
+        console.error(`[v0] ERROR in batch ${batchCount}:`, batchError)
+        hasMore = false
+      }
+    }
+
+    console.log(`[v0] Total files fetched from Appwrite: ${allFiles.length}`)
+
+    const pdfFiles = allFiles.filter((file) => file.name.toLowerCase().endsWith(".pdf"))
+    console.log(`[v0] PDF files found: ${pdfFiles.length} out of ${allFiles.length} total files`)
+
+    const papers: QuestionPaper[] = pdfFiles
       .map((file) => {
         const metadata = parseFilename(file.name)
 
@@ -89,9 +138,19 @@ async function getPapers(): Promise<QuestionPaper[]> {
         return a.paper_type.localeCompare(b.paper_type)
       })
 
+    console.log(`[v0] Successfully parsed ${papers.length} question papers`)
+    console.log(
+      `[v0] Year range: ${Math.min(...papers.map((p) => p.year))} - ${Math.max(...papers.map((p) => p.year))}`,
+    )
+    console.log(`[v0] Unique subjects: ${new Set(papers.map((p) => p.subject)).size}`)
+
     return papers
   } catch (error) {
-    console.error("Error fetching papers from storage:", error)
+    console.error("[v0] CRITICAL ERROR fetching papers from storage:", error)
+    if (error instanceof Error) {
+      console.error("[v0] Error message:", error.message)
+      console.error("[v0] Error stack:", error.stack)
+    }
     return []
   }
 }

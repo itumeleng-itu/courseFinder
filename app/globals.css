@@ -128,3 +128,10 @@
 .animate-fadeIn {
   animation: fadeIn 0.3s ease-out;
 }
+
+/* Add padding for mobile navigation bar */
+@layer utilities {
+  .mobile-safe-bottom {
+    @apply pb-20 md:pb-0;
+  }
+}

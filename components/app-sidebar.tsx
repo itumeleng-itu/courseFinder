@@ -1,4 +1,4 @@
-"use client";
+"use client"
 
 import {
   Sidebar,
@@ -7,41 +7,19 @@ import {
   SidebarHeader,
   SidebarTrigger,
   useSidebar,
-} from "@/components/ui/sidebar";
-import { cn } from "@/lib/utils";
-import { motion } from "framer-motion";
-import {
-  Activity,
-  DollarSign,
-  Home,
-  Infinity,
-  LinkIcon,
-  Package2,
-  Percent,
-  PieChart,
-  Settings,
-  ShoppingBag,
-  Sparkles,
-  Store,
-  TrendingUp,
-  Users,
-  LayoutDashboard,
-  Search,
-  FileText,
-  Building2,
-  BookOpen,
-  Calendar,
-  Lightbulb,
-} from "lucide-react";
-import { Logo } from "@/components/logo";
-import type { Route } from "./nav-main";
-import DashboardNavigation from "@/components/nav-main";
-import { NotificationsPopover } from "@/components/nav-notifications";
-import { Personalise } from "@/components/personalise";
-import { getCalendarNotifications } from "@/lib/calendar-events";
+} from "@/components/ui/sidebar"
+import { cn } from "@/lib/utils"
+import { motion } from "framer-motion"
+import { DollarSign, LayoutDashboard, Search, FileText, Building2, BookOpen, Calendar, Lightbulb } from "lucide-react"
+import { Logo } from "@/components/logo"
+import type { Route } from "./nav-main"
+import DashboardNavigation from "@/components/nav-main"
+import { NotificationsPopover } from "@/components/nav-notifications"
+import { Personalise } from "@/components/personalise"
+import { getCalendarNotifications } from "@/lib/calendar-events"
 
 // No sample notifications - using only calendar events
-const sampleNotifications: never[] = [];
+const sampleNotifications: never[] = []
 
 const dashboardRoutes: Route[] = [
   {
@@ -97,17 +75,15 @@ const dashboardRoutes: Route[] = [
     icon: <Building2 className="size-4" />,
     link: "/universities",
   },
-];
-
-// ... existing code ...
+]
 
 export function DashboardSidebar() {
-  const { state } = useSidebar();
-  const isCollapsed = state === "collapsed";
+  const { state } = useSidebar()
+  const isCollapsed = state === "collapsed"
 
   // Combine regular notifications with calendar events
-  const calendarNotifications = getCalendarNotifications(1); // Get events for next 24 hours
-  const allNotifications = [...sampleNotifications, ...calendarNotifications];
+  const calendarNotifications = getCalendarNotifications(1) // Get events for next 24 hours
+  const allNotifications = [...sampleNotifications, ...calendarNotifications]
 
   return (
     <Sidebar variant="inset" collapsible="icon">
@@ -116,24 +92,17 @@ export function DashboardSidebar() {
           "flex md:pt-3.5",
           isCollapsed
             ? "flex-row items-center justify-between gap-y-4 md:flex-col md:items-start md:justify-start"
-            : "flex-row items-center justify-between"
+            : "flex-row items-center justify-between",
         )}
       >
         <a href="#" className="flex items-center gap-2">
           <Logo className="h-8 w-8" />
-          {!isCollapsed && (
-            <span className="font-semibold text-black dark:text-white">
-              CourseFinder
-            </span>
-          )}
+          {!isCollapsed && <span className="font-semibold text-black dark:text-white">CourseFinder</span>}
         </a>
 
         <motion.div
           key={isCollapsed ? "header-collapsed" : "header-expanded"}
-          className={cn(
-            "flex items-center gap-2",
-            isCollapsed ? "flex-row md:flex-col-reverse" : "flex-row"
-          )}
+          className={cn("flex items-center gap-2", isCollapsed ? "flex-row md:flex-col-reverse" : "flex-row")}
           initial={{ opacity: 0, scale: 0.5 }}
           animate={{ opacity: 1, scale: 1 }}
           transition={{ duration: 0.5 }}
@@ -149,5 +118,5 @@ export function DashboardSidebar() {
         <Personalise />
       </SidebarFooter>
     </Sidebar>
-  );
+  )
 }

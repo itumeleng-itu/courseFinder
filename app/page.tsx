@@ -16,7 +16,7 @@ export default function DashboardPage() {
       <SidebarInset>
         <div className="flex flex-col h-full">
           {/* Header */}
-          <header className="sticky top-0 z-10 flex h-14 items-center gap-4 border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 px-6">
+          <header className="sticky top-0 z-10 flex h-14 items-center gap-4 border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 px-4 sm:px-6">
             <div className="flex items-center gap-2 text-sm">
               <LayoutDashboard className="h-4 w-4" />
               <span className="font-semibold">Dashboard</span>
@@ -25,16 +25,18 @@ export default function DashboardPage() {
 
           {/* Main Content */}
           <main className="flex-1 overflow-auto">
-            <div className="mx-auto max-w-7xl p-6 space-y-8 animate-fadeIn">
+            <div className="mx-auto max-w-7xl p-4 sm:p-6 space-y-6 sm:space-y-8 animate-fadeIn">
               {/* Welcome Section */}
               <div className="space-y-2">
-                <h1 className="text-3xl font-semibold tracking-tight">Welcome back</h1>
-                <p className="text-muted-foreground">Here's an overview of your university search dashboard</p>
+                <h1 className="text-2xl sm:text-3xl font-semibold tracking-tight">Welcome back</h1>
+                <p className="text-sm sm:text-base text-muted-foreground">
+                  Here's an overview of your university search dashboard
+                </p>
               </div>
 
               {/* News Section - First Priority */}
               <section className="space-y-4">
-                <h2 className="text-xl font-semibold">Latest Education News</h2>
+                <h2 className="text-lg sm:text-xl font-semibold">Latest Education News</h2>
                 <NewsGrid />
               </section>
 
@@ -43,7 +45,7 @@ export default function DashboardPage() {
               {/* Pass Rate Charts - Second Priority */}
               <section className="space-y-4">
                 <div className="flex items-center justify-between">
-                  <h2 className="text-xl font-semibold">Matric Pass Rates</h2>
+                  <h2 className="text-lg sm:text-xl font-semibold">Matric Pass Rates</h2>
                 </div>
                 <PassRateCharts />
               </section>
@@ -52,7 +54,7 @@ export default function DashboardPage() {
 
               {/* Provincial Map - Third Priority */}
               <section className="space-y-4">
-                <h2 className="text-xl font-semibold">Provincial Performance</h2>
+                <h2 className="text-lg sm:text-xl font-semibold">Provincial Performance</h2>
                 <GeoProvincialPass />
               </section>
             </div>

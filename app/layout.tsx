@@ -6,12 +6,13 @@ import "./globals.css"
 import { ThemeProvider } from "@/components/theme-provider"
 import { SidebarProvider } from "@/components/ui/sidebar"
 import { Toaster } from "@/components/ui/toaster"
+import { MobileNav } from "@/components/mobile-nav"
 
 export const metadata: Metadata = {
   title: "CourseFinder - Find Your Perfect University Course",
   description: "Calculate your APS score and discover South African university courses you qualify for",
   keywords: "APS calculator, university courses, South Africa, matric results, course finder",
-    generator: 'v0.app'
+  generator: "v0.app",
 }
 
 export default function RootLayout({
@@ -24,6 +25,7 @@ export default function RootLayout({
       <body className="font-sans antialiased">
         <ThemeProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange>
           <SidebarProvider>{children}</SidebarProvider>
+          <MobileNav />
           <Toaster />
         </ThemeProvider>
       </body>

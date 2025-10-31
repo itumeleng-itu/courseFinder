@@ -21,22 +21,14 @@ interface NewsArticle {
 export function NewsGrid() {
   const [news, setNews] = useState<NewsArticle[]>([])
   const [loading, setLoading] = useState(true)
-  const [newsSource, setNewsSource] = useState<string>("")
 
   useEffect(() => {
     async function fetchNews() {
       try {
-        console.log("Fetching news from /api/news...")
         const response = await fetch("/api/news")
-        console.log("News API response status:", response.status)
         const data = await response.json()
-        console.log("News API response data:", data)
         if (data.success || data.articles) {
           setNews(data.articles.slice(0, 4))
-          setNewsSource(data.source || "News Source")
-          console.log("News articles set:", data.articles.slice(0, 4))
-        } else {
-          console.error("News API returned no articles", data)
         }
       } catch (err) {
         console.error("Error fetching news:", err)
@@ -50,7 +42,7 @@ export function NewsGrid() {
 
   if (loading) {
     return (
-      <div className="grid gap-4 grid-cols-1 md:grid-cols-4 md:grid-rows-2 auto-rows-fr">
+      <div className="grid gap-4 grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 lg:grid-rows-2 auto-rows-fr">
         {[1, 2, 3, 4].map((i) => (
           <Card key={i} className="overflow-hidden">
             <div className="aspect-[16/9] relative">
@@ -69,31 +61,21 @@ export function NewsGrid() {
   if (news.length === 0) {
     return (
       <div className="text-center py-8">
-        <p className="text-muted-foreground">No news articles available at the moment.</p>
+        <p className="text-sm sm:text-base text-muted-foreground">No news articles available at the moment.</p>
       </div>
     )
   }
 
   return (
     <div className="space-y-4">
-      {newsSource && (
-        <div className="flex items-center justify-between">
-          <Badge variant="outline" className="text-xs">
-            Source: {newsSource}
-          </Badge>
-        </div>
-      )}
-      <div className="grid gap-4 grid-cols-1 md:grid-cols-4 md:grid-rows-2 auto-rows-fr">
+      <div className="grid gap-4 grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 lg:grid-rows-2 auto-rows-fr">
         {news.map((article, index) => {
-          // Bento grid layout: first article spans 2 columns, others are single column
           const isLarge = index === 0
-          const gridClass = isLarge 
-            ? "md:col-span-2 md:row-span-2" 
-            : "md:col-span-1 md:row-span-1"
-          
+          const gridClass = isLarge ? "sm:col-span-2 sm:row-span-2" : "sm:col-span-1 sm:row-span-1"
+
           return (
             <Card key={index} className={`group overflow-hidden hover:shadow-lg transition-shadow ${gridClass}`}>
-              <div className={`relative overflow-hidden bg-muted ${isLarge ? 'aspect-[16/10]' : 'aspect-[16/9]'}`}>
+              <div className={`relative overflow-hidden bg-muted ${isLarge ? "aspect-[16/10]" : "aspect-[16/9]"}`}>
                 {article.image_url ? (
                   <Image
                     src={article.image_url || "/placeholder.svg"}
@@ -106,21 +88,27 @@ export function NewsGrid() {
                   <div className="w-full h-full bg-gradient-to-br from-muted to-muted/50" />
                 )}
               </div>
-              <CardHeader className="space-y-2">
+              <CardHeader className="space-y-2 p-4 sm:p-6">
                 {article.category?.[0] && (
                   <Badge variant="secondary" className="w-fit text-xs">
                     {article.category[0]}
                   </Badge>
                 )}
-                <CardTitle className={`line-clamp-2 ${isLarge ? 'text-base' : 'text-sm'}`}>
+                <CardTitle className={`line-clamp-2 ${isLarge ? "text-sm sm:text-base" : "text-xs sm:text-sm"}`}>
                   {article.title}
                 </CardTitle>
                 <CardDescription className="text-xs">
-                  {new Date(article.pubDate).toLocaleDateString()} • {article.source_id}
+                  {new Date(article.pubDate).toLocaleDateString()}
+                  {article.source_id && !article.source_id.includes("Fallback") && <> • {article.source_id}</>}
                 </CardDescription>
               </CardHeader>
-              <CardContent>
-                <Button asChild variant="ghost" size="sm" className="w-full justify-start px-0 h-auto font-normal">
+              <CardContent className="p-4 sm:p-6 pt-0">
+                <Button
+                  asChild
+                  variant="ghost"
+                  size="sm"
+                  className="w-full justify-start px-0 h-auto font-normal text-xs sm:text-sm"
+                >
                   <a href={article.link} target="_blank" rel="noopener noreferrer" className="flex items-center gap-2">
                     Read article
                     <ExternalLink className="h-3 w-3" />
