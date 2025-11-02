@@ -7,12 +7,14 @@ import { Badge } from "@/components/ui/badge"
 import { isSameDay } from "date-fns"
 import { cn } from "@/lib/utils"
 import { getAllEventsWithStatus } from "@/lib/calendar-events"
+import { useIsMobile } from "@/hooks/use-mobile"
 
 // Get all calendar events with past status
 const calendarEvents = getAllEventsWithStatus()
 
 export function CalendarWithHolidays() {
   const [selectedDate, setSelectedDate] = useState<Date | undefined>(new Date())
+  const isMobile = useIsMobile()
   
   // Get events for the selected date
   const getEventsForDate = (date: Date) => {
@@ -85,8 +87,16 @@ export function CalendarWithHolidays() {
   }
 
   return (
-    <div className="grid gap-8 lg:grid-cols-3 xl:grid-cols-2">
-      <div className="space-y-6 lg:col-span-2 xl:col-span-1">
+    <div className={cn(
+      "grid gap-4",
+      isMobile 
+        ? "grid-cols-1" 
+        : "md:grid-cols-1 lg:grid-cols-3 xl:grid-cols-2"
+    )}>
+      <div className={cn(
+        "space-y-4",
+        !isMobile && "lg:col-span-2 xl:col-span-1"
+      )}>
         <Calendar
           mode="single"
           selected={selectedDate}
@@ -95,36 +105,31 @@ export function CalendarWithHolidays() {
           modifiersStyles={modifiersStyles}
           className={cn(
             "rounded-md border w-full max-w-none",
-            "[--cell-size:theme(spacing.16)]", // Increased from default spacing.8 to spacing.16 (64px)
-            "min-h-[600px]", // Minimum height for better visibility
-            "[&_.rdp-day]:min-h-16", // Minimum height for day cells
-            "[&_.rdp-day]:p-2", // Padding for day cells
-            "[&_.rdp-day]:flex", // Flex layout for day cells
-            "[&_.rdp-day]:flex-col", // Column layout for stacking content
-            "[&_.rdp-day]:items-start", // Align items to start
-            "[&_.rdp-day]:justify-start", // Justify content to start
-            "[&_.rdp-day]:gap-1", // Gap between elements in day cells
-            "[&_.rdp-day]:text-left", // Left align text
-            "[&_.rdp-day]:overflow-hidden", // Hide overflow
-            "[&_.rdp-day_button]:w-full", // Full width buttons
-            "[&_.rdp-day_button]:h-full", // Full height buttons
-            "[&_.rdp-day_button]:min-h-16", // Minimum button height
-            "[&_.rdp-day_button]:flex", // Flex layout for buttons
-            "[&_.rdp-day_button]:flex-col", // Column layout for button content
-            "[&_.rdp-day_button]:items-start", // Align button items to start
-            "[&_.rdp-day_button]:justify-start", // Justify button content to start
-            "[&_.rdp-day_button]:p-2", // Padding for buttons
-            "[&_.rdp-day_button]:gap-1", // Gap between button elements
-            "[&_.rdp-day_button]:text-left", // Left align button text
-            "[&_.rdp-table]:w-full", // Full width table
-            "[&_.rdp-week]:gap-1", // Gap between week days
-            "[&_.rdp-weekday]:min-h-8", // Minimum height for weekday headers
-            "[&_.rdp-weekday]:flex", // Flex layout for weekday headers
-            "[&_.rdp-weekday]:items-center", // Center weekday header content
-            "[&_.rdp-weekday]:justify-center", // Center weekday header text
-            "sm:[--cell-size:theme(spacing.20)]", // Even larger on small screens and up (80px)
-            "md:[--cell-size:theme(spacing.24)]", // Larger on medium screens and up (96px)
-            "lg:[--cell-size:theme(spacing.28)]", // Largest on large screens and up (112px)
+            // Responsive cell sizes
+            isMobile 
+              ? "[--cell-size:theme(spacing.12)] min-h-[400px]" // Smaller on mobile (48px)
+              : "[--cell-size:theme(spacing.16)] min-h-[600px]", // Larger on desktop (64px)
+            // Day cell styling
+            "[&_.rdp-day]:flex [&_.rdp-day]:flex-col [&_.rdp-day]:items-start [&_.rdp-day]:justify-start",
+            "[&_.rdp-day]:gap-1 [&_.rdp-day]:text-left [&_.rdp-day]:overflow-hidden",
+            isMobile 
+              ? "[&_.rdp-day]:min-h-12 [&_.rdp-day]:p-1" // Smaller padding on mobile
+              : "[&_.rdp-day]:min-h-16 [&_.rdp-day]:p-2", // Larger padding on desktop
+            // Button styling
+            "[&_.rdp-day_button]:w-full [&_.rdp-day_button]:h-full [&_.rdp-day_button]:flex",
+            "[&_.rdp-day_button]:flex-col [&_.rdp-day_button]:items-start [&_.rdp-day_button]:justify-start",
+            "[&_.rdp-day_button]:gap-1 [&_.rdp-day_button]:text-left",
+            isMobile 
+              ? "[&_.rdp-day_button]:min-h-12 [&_.rdp-day_button]:p-1" // Smaller on mobile
+              : "[&_.rdp-day_button]:min-h-16 [&_.rdp-day_button]:p-2", // Larger on desktop
+            // Table and week styling
+            "[&_.rdp-table]:w-full [&_.rdp-week]:gap-1",
+            "[&_.rdp-weekday]:flex [&_.rdp-weekday]:items-center [&_.rdp-weekday]:justify-center",
+            isMobile 
+              ? "[&_.rdp-weekday]:min-h-6 [&_.rdp-weekday]:text-xs" // Smaller weekday headers on mobile
+              : "[&_.rdp-weekday]:min-h-8 [&_.rdp-weekday]:text-sm", // Larger on desktop
+            // Responsive breakpoint adjustments
+            !isMobile && "sm:[--cell-size:theme(spacing.20)] md:[--cell-size:theme(spacing.24)] lg:[--cell-size:theme(spacing.28)]"
           )}
           components={{
             DayButton: ({ day, modifiers, ...props }) => {
@@ -136,10 +141,13 @@ export function CalendarWithHolidays() {
                 <button
                   {...props}
                   className={cn(
-                    "relative w-full h-full min-h-16 p-2 flex flex-col items-start justify-start gap-1 text-left",
+                    "relative w-full h-full flex flex-col items-start justify-start gap-1 text-left",
                     "hover:bg-accent hover:text-accent-foreground",
                     "focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2",
                     "transition-colors duration-200",
+                    isMobile 
+                      ? "min-h-12 p-1" // Smaller on mobile
+                      : "min-h-16 p-2", // Larger on desktop
                     isSelected && "bg-primary text-primary-foreground",
                     modifiers.today && "bg-accent text-accent-foreground font-semibold",
                     modifiers.outside && "text-muted-foreground opacity-50",
@@ -147,16 +155,20 @@ export function CalendarWithHolidays() {
                     isPastEvent && "opacity-50 grayscale",
                   )}
                 >
-                  <span className="text-sm font-medium leading-none">
+                  <span className={cn(
+                    "font-medium leading-none",
+                    isMobile ? "text-xs" : "text-sm"
+                  )}>
                     {day.date.getDate()}
                   </span>
                   {dayEvents.length > 0 && (
                     <div className="flex flex-col gap-0.5 w-full">
-                      {dayEvents.slice(0, 2).map((event, index) => (
+                      {dayEvents.slice(0, isMobile ? 1 : 2).map((event, index) => (
                         <div
                           key={index}
                           className={cn(
-                            "text-xs px-1 py-0.5 rounded text-white font-medium truncate w-full",
+                            "px-1 py-0.5 rounded text-white font-medium truncate w-full",
+                            isMobile ? "text-[10px]" : "text-xs",
                             event.type === 'public' ? "bg-red-500" : 
                             event.type === 'academic' ? "bg-blue-500" : 
                             event.type === 'exam' ? "bg-orange-500" : "bg-gray-500",
@@ -164,17 +176,23 @@ export function CalendarWithHolidays() {
                           )}
                           title={`${event.name}${event.time ? ` at ${event.time}` : ''}${event.description ? ` - ${event.description}` : ''}`}
                         >
-                          {event.name.length > 12 ? `${event.name.substring(0, 12)}...` : event.name}
-                          {event.time && event.type === 'exam' && (
+                          {isMobile 
+                            ? (event.name.length > 8 ? `${event.name.substring(0, 8)}...` : event.name)
+                            : (event.name.length > 12 ? `${event.name.substring(0, 12)}...` : event.name)
+                          }
+                          {event.time && event.type === 'exam' && !isMobile && (
                             <div className="text-xs opacity-90 mt-0.5">
                               {event.time}
                             </div>
                           )}
                         </div>
                       ))}
-                      {dayEvents.length > 2 && (
-                        <div className="text-xs text-muted-foreground">
-                          +{dayEvents.length - 2} more
+                      {dayEvents.length > (isMobile ? 1 : 2) && (
+                        <div className={cn(
+                          "text-muted-foreground",
+                          isMobile ? "text-[10px]" : "text-xs"
+                        )}>
+                          +{dayEvents.length - (isMobile ? 1 : 2)} more
                         </div>
                       )}
                     </div>

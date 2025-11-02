@@ -16,26 +16,16 @@ const SUBJECTS = [
   "Mathematics",
   "Physical Sciences",
   "Life Sciences",
-  "English Home Language",
-  "English First Additional Language",
-  "Afrikaans Home Language",
-  "Afrikaans First Additional Language",
-  "IsiZulu Home Language",
-  "IsiZulu First Additional Language",
-  "IsiXhosa Home Language",
-  "IsiXhosa First Additional Language",
-  "Sepedi Home Language",
-  "Sepedi First Additional Language",
-  "Sesotho Home Language",
-  "Sesotho First Additional Language",
-  "Setswana Home Language",
-  "Setswana First Additional Language",
-  "Tshivenda Home Language",
-  "Tshivenda First Additional Language",
-  "Xitsonga Home Language",
-  "Xitsonga First Additional Language",
-  "SiSwati Home Language",
-  "SiSwati First Additional Language",
+  "English",
+  "Afrikaans",
+  "IsiZulu",
+  "IsiXhosa",
+  "Sepedi",
+  "Sesotho",
+  "Setswana",
+  "Tshivenda",
+  "Xitsonga",
+  "SiSwati",
   "Accounting",
   "Agricultural Sciences",
   "Business Studies",
@@ -56,6 +46,8 @@ const SUBJECTS = [
   "Religion Studies",
   "Tourism",
   "Visual Arts",
+  "HL",
+  "FAL"
 ]
 
 const YEARS = Array.from({ length: 15 }, (_, i) => 2024 - i)
@@ -141,7 +133,10 @@ export function PastPapersClient({ papers }: { papers: QuestionPaper[] }) {
                     <Search className="h-5 w-5" />
                     Search Papers
                   </CardTitle>
-                  <CardDescription>Use the search and filters below to find specific papers</CardDescription>
+                  <CardDescription>
+                    Use the search and filters below to find specific papers.<br />
+                    (For languages, please select HL(home language) or FAL(first additional language) )
+                  </CardDescription>
                 </CardHeader>
                 <CardContent>
                   <div className="grid gap-4 md:grid-cols-3">

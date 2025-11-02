@@ -13,6 +13,7 @@ import { Separator } from "@/components/ui/separator"
 import { Search, GraduationCap, X, Plus, Calculator } from "lucide-react"
 import { getAllUniversities } from "@/data/universities"
 import type { Course, University } from "@/data/universities/base-university"
+import { getAllColleges, collegeToUniversityFormat } from "@/data/colleges"
 import { Chatbot } from "@/components/chatbot"
 
 type Subject = {
@@ -55,6 +56,30 @@ const SUBJECTS = [
   "Music",
 ]
 
+// Define conflicting subject groups - students can only select one from each group
+const CONFLICTING_SUBJECTS = [
+  ["Mathematics", "Mathematical Literacy"],
+  ["English Home Language", "English First Additional Language"],
+  ["Afrikaans Home Language", "Afrikaans First Additional Language"],
+  ["IsiZulu Home Language", "IsiZulu First Additional Language"],
+  ["IsiXhosa Home Language", "IsiXhosa First Additional Language"],
+  ["Information Technology", "Computer Applications Technology"],
+]
+
+// Define home languages - only ONE can be selected at a time
+const HOME_LANGUAGES = [
+  "English Home Language",
+  "Afrikaans Home Language", 
+  "IsiZulu Home Language",
+  "IsiXhosa Home Language",
+  "Sepedi",
+  "Sesotho", 
+  "Setswana",
+  "Tshivenda",
+  "Xitsonga",
+  "SiSwati"
+]
+
 export default function FindCoursePage() {
   const [subjects, setSubjects] = useState<Subject[]>([])
   const [currentSubject, setCurrentSubject] = useState("")
@@ -78,6 +103,33 @@ export default function FindCoursePage() {
     return total
   }
 
+  // Check if adding a subject would create a conflict
+  const checkSubjectConflict = (newSubjectName: string, existingSubjects: Subject[]) => {
+    // Check home language conflicts - only one home language allowed
+    if (HOME_LANGUAGES.includes(newSubjectName)) {
+      const existingHomeLanguage = existingSubjects.find(subject => 
+        HOME_LANGUAGES.includes(subject.name)
+      )
+      if (existingHomeLanguage) {
+        return existingHomeLanguage.name
+      }
+    }
+
+    // Check other conflicting subject groups
+    for (const conflictGroup of CONFLICTING_SUBJECTS) {
+      if (conflictGroup.includes(newSubjectName)) {
+        // Check if any existing subject is in the same conflict group
+        const conflictingSubject = existingSubjects.find(subject => 
+          conflictGroup.includes(subject.name) && subject.name !== newSubjectName
+        )
+        if (conflictingSubject) {
+          return conflictingSubject.name
+        }
+      }
+    }
+    return null
+  }
+
   const addSubject = () => {
     if (!currentSubject || !currentPercentage) {
       alert("Please select a subject and enter a percentage")
@@ -92,6 +144,18 @@ export default function FindCoursePage() {
 
     if (subjects.some((s) => s.name === currentSubject)) {
       alert("Subject already added")
+      return
+    }
+
+    // Check for conflicting subjects
+    const conflictingSubject = checkSubjectConflict(currentSubject, subjects)
+    if (conflictingSubject) {
+      // Check if it's a home language conflict
+      if (HOME_LANGUAGES.includes(currentSubject) && HOME_LANGUAGES.includes(conflictingSubject)) {
+        alert(`Cannot add ${currentSubject} because you have already selected ${conflictingSubject}. You can only choose ONE home language.`)
+      } else {
+        alert(`Cannot add ${currentSubject} because you have already selected ${conflictingSubject}. You can only choose one from this subject group.`)
+      }
       return
     }
 
@@ -141,6 +205,19 @@ export default function FindCoursePage() {
         }
       })
     })
+
+    // If courses are 15 or fewer, add college options
+    if (matches.length <= 15) {
+      const colleges = getAllColleges()
+      colleges.forEach((college) => {
+        const universityFormatCollege = collegeToUniversityFormat(college)
+        universityFormatCollege.courses.forEach((course) => {
+          if (calculatedAPS >= course.apsRequired) {
+            matches.push({ course, university: universityFormatCollege })
+          }
+        })
+      })
+    }
 
     matches.sort((a, b) => b.course.apsRequired - a.course.apsRequired)
     setQualifyingCourses(matches)
@@ -193,17 +270,26 @@ export default function FindCoursePage() {
 
                 <Separator />
 
-                <Card>
+                <Card className="glass-card">
                   <CardHeader className="pb-3">
                     <CardTitle className="text-base">Add Subject</CardTitle>
                   </CardHeader>
                   <CardContent className="space-y-3">
                     <Select value={currentSubject} onValueChange={setCurrentSubject}>
-                      <SelectTrigger className="text-sm">
+                      <SelectTrigger className="text-sm glass-input">
                         <SelectValue placeholder="Select subject" />
                       </SelectTrigger>
-                      <SelectContent>
-                        {SUBJECTS.filter((s) => !subjects.some((sub) => sub.name === s)).map((subject) => (
+                      <SelectContent className="glass-modal">
+                        {SUBJECTS.filter((s) => {
+                          // Don't show subjects that are already selected
+                          if (subjects.some((sub) => sub.name === s)) return false
+                          
+                          // If a home language is already selected, don't show other home languages
+                          const hasHomeLanguage = subjects.some(subject => HOME_LANGUAGES.includes(subject.name))
+                          if (hasHomeLanguage && HOME_LANGUAGES.includes(s)) return false
+                          
+                          return true
+                        }).map((subject) => (
                           <SelectItem key={subject} value={subject}>
                             {subject}
                           </SelectItem>
@@ -218,12 +304,12 @@ export default function FindCoursePage() {
                       onChange={(e) => setCurrentPercentage(e.target.value)}
                       min="0"
                       max="100"
-                      className="text-sm"
+                      className="text-sm glass-input"
                     />
                     <Button
                       onClick={addSubject}
                       disabled={!currentSubject || !currentPercentage}
-                      className="w-full text-sm"
+                      className="w-full text-sm glass-button"
                     >
                       <Plus className="h-4 w-4 mr-2" />
                       Add Subject ({subjects.length}/7)
@@ -232,7 +318,7 @@ export default function FindCoursePage() {
                 </Card>
 
                 {subjects.length > 0 && (
-                  <Card>
+                  <Card className="glass-card">
                     <CardHeader className="pb-3">
                       <CardTitle className="text-base">Your Subjects</CardTitle>
                     </CardHeader>
@@ -241,7 +327,7 @@ export default function FindCoursePage() {
                         {subjects.map((subject) => (
                           <div
                             key={subject.id}
-                            className="flex items-center justify-between p-2 bg-secondary rounded-md"
+                            className="flex items-center justify-between p-2 glass-button rounded-md"
                           >
                             <div className="flex-1">
                               <p className="font-medium text-sm">{subject.name}</p>
@@ -251,7 +337,7 @@ export default function FindCoursePage() {
                               variant="ghost"
                               size="sm"
                               onClick={() => removeSubject(subject.id)}
-                              className="h-8 w-8 p-0"
+                              className="h-8 w-8 p-0 glass-hover"
                             >
                               <X className="h-4 w-4" />
                             </Button>
@@ -264,18 +350,18 @@ export default function FindCoursePage() {
 
                 {subjects.length > 0 && (
                   <div className="space-y-2">
-                    <Button onClick={findCourses} className="w-full" size="lg">
+                    <Button onClick={findCourses} className="w-full glass-button" size="lg">
                       <Calculator className="h-4 w-4 mr-2" />
                       Calculate APS & Find Courses
                     </Button>
-                    <Button onClick={reset} variant="outline" className="w-full bg-transparent">
+                    <Button onClick={reset} variant="outline" className="w-full glass-button">
                       Reset All
                     </Button>
                   </div>
                 )}
 
                 {apsScore !== null && (
-                  <Card className="bg-primary text-primary-foreground">
+                  <Card className="glass-card liquid-gradient liquid-border">
                     <CardContent className="pt-6">
                       <div className="text-center">
                         <p className="text-sm font-medium mb-1">Your APS Score</p>
@@ -304,7 +390,7 @@ export default function FindCoursePage() {
               </div>
             ) : (
               <>
-                <div className="p-4 md:p-6 border-b bg-background">
+                <div className="p-4 md:p-6 border-b glass-nav">
                   <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-4">
                     <div className="relative flex-1">
                       <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
@@ -312,7 +398,7 @@ export default function FindCoursePage() {
                         placeholder="Search courses..."
                         value={searchQuery}
                         onChange={(e) => setSearchQuery(e.target.value)}
-                        className="pl-10"
+                        className="pl-10 glass-input"
                       />
                     </div>
                     <div className="text-sm text-muted-foreground text-center sm:text-left whitespace-nowrap">
@@ -343,7 +429,7 @@ export default function FindCoursePage() {
                     ) : (
                       <div className="space-y-4">
                         {filteredCourses.map(({ course, university }, index) => (
-                          <Card key={index} className="hover:shadow-md transition-shadow">
+                          <Card key={index} className="glass-card hover:shadow-2xl transition-all duration-300 hover:scale-[1.02]">
                             <CardHeader>
                               <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-2">
                                 <div className="space-y-1 flex-1">
@@ -354,7 +440,7 @@ export default function FindCoursePage() {
                                     <span className="block sm:inline w-full sm:w-auto">{university.location}</span>
                                   </CardDescription>
                                 </div>
-                                <Badge variant="secondary" className="self-start sm:ml-4">
+                                <Badge variant="secondary" className="self-start sm:ml-4 glass-button">
                                   APS: {course.apsRequired}
                                 </Badge>
                               </div>

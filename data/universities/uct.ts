@@ -26,7 +26,7 @@ export class UCT extends BaseUniversity {
       id: "uct-bcom-general",
       name: "Bachelor of Commerce (General)",
       faculty: "Commerce",
-      apsMin: 435,
+      apsRequired: 35,
       duration: "3 years",
       subjectRequirements: {
         Mathematics: 60,
@@ -49,7 +49,7 @@ export class UCT extends BaseUniversity {
       id: "uct-bbussc-general",
       name: "Bachelor of Business Science (General)",
       faculty: "Commerce",
-      apsMin: 435,
+      apsRequired: 42,
       duration: "4 years",
       subjectRequirements: {
         Mathematics: 60,
@@ -71,7 +71,7 @@ export class UCT extends BaseUniversity {
       id: "uct-bbussc-actuarial",
       name: "Bachelor of Business Science in Actuarial Science",
       faculty: "Commerce",
-      apsMin: 500,
+      apsRequired: 40,
       duration: "4 years",
       subjectRequirements: {
         Mathematics: 80,
@@ -212,7 +212,7 @@ export class UCT extends BaseUniversity {
       id: "uct-bas",
       name: "Bachelor of Architectural Studies",
       faculty: "Engineering & the Built Environment",
-      apsMin: 450,
+      apsRequired: 40,
       duration: "3 years",
       subjectRequirements: {
         Mathematics: 50,

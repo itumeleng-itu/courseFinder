@@ -86,7 +86,7 @@ export function DashboardSidebar() {
   const allNotifications = [...sampleNotifications, ...calendarNotifications]
 
   return (
-    <Sidebar variant="inset" collapsible="icon">
+    <Sidebar variant="inset" collapsible="icon" className="glass-sidebar">
       <SidebarHeader
         className={cn(
           "flex md:pt-3.5",

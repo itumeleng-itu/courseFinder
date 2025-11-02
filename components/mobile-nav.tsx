@@ -38,7 +38,10 @@ const mobileNavItems = [
 
 export function MobileNav() {
   const pathname = usePathname()
-  // Theme toggle removed; rely on system default theme
+  
+  // Check if current path is in study tools dropdown
+  const studyToolsPaths = ["/past-papers", "/calendar", "/study-tips"]
+  const isStudyToolsActive = studyToolsPaths.includes(pathname)
 
   return (
     <>
@@ -46,7 +49,7 @@ export function MobileNav() {
       <div className="h-16 lg:hidden" />
       
       {/* Visible on mobile and tablet (hide on large and above) */}
-      <nav className="fixed bottom-0 left-0 right-0 z-50 border-t bg-background lg:hidden">
+      <nav className="fixed bottom-0 left-0 right-0 z-50 glass-nav lg:hidden">
         <div className="flex items-center justify-between h-16 px-2">
           <div className="flex items-center justify-around flex-1">
         {mobileNavItems.map((item) => {
@@ -58,10 +61,10 @@ export function MobileNav() {
               key={item.href}
               href={item.href}
               className={cn(
-                "flex flex-col items-center justify-center gap-1 px-3 py-2 rounded-lg transition-colors min-w-[60px]",
+                "flex flex-col items-center justify-center gap-1 px-3 py-2 rounded-xl transition-all duration-300 min-w-[60px]",
                 isActive
-                  ? "text-foreground bg-accent"
-                  : "text-muted-foreground hover:text-foreground hover:bg-accent/50",
+                  ? "text-primary bg-white/30 dark:bg-white/20 backdrop-blur-md shadow-lg scale-105"
+                  : "text-muted-foreground hover:text-foreground glass-hover",
               )}
             >
               <Icon className="h-5 w-5" />
@@ -75,8 +78,10 @@ export function MobileNav() {
               <DropdownMenuTrigger asChild>
                 <button
                   className={cn(
-                    "flex flex-col items-center justify-center gap-1 px-3 py-2 rounded-lg transition-colors min-w-[60px]",
-                    "text-muted-foreground hover:text-foreground hover:bg-accent/50"
+                    "flex flex-col items-center justify-center gap-1 px-3 py-2 rounded-xl transition-all duration-300 min-w-[60px]",
+                    isStudyToolsActive
+                      ? "text-primary bg-white/30 dark:bg-white/20 backdrop-blur-md shadow-lg scale-105"
+                      : "text-muted-foreground hover:text-foreground glass-hover"
                   )}
                   aria-label="Study Tools"
                 >
@@ -84,23 +89,41 @@ export function MobileNav() {
                   <span className="text-[10px] font-medium">Study Tools</span>
                 </button>
               </DropdownMenuTrigger>
-              <DropdownMenuContent align="center" className="min-w-[180px]">
+              <DropdownMenuContent align="center" className="min-w-[180px] glass-modal">
                 <DropdownMenuItem asChild>
-                  <a href="/past-papers" className="flex items-center gap-2">
+                  <a 
+                    href="/past-papers" 
+                    className={cn(
+                      "flex items-center gap-2 rounded-lg transition-all duration-300",
+                      pathname === "/past-papers" && "bg-white/30 dark:bg-white/20 text-primary backdrop-blur-md"
+                    )}
+                  >
                     <FileText className="h-4 w-4" />
                     Past Papers
                   </a>
                 </DropdownMenuItem>
                 <DropdownMenuItem asChild>
-                  <a href="/calendar" className="flex items-center gap-2">
+                  <a 
+                    href="/calendar" 
+                    className={cn(
+                      "flex items-center gap-2 rounded-lg transition-all duration-300",
+                      pathname === "/calendar" && "bg-white/30 dark:bg-white/20 text-primary backdrop-blur-md"
+                    )}
+                  >
                     <Calendar className="h-4 w-4" />
                     Calendar
                   </a>
                 </DropdownMenuItem>
                 <DropdownMenuItem asChild>
-                  <a href="/study-tips" className="flex items-center gap-2">
+                  <a 
+                    href="/study-tips" 
+                    className={cn(
+                      "flex items-center gap-2 rounded-lg transition-all duration-300",
+                      pathname === "/study-tips" && "bg-white/30 dark:bg-white/20 text-primary backdrop-blur-md"
+                    )}
+                  >
                     <Lightbulb className="h-4 w-4" />
-                    Study Tools
+                    Study Tips
                   </a>
                 </DropdownMenuItem>
               </DropdownMenuContent>

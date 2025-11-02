@@ -20,18 +20,18 @@ export default function CalendarPage() {
             <h1 className="text-lg font-semibold">Calendar</h1>
           </div>
         </header>
-        <div className="flex flex-1 flex-col gap-4 p-4">
+        <div className="flex flex-1 flex-col gap-4 p-2 sm:p-4">
           <Card>
-            <CardHeader>
-              <CardTitle className="flex items-center gap-2">
-                <CalendarIcon className="h-5 w-5" />
+            <CardHeader className="p-4 sm:p-6">
+              <CardTitle className="flex items-center gap-2 text-base sm:text-lg">
+                <CalendarIcon className="h-4 w-4 sm:h-5 sm:w-5" />
                 Academic Calendar
               </CardTitle>
-              <CardDescription>
+              <CardDescription className="text-sm">
                 View important dates and South African public holidays
               </CardDescription>
             </CardHeader>
-            <CardContent>
+            <CardContent className="p-2 sm:p-6">
               <CalendarWithHolidays />
             </CardContent>
           </Card>
