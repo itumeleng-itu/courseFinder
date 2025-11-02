@@ -26,7 +26,7 @@ export class UCT extends BaseUniversity {
       id: "uct-bcom-general",
       name: "Bachelor of Commerce (General)",
       faculty: "Commerce",
-      apsRequired: 35,
+      apsRequired: 435, // Updated FPS from 35 to 435 (out of 600) per 2026 prospectus Band A
       duration: "3 years",
       subjectRequirements: {
         Mathematics: 60,
@@ -49,7 +49,7 @@ export class UCT extends BaseUniversity {
       id: "uct-bbussc-general",
       name: "Bachelor of Business Science (General)",
       faculty: "Commerce",
-      apsRequired: 42,
+      apsRequired: 435, // Updated to 435 FPS Band A per 2026 prospectus
       duration: "4 years",
       subjectRequirements: {
         Mathematics: 60,
@@ -71,7 +71,7 @@ export class UCT extends BaseUniversity {
       id: "uct-bbussc-actuarial",
       name: "Bachelor of Business Science in Actuarial Science",
       faculty: "Commerce",
-      apsRequired: 40,
+      apsRequired: 435, // Updated to 435 FPS Band A per 2026 prospectus
       duration: "4 years",
       subjectRequirements: {
         Mathematics: 80,
@@ -95,7 +95,7 @@ export class UCT extends BaseUniversity {
       id: "uct-bcom-computer-science",
       name: "Bachelor of Commerce in Computer Science",
       faculty: "Commerce",
-      apsMin: 435,
+      apsRequired: 435, // Updated to 435 FPS Band A
       duration: "3 years",
       subjectRequirements: {
         Mathematics: 70,
@@ -119,7 +119,7 @@ export class UCT extends BaseUniversity {
       id: "uct-bsc-eng-civil",
       name: "BSc Engineering (Civil)",
       faculty: "Engineering & the Built Environment",
-      apsMin: 500,
+      apsRequired: 500, // FPS 500 Band A per 2026 prospectus
       duration: "4 years",
       subjectRequirements: {
         Mathematics: 75,
@@ -141,9 +141,9 @@ export class UCT extends BaseUniversity {
     },
     {
       id: "uct-bsc-eng-electrical",
-      name: "BSc Engineering (Electrical)",
+      name: "BSc Engineering (Electrical, Electrical and Computer Engineering and Mechatronics)",
       faculty: "Engineering & the Built Environment",
-      apsMin: 500,
+      apsRequired: 500, // FPS 500 Band A per 2026 prospectus
       duration: "4 years",
       subjectRequirements: {
         Mathematics: 80,
@@ -152,7 +152,7 @@ export class UCT extends BaseUniversity {
       additionalRequirements: [
         "NBT in Mathematics, AL & QL required",
         "ECSA accredited program",
-        "Specialization options in final year",
+        "Specialization options available in multiple disciplines",
       ],
       careerOpportunities: [
         "Electrical Engineer",
@@ -160,13 +160,14 @@ export class UCT extends BaseUniversity {
         "Electronics Engineer",
         "Telecommunications Engineer",
         "Control Systems Engineer",
+        "Mechatronics Engineer",
       ],
     },
     {
       id: "uct-bsc-eng-mechanical",
       name: "BSc Engineering (Mechanical)",
       faculty: "Engineering & the Built Environment",
-      apsMin: 500,
+      apsRequired: 500, // FPS 500 Band A per 2026 prospectus
       duration: "4 years",
       subjectRequirements: {
         Mathematics: 80,
@@ -189,7 +190,7 @@ export class UCT extends BaseUniversity {
       id: "uct-bsc-eng-chemical",
       name: "BSc Engineering (Chemical)",
       faculty: "Engineering & the Built Environment",
-      apsMin: 500,
+      apsRequired: 500, // FPS 500 Band A per 2026 prospectus
       duration: "4 years",
       subjectRequirements: {
         Mathematics: 80,
@@ -212,7 +213,7 @@ export class UCT extends BaseUniversity {
       id: "uct-bas",
       name: "Bachelor of Architectural Studies",
       faculty: "Engineering & the Built Environment",
-      apsRequired: 40,
+      apsRequired: 400, // Updated from 40 to 400 FPS (out of 600)
       duration: "3 years",
       subjectRequirements: {
         Mathematics: 50,
@@ -235,7 +236,7 @@ export class UCT extends BaseUniversity {
       id: "uct-bsc-construction",
       name: "BSc Construction Studies",
       faculty: "Engineering & the Built Environment",
-      apsMin: 450,
+      apsRequired: 450, // Updated to 450 FPS Band A
       duration: "3 years",
       subjectRequirements: {
         Mathematics: 65,
@@ -260,7 +261,7 @@ export class UCT extends BaseUniversity {
       id: "uct-mbchb",
       name: "Bachelor of Medicine and Bachelor of Surgery (MBChB)",
       faculty: "Health Sciences",
-      apsMin: 810, // FPS out of 900
+      apsRequired: 628, // Updated from 810 to 628 FPS (out of 900) Band A per 2026 prospectus
       duration: "6 years",
       subjectRequirements: {
         Mathematics: 70,
@@ -285,7 +286,7 @@ export class UCT extends BaseUniversity {
       id: "uct-bsc-physiotherapy",
       name: "BSc Physiotherapy",
       faculty: "Health Sciences",
-      apsMin: 730, // FPS out of 900
+      apsRequired: 550, // Updated from 730 to 550 FPS (out of 900) Band A
       duration: "4 years",
       subjectRequirements: {
         Mathematics: 60,
@@ -309,7 +310,7 @@ export class UCT extends BaseUniversity {
       id: "uct-bsc-occupational-therapy",
       name: "BSc Occupational Therapy",
       faculty: "Health Sciences",
-      apsMin: 730, // FPS out of 900
+      apsRequired: 540, // Updated from 730 to 540 FPS (out of 900) Band A
       duration: "4 years",
       subjectRequirements: {
         Mathematics: 60, // or Mathematical Literacy 70%
@@ -333,7 +334,7 @@ export class UCT extends BaseUniversity {
       id: "uct-bsc-audiology",
       name: "BSc Audiology",
       faculty: "Health Sciences",
-      apsMin: 720, // FPS out of 900
+      apsRequired: 530, // Updated from 720 to 530 FPS (out of 900) Band A
       duration: "4 years",
       subjectRequirements: {
         Mathematics: 60, // or Mathematical Literacy 70%
@@ -357,7 +358,7 @@ export class UCT extends BaseUniversity {
       id: "uct-bsc-speech-language",
       name: "BSc Speech-Language Pathology",
       faculty: "Health Sciences",
-      apsMin: 715, // FPS out of 900
+      apsRequired: 525, // Updated from 715 to 525 FPS (out of 900) Band A
       duration: "4 years",
       subjectRequirements: {
         Mathematics: 60, // or Mathematical Literacy 70%
@@ -383,7 +384,7 @@ export class UCT extends BaseUniversity {
       id: "uct-ba",
       name: "Bachelor of Arts",
       faculty: "Humanities",
-      apsMin: 450,
+      apsRequired: 435, // Updated from 450 to 435 FPS Band A per 2026 prospectus
       duration: "3 years",
       subjectRequirements: {
         English: 50, // HL or 60 for FAL
@@ -407,7 +408,7 @@ export class UCT extends BaseUniversity {
       id: "uct-bsocsci",
       name: "Bachelor of Social Science",
       faculty: "Humanities",
-      apsMin: 450,
+      apsRequired: 435, // Updated from 450 to 435 FPS Band A
       duration: "3 years",
       subjectRequirements: {
         English: 50, // HL or 60 for FAL
@@ -430,7 +431,7 @@ export class UCT extends BaseUniversity {
       id: "uct-bsocsci-ppe",
       name: "Bachelor of Social Science in Philosophy, Politics and Economics",
       faculty: "Humanities",
-      apsMin: 450,
+      apsRequired: 435, // Updated from 450 to 435 FPS Band A
       duration: "3 years",
       subjectRequirements: {
         Mathematics: 60,
@@ -454,7 +455,7 @@ export class UCT extends BaseUniversity {
       id: "uct-bsw",
       name: "Bachelor of Social Work",
       faculty: "Humanities",
-      apsMin: 450,
+      apsRequired: 435, // Updated from 450 to 435 FPS Band A
       duration: "4 years",
       subjectRequirements: {
         English: 50, // HL or 60 for FAL
@@ -476,7 +477,7 @@ export class UCT extends BaseUniversity {
       id: "uct-ba-fine-art",
       name: "Bachelor of Arts in Fine Art",
       faculty: "Humanities",
-      apsMin: 380,
+      apsRequired: 380, // Kept at 380 as no update found in prospectus
       duration: "4 years",
       subjectRequirements: {
         English: 50, // HL or 60 for FAL
@@ -499,7 +500,7 @@ export class UCT extends BaseUniversity {
       id: "uct-bmus",
       name: "Bachelor of Music",
       faculty: "Humanities",
-      apsMin: 380,
+      apsRequired: 380, // Kept at 380 as no update found in prospectus
       duration: "4 years",
       subjectRequirements: {
         English: 50, // HL or 60 for FAL
@@ -525,7 +526,7 @@ export class UCT extends BaseUniversity {
       id: "uct-llb-undergraduate",
       name: "Bachelor of Laws (LLB) - 4 year",
       faculty: "Law",
-      apsMin: 500,
+      apsRequired: 470, // Updated from 500 to 470 FPS Band A per 2026 prospectus
       duration: "4 years",
       subjectRequirements: {
         English: 50, // HL or 60 for FAL
@@ -551,7 +552,7 @@ export class UCT extends BaseUniversity {
       id: "uct-bsc",
       name: "Bachelor of Science",
       faculty: "Science",
-      apsMin: 660, // FPS out of 800
+      apsRequired: 550, // Updated from 660 to 550 FPS Band A (out of 800) per 2026 prospectus
       duration: "3 years",
       subjectRequirements: {
         Mathematics: 70,
@@ -575,7 +576,7 @@ export class UCT extends BaseUniversity {
       id: "uct-bsc-computer-science",
       name: "BSc Computer Science",
       faculty: "Science",
-      apsMin: 660,
+      apsRequired: 550, // Updated from 660 to 550 FPS Band A
       duration: "3 years",
       subjectRequirements: {
         Mathematics: 70,
@@ -599,7 +600,7 @@ export class UCT extends BaseUniversity {
       id: "uct-bsc-mathematics",
       name: "BSc Mathematics",
       faculty: "Science",
-      apsMin: 660,
+      apsRequired: 550, // Updated from 660 to 550 FPS Band A
       duration: "3 years",
       subjectRequirements: {
         Mathematics: 70,
@@ -623,7 +624,7 @@ export class UCT extends BaseUniversity {
       id: "uct-bsc-physics",
       name: "BSc Physics",
       faculty: "Science",
-      apsMin: 660,
+      apsRequired: 550, // Updated from 660 to 550 FPS Band A
       duration: "3 years",
       subjectRequirements: {
         Mathematics: 70,
@@ -647,7 +648,7 @@ export class UCT extends BaseUniversity {
       id: "uct-bsc-chemistry",
       name: "BSc Chemistry",
       faculty: "Science",
-      apsMin: 660,
+      apsRequired: 550, // Updated from 660 to 550 FPS Band A
       duration: "3 years",
       subjectRequirements: {
         Mathematics: 70,
@@ -671,7 +672,7 @@ export class UCT extends BaseUniversity {
       id: "uct-bsc-biology",
       name: "BSc Biology",
       faculty: "Science",
-      apsMin: 660,
+      apsRequired: 550, // Updated from 660 to 550 FPS Band A
       duration: "3 years",
       subjectRequirements: {
         Mathematics: 70,
@@ -695,7 +696,7 @@ export class UCT extends BaseUniversity {
       id: "uct-bsc-geology",
       name: "BSc Geology",
       faculty: "Science",
-      apsMin: 660,
+      apsRequired: 550, // Updated from 660 to 550 FPS Band A
       duration: "3 years",
       subjectRequirements: {
         Mathematics: 70,
