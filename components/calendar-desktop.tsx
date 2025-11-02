@@ -46,7 +46,7 @@ export function CalendarDesktop() {
       fontWeight: "bold",
     },
     examDate: {
-      backgroundColor: "#f59e0b",
+      backgroundColor: "trasparent",
       color: "white",
       fontWeight: "bold",
     },
@@ -56,7 +56,7 @@ export function CalendarDesktop() {
   }
 
   return (
-    <div className="grid gap-6 lg:grid-cols-3">
+    <div className="grid gap-2 lg:grid-cols-3">
       {/* Main Calendar with Liquid Glass */}
       <div className="lg:col-span-2 space-y-4">
         <Card className="glass-light dark:glass-dark p-6">
@@ -70,7 +70,7 @@ export function CalendarDesktop() {
               "rounded-md w-full",
               "[--cell-size:theme(spacing.16)]",
               "min-h-[500px]",
-              "[&_.rdp-day]:min-h-16 [&_.rdp-day]:p-2",
+              "[&_.rdp-day]:min-h-16 [&_.rdp-day]:p-0.5",
               "[&_.rdp-day_button]:w-full [&_.rdp-day_button]:h-full [&_.rdp-day_button]:min-h-16",
             )}
             components={{
@@ -82,7 +82,7 @@ export function CalendarDesktop() {
                   <button
                     {...props}
                     className={cn(
-                      "relative w-full h-full min-h-16 p-2 flex flex-col items-start justify-start gap-1 text-left rounded transition-all",
+                      "relative w-full h-full min-h-16 p-2 flex flex-col items-start justify-start gap-1 text-left rounded transition-all border-[1px] border-black/20 dark:border-white/20",
                       "hover:bg-accent/50 hover:backdrop-blur",
                       "focus:outline-none focus:ring-2 focus:ring-ring",
                       isSelected && "glass-light dark:glass-dark ring-2 ring-primary",
