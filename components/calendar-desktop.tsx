@@ -97,7 +97,7 @@ export function CalendarDesktop() {
                         {dayEvents.slice(0, 2).map((event, index) => (
                           <div
                             key={index}
-                            className="px-1.5 py-0.5 rounded text-foreground/70 font-medium truncate bg-transparent"
+                            className="px-1.5 py-0.5 rounded text-foreground/80 font-medium truncate"
                             title={event.name}
                           >
                             {event.name.substring(0, 10)}
@@ -120,7 +120,7 @@ export function CalendarDesktop() {
             Holiday
           </Badge>
           <Badge className="bg-blue-500 text-xs">Academic</Badge>
-          <Badge className="bg-orange-500 text-xs">Exam</Badge>
+          <Badge className="bg-slate-500 text-xs">Exam</Badge>
         </div>
       </div>
 
