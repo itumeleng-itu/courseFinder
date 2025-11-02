@@ -7,12 +7,22 @@ import { ThemeProvider } from "@/components/theme-provider"
 import { SidebarProvider } from "@/components/ui/sidebar"
 import { Toaster } from "@/components/ui/toaster"
 import { MobileNav } from "@/components/mobile-nav"
+import { PWAInstallPrompt } from "@/components/pwa-install-prompt"
 
 export const metadata: Metadata = {
   title: "CourseFinder - Find Your Perfect University Course",
   description: "Calculate your APS score and discover South African university courses you qualify for",
   keywords: "APS calculator, university courses, South Africa, matric results, course finder",
   generator: "v0.app",
+  manifest: "/manifest.json",
+  appleWebApp: {
+    capable: true,
+    statusBarStyle: "black-translucent",
+    title: "CourseFinder",
+  },
+  formatDetection: {
+    telephone: false,
+  },
 }
 
 export default function RootLayout({
@@ -22,12 +32,37 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" suppressHydrationWarning className={`${GeistSans.variable} ${GeistMono.variable}`}>
+      <head>
+        <meta name="theme-color" content="#000000" />
+        <meta name="mobile-web-app-capable" content="yes" />
+        <meta name="apple-mobile-web-app-capable" content="yes" />
+        <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+        <meta name="apple-mobile-web-app-title" content="CourseFinder" />
+        <link rel="apple-touch-icon" href="/icons/icon-192.png" />
+        <link rel="manifest" href="/manifest.json" />
+        <link rel="icon" type="image/png" href="/icons/icon-192.png" />
+      </head>
       <body className="font-sans antialiased">
         <ThemeProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange>
           <SidebarProvider>{children}</SidebarProvider>
           <MobileNav />
+          <PWAInstallPrompt />
           <Toaster />
         </ThemeProvider>
+
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `
+              if ('serviceWorker' in navigator) {
+                navigator.serviceWorker.register('/service-worker.js').then(() => {
+                  console.log('[PWA] Service Worker registered successfully')
+                }).catch((error) => {
+                  console.error('[PWA] Service Worker registration failed:', error)
+                })
+              }
+            `,
+          }}
+        />
       </body>
     </html>
   )
