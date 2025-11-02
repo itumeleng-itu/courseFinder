@@ -32,7 +32,7 @@ interface QualifyingCoursesProps {
 
 interface CourseWithUniversity {
   name: string
-  minimumAPS: number
+  minimumAPS: number // Maps to apsRequired from Course interface
   faculty?: string
   description?: string
   duration?: string
@@ -49,16 +49,21 @@ export default function QualifyingCourses({ apsScore, subjects }: QualifyingCour
 
   // Get all courses from all universities
   const allCourses = universities.flatMap((uni) =>
-    uni.courses.map((course) => ({
-      ...course,
-      universityName: uni.name,
-      universityShortName: uni.shortName,
-      universityWebsite: uni.website,
-    })),
+    uni.courses
+      .filter((course) => course.apsRequired > 0) // Filter out courses with invalid APS
+      .map((course) => ({
+        ...course,
+        minimumAPS: course.apsRequired, // Map apsRequired to minimumAPS for component compatibility
+        universityName: uni.name,
+        universityShortName: uni.shortName,
+        universityWebsite: uni.website,
+      })),
   )
 
   // Filter courses based on APS score and search query
   const qualifyingCourses = allCourses.filter((course) => {
+    // Validate APS requirement is valid before checking match
+    if (course.minimumAPS <= 0) return false
     const meetsAPS = apsScore >= course.minimumAPS
     const matchesSearch =
       searchQuery === "" ||
