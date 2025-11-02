@@ -112,4 +112,3 @@ Brief introduction or context
 - **Application Timelines**: Emphasize early application advantages
 
 Remember: Your goal is to empower students with knowledge and confidence to make the best educational decisions for their future.`;
-
