@@ -46,6 +46,13 @@ const commonSubjects = [
 export default function SubjectsForm({ onSubjectsChange }: SubjectsFormProps) {
   const [subjects, setSubjects] = useState<SubjectEntry[]>([{ id: "1", name: "", percentage: 0 }])
 
+  // Get currently selected subject names for mutual exclusivity logic
+  const selectedSubjectNames = subjects.map(s => s.name).filter(name => name !== "")
+  
+  // Check mutual exclusivity for Mathematics subjects
+  const hasMathematics = selectedSubjectNames.includes("Mathematics")
+  const hasMathematicalLiteracy = selectedSubjectNames.includes("Mathematical Literacy")
+
   const addSubject = () => {
     const newSubject: SubjectEntry = {
       id: Date.now().toString(),
@@ -63,7 +70,23 @@ export default function SubjectsForm({ onSubjectsChange }: SubjectsFormProps) {
   }
 
   const updateSubject = (id: string, field: "name" | "percentage", value: string | number) => {
-    const updatedSubjects = subjects.map((s) => (s.id === id ? { ...s, [field]: value } : s))
+    let updatedSubjects = subjects.map((s) => (s.id === id ? { ...s, [field]: value } : s))
+    
+    // Handle mutual exclusivity when updating subject name
+    if (field === "name") {
+      if (value === "Mathematics") {
+        // Remove Mathematical Literacy if Mathematics is selected
+        updatedSubjects = updatedSubjects.map(s => 
+          s.name === "Mathematical Literacy" ? { ...s, name: "", percentage: 0 } : s
+        )
+      } else if (value === "Mathematical Literacy") {
+        // Remove Mathematics if Mathematical Literacy is selected
+        updatedSubjects = updatedSubjects.map(s => 
+          s.name === "Mathematics" ? { ...s, name: "", percentage: 0 } : s
+        )
+      }
+    }
+    
     setSubjects(updatedSubjects)
     onSubjectsChange(updatedSubjects)
   }
@@ -90,11 +113,31 @@ export default function SubjectsForm({ onSubjectsChange }: SubjectsFormProps) {
                 <SelectValue placeholder="Select a subject" />
               </SelectTrigger>
               <SelectContent>
-                {commonSubjects.map((subjectName) => (
-                  <SelectItem key={subjectName} value={subjectName}>
-                    {subjectName}
-                  </SelectItem>
-                ))}
+                {commonSubjects.map((subjectName) => {
+                  // Check if this subject should be disabled due to mutual exclusivity
+                  const isDisabled = 
+                    selectedSubjectNames.includes(subjectName) ||
+                    (subjectName === "Mathematics" && hasMathematicalLiteracy && subject.name !== "Mathematics") ||
+                    (subjectName === "Mathematical Literacy" && hasMathematics && subject.name !== "Mathematical Literacy")
+                  
+                  return (
+                    <SelectItem 
+                       key={subjectName} 
+                       value={subjectName}
+                       disabled={isDisabled}
+                       className={isDisabled ? "opacity-50 cursor-not-allowed text-gray-400" : ""}
+                       aria-label={
+                         isDisabled && (subjectName === "Mathematics" || subjectName === "Mathematical Literacy")
+                           ? `${subjectName} - Disabled due to mutual exclusivity with ${
+                               subjectName === "Mathematics" ? "Mathematical Literacy" : "Mathematics"
+                             }`
+                           : subjectName
+                       }
+                     >
+                       {subjectName}
+                     </SelectItem>
+                  )
+                })}
               </SelectContent>
             </Select>
           </div>

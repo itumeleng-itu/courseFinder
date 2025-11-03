@@ -19,7 +19,7 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: "Server is not configured with OpenRouter API key" }, { status: 500 })
     }
 
-    const selectedModel = model || "deepseek/deepseek-chat-v3-0324:free"
+    const selectedModel = model || "minimax/minimax-m2:free"
 
     // Build messages array for OpenRouter API
     const messages: Array<{ role: "system" | "user" | "assistant"; content: string }> = []

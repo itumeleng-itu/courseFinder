@@ -1,224 +1,251 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useMemo } from "react"
 import { Button } from "@/components/ui/button"
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
-import {
-  Select,
-  SelectContent,
-  SelectGroup,
-  SelectItem,
-  SelectLabel,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select"
-import { PlusCircle, FileText } from "lucide-react"
-import { calculateAPS } from "@/lib/aps-calculator"
-import type { SubjectEntry, CourseResult } from "@/lib/types"
-import CourseList from "@/components/course-list"
-import SubjectList from "@/components/subject-list"
+import { Label } from "@/components/ui/label"
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
+import { Plus, Trash2 } from "lucide-react"
 
-export default function SubjectForm() {
-  const [subjects, setSubjects] = useState<SubjectEntry[]>([])
-  const [currentSubject, setCurrentSubject] = useState<{ name: string; percentage: string }>({
-    name: "",
-    percentage: "",
-  })
-  const [apsScore, setApsScore] = useState<number | null>(null)
-  const [qualifyingCourses, setQualifyingCourses] = useState<CourseResult[]>([])
-  const [showResults, setShowResults] = useState(false)
+// Types
+interface SubjectEntry {
+  id: string
+  name: string
+  percentage: number
+}
 
-  const handleAddSubject = () => {
-    if (!currentSubject.name || !currentSubject.percentage) {
-      alert("Please select a subject and enter a percentage")
-      return
-    }
+interface SubjectsFormProps {
+  onSubjectsChange: (subjects: SubjectEntry[]) => void
+}
 
-    const percentage = Number(currentSubject.percentage)
-    if (isNaN(percentage) || percentage < 0 || percentage > 100) {
-      alert("Please enter a valid percentage between 0 and 100")
-      return
-    }
+// Subject groupings for mutual exclusivity
+const SUBJECT_GROUPS: Record<string, string[]> = {
+  mathematics: ['Mathematics', 'Mathematical Literacy', 'Technical Mathematics'],
+  english: ['English Home Language', 'English First Additional Language'],
+  afrikaans: ['Afrikaans Home Language', 'Afrikaans First Additional Language'],
+  isizulu: ['IsiZulu Home Language', 'IsiZulu First Additional Language'],
+  isixhosa: ['IsiXhosa Home Language', 'IsiXhosa First Additional Language'],
+  sepedi: ['Sepedi Home Language', 'Sepedi First Additional Language'],
+  sesotho: ['Sesotho Home Language', 'Sesotho First Additional Language'],
+  setswana: ['Setswana Home Language', 'Setswana First Additional Language'],
+  xitsonga: ['Xitsonga Home Language', 'Xitsonga First Additional Language'],
+  siswati: ['SiSwati Home Language', 'SiSwati First Additional Language'],
+  tshivenda: ['Tshivenda Home Language', 'Tshivenda First Additional Language'],
+  ndebele: ['isiNdebele Home Language', 'isiNdebele First Additional Language'],
+}
 
-    // Check if subject already exists
-    if (subjects.some((s) => s.name === currentSubject.name)) {
-      alert("This subject has already been added")
-      return
-    }
+const commonSubjects = [
+  // Mathematics (mutually exclusive)
+  "Mathematics",
+  "Mathematical Literacy",
+  "Technical Mathematics",
+  
+  // English (mutually exclusive)
+  "English Home Language",
+  "English First Additional Language",
+  
+  // Afrikaans (mutually exclusive)
+  "Afrikaans Home Language",
+  "Afrikaans First Additional Language",
+  
+  // IsiZulu (mutually exclusive)
+  "IsiZulu Home Language",
+  "IsiZulu First Additional Language",
+  
+  // IsiXhosa (mutually exclusive)
+  "IsiXhosa Home Language",
+  "IsiXhosa First Additional Language",
+  
+  // Sepedi (mutually exclusive)
+  "Sepedi Home Language",
+  "Sepedi First Additional Language",
+  
+  // Sesotho (mutually exclusive)
+  "Sesotho Home Language",
+  "Sesotho First Additional Language",
+  
+  // Setswana (mutually exclusive)
+  "Setswana Home Language",
+  "Setswana First Additional Language",
+  
+  // Xitsonga (mutually exclusive)
+  "Xitsonga Home Language",
+  "Xitsonga First Additional Language",
+  
+  // SiSwati (mutually exclusive)
+  "SiSwati Home Language",
+  "SiSwati First Additional Language",
+  
+  // Tshivenda (mutually exclusive)
+  "Tshivenda Home Language",
+  "Tshivenda First Additional Language",
+  
+  // isiNdebele (mutually exclusive)
+  "isiNdebele Home Language",
+  "isiNdebele First Additional Language",
+  
+  // Sciences
+  "Physical Sciences",
+  "Life Sciences",
+  "Agricultural Sciences",
+  "Technical Sciences",
+  
+  // Commerce
+  "Accounting",
+  "Business Studies",
+  "Economics",
+  
+  // Humanities
+  "Geography",
+  "History",
+  "Life Orientation",
+  "Religion Studies",
+  
+  // Technology & Arts
+  "Information Technology",
+  "Computer Applications Technology",
+  "Engineering Graphics and Design",
+  "Visual Arts",
+  "Music",
+  "Dramatic Arts",
+  "Consumer Studies",
+  "Tourism",
+]
 
-    const newId = subjects.length > 0 ? Math.max(...subjects.map((s) => s.id)) + 1 : 1
-    setSubjects([...subjects, { id: newId, ...currentSubject }])
-    setCurrentSubject({ name: "", percentage: "" })
+export default function SubjectsForm({ onSubjectsChange }: SubjectsFormProps) {
+  const [subjects, setSubjects] = useState<SubjectEntry[]>([{ id: "1", name: "", percentage: 0 }])
+
+  // Get currently selected subject names (excluding empty entries and current row)
+  const getSelectedSubjects = (excludeId?: string) => {
+    return subjects
+      .filter(s => s.name !== "" && s.id !== excludeId)
+      .map(s => s.name)
   }
 
-  const handleRemoveSubject = (id: number) => {
-    setSubjects(subjects.filter((subject) => subject.id !== id))
-  }
+  // Determine which subjects should be disabled for a specific row
+  const getDisabledSubjects = (currentSubjectId: string) => {
+    const selectedSubjects = getSelectedSubjects(currentSubjectId)
+    const disabled = new Set<string>()
 
-  const findCourses = () => {
-    if (subjects.length < 6) {
-      alert("Please add at least 6 subjects excluding Life Orientation")
-      return
-    }
+    selectedSubjects.forEach(selectedSubject => {
+      // Add the already selected subject
+      disabled.add(selectedSubject)
 
-    // Calculate APS score
-    const score = calculateAPS(subjects)
-    setApsScore(score)
-
-    // Get qualifying courses
-    import("@/lib/course-matcher").then(({ findQualifyingCourses }) => {
-      const courses = findQualifyingCourses(score, subjects)
-      setQualifyingCourses(courses)
-      setShowResults(true)
+      // Find which group this subject belongs to and disable all others in that group
+      Object.values(SUBJECT_GROUPS).forEach(group => {
+        if (group.includes(selectedSubject)) {
+          group.forEach(subject => {
+            if (subject !== selectedSubject) {
+              disabled.add(subject)
+            }
+          })
+        }
+      })
     })
+
+    return disabled
   }
 
-  const resetForm = () => {
-    setShowResults(false)
-    setApsScore(null)
-    setQualifyingCourses([])
+  const addSubject = () => {
+    const newSubject: SubjectEntry = {
+      id: Date.now().toString(),
+      name: "",
+      percentage: 0,
+    }
+    const updatedSubjects = [...subjects, newSubject]
+    setSubjects(updatedSubjects)
+  }
+
+  const removeSubject = (id: string) => {
+    const updatedSubjects = subjects.filter((s) => s.id !== id)
+    setSubjects(updatedSubjects)
+    onSubjectsChange(updatedSubjects)
+  }
+
+  const updateSubject = (id: string, field: "name" | "percentage", value: string | number) => {
+    const updatedSubjects = subjects.map((s) => (s.id === id ? { ...s, [field]: value } : s))
+    setSubjects(updatedSubjects)
+    onSubjectsChange(updatedSubjects)
   }
 
   return (
-    <>
-      {!showResults ? (
-        <Card className="bg-white/10 backdrop-blur-sm border-none text-white">
-          <CardHeader>
-            <CardTitle className="text-2xl">Enter your NSC Subject Results</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="space-y-6">
-              <div className="flex flex-col md:flex-row gap-4">
-                <div className="flex-1">
-                  <Select
-                    value={currentSubject.name}
-                    onValueChange={(value) => setCurrentSubject({ ...currentSubject, name: value })}
-                  >
-                    <SelectTrigger className="bg-white/20 border-none text-white">
-                      <SelectValue placeholder="Select Subject" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectGroup>
-                        <SelectLabel>Languages</SelectLabel>
-                        <SelectItem value="english-home">English Home Language</SelectItem>
-                        <SelectItem value="english-fal">English First Additional Language</SelectItem>
-                        <SelectItem value="afrikaans-home">Afrikaans Home Language</SelectItem>
-                        <SelectItem value="afrikaans-fal">Afrikaans First Additional Language</SelectItem>
-                        <SelectItem value="isizulu-home">IsiZulu Home Language</SelectItem>
-                        <SelectItem value="isizulu-fal">IsiZulu First Additional Language</SelectItem>
-                        <SelectItem value="isixhosa-home">IsiXhosa Home Language</SelectItem>
-                        <SelectItem value="isixhosa-fal">IsiXhosa First Additional Language</SelectItem>
-                        <SelectItem value="sepedi-home">Sepedi Home Language</SelectItem>
-                        <SelectItem value="sepedi-fal">Sepedi First Additional Language</SelectItem>
-                        <SelectItem value="setswana-home">Setswana Home Language</SelectItem>
-                        <SelectItem value="setswana-fal">Setswana First Additional Language</SelectItem>
-                        <SelectItem value="sesotho-home">Sesotho Home Language</SelectItem>
-                        <SelectItem value="sesotho-fal">Sesotho First Additional Language</SelectItem>
-                        <SelectItem value="xitsonga-home">Xitsonga Home Language</SelectItem>
-                        <SelectItem value="xitsonga-fal">Xitsonga First Additional Language</SelectItem>
-                        <SelectItem value="siswati-home">SiSwati Home Language</SelectItem>
-                        <SelectItem value="siswati-fal">SiSwati First Additional Language</SelectItem>
-                        <SelectItem value="tshivenda-home">Tshivenda Home Language</SelectItem>
-                        <SelectItem value="tshivenda-fal">Tshivenda First Additional Language</SelectItem>
-                        <SelectItem value="ndebele-home">isiNdebele Home Language</SelectItem>
-                        <SelectItem value="ndebele-fal">isiNdebele First Additional Language</SelectItem>
-                      </SelectGroup>
-                      <SelectGroup>
-                        <SelectLabel>Mathematics</SelectLabel>
-                        <SelectItem value="mathematics">Mathematics</SelectItem>
-                        <SelectItem value="mathematical-literacy">Mathematical Literacy</SelectItem>
-                        <SelectItem value="technical-mathematics">Technical Mathematics</SelectItem>
-                      </SelectGroup>
-                      <SelectGroup>
-                        <SelectLabel>Sciences</SelectLabel>
-                        <SelectItem value="physical-sciences">Physical Sciences</SelectItem>
-                        <SelectItem value="life-sciences">Life Sciences</SelectItem>
-                        <SelectItem value="agricultural-sciences">Agricultural Sciences</SelectItem>
-                        <SelectItem value="technical-sciences">Technical Sciences</SelectItem>
-                      </SelectGroup>
-                      <SelectGroup>
-                        <SelectLabel>Commerce</SelectLabel>
-                        <SelectItem value="accounting">Accounting</SelectItem>
-                        <SelectItem value="business-studies">Business Studies</SelectItem>
-                        <SelectItem value="economics">Economics</SelectItem>
-                      </SelectGroup>
-                      <SelectGroup>
-                        <SelectLabel>Humanities</SelectLabel>
-                        <SelectItem value="history">History</SelectItem>
-                        <SelectItem value="geography">Geography</SelectItem>
-                        <SelectItem value="religion-studies">Religion Studies</SelectItem>
-                        <SelectItem value="life-orientation">Life Orientation</SelectItem>
-                      </SelectGroup>
-                      <SelectGroup>
-                        <SelectLabel>Other</SelectLabel>
-                        <SelectItem value="consumer-studies">Consumer Studies</SelectItem>
-                        <SelectItem value="tourism">Tourism</SelectItem>
-                        <SelectItem value="cat">Computer Applications Technology</SelectItem>
-                        <SelectItem value="information-technology">Information Technology</SelectItem>
-                        <SelectItem value="engineering-graphics-design">Engineering Graphics & Design</SelectItem>
-                        <SelectItem value="visual-arts">Visual Arts</SelectItem>
-                        <SelectItem value="music">Music</SelectItem>
-                        <SelectItem value="dramatic-arts">Dramatic Arts</SelectItem>
-                      </SelectGroup>
-                    </SelectContent>
-                  </Select>
-                </div>
-                <div className="w-24">
-                  <Input
-                    type="number"
-                    min="0"
-                    max="100"
-                    placeholder="%"
-                    value={currentSubject.percentage}
-                    onChange={(e) => setCurrentSubject({ ...currentSubject, percentage: e.target.value })}
-                    className="bg-white/20 border-none text-white placeholder:text-white/70"
-                  />
-                </div>
-              </div>
-
-              <div className="flex flex-col md:flex-row gap-4">
-                <Button onClick={handleAddSubject} className="bg-white/20 hover:bg-white/30 text-white" size="lg">
-                  <PlusCircle className="mr-2 h-5 w-5" /> Add Subject
+    <div className="space-y-4">
+      {subjects.map((subject, index) => {
+        const disabledSubjects = getDisabledSubjects(subject.id)
+        
+        return (
+          <div key={subject.id} className="space-y-3 p-4 border rounded-lg bg-gray-50">
+            <div className="flex items-center justify-between">
+              <Label className="text-sm font-medium">Subject {index + 1}</Label>
+              {subjects.length > 1 && (
+                <Button type="button" variant="ghost" size="sm" onClick={() => removeSubject(subject.id)}>
+                  <Trash2 className="h-4 w-4 text-red-500" />
                 </Button>
-
-                <Button
-                  onClick={findCourses}
-                  className="bg-white/20 hover:bg-white/30 text-white"
-                  size="lg"
-                  disabled={subjects.length < 6}
-                >
-                  <FileText className="mr-2 h-5 w-5" /> Find Courses
-                </Button>
-              </div>
-
-              <p className="text-sm text-white/80">
-                Add at least 6 subjects excluding Life Orientation for APS calculation
-              </p>
-
-              {subjects.length > 0 && (
-                <div className="mt-6">
-                  <SubjectList subjects={subjects} onRemove={handleRemoveSubject} />
-                </div>
               )}
             </div>
-          </CardContent>
-        </Card>
-      ) : (
-        <div className="space-y-6">
-          <Card>
-            <CardHeader>
-              <CardTitle>Your APS Score: {apsScore}</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <CourseList courses={qualifyingCourses} />
-              <Button onClick={resetForm} className="mt-6">
-                Calculate Another Score
-              </Button>
-            </CardContent>
-          </Card>
+
+            <div className="space-y-2">
+              <Label htmlFor={`subject-${subject.id}`} className="text-xs">
+                Subject Name
+              </Label>
+              <Select value={subject.name} onValueChange={(value) => updateSubject(subject.id, "name", value)}>
+                <SelectTrigger id={`subject-${subject.id}`}>
+                  <SelectValue placeholder="Select a subject" />
+                </SelectTrigger>
+                <SelectContent>
+                  {commonSubjects.map((subjectName) => {
+                    const isDisabled = disabledSubjects.has(subjectName)
+                    const isInMathGroup = SUBJECT_GROUPS.mathematics.includes(subjectName)
+                    
+                    return (
+                      <SelectItem 
+                        key={subjectName} 
+                        value={subjectName}
+                        disabled={isDisabled}
+                        className={isDisabled ? "opacity-50 cursor-not-allowed" : ""}
+                      >
+                        {subjectName}
+                        {isDisabled && isInMathGroup && " (conflicts with selected math subject)"}
+                        {isDisabled && !isInMathGroup && disabledSubjects.has(subjectName) && " (already selected or conflicts)"}
+                      </SelectItem>
+                    )
+                  })}
+                </SelectContent>
+              </Select>
+            </div>
+
+            <div className="space-y-2">
+              <Label htmlFor={`percentage-${subject.id}`} className="text-xs">
+                Percentage (%)
+              </Label>
+              <Input
+                id={`percentage-${subject.id}`}
+                type="number"
+                min="0"
+                max="100"
+                value={subject.percentage || ""}
+                onChange={(e) => updateSubject(subject.id, "percentage", Number(e.target.value))}
+                placeholder="Enter percentage"
+              />
+            </div>
+          </div>
+        )
+      })}
+
+      {subjects.length < 7 && (
+        <Button type="button" variant="outline" onClick={addSubject} className="w-full bg-transparent">
+          <Plus className="h-4 w-4 mr-2" />
+          Add Subject
+        </Button>
+      )}
+
+      {subjects.length > 0 && subjects.some(s => s.name !== "") && (
+        <div className="mt-4 p-3 bg-blue-50 border border-blue-200 rounded-lg">
+          <p className="text-xs text-blue-800">
+            <strong>Note:</strong> You cannot select both versions of the same subject (e.g., Home Language and First Additional Language) or multiple mathematics subjects.
+          </p>
         </div>
       )}
-    </>
+    </div>
   )
 }
