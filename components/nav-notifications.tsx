@@ -67,7 +67,8 @@ export function NotificationsPopover({
         >
           <BellIcon className="size-5" />
           {notifications.length > 0 && (
-            <span className="absolute -top-1 -right-1 size-4 bg-transparent text-black dark:text-white text-xs rounded-full flex items-center justify-center">              {notifications.length > 9 ? "9+" : notifications.length}
+            <span className="absolute -top-1 -right-1 size-4 bg-transparent text-white text-xs rounded-full flex items-center justify-center">
+              {notifications.length > 9 ? "9+" : notifications.length}
             </span>
           )}
         </Button>

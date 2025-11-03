@@ -30,40 +30,22 @@ import { TUT } from "./tut"
 import { SPU } from "./spu"
 
 // Helper to normalize APS field across varying course shapes
-// Returns null if no valid APS field is found (to indicate invalid/missing APS requirement)
-function normalizeAps(course: any): number | null {
-  const aps = course?.apsMin ??
+function normalizeAps(course: any): number {
+  return (
+    course?.apsMin ??
     course?.minimumAPS ??
     course?.apsRequired ??
     course?.minAps ??
-    null
-  
-  // Return null if APS is missing or invalid (0 or negative is invalid)
-  if (aps === null || aps === undefined || aps <= 0) {
-    return null
-  }
-  
-  return aps
+    0
+  )
 }
 
 // Map detailed course to simplified index course
-// Returns null if course has invalid/missing APS requirement
-function toIndexCourse(course: any): Course | null {
-  const apsRequired = normalizeAps(course)
-  
-  // Filter out courses with invalid or missing APS requirements
-  if (apsRequired === null || apsRequired <= 0) {
-    // Log warning for missing APS (only in development)
-    if (process.env.NODE_ENV === 'development' && course?.name) {
-      console.warn(`Course "${course.name}" has invalid or missing APS requirement and will be filtered out.`)
-    }
-    return null
-  }
-  
+function toIndexCourse(course: any): Course {
   return {
     name: course?.name ?? "",
     faculty: course?.faculty ?? "",
-    apsRequired,
+    apsRequired: normalizeAps(course),
     description: course?.description,
     requirements: Array.isArray(course?.requirements) ? course.requirements : undefined,
   }
@@ -106,9 +88,7 @@ export const universities: University[] = instances.map((uni) => ({
   shortName: uni.shortName,
   location: typeof (uni as any).getLocationString === "function" ? (uni as any).getLocationString() : String((uni as any).location?.city ?? ""),
   website: uni.website,
-  courses: (uni.courses ?? [])
-    .map(toIndexCourse)
-    .filter((course): course is Course => course !== null), // Filter out null courses (invalid APS)
+  courses: (uni.courses ?? []).map(toIndexCourse),
 }))
 
 export function getAllUniversities(): University[] {

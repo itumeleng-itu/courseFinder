@@ -25,7 +25,6 @@ type Subject = {
 const SUBJECTS = [
   "Mathematics",
   "Mathematical Literacy",
-  "Technical Mathematics",
   "Physical Sciences",
   "Life Sciences",
   "English Home Language",
@@ -57,11 +56,14 @@ const SUBJECTS = [
   "Music",
 ]
 
-// Define mathematics subjects - only ONE can be selected at a time
-const MATH_SUBJECTS = [
-  "Mathematics",
-  "Mathematical Literacy",
-  "Technical Mathematics",
+// Define conflicting subject groups - students can only select one from each group
+const CONFLICTING_SUBJECTS = [
+  ["Mathematics", "Mathematical Literacy"],
+  ["English Home Language", "English First Additional Language"],
+  ["Afrikaans Home Language", "Afrikaans First Additional Language"],
+  ["IsiZulu Home Language", "IsiZulu First Additional Language"],
+  ["IsiXhosa Home Language", "IsiXhosa First Additional Language"],
+  ["Information Technology", "Computer Applications Technology"],
 ]
 
 // Define home languages - only ONE can be selected at a time
@@ -77,52 +79,6 @@ const HOME_LANGUAGES = [
   "Xitsonga",
   "SiSwati"
 ]
-
-// Define first additional languages - only ONE can be selected at a time
-const FIRST_ADDITIONAL_LANGUAGES = [
-  "English First Additional Language",
-  "Afrikaans First Additional Language",
-  "IsiZulu First Additional Language",
-  "IsiXhosa First Additional Language",
-]
-
-// Define conflicting subject groups - students can only select one from each group
-const CONFLICTING_SUBJECTS = [
-  ["Information Technology", "Computer Applications Technology"],
-]
-
-// Helper function to get the corresponding first additional language for a home language
-const getCorrespondingFAL = (homeLang: string): string | null => {
-  if (homeLang === "English Home Language") return "English First Additional Language"
-  if (homeLang === "Afrikaans Home Language") return "Afrikaans First Additional Language"
-  if (homeLang === "IsiZulu Home Language") return "IsiZulu First Additional Language"
-  if (homeLang === "IsiXhosa Home Language") return "IsiXhosa First Additional Language"
-  return null
-}
-
-// Helper function to get the corresponding home language for a first additional language
-const getCorrespondingHomeLang = (fal: string): string | null => {
-  if (fal === "English First Additional Language") return "English Home Language"
-  if (fal === "Afrikaans First Additional Language") return "Afrikaans Home Language"
-  if (fal === "IsiZulu First Additional Language") return "IsiZulu Home Language"
-  if (fal === "IsiXhosa First Additional Language") return "IsiXhosa Home Language"
-  return null
-}
-
-// Helper function to extract base language name (for languages that only appear once)
-const getBaseLanguageName = (subjectName: string): string | null => {
-  if (subjectName.includes("Home Language")) {
-    return subjectName.replace(" Home Language", "")
-  }
-  if (subjectName.includes("First Additional Language")) {
-    return subjectName.replace(" First Additional Language", "")
-  }
-  // For standalone languages like "Sepedi", "Sesotho", etc.
-  if (HOME_LANGUAGES.includes(subjectName) && !subjectName.includes("Home Language")) {
-    return subjectName
-  }
-  return null
-}
 
 export default function FindCoursePage() {
   const [subjects, setSubjects] = useState<Subject[]>([])
@@ -149,16 +105,6 @@ export default function FindCoursePage() {
 
   // Check if adding a subject would create a conflict
   const checkSubjectConflict = (newSubjectName: string, existingSubjects: Subject[]) => {
-    // Check mathematics conflicts - only one mathematics type allowed
-    if (MATH_SUBJECTS.includes(newSubjectName)) {
-      const existingMathSubject = existingSubjects.find(subject => 
-        MATH_SUBJECTS.includes(subject.name)
-      )
-      if (existingMathSubject) {
-        return existingMathSubject.name
-      }
-    }
-
     // Check home language conflicts - only one home language allowed
     if (HOME_LANGUAGES.includes(newSubjectName)) {
       const existingHomeLanguage = existingSubjects.find(subject => 
@@ -166,40 +112,6 @@ export default function FindCoursePage() {
       )
       if (existingHomeLanguage) {
         return existingHomeLanguage.name
-      }
-    }
-
-    // Check first additional language conflicts - only one first additional language allowed
-    if (FIRST_ADDITIONAL_LANGUAGES.includes(newSubjectName)) {
-      const existingFAL = existingSubjects.find(subject => 
-        FIRST_ADDITIONAL_LANGUAGES.includes(subject.name)
-      )
-      if (existingFAL) {
-        return existingFAL.name
-      }
-      
-      // Check if the same language is already selected as home language
-      const correspondingHomeLang = getCorrespondingHomeLang(newSubjectName)
-      if (correspondingHomeLang) {
-        const existingHomeLang = existingSubjects.find(subject => 
-          subject.name === correspondingHomeLang
-        )
-        if (existingHomeLang) {
-          return existingHomeLang.name
-        }
-      }
-    }
-
-    // Check if selecting a home language conflicts with the same language as first additional
-    if (HOME_LANGUAGES.includes(newSubjectName)) {
-      const correspondingFAL = getCorrespondingFAL(newSubjectName)
-      if (correspondingFAL) {
-        const existingFAL = existingSubjects.find(subject => 
-          subject.name === correspondingFAL
-        )
-        if (existingFAL) {
-          return existingFAL.name
-        }
       }
     }
 
@@ -238,18 +150,9 @@ export default function FindCoursePage() {
     // Check for conflicting subjects
     const conflictingSubject = checkSubjectConflict(currentSubject, subjects)
     if (conflictingSubject) {
-      // Check what type of conflict it is
-      if (MATH_SUBJECTS.includes(currentSubject) && MATH_SUBJECTS.includes(conflictingSubject)) {
-        alert(`Cannot add ${currentSubject} because you have already selected ${conflictingSubject}. You can only choose ONE type of mathematics.`)
-      } else if (HOME_LANGUAGES.includes(currentSubject) && HOME_LANGUAGES.includes(conflictingSubject)) {
+      // Check if it's a home language conflict
+      if (HOME_LANGUAGES.includes(currentSubject) && HOME_LANGUAGES.includes(conflictingSubject)) {
         alert(`Cannot add ${currentSubject} because you have already selected ${conflictingSubject}. You can only choose ONE home language.`)
-      } else if (FIRST_ADDITIONAL_LANGUAGES.includes(currentSubject) && FIRST_ADDITIONAL_LANGUAGES.includes(conflictingSubject)) {
-        alert(`Cannot add ${currentSubject} because you have already selected ${conflictingSubject}. You can only choose ONE first additional language.`)
-      } else if (
-        (HOME_LANGUAGES.includes(currentSubject) && FIRST_ADDITIONAL_LANGUAGES.includes(conflictingSubject)) ||
-        (FIRST_ADDITIONAL_LANGUAGES.includes(currentSubject) && HOME_LANGUAGES.includes(conflictingSubject))
-      ) {
-        alert(`Cannot add ${currentSubject} because you have already selected ${conflictingSubject}. You cannot choose the same language as both home language and first additional language.`)
       } else {
         alert(`Cannot add ${currentSubject} because you have already selected ${conflictingSubject}. You can only choose one from this subject group.`)
       }
@@ -297,8 +200,7 @@ export default function FindCoursePage() {
 
     universities.forEach((university) => {
       university.courses.forEach((course) => {
-        // Validate course has valid APS requirement before checking match
-        if (course.apsRequired > 0 && calculatedAPS >= course.apsRequired) {
+        if (calculatedAPS >= course.apsRequired) {
           matches.push({ course, university })
         }
       })
@@ -310,8 +212,7 @@ export default function FindCoursePage() {
       colleges.forEach((college) => {
         const universityFormatCollege = collegeToUniversityFormat(college)
         universityFormatCollege.courses.forEach((course) => {
-          // Validate course has valid APS requirement before checking match
-          if (course.apsRequired > 0 && calculatedAPS >= course.apsRequired) {
+          if (calculatedAPS >= course.apsRequired) {
             matches.push({ course, university: universityFormatCollege })
           }
         })
@@ -383,33 +284,9 @@ export default function FindCoursePage() {
                           // Don't show subjects that are already selected
                           if (subjects.some((sub) => sub.name === s)) return false
                           
-                          // If a mathematics subject is already selected, don't show other mathematics subjects
-                          const hasMathSubject = subjects.some(subject => MATH_SUBJECTS.includes(subject.name))
-                          if (hasMathSubject && MATH_SUBJECTS.includes(s)) return false
-                          
                           // If a home language is already selected, don't show other home languages
                           const hasHomeLanguage = subjects.some(subject => HOME_LANGUAGES.includes(subject.name))
                           if (hasHomeLanguage && HOME_LANGUAGES.includes(s)) return false
-                          
-                          // If a first additional language is already selected, don't show other first additional languages
-                          const hasFAL = subjects.some(subject => FIRST_ADDITIONAL_LANGUAGES.includes(subject.name))
-                          if (hasFAL && FIRST_ADDITIONAL_LANGUAGES.includes(s)) return false
-                          
-                          // If a home language is selected, don't show the corresponding first additional language
-                          if (FIRST_ADDITIONAL_LANGUAGES.includes(s)) {
-                            const correspondingHomeLang = getCorrespondingHomeLang(s)
-                            if (correspondingHomeLang && subjects.some(subject => subject.name === correspondingHomeLang)) {
-                              return false
-                            }
-                          }
-                          
-                          // If a first additional language is selected, don't show the corresponding home language
-                          if (HOME_LANGUAGES.includes(s)) {
-                            const correspondingFAL = getCorrespondingFAL(s)
-                            if (correspondingFAL && subjects.some(subject => subject.name === correspondingFAL)) {
-                              return false
-                            }
-                          }
                           
                           return true
                         }).map((subject) => (

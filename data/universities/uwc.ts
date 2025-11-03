@@ -71,6 +71,12 @@ export class UWC extends BaseUniversity {
       department: "Social Work",
       apsMin: 34,
       duration: "4 years",
+      tuitionFee: {
+        min: 39263,
+        max: 54646,
+        currency: "ZAR",
+        year: 2026,
+      },
       subjectRequirements: {
         "English Home": 4,
         "English First Additional": 5,
@@ -78,8 +84,8 @@ export class UWC extends BaseUniversity {
         "Mathematics Literacy": 4,
       },
       additionalRequirements: [
-        "Another language (home or first additional) Code 4",
-        "English home language Code 4 OR English first additional language Code 5",
+        "English Code 4 (home or first additional language)",
+        "Another language Code 3 (home or first additional language)",
       ],
       careerOpportunities: [
         "Social Worker",
@@ -96,13 +102,19 @@ export class UWC extends BaseUniversity {
       department: "Social Work",
       apsMin: 30,
       duration: "3 years",
+      tuitionFee: {
+        min: 39263,
+        max: 54646,
+        currency: "ZAR",
+        year: 2026,
+      },
       subjectRequirements: {
         "English Home": 4,
         "English First Additional": 4,
         Mathematics: 3,
         "Mathematics Literacy": 4,
       },
-      additionalRequirements: ["Another language Code 3 (home OR first additional language)"],
+      additionalRequirements: ["Another language Code 3 (home or first additional language)"],
       careerOpportunities: [
         "Community Development Practitioner",
         "Project Coordinator",
@@ -118,13 +130,19 @@ export class UWC extends BaseUniversity {
       department: "Sport, Recreation and Exercise Science",
       apsMin: 30,
       duration: "3 years",
+      tuitionFee: {
+        min: 39263,
+        max: 54646,
+        currency: "ZAR",
+        year: 2026,
+      },
       subjectRequirements: {
         "English Home": 4,
         "English First Additional": 4,
         Mathematics: 3,
         "Mathematics Literacy": 4,
       },
-      additionalRequirements: ["Another language Code 3 (home OR first additional language)"],
+      additionalRequirements: ["Another language Code 3 (home or first additional language)"],
       careerOpportunities: [
         "Sports Scientist",
         "Exercise Physiologist",
@@ -140,6 +158,12 @@ export class UWC extends BaseUniversity {
       department: "Dietetics and Nutrition",
       apsMin: 33,
       duration: "4 years",
+      tuitionFee: {
+        min: 39263,
+        max: 54646,
+        currency: "ZAR",
+        year: 2026,
+      },
       subjectRequirements: {
         "English Home": 4,
         "English First Additional": 4,
@@ -147,7 +171,7 @@ export class UWC extends BaseUniversity {
         "Mathematics Literacy": 6,
         "Life Sciences": 4,
       },
-      additionalRequirements: ["Another language Code 3 (home OR first additional language)"],
+      additionalRequirements: ["Another language Code 3 (home or first additional language)"],
       careerOpportunities: [
         "Dietitian",
         "Nutritionist",
@@ -163,6 +187,12 @@ export class UWC extends BaseUniversity {
       department: "Sport, Recreation and Exercise Science",
       apsMin: 33,
       duration: "3 years",
+      tuitionFee: {
+        min: 39263,
+        max: 54646,
+        currency: "ZAR",
+        year: 2026,
+      },
       subjectRequirements: {
         "English Home": 4,
         "English First Additional": 4,
@@ -170,7 +200,7 @@ export class UWC extends BaseUniversity {
         "Mathematics Literacy": 6,
         "Life Sciences": 4,
       },
-      additionalRequirements: ["Another language Code 3 (home OR first additional language)"],
+      additionalRequirements: ["Another language Code 3 (home or first additional language)"],
       careerOpportunities: [
         "Exercise Scientist",
         "Sports Performance Analyst",
@@ -186,6 +216,12 @@ export class UWC extends BaseUniversity {
       department: "Occupational Therapy",
       apsMin: 33,
       duration: "4 years",
+      tuitionFee: {
+        min: 39263,
+        max: 54646,
+        currency: "ZAR",
+        year: 2026,
+      },
       subjectRequirements: {
         "English Home": 4,
         "English First Additional": 4,
@@ -193,7 +229,7 @@ export class UWC extends BaseUniversity {
         "Mathematics Literacy": 5,
         "Life Sciences": 4,
       },
-      additionalRequirements: ["Another language Code 3 (home OR first additional language)"],
+      additionalRequirements: ["Another language Code 3 (home or first additional language)"],
       careerOpportunities: [
         "Occupational Therapist",
         "Rehabilitation Specialist",
@@ -209,6 +245,12 @@ export class UWC extends BaseUniversity {
       department: "Physiotherapy",
       apsMin: 39,
       duration: "4 years",
+      tuitionFee: {
+        min: 39263,
+        max: 54646,
+        currency: "ZAR",
+        year: 2026,
+      },
       subjectRequirements: {
         "English Home": 4,
         "English First Additional": 4,
@@ -217,7 +259,7 @@ export class UWC extends BaseUniversity {
         "Life Sciences": 4,
         "Physical Sciences": 4,
       },
-      additionalRequirements: ["Another language Code 3 (home OR first additional language)"],
+      additionalRequirements: ["Another language Code 3 (home or first additional language)"],
       careerOpportunities: [
         "Physiotherapist",
         "Sports Physiotherapist",
@@ -233,6 +275,12 @@ export class UWC extends BaseUniversity {
       department: "Nursing",
       apsMin: 30,
       duration: "4 years",
+      tuitionFee: {
+        min: 39263,
+        max: 54646,
+        currency: "ZAR",
+        year: 2026,
+      },
       subjectRequirements: {
         "English Home": 4,
         "English First Additional": 4,
@@ -240,7 +288,7 @@ export class UWC extends BaseUniversity {
         "Mathematics Literacy": 6,
         "Life Sciences": 4,
       },
-      additionalRequirements: ["Another language Code 3 (home OR first additional language)"],
+      additionalRequirements: ["Another language Code 3 (home or first additional language)"],
       careerOpportunities: ["Registered Nurse", "Midwife", "Community Health Nurse", "Hospital Nurse", "Nurse Manager"],
     },
 
@@ -252,13 +300,19 @@ export class UWC extends BaseUniversity {
       department: "Public Administration and Management",
       apsMin: 30,
       duration: "3 years",
+      tuitionFee: {
+        min: 39263,
+        max: 54646,
+        currency: "ZAR",
+        year: 2026,
+      },
       subjectRequirements: {
         "English Home": 4,
         "English First Additional": 4,
         Mathematics: 3,
         "Mathematics Literacy": 5,
       },
-      additionalRequirements: ["Another language Code 3 (home OR first additional language)"],
+      additionalRequirements: ["Another language Code 3 (home or first additional language)"],
       careerOpportunities: [
         "Public Administrator",
         "Government Official",
@@ -274,12 +328,18 @@ export class UWC extends BaseUniversity {
       department: "Economics and Finance",
       apsMin: 30,
       duration: "3 years",
+      tuitionFee: {
+        min: 39263,
+        max: 54646,
+        currency: "ZAR",
+        year: 2026,
+      },
       subjectRequirements: {
         "English Home": 4,
         "English First Additional": 4,
         Mathematics: 4,
       },
-      additionalRequirements: ["Another language Code 3 (home OR first additional language)"],
+      additionalRequirements: ["Another language Code 3 (home or first additional language)"],
       careerOpportunities: [
         "Business Analyst",
         "Financial Consultant",
@@ -295,13 +355,19 @@ export class UWC extends BaseUniversity {
       department: "Economics and Finance",
       apsMin: 30,
       duration: "4 years",
-      subjectRequirements: {
-        "English Home": 3,
-        "English First Additional": 3,
-        Mathematics: 2,
-        "Mathematics Literacy": 6,
+      tuitionFee: {
+        min: 39263,
+        max: 54646,
+        currency: "ZAR",
+        year: 2026,
       },
-      additionalRequirements: ["Another language Code 3 (home OR first additional language)"],
+      subjectRequirements: {
+        "English Home": 4,
+        "English First Additional": 4,
+        Mathematics: 3,
+        "Mathematics Literacy": 4,
+      },
+      additionalRequirements: ["Another language Code 3 (home or first additional language)"],
       careerOpportunities: [
         "Business Analyst",
         "Financial Consultant",
@@ -317,12 +383,18 @@ export class UWC extends BaseUniversity {
       department: "Accounting",
       apsMin: 30,
       duration: "3 years",
+      tuitionFee: {
+        min: 39263,
+        max: 54646,
+        currency: "ZAR",
+        year: 2026,
+      },
       subjectRequirements: {
         "English Home": 4,
         "English First Additional": 4,
         Mathematics: 4,
       },
-      additionalRequirements: ["Another language Code 3 (home OR first additional language)"],
+      additionalRequirements: ["Another language Code 3 (home or first additional language)"],
       careerOpportunities: [
         "Financial Accountant",
         "Auditor",
@@ -338,12 +410,18 @@ export class UWC extends BaseUniversity {
       department: "Information Systems",
       apsMin: 30,
       duration: "3 years",
+      tuitionFee: {
+        min: 39263,
+        max: 54646,
+        currency: "ZAR",
+        year: 2026,
+      },
       subjectRequirements: {
         "English Home": 4,
         "English First Additional": 4,
         Mathematics: 4,
       },
-      additionalRequirements: ["Another language Code 3 (home OR first additional language)"],
+      additionalRequirements: ["Another language Code 3 (home or first additional language)"],
       careerOpportunities: [
         "Systems Analyst",
         "IT Consultant",
@@ -359,6 +437,12 @@ export class UWC extends BaseUniversity {
       department: "Accounting",
       apsMin: 30,
       duration: "3 years",
+      tuitionFee: {
+        min: 39263,
+        max: 54646,
+        currency: "ZAR",
+        year: 2026,
+      },
       subjectRequirements: {
         "English Home": 4,
         "English First Additional": 4,
@@ -366,7 +450,7 @@ export class UWC extends BaseUniversity {
         Accounting: 5,
       },
       additionalRequirements: [
-        "Another language Code 3 (home OR first additional language)",
+        "Another language Code 3 (home or first additional language)",
         "Mathematics Code 4 AND Accounting Code 5 OR Mathematics Code 5",
       ],
       careerOpportunities: [
@@ -384,14 +468,20 @@ export class UWC extends BaseUniversity {
       department: "Accounting",
       apsMin: 30,
       duration: "4 years",
+      tuitionFee: {
+        min: 39263,
+        max: 54646,
+        currency: "ZAR",
+        year: 2026,
+      },
       subjectRequirements: {
-        "English Home": 3,
-        "English First Additional": 3,
+        "English Home": 4,
+        "English First Additional": 4,
         Mathematics: 4,
         Accounting: 5,
       },
       additionalRequirements: [
-        "Another language Code 3 (home OR first additional language)",
+        "Another language Code 3 (home or first additional language)",
         "Mathematics Code 4 AND Accounting Code 5 OR Mathematics Code 4",
       ],
       careerOpportunities: [
@@ -411,6 +501,12 @@ export class UWC extends BaseUniversity {
       department: "Earth Sciences",
       apsMin: 33,
       duration: "3 years",
+      tuitionFee: {
+        min: 42843,
+        max: 47428,
+        currency: "ZAR",
+        year: 2026,
+      },
       subjectRequirements: {
         "English Home": 4,
         "English First Additional": 4,
@@ -419,7 +515,7 @@ export class UWC extends BaseUniversity {
         "Life Sciences": 4,
       },
       additionalRequirements: [
-        "Another language Code 3 (home OR first additional language)",
+        "Another language Code 3 (home or first additional language)",
         "Physical Sciences OR Life Sciences Code 4",
       ],
       careerOpportunities: [
@@ -437,6 +533,12 @@ export class UWC extends BaseUniversity {
       department: "Biotechnology",
       apsMin: 33,
       duration: "3 years",
+      tuitionFee: {
+        min: 42843,
+        max: 47428,
+        currency: "ZAR",
+        year: 2026,
+      },
       subjectRequirements: {
         "English Home": 4,
         "English First Additional": 4,
@@ -445,7 +547,7 @@ export class UWC extends BaseUniversity {
         "Life Sciences": 4,
       },
       additionalRequirements: [
-        "Another language Code 3 (home OR first additional language)",
+        "Another language Code 3 (home or first additional language)",
         "Physical Sciences OR Life Sciences Code 4",
       ],
       careerOpportunities: [
@@ -463,6 +565,12 @@ export class UWC extends BaseUniversity {
       department: "Biodiversity and Conservation Biology",
       apsMin: 33,
       duration: "3 years",
+      tuitionFee: {
+        min: 42843,
+        max: 47428,
+        currency: "ZAR",
+        year: 2026,
+      },
       subjectRequirements: {
         "English Home": 4,
         "English First Additional": 4,
@@ -471,7 +579,7 @@ export class UWC extends BaseUniversity {
         "Life Sciences": 4,
       },
       additionalRequirements: [
-        "Another language Code 3 (home OR first additional language)",
+        "Another language Code 3 (home or first additional language)",
         "Physical Sciences OR Life Sciences Code 4",
       ],
       careerOpportunities: [
@@ -489,13 +597,19 @@ export class UWC extends BaseUniversity {
       department: "Medical Bioscience",
       apsMin: 33,
       duration: "3 years",
+      tuitionFee: {
+        min: 42843,
+        max: 47428,
+        currency: "ZAR",
+        year: 2026,
+      },
       subjectRequirements: {
         "English Home": 4,
         "English First Additional": 4,
         Mathematics: 4,
         "Life Sciences": 4,
       },
-      additionalRequirements: ["Another language Code 3 (home OR first additional language)"],
+      additionalRequirements: ["Another language Code 3 (home or first additional language)"],
       careerOpportunities: [
         "Medical Technologist",
         "Laboratory Scientist",
@@ -511,13 +625,19 @@ export class UWC extends BaseUniversity {
       department: "Chemistry",
       apsMin: 33,
       duration: "3 years",
+      tuitionFee: {
+        min: 42843,
+        max: 47428,
+        currency: "ZAR",
+        year: 2026,
+      },
       subjectRequirements: {
         "English Home": 4,
         "English First Additional": 4,
         Mathematics: 4,
         "Physical Sciences": 4,
       },
-      additionalRequirements: ["Another language Code 3 (home OR first additional language)"],
+      additionalRequirements: ["Another language Code 3 (home or first additional language)"],
       careerOpportunities: [
         "Chemist",
         "Chemical Analyst",
@@ -533,13 +653,19 @@ export class UWC extends BaseUniversity {
       department: "Earth Sciences",
       apsMin: 33,
       duration: "3 years",
+      tuitionFee: {
+        min: 43130,
+        max: 43130,
+        currency: "ZAR",
+        year: 2026,
+      },
       subjectRequirements: {
         "English Home": 4,
         "English First Additional": 4,
         Mathematics: 4,
         "Physical Sciences": 4,
       },
-      additionalRequirements: ["Another language Code 3 (home OR first additional language)"],
+      additionalRequirements: ["Another language Code 3 (home or first additional language)"],
       careerOpportunities: [
         "Geologist",
         "Mining Geologist",
@@ -555,13 +681,19 @@ export class UWC extends BaseUniversity {
       department: "Physics and Astronomy",
       apsMin: 33,
       duration: "3 years",
+      tuitionFee: {
+        min: 42843,
+        max: 47428,
+        currency: "ZAR",
+        year: 2026,
+      },
       subjectRequirements: {
         "English Home": 4,
         "English First Additional": 4,
         Mathematics: 5,
         "Physical Sciences": 4,
       },
-      additionalRequirements: ["Another language Code 3 (home OR first additional language)"],
+      additionalRequirements: ["Another language Code 3 (home or first additional language)"],
       careerOpportunities: [
         "Physicist",
         "Research Scientist",
@@ -577,18 +709,18 @@ export class UWC extends BaseUniversity {
       department: "Mathematics and Applied Mathematics",
       apsMin: 33,
       duration: "3 years",
+      tuitionFee: {
+        min: 42843,
+        max: 47428,
+        currency: "ZAR",
+        year: 2026,
+      },
       subjectRequirements: {
         "English Home": 4,
         "English First Additional": 4,
-        Mathematics: 5,
-        "Physical Sciences": 4,
-        "Life Sciences": 4,
-        "Information Technology": 4,
+        Mathematics: 4,
       },
-      additionalRequirements: [
-        "Another language Code 3 (home OR first additional language)",
-        "Physical Sciences OR Life Sciences OR Information Technology Code 4",
-      ],
+      additionalRequirements: ["Another language Code 3 (home or first additional language)"],
       careerOpportunities: ["Statistician", "Data Scientist", "Actuary", "Research Analyst", "Mathematical Modeler"],
     },
     {
@@ -598,6 +730,12 @@ export class UWC extends BaseUniversity {
       department: "Computer Science",
       apsMin: 33,
       duration: "3 years",
+      tuitionFee: {
+        min: 42843,
+        max: 47428,
+        currency: "ZAR",
+        year: 2026,
+      },
       subjectRequirements: {
         "English Home": 4,
         "English First Additional": 4,
@@ -607,7 +745,7 @@ export class UWC extends BaseUniversity {
         "Information Technology": 4,
       },
       additionalRequirements: [
-        "Another language Code 3 (home OR first additional language)",
+        "Another language Code 3 (home or first additional language)",
         "Physical Sciences OR Life Sciences OR Information Technology Code 4",
       ],
       careerOpportunities: [
@@ -625,6 +763,12 @@ export class UWC extends BaseUniversity {
       department: "Pharmacy",
       apsMin: 38,
       duration: "4 years",
+      tuitionFee: {
+        min: 42843,
+        max: 47428,
+        currency: "ZAR",
+        year: 2026,
+      },
       subjectRequirements: {
         "English Home": 4,
         "English First Additional": 4,
@@ -632,7 +776,7 @@ export class UWC extends BaseUniversity {
         "Physical Sciences": 4,
         "Life Sciences": 4,
       },
-      additionalRequirements: ["Another language Code 3 (home OR first additional language)"],
+      additionalRequirements: ["Another language Code 3 (home or first additional language)"],
       careerOpportunities: [
         "Pharmacist",
         "Clinical Pharmacist",
@@ -650,6 +794,12 @@ export class UWC extends BaseUniversity {
       department: "Oral Health Sciences",
       apsMin: 40,
       duration: "5 years",
+      tuitionFee: {
+        min: 70842,
+        max: 70842,
+        currency: "ZAR",
+        year: 2026,
+      },
       subjectRequirements: {
         "English Home": 4,
         "English First Additional": 4,
@@ -658,8 +808,8 @@ export class UWC extends BaseUniversity {
         "Life Sciences": 4,
       },
       additionalRequirements: [
-        "Another language Code 3 (home OR first additional language)",
-        "Application closing date: 31 August 2024",
+        "Another language Code 3 (home or first additional language)",
+        "Application closing date: 31 August 2025",
       ],
       careerOpportunities: ["Dentist", "Oral Surgeon", "Orthodontist", "Periodontist", "Dental Specialist"],
     },
@@ -670,6 +820,12 @@ export class UWC extends BaseUniversity {
       department: "Oral Health Sciences",
       apsMin: 33,
       duration: "3 years",
+      tuitionFee: {
+        min: 45573,
+        max: 45573,
+        currency: "ZAR",
+        year: 2026,
+      },
       subjectRequirements: {
         "English Home": 4,
         "English First Additional": 4,
@@ -678,8 +834,8 @@ export class UWC extends BaseUniversity {
         "Life Sciences": 4,
       },
       additionalRequirements: [
-        "Another language Code 3 (home OR first additional language)",
-        "Application closing date: 31 August 2024",
+        "Another language Code 3 (home or first additional language)",
+        "Application closing date: 31 August 2025",
       ],
       careerOpportunities: [
         "Oral Hygienist",
@@ -698,13 +854,19 @@ export class UWC extends BaseUniversity {
       department: "Private Law",
       apsMin: 37,
       duration: "4 years",
+      tuitionFee: {
+        min: 39263,
+        max: 54646,
+        currency: "ZAR",
+        year: 2026,
+      },
       subjectRequirements: {
         "English Home": 4,
         "English First Additional": 4,
         Mathematics: 3,
         "Mathematics Literacy": 5,
       },
-      additionalRequirements: ["Another language Code 3 (home OR first additional language)"],
+      additionalRequirements: ["Another language Code 3 (home or first additional language)"],
       careerOpportunities: ["Attorney", "Advocate", "Legal Advisor", "Magistrate", "Corporate Lawyer"],
     },
     {
@@ -714,12 +876,18 @@ export class UWC extends BaseUniversity {
       department: "Mercantile Law",
       apsMin: 30,
       duration: "3 years",
+      tuitionFee: {
+        min: 39263,
+        max: 54646,
+        currency: "ZAR",
+        year: 2026,
+      },
       subjectRequirements: {
         "English Home": 4,
         "English First Additional": 4,
         Mathematics: 4,
       },
-      additionalRequirements: ["Another language Code 3 (home OR first additional language)"],
+      additionalRequirements: ["Another language Code 3 (home or first additional language)"],
       careerOpportunities: [
         "Legal Advisor",
         "Compliance Officer",
@@ -735,13 +903,19 @@ export class UWC extends BaseUniversity {
       department: "Public Law",
       apsMin: 37,
       duration: "3 years",
+      tuitionFee: {
+        min: 39263,
+        max: 54646,
+        currency: "ZAR",
+        year: 2026,
+      },
       subjectRequirements: {
         "English Home": 4,
         "English First Additional": 4,
         Mathematics: 3,
         "Mathematics Literacy": 5,
       },
-      additionalRequirements: ["Another language Code 3 (home OR first additional language)"],
+      additionalRequirements: ["Another language Code 3 (home or first additional language)"],
       careerOpportunities: ["Legal Researcher", "Paralegal", "Court Administrator", "Legal Advisor", "Policy Analyst"],
     },
 
@@ -753,6 +927,12 @@ export class UWC extends BaseUniversity {
       department: "Curriculum Studies",
       apsMin: 33,
       duration: "4 years",
+      tuitionFee: {
+        min: 39263,
+        max: 54646,
+        currency: "ZAR",
+        year: 2026,
+      },
       subjectRequirements: {
         "English Home": 4,
         "English First Additional": 4,
@@ -763,7 +943,7 @@ export class UWC extends BaseUniversity {
         Economics: 4,
       },
       additionalRequirements: [
-        "Another language Code 3 (home OR first additional language)",
+        "Another language Code 3 (home or first additional language)",
         "Accounting Code 4 OR Business Studies Code 4 OR Economics Code 4",
       ],
       careerOpportunities: [
@@ -781,6 +961,12 @@ export class UWC extends BaseUniversity {
       department: "Science and Technology Education",
       apsMin: 33,
       duration: "4 years",
+      tuitionFee: {
+        min: 39263,
+        max: 54646,
+        currency: "ZAR",
+        year: 2026,
+      },
       subjectRequirements: {
         "English Home": 4,
         "English First Additional": 4,
@@ -790,7 +976,7 @@ export class UWC extends BaseUniversity {
         "Physical Sciences": 4,
       },
       additionalRequirements: [
-        "Another language Code 3 (home OR first additional language)",
+        "Another language Code 3 (home or first additional language)",
         "Life Sciences Code 4 OR Physical Sciences Code 4",
       ],
       careerOpportunities: [
@@ -808,6 +994,12 @@ export class UWC extends BaseUniversity {
       department: "Language Education",
       apsMin: 33,
       duration: "4 years",
+      tuitionFee: {
+        min: 39263,
+        max: 54646,
+        currency: "ZAR",
+        year: 2026,
+      },
       subjectRequirements: {
         "English Home": 4,
         "English First Additional": 5,
@@ -831,6 +1023,12 @@ export class UWC extends BaseUniversity {
       department: "Language Education",
       apsMin: 33,
       duration: "4 years",
+      tuitionFee: {
+        min: 39263,
+        max: 54646,
+        currency: "ZAR",
+        year: 2026,
+      },
       subjectRequirements: {
         "English Home": 4,
         "English First Additional": 5,
@@ -853,6 +1051,12 @@ export class UWC extends BaseUniversity {
       department: "Language Education",
       apsMin: 33,
       duration: "4 years",
+      tuitionFee: {
+        min: 39263,
+        max: 54646,
+        currency: "ZAR",
+        year: 2026,
+      },
       subjectRequirements: {
         "English Home": 4,
         "English First Additional": 5,
@@ -880,6 +1084,12 @@ export class UWC extends BaseUniversity {
       department: "Foundation Phase Studies",
       apsMin: 33,
       duration: "4 years",
+      tuitionFee: {
+        min: 39263,
+        max: 54646,
+        currency: "ZAR",
+        year: 2026,
+      },
       subjectRequirements: {
         "English Home": 4,
         "English First Additional": 4,
@@ -904,6 +1114,12 @@ export class UWC extends BaseUniversity {
       department: "Arts",
       apsMin: 35,
       duration: "3 years",
+      tuitionFee: {
+        min: 39263,
+        max: 54646,
+        currency: "ZAR",
+        year: 2026,
+      },
       subjectRequirements: {
         "English Home": 4,
         "English First Additional": 4,
@@ -932,6 +1148,12 @@ export class UWC extends BaseUniversity {
       department: "Religion and Theology",
       apsMin: 35,
       duration: "3 years",
+      tuitionFee: {
+        min: 39263,
+        max: 54646,
+        currency: "ZAR",
+        year: 2026,
+      },
       subjectRequirements: {
         "English Home": 4,
         "English First Additional": 4,
@@ -948,6 +1170,12 @@ export class UWC extends BaseUniversity {
       department: "Library and Information Science",
       apsMin: 35,
       duration: "3 years",
+      tuitionFee: {
+        min: 39263,
+        max: 54646,
+        currency: "ZAR",
+        year: 2026,
+      },
       subjectRequirements: {
         "English Home": 4,
         "English First Additional": 4,
