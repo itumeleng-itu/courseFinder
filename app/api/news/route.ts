@@ -77,13 +77,21 @@ function buildImageForArticle(article: NewsArticle): { image_url: string; alt_te
   let query = ""
   let imageDescription = ""
 
-  // ... (Your image generation logic remains the same, simplified for brevity)
   if (fullText.includes("matric results") || fullText.includes("nsc results")) {
     query = "student,celebration,graduation,success"
     imageDescription = "Students celebrating their results"
   } else if (fullText.includes("bursary") || fullText.includes("scholarship")) {
     query = "student,laptop,studying,books"
     imageDescription = "Student studying with scholarship opportunities"
+  } else if (fullText.includes("university") || fullText.includes("college")) {
+    query = "university,campus,students"
+    imageDescription = "University campus and students"
+  } else if (fullText.includes("exam") || fullText.includes("test")) {
+    query = "student,exam,studying,focus"
+    imageDescription = "Student preparing for exams"
+  } else if (fullText.includes("career") || fullText.includes("job")) {
+    query = "career,professional,workplace"
+    imageDescription = "Career and professional development"
   } else {
     // Default fallback for any other education-related news
     query = "education,student,learning,school"
@@ -100,9 +108,8 @@ async function fetchRealNews(): Promise<NewsArticle[]> {
     // Fetch general South African news
     const url = `https://newsdata.io/api/1/news?apikey=${NEWS_API_KEY}&country=za&language=en&category=top,politics,education,technology,science`
 
-    // ⭐️ FIX: Use Next.js 'next' property with revalidate: 0 to force a fresh fetch
-    // This tells Next.js *not* to cache the external data, 
-    // but relies on the segment's export const revalidate = 86400 to cache the *output*.
+    // ⭐️ FIXED: Removed next: { revalidate: 0 }
+    // Let the route-level revalidate handle caching
     const response = await fetch(url, {
       method: "GET",
       headers: {
@@ -113,8 +120,8 @@ async function fetchRealNews(): Promise<NewsArticle[]> {
     if (!response.ok) {
       // Return empty array on API failure to prevent build error
       if (response.status === 400 || response.status === 401) {
-          console.error("News API KEY invalid or request malformed.")
-          return []
+        console.error("News API KEY invalid or request malformed.")
+        return []
       }
       throw new Error(`News API failed: ${response.status}`)
     }
@@ -141,9 +148,9 @@ async function fetchRealNews(): Promise<NewsArticle[]> {
     if (articles.length < 5) {
       const eduUrl = `https://newsdata.io/api/1/news?apikey=${NEWS_API_KEY}&country=za&language=en&q=matric OR education OR student OR university&category=education`
 
-      // ⭐️ FIX: Use 'next: { revalidate: 0 }' here as well
-      const eduResponse = await fetch(eduUrl, { next: { revalidate: 0 } })
-      
+      // ⭐️ FIXED: Removed next: { revalidate: 0 }
+      const eduResponse = await fetch(eduUrl)
+
       if (eduResponse.ok) {
         const eduData = await eduResponse.json()
         if (eduData.results) {
