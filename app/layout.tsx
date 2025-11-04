@@ -8,6 +8,7 @@ import { SidebarProvider } from "@/components/ui/sidebar"
 import { Toaster } from "@/components/ui/toaster"
 import { MobileNav } from "@/components/mobile-nav"
 import { PWAInstallPrompt } from "@/components/pwa-install-prompt"
+import { Analytics } from "@vercel/analytics/next"
 
 export const metadata: Metadata = {
   title: "CourseFinder - Find Your Perfect University Course",
@@ -49,6 +50,8 @@ export default function RootLayout({
           <PWAInstallPrompt />
           <Toaster />
         </ThemeProvider>
+
+        <Analytics />
 
         <script
           dangerouslySetInnerHTML={{
