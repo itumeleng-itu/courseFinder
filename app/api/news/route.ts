@@ -1,7 +1,5 @@
 import { NextResponse } from "next/server"
 
-// Edge runtime for optimal CDN caching
-export const runtime = 'edge'
 // Revalidate every 24 hours
 export const revalidate = 86400
 
@@ -23,12 +21,35 @@ const NEWS_API_KEY = process.env.NEWSDATA_API_KEY
 
 // Keywords relevant to matric/grade 11 learners
 const STUDENT_RELEVANT_KEYWORDS = [
-  'matric', 'grade 11', 'grade 12', 'education', 'school', 'university',
-  'student', 'exam', 'tertiary', 'bursary', 'scholarship', 'study',
-  'career', 'apprenticeship', 'learner', 'graduation', 'college',
-  'nsc', 'subject choice', 'career guidance', 'tvet', 'learnership',
-  'youth unemployment', 'gap year', 'study tips', 'final exam',
-  'university application', 'nbts', 'university acceptance'
+  "matric",
+  "grade 11",
+  "grade 12",
+  "education",
+  "school",
+  "university",
+  "student",
+  "exam",
+  "tertiary",
+  "bursary",
+  "scholarship",
+  "study",
+  "career",
+  "apprenticeship",
+  "learner",
+  "graduation",
+  "college",
+  "nsc",
+  "subject choice",
+  "career guidance",
+  "tvet",
+  "learnership",
+  "youth unemployment",
+  "gap year",
+  "study tips",
+  "final exam",
+  "university application",
+  "nbts",
+  "university acceptance",
 ]
 
 function isWithin48Hours(pubDate: string): boolean {
@@ -40,11 +61,9 @@ function isWithin48Hours(pubDate: string): boolean {
 
 function isRelevantToStudents(article: any): boolean {
   const searchText = `${article.title} ${article.description}`.toLowerCase()
-  
+
   // Check if article contains any student-relevant keywords
-  return STUDENT_RELEVANT_KEYWORDS.some(keyword => 
-    searchText.includes(keyword.toLowerCase())
-  )
+  return STUDENT_RELEVANT_KEYWORDS.some((keyword) => searchText.includes(keyword.toLowerCase()))
 }
 
 function buildImageForArticle(article: NewsArticle): { image_url: string; alt_text: string } {
@@ -60,7 +79,11 @@ function buildImageForArticle(article: NewsArticle): { image_url: string; alt_te
   if (fullText.includes("matric results") || fullText.includes("nsc results")) {
     query = "student,celebration,graduation,success"
     imageDescription = "Students celebrating their results"
-  } else if (fullText.includes("matric exam") || fullText.includes("final exam") || fullText.includes("grade 12 exam")) {
+  } else if (
+    fullText.includes("matric exam") ||
+    fullText.includes("final exam") ||
+    fullText.includes("grade 12 exam")
+  ) {
     query = "student,studying,exam,classroom"
     imageDescription = "Students writing exams"
   } else if (fullText.includes("bursary") || fullText.includes("scholarship") || fullText.includes("financial aid")) {
@@ -139,7 +162,7 @@ async function fetchRealNews(): Promise<NewsArticle[]> {
         "Content-Type": "application/json",
       },
       // Important: Don't cache the external API call itself
-      cache: 'no-store'
+      cache: "no-store",
     })
 
     if (!response.ok) {
@@ -153,24 +176,22 @@ async function fetchRealNews(): Promise<NewsArticle[]> {
     }
 
     // Transform and filter for student-relevant articles
-    const articles: NewsArticle[] = data.results
-      .filter(isRelevantToStudents)
-      .map((item: any) => ({
-        title: item.title || "No title",
-        description: item.description || item.content || "No description available",
-        link: item.link || "#",
-        pubDate: item.pubDate || new Date().toISOString(),
-        source_id: item.source_id || "Unknown",
-        category: item.category || ["education"],
-        image_url: item.image_url || "",
-        alt_text: item.title || "News image",
-      }))
+    const articles: NewsArticle[] = data.results.filter(isRelevantToStudents).map((item: any) => ({
+      title: item.title || "No title",
+      description: item.description || item.content || "No description available",
+      link: item.link || "#",
+      pubDate: item.pubDate || new Date().toISOString(),
+      source_id: item.source_id || "Unknown",
+      category: item.category || ["education"],
+      image_url: item.image_url || "",
+      alt_text: item.title || "News image",
+    }))
 
     // If not enough student-relevant news found, fetch education-specific news
     if (articles.length < 5) {
       const eduUrl = `https://newsdata.io/api/1/news?apikey=${NEWS_API_KEY}&country=za&language=en&q=matric OR education OR student OR university&category=education`
-      
-      const eduResponse = await fetch(eduUrl, { cache: 'no-store' })
+
+      const eduResponse = await fetch(eduUrl, { cache: "no-store" })
       if (eduResponse.ok) {
         const eduData = await eduResponse.json()
         if (eduData.results) {
@@ -199,7 +220,7 @@ async function fetchRealNews(): Promise<NewsArticle[]> {
 export async function GET() {
   try {
     console.log("Fetching news from API (will be cached by Vercel CDN for 24 hours)")
-    
+
     // Fetch fresh news from API
     const fetchedArticles = await fetchRealNews()
 
@@ -231,24 +252,20 @@ export async function GET() {
       .filter((a) => isWithin48Hours(a.pubDate))
       .slice(0, 8)
 
-    console.log(`Returning ${normalized.length} articles (cached by Vercel Edge CDN)`)
+    console.log(`Returning ${normalized.length} articles (cached by Vercel for 24h)`)
 
     return NextResponse.json(
       {
         success: true,
         articles: normalized,
-        source: "Live News Feed (Cached at Vercel Edge for 24h)",
+        source: "Live News Feed (Cached at Vercel for 24h)",
         year: new Date().getFullYear(),
-        cacheInfo: "This response is cached globally by Vercel's CDN and shared across all users",
-        nextUpdate: new Date(Date.now() + 86400000).toISOString()
+        cacheInfo: "This response is cached globally by Vercel and shared across all users",
+        nextUpdate: new Date(Date.now() + 86400000).toISOString(),
       },
       {
         headers: {
-          // CDN will cache this for 24 hours and serve to all users
-          'Cache-Control': 'public, s-maxage=86400, stale-while-revalidate=43200',
-          // Additional Vercel-specific headers
-          'CDN-Cache-Control': 'max-age=86400',
-          'Vercel-CDN-Cache-Control': 'max-age=86400',
+          "Cache-Control": "public, s-maxage=86400, stale-while-revalidate=43200",
         },
       },
     )
@@ -262,11 +279,11 @@ export async function GET() {
         message: "Unable to load news at this time. Please try again later.",
         year: new Date().getFullYear(),
       },
-      { 
+      {
         status: 500,
         headers: {
           // Don't cache errors
-          'Cache-Control': 'no-store',
+          "Cache-Control": "no-store",
         },
       },
     )
