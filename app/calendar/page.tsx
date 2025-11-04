@@ -13,7 +13,7 @@ export default function CalendarPage() {
   return (
     <>
       <DashboardSidebar />
-      <SidebarInset>
+      <SidebarInset className="w-full lg:w-auto">
         <header className="flex h-16 shrink-0 items-center gap-2 border-b px-4 hidden lg:flex">
           <Separator orientation="vertical" className="mr-2 h-4" />
           <div className="flex items-center gap-2">
