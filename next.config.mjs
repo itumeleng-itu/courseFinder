@@ -9,7 +9,6 @@ const nextConfig = {
   images: {
     unoptimized: true,
   },
-  output: 'standalone',
   experimental: {
     optimizePackageImports: ['@radix-ui/*', 'lucide-react'],
   },
