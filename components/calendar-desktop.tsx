@@ -36,27 +36,35 @@ export function CalendarDesktop() {
 
   const modifiersStyles = {
     publicHoliday: {
-      backgroundColor: "#ef4444",
-      color: "white",
+      color:"red",
       fontWeight: "bold",
     },
     academicEvent: {
-      backgroundColor: "#3b82f6",
       color: "white",
       fontWeight: "bold",
     },
     examDate: {
-      border: "2px solid #f59e0b",
-      color: "#f59e0b",
+      color: "#ffa200ff",
       fontWeight: "bold",
     },
     pastEvent: {
-      opacity: "0.5",
+      opacity: "0.7",
     },
   }
 
+  const getDateBorderColor = (events: any[]) => {
+    if (events.length === 0) return "border-black/50 dark:border-white/50"
+    
+    // Priority: public holiday > exam > academic
+    if (events.some(e => e.type === "public")) return "border-red-500 dark:border-red-500"
+    if (events.some(e => e.type === "exam")) return "border-[#ffa200ff] dark:border-[#ffa200ff]"
+    if (events.some(e => e.type === "academic")) return "border-blue-500 dark:border-blue-500"
+    
+    return "border-black/50 dark:border-white/50"
+  }
+
   return (
-    <div className="grid gap-6 lg:grid-cols-3">
+    <div className="grid gap-5 lg:grid-cols-3">
       {/* Main Calendar with Liquid Glass */}
       <div className="lg:col-span-2 space-y-4">
         <Card className="glass-light dark:glass-dark p-6">
@@ -82,7 +90,9 @@ export function CalendarDesktop() {
                   <button
                     {...props}
                     className={cn(
-                      "relative w-full h-full min-h-16 p-2 flex flex-col items-start justify-start gap-1 text-left rounded transition-all",
+                      "relative w-full h-full min-h-16 p-2 flex flex-col items-start justify-start gap-2 text-left rounded transition-all",
+                      "border-[1.2px]",
+                      getDateBorderColor(dayEvents),
                       "hover:bg-accent/50 hover:backdrop-blur",
                       "focus:outline-none focus:ring-2 focus:ring-ring",
                       isSelected && "glass-light dark:glass-dark ring-2 ring-primary",
@@ -91,7 +101,12 @@ export function CalendarDesktop() {
                       modifiers.disabled && "opacity-50 cursor-not-allowed",
                     )}
                   >
-                    <span className="text-sm font-medium">{day.date.getDate()}</span>
+                    <span className={cn(
+                      "text-sm font-medium",
+                      dayEvents.length > 0 && "text-primary font-bold"
+                    )}>
+                      {day.date.getDate()}
+                    </span>
                     {dayEvents.length > 0 && (
                       <div className="flex flex-col gap-1 w-full text-xs">
                         {dayEvents.slice(0, 2).map((event, index) => (
@@ -120,7 +135,7 @@ export function CalendarDesktop() {
             Holiday
           </Badge>
           <Badge className="bg-blue-500 text-xs">Academic</Badge>
-          <Badge className="border-2 border-slate-500 text-slate-500 text-xs">Exam</Badge>
+          <Badge className="bg-orange-500 border-2 border-slate-500 text-slate-500 text-xs">Exam</Badge>
         </div>
       </div>
 
@@ -163,7 +178,7 @@ export function CalendarDesktop() {
             {(selectedDate || new Date()).toLocaleDateString("en-ZA", { month: "long" })} Events
           </h3>
           {currentMonthEvents.length > 0 ? (
-            <div className="space-y-2 max-h-64 overflow-y-auto">
+            <div className="space-y-1 max-h-64 overflow-y-auto">
               {currentMonthEvents
                 .sort((a, b) => a.date.getDate() - b.date.getDate())
                 .map((event, index) => (
