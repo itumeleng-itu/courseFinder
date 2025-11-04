@@ -108,10 +108,6 @@ async function fetchRealNews(): Promise<NewsArticle[]> {
       headers: {
         "Content-Type": "application/json",
       },
-      next: {
-        // This is equivalent to cache: "no-store" but works within ISR segments
-        revalidate: 0, 
-      }
     })
 
     if (!response.ok) {
