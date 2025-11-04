@@ -35,18 +35,12 @@ const SUBJECTS = [
   "IsiZulu First Additional Language",
   "IsiXhosa Home Language",
   "IsiXhosa First Additional Language",
-  "Sepedi Home Language",
-  "Sepedi First Additional Language",
-  "Sesotho Home Language",
-  "Sesotho First Additional Language",
-  "Setswana Home Language",
-  "Setswana First Additional Language",
-  "Tshivenda Home Language",
-  "Tshivenda First Additional Language",
-  "Xitsonga Home Language",
-  "Xitsonga First Additional Language",
-  "SiSwati Home Language",
-  "SiSwati First Additional Language",
+  "Sepedi",
+  "Sesotho",
+  "Setswana",
+  "Tshivenda",
+  "Xitsonga",
+  "SiSwati",
   "Accounting",
   "Business Studies",
   "Economics",
@@ -69,12 +63,6 @@ const CONFLICTING_SUBJECTS = [
   ["Afrikaans Home Language", "Afrikaans First Additional Language"],
   ["IsiZulu Home Language", "IsiZulu First Additional Language"],
   ["IsiXhosa Home Language", "IsiXhosa First Additional Language"],
-  ["Sepedi Home Language", "Sepedi First Additional Language"],
-  ["Sesotho Home Language", "Sesotho First Additional Language"],
-  ["Setswana Home Language", "Setswana First Additional Language"],
-  ["Tshivenda Home Language", "Tshivenda First Additional Language"],
-  ["Xitsonga Home Language", "Xitsonga First Additional Language"],
-  ["SiSwati Home Language", "SiSwati First Additional Language"],
   ["Information Technology", "Computer Applications Technology"],
 ]
 
@@ -84,12 +72,12 @@ const HOME_LANGUAGES = [
   "Afrikaans Home Language", 
   "IsiZulu Home Language",
   "IsiXhosa Home Language",
-  "Sepedi Home Language",
-  "Sesotho Home Language", 
-  "Setswana Home Language",
-  "Tshivenda Home Language",
-  "Xitsonga Home Language",
-  "SiSwati Home Language"
+  "Sepedi",
+  "Sesotho", 
+  "Setswana",
+  "Tshivenda",
+  "Xitsonga",
+  "SiSwati"
 ]
 
 export default function FindCoursePage() {
@@ -115,28 +103,31 @@ export default function FindCoursePage() {
     return total
   }
 
-  // Check if a subject should be disabled in the dropdown
-  const isSubjectDisabled = (subjectName: string) => {
-    // Already selected
-    if (subjects.some((s) => s.name === subjectName)) return true
-
+  // Check if adding a subject would create a conflict
+  const checkSubjectConflict = (newSubjectName: string, existingSubjects: Subject[]) => {
     // Check home language conflicts - only one home language allowed
-    if (HOME_LANGUAGES.includes(subjectName)) {
-      const hasHomeLanguage = subjects.some(subject => HOME_LANGUAGES.includes(subject.name))
-      if (hasHomeLanguage) return true
+    if (HOME_LANGUAGES.includes(newSubjectName)) {
+      const existingHomeLanguage = existingSubjects.find(subject => 
+        HOME_LANGUAGES.includes(subject.name)
+      )
+      if (existingHomeLanguage) {
+        return existingHomeLanguage.name
+      }
     }
 
     // Check other conflicting subject groups
     for (const conflictGroup of CONFLICTING_SUBJECTS) {
-      if (conflictGroup.includes(subjectName)) {
-        const hasConflict = subjects.some(subject => 
-          conflictGroup.includes(subject.name) && subject.name !== subjectName
+      if (conflictGroup.includes(newSubjectName)) {
+        // Check if any existing subject is in the same conflict group
+        const conflictingSubject = existingSubjects.find(subject => 
+          conflictGroup.includes(subject.name) && subject.name !== newSubjectName
         )
-        if (hasConflict) return true
+        if (conflictingSubject) {
+          return conflictingSubject.name
+        }
       }
     }
-
-    return false
+    return null
   }
 
   const addSubject = () => {
@@ -153,6 +144,18 @@ export default function FindCoursePage() {
 
     if (subjects.some((s) => s.name === currentSubject)) {
       alert("Subject already added")
+      return
+    }
+
+    // Check for conflicting subjects
+    const conflictingSubject = checkSubjectConflict(currentSubject, subjects)
+    if (conflictingSubject) {
+      // Check if it's a home language conflict
+      if (HOME_LANGUAGES.includes(currentSubject) && HOME_LANGUAGES.includes(conflictingSubject)) {
+        alert(`Cannot add ${currentSubject} because you have already selected ${conflictingSubject}. You can only choose ONE home language.`)
+      } else {
+        alert(`Cannot add ${currentSubject} because you have already selected ${conflictingSubject}. You can only choose one from this subject group.`)
+      }
       return
     }
 
@@ -277,19 +280,20 @@ export default function FindCoursePage() {
                         <SelectValue placeholder="Select subject" />
                       </SelectTrigger>
                       <SelectContent className="glass-modal">
-                        {SUBJECTS.map((subject) => {
-                          const disabled = isSubjectDisabled(subject)
-                          return (
-                            <SelectItem 
-                              key={subject} 
-                              value={subject}
-                              disabled={disabled}
-                              className={disabled ? "opacity-40 cursor-not-allowed" : ""}
-                            >
-                              {subject}
-                            </SelectItem>
-                          )
-                        })}
+                        {SUBJECTS.filter((s) => {
+                          // Don't show subjects that are already selected
+                          if (subjects.some((sub) => sub.name === s)) return false
+                          
+                          // If a home language is already selected, don't show other home languages
+                          const hasHomeLanguage = subjects.some(subject => HOME_LANGUAGES.includes(subject.name))
+                          if (hasHomeLanguage && HOME_LANGUAGES.includes(s)) return false
+                          
+                          return true
+                        }).map((subject) => (
+                          <SelectItem key={subject} value={subject}>
+                            {subject}
+                          </SelectItem>
+                        ))}
                       </SelectContent>
                     </Select>
 
