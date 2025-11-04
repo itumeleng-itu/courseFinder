@@ -25,28 +25,16 @@
   ],
   "icons": [
     {
-      "src": "/icons/icon-192.png",
+      "src": "/favicon.png",
       "sizes": "192x192",
       "type": "image/png",
-      "purpose": "any"
+      "purpose": "any maskable"
     },
     {
-      "src": "/icons/icon-192-maskable.png",
-      "sizes": "192x192",
-      "type": "image/png",
-      "purpose": "maskable"
-    },
-    {
-      "src": "/icons/icon-512.png",
+      "src": "/favicon.png",
       "sizes": "512x512",
       "type": "image/png",
-      "purpose": "any"
-    },
-    {
-      "src": "/icons/icon-512-maskable.png",
-      "sizes": "512x512",
-      "type": "image/png",
-      "purpose": "maskable"
+      "purpose": "any maskable"
     }
   ],
   "shortcuts": [
@@ -57,7 +45,7 @@
       "url": "/",
       "icons": [
         {
-          "src": "/icons/icon-96.png",
+          "src": "/favicon.png",
           "sizes": "96x96",
           "type": "image/png"
         }
@@ -70,7 +58,7 @@
       "url": "/find-course",
       "icons": [
         {
-          "src": "/icons/icon-96.png",
+          "src": "/favicon.png",
           "sizes": "96x96",
           "type": "image/png"
         }
@@ -83,7 +71,7 @@
       "url": "/bursaries",
       "icons": [
         {
-          "src": "/icons/icon-96.png",
+          "src": "/favicon.png",
           "sizes": "96x96",
           "type": "image/png"
         }
