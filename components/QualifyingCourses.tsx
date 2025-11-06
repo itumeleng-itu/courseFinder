@@ -24,6 +24,8 @@ import {
 } from "lucide-react"
 import type { SubjectEntry } from "@/lib/types"
 import { universities } from "@/data/universities"
+import { evaluateNSC } from "@/lib/nsc"
+import SecondChanceCard from "@/components/SecondChanceCard"
 
 interface QualifyingCoursesProps {
   apsScore: number
@@ -121,6 +123,11 @@ export default function QualifyingCourses({ apsScore, subjects }: QualifyingCour
                   <GraduationCap className="h-12 w-12 mx-auto mb-4 opacity-50" />
                   <p>No courses found matching your criteria.</p>
                   <p className="text-sm mt-2">Try adjusting your search or improving your APS score.</p>
+                  {subjects.length > 0 && !evaluateNSC(subjects).meetsBasicNSC && (
+                    <div className="mt-4 flex justify-center">
+                      <SecondChanceCard />
+                    </div>
+                  )}
                 </div>
               ) : (
                 <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">

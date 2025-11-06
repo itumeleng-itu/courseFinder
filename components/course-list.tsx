@@ -2,6 +2,7 @@ import type { CourseResult } from "@/lib/types"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
+import SecondChanceCard from "@/components/SecondChanceCard"
 
 interface CourseListProps {
   courses: CourseResult[]
@@ -22,9 +23,11 @@ export default function CourseList({ courses }: CourseListProps) {
 
   if (courses.length === 0) {
     return (
-      <div className="text-center py-8">
-        <p className="text-lg text-gray-500">No qualifying courses found with your current APS score.</p>
-        <p className="text-sm text-gray-400 mt-2">Try improving your subject percentages or adding more subjects.</p>
+      <div className="py-8 flex justify-center">
+        <div className="space-y-4 text-center">
+          <p className="text-lg text-muted-foreground">No qualifying courses found with your current APS score.</p>
+          <SecondChanceCard />
+        </div>
       </div>
     )
   }

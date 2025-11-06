@@ -1,4 +1,4 @@
-const CACHE_NAME = "coursefinder-v1"
+const CACHE_NAME = "coursefinder-v2"
 const STATIC_ASSETS = ["/", "/offline.html", "/icons/icon-192.png", "/icons/icon-512.png"]
 
 // Install event - cache static assets
@@ -34,6 +34,7 @@ self.addEventListener("activate", (event) => {
 // Fetch event - network first, fallback to cache
 self.addEventListener("fetch", (event) => {
   const { request } = event
+  const url = new URL(request.url)
 
   // Skip non-GET requests
   if (request.method !== "GET") {
@@ -42,6 +43,17 @@ self.addEventListener("fetch", (event) => {
 
   // Skip cross-origin requests
   if (!request.url.startsWith(self.location.origin)) {
+    return
+  }
+
+  // IMPORTANT: Never intercept/caches Next.js build/dev assets or HMR
+  // This prevents stale chunk caching that causes ChunkLoadError
+  if (
+    url.pathname.startsWith("/_next/") ||
+    url.pathname.startsWith("/@vite") ||
+    url.pathname.includes("/webpack") ||
+    url.searchParams.has("v") // dev cache-busting param; let browser handle it
+  ) {
     return
   }
 
@@ -57,9 +69,15 @@ self.addEventListener("fetch", (event) => {
         const responseToCache = response.clone()
 
         // Cache successful responses
-        caches.open(CACHE_NAME).then((cache) => {
-          cache.put(request, responseToCache)
-        })
+        caches
+          .open(CACHE_NAME)
+          .then((cache) => {
+            // Avoid caching API responses with query params aggressively
+            // but allow caching static pages and assets under root
+            if (!url.pathname.startsWith("/api/") || !url.search) {
+              cache.put(request, responseToCache).catch(() => {})
+            }
+          })
 
         return response
       })

@@ -7,6 +7,9 @@ export interface Course {
   apsRequired: number
   description?: string
   requirements?: string[]
+  // Carry subject requirements to the index for filtering
+  subjectRequirements?: Record<string, number | { alternatives: { subject: string; level: number }[] }>
+  duration?: string
 }
 
 // Public University shape for aggregated listing

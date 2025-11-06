@@ -48,6 +48,8 @@ function toIndexCourse(course: any): Course {
     apsRequired: normalizeAps(course),
     description: course?.description,
     requirements: Array.isArray(course?.requirements) ? course.requirements : undefined,
+    subjectRequirements: course?.subjectRequirements,
+    duration: course?.duration,
   }
 }
 

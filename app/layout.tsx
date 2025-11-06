@@ -53,19 +53,40 @@ export default function RootLayout({
 
         <Analytics />
 
-        <script
-          dangerouslySetInnerHTML={{
-            __html: `
-              if ('serviceWorker' in navigator) {
-                navigator.serviceWorker.register('/service-worker.js').then(() => {
-                  console.log('[PWA] Service Worker registered successfully')
-                }).catch((error) => {
-                  console.error('[PWA] Service Worker registration failed:', error)
-                })
-              }
-            `,
-          }}
-        />
+        {process.env.NODE_ENV === "production" && (
+          <script
+            dangerouslySetInnerHTML={{
+              __html: `
+                if ('serviceWorker' in navigator) {
+                  navigator.serviceWorker.register('/service-worker.js').then(() => {
+                    console.log('[PWA] Service Worker registered successfully')
+                  }).catch((error) => {
+                    console.error('[PWA] Service Worker registration failed:', error)
+                  })
+                }
+              `,
+            }}
+          />
+        )}
+
+        {process.env.NODE_ENV !== "production" && (
+          <script
+            dangerouslySetInnerHTML={{
+              __html: `
+                // Dev mode: ensure no SW remains registered to avoid chunk caching issues
+                if ('serviceWorker' in navigator) {
+                  navigator.serviceWorker.getRegistrations().then(regs => {
+                    regs.forEach(reg => reg.unregister())
+                  })
+                  if (window.caches) {
+                    caches.keys().then(names => names.forEach(name => caches.delete(name)))
+                  }
+                  console.log('[PWA] Dev: unregistered Service Workers and cleared caches')
+                }
+              `,
+            }}
+          />
+        )}
       </body>
     </html>
   )

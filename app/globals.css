@@ -210,3 +210,47 @@
     box-shadow: 0 8px 32px rgba(0,0,0,0.1);
   }
 }
+
+/* Responsive sizing for Second Chance Programme card */
+.second-chance-card {
+  width: 100%;
+  max-width: 100%;
+}
+
+.second-chance-card .sc-header,
+.second-chance-card .sc-content,
+.second-chance-card .sc-footer {
+  padding-top: 0.5rem;
+  padding-bottom: 0.5rem;
+}
+
+@media (min-width: 640px) { /* sm */
+  .second-chance-card .sc-header,
+  .second-chance-card .sc-content,
+  .second-chance-card .sc-footer {
+    padding-top: 0.75rem;
+    padding-bottom: 0.75rem;
+  }
+}
+
+@media (min-width: 768px) { /* md */
+  .second-chance-card {
+    /* Match typical course card width inside content container */
+    border-radius: 1rem;
+  }
+  .second-chance-card .sc-header,
+  .second-chance-card .sc-content,
+  .second-chance-card .sc-footer {
+    padding-top: 0.75rem;
+    padding-bottom: 0.75rem;
+  }
+}
+
+@media (min-width: 1024px) { /* lg */
+  .second-chance-card .sc-header,
+  .second-chance-card .sc-content,
+  .second-chance-card .sc-footer {
+    padding-top: 0.75rem;
+    padding-bottom: 0.75rem;
+  }
+}
