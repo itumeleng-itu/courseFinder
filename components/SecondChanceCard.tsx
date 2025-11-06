@@ -18,7 +18,7 @@ export function SecondChanceCard({
       <CardHeader className="sc-header">
         <CardTitle className="text-lg">Second Chance Programme</CardTitle>
         <CardDescription>
-          Your current marks don’t meet the minimum requirements. Explore the Department of Education’s Second Chance Programme
+          Explore the Department of Education’s Second Chance Programme
           to improve your results and eligibility.
         </CardDescription>
       </CardHeader>

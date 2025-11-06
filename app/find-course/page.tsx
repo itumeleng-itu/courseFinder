@@ -495,6 +495,17 @@ export default function FindCoursePage() {
     })
   }, [recommendedColleges, searchQuery])
   
+  // Unique list of colleges for display as cards (no course listing)
+  const filteredColleges = useMemo(() => {
+    const byId = new Map<string, University>()
+    for (const { university } of filteredCollegeCourses) {
+      if (university?.id && !byId.has(university.id)) {
+        byId.set(university.id, university)
+      }
+    }
+    return Array.from(byId.values())
+  }, [filteredCollegeCourses])
+  
   const courseKey = (course: ExtendedCourse, university: University) => `${university.id}::${course.name}`
   const isCompared = (course: ExtendedCourse, university: University) => compareKeys.includes(courseKey(course, university))
   const toggleCompare = (course: ExtendedCourse, university: University) => {
@@ -879,63 +890,43 @@ export default function FindCoursePage() {
                       </div>
                     )}
 
-                    {/* Recommended Colleges Section */}
-                    {qualifyingCourses.length < 25 && filteredCollegeCourses.length > 0 && (
+                    {/* Recommended Colleges Section: show only college cards in Bento grid */}
+                    {qualifyingCourses.length < 25 && filteredColleges.length > 0 && (
                       <>
                         <Separator className="my-6" />
                         <div className="mb-4">
                           <h3 className="text-lg font-semibold">Recommended Colleges</h3>
-                          <p className="text-sm text-muted-foreground">
-                            Additional options closely aligned with your subjects.
-                          </p>
+                          <p className="text-sm text-muted-foreground">Explore colleges closely aligned with your subjects.</p>
                         </div>
-                        <div className="space-y-4">
-                          {filteredCollegeCourses.map(
-                            ({ course, university, metRequirements }, index) => (
-                              <Card key={`college-${index}`} className="glass-card border-blue-200 bg-blue-50/50">
-                                <CardHeader>
-                                  <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-2">
-                                    <div className="space-y-1 flex-1">
-                                      <div className="flex items-center gap-2">
-                                        <CardTitle className="text-base md:text-lg">{course.name}</CardTitle>
-                                      </div>
-                                      <CardDescription className="flex flex-wrap items-center gap-2 text-xs md:text-sm">
-                                        <span className="font-medium">{university.shortName}</span>
-                                        <span className="hidden sm:inline">•</span>
-                                        <span className="block sm:inline w-full sm:w-auto">{university.location}</span>
-                                        {course.faculty && (
-                                          <>
-                                            <span className="hidden sm:inline">•</span>
-                                            <span className="block sm:inline w-full sm:w-auto">{course.faculty}</span>
-                                          </>
-                                        )}
-                                      </CardDescription>
-                                    </div>
-                                    <Badge variant="secondary" className="self-start sm:ml-4 glass-button">
-                                      APS: {course.apsRequired}
-                                    </Badge>
-                                  </div>
-                                </CardHeader>
-                                <CardContent>
-                                  <div className="space-y-3">
-                                    {course.description && (
-                                      <p className="text-sm text-muted-foreground">{course.description}</p>
-                                    )}
-                                    {metRequirements.length > 0 && (
-                                      <div className="p-3 bg-blue-100 border border-blue-200 rounded-lg">
-                                        <span className="font-semibold text-blue-900 text-sm">You match:</span>
-                                        <ul className="text-xs text-blue-800 ml-6 space-y-1 mt-2">
-                                          {metRequirements.map((req, i) => (
-                                            <li key={i}>{req}</li>
-                                          ))}
-                                        </ul>
-                                      </div>
-                                    )}
-                                  </div>
-                                </CardContent>
-                              </Card>
-                            ),
-                          )}
+                        <div className="grid gap-4 grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 lg:grid-rows-2 auto-rows-fr">
+                          {filteredColleges.map((university, index) => (
+                            <Card
+                              key={`college-card-${university.id}`}
+                              className={`group overflow-hidden glass-card border-blue-200 bg-blue-50/50 hover:shadow-lg transition-shadow ${index === 0 ? "sm:col-span-2 sm:row-span-2" : ""}`}
+                            >
+                              <div className={`relative overflow-hidden bg-muted ${index === 0 ? "aspect-[16/10]" : "aspect-[16/9]"}`} />
+                              <CardHeader className="space-y-2 p-4 sm:p-6">
+                                <CardTitle className={`${index === 0 ? "text-sm sm:text-base" : "text-xs sm:text-sm"}`}>
+                                  {university.name}
+                                </CardTitle>
+                                <CardDescription className="text-xs">{university.location}</CardDescription>
+                              </CardHeader>
+                              <CardContent className="p-4 sm:p-6 pt-0">
+                                {university.website ? (
+                                  <Button
+                                    asChild
+                                    variant="ghost"
+                                    size="sm"
+                                    className="w-full justify-start px-0 h-auto font-normal text-xs sm:text-sm"
+                                  >
+                                    <a href={university.website} target="_blank" rel="noopener noreferrer">Visit website</a>
+                                  </Button>
+                                ) : (
+                                  <div className="text-xs text-muted-foreground">Website not available</div>
+                                )}
+                              </CardContent>
+                            </Card>
+                          ))}
                         </div>
                       </>
                     )}

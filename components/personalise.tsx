@@ -21,10 +21,13 @@ import * as React from "react"
 
 export function Personalise() {
   const { isMobile } = useSidebar()
-  const { theme, setTheme } = useTheme()
+  const { theme, resolvedTheme, setTheme } = useTheme()
+  const [mounted, setMounted] = React.useState(false)
+  React.useEffect(() => setMounted(true), [])
 
   const getThemeIcon = () => {
-    switch (theme) {
+    const current = mounted ? (resolvedTheme ?? theme) : "system"
+    switch (current) {
       case "light":
         return <Sun className="size-3" />
       case "dark":
@@ -35,7 +38,8 @@ export function Personalise() {
   }
 
   const getThemeLabel = () => {
-    switch (theme) {
+    const current = mounted ? (resolvedTheme ?? theme) : "system"
+    switch (current) {
       case "light":
         return "Light"
       case "dark":
@@ -77,7 +81,7 @@ export function Personalise() {
               Theme Preferences
             </DropdownMenuLabel>
             <DropdownMenuRadioGroup
-              value={theme}
+              value={mounted ? (theme ?? "system") : "system"}
               onValueChange={(val) => setTheme(val as "light" | "dark" | "system")}
             >
               <DropdownMenuRadioItem value="system" className="flex items-center gap-2">
