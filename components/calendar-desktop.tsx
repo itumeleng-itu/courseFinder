@@ -6,7 +6,7 @@ import { Card } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { isSameDay } from "date-fns"
 import { cn } from "@/lib/utils"
-import { getAllEventsWithStatus } from "@/lib/calendar-events"
+import { getAllEventsWithStatus, detectConflictsForDate } from "@/lib/calendar-events"
 
 const calendarEvents = getAllEventsWithStatus()
 
@@ -64,9 +64,9 @@ export function CalendarDesktop() {
   }
 
   return (
-    <div className="grid gap-5 lg:grid-cols-3">
+    <div className="grid gap-5 items-start lg:grid-cols-[2fr_1fr]">
       {/* Main Calendar with Liquid Glass */}
-      <div className="lg:col-span-2 space-y-4">
+      <div className="min-w-0 space-y-4">
         <Card className="glass-light dark:glass-dark p-6">
           <Calendar
             mode="single"
@@ -75,7 +75,7 @@ export function CalendarDesktop() {
             modifiers={modifiers}
             modifiersStyles={modifiersStyles}
             className={cn(
-              "rounded-md w-full",
+              "rounded-md w-full max-w-full overflow-hidden",
               "[--cell-size:theme(spacing.16)]",
               "min-h-[500px]",
               "[&_.rdp-day]:min-h-16 [&_.rdp-day]:p-2",
@@ -84,6 +84,7 @@ export function CalendarDesktop() {
             components={{
               DayButton: ({ day, modifiers, ...props }) => {
                 const dayEvents = getEventsForDate(day.date)
+                const conflictSummary = detectConflictsForDate(day.date, dayEvents)
                 const isSelected = modifiers.selected
 
                 return (
@@ -101,6 +102,15 @@ export function CalendarDesktop() {
                       modifiers.disabled && "opacity-50 cursor-not-allowed",
                     )}
                   >
+                    {(conflictSummary.hard || conflictSummary.soft) && (
+                      <span
+                        aria-label={conflictSummary.hard ? "Hard conflict detected" : "Potential scheduling conflict"}
+                        className={cn(
+                          "absolute top-1 right-1 h-2 w-2 rounded-full",
+                          conflictSummary.hard ? "bg-red-500" : "bg-amber-500",
+                        )}
+                      />
+                    )}
                     <span className={cn(
                       "text-sm font-medium",
                       dayEvents.length > 0 && "text-primary font-bold"
@@ -140,7 +150,7 @@ export function CalendarDesktop() {
       </div>
 
       {/* Sidebar with Events */}
-      <div className="space-y-4">
+      <div className="space-y-4 min-w-0">
         {/* Selected Date Events */}
         {selectedDate && (
           <Card className="glass-light dark:glass-dark p-4">
@@ -153,7 +163,10 @@ export function CalendarDesktop() {
             </h3>
             {selectedDateEvents.length > 0 ? (
               <div className="space-y-2">
-                {selectedDateEvents.map((event, index) => (
+                {selectedDateEvents.map((event, index) => {
+                  const conflictMap = detectConflictsForDate(selectedDate!, selectedDateEvents).eventConflictMap
+                  const conflictType = conflictMap[event.name]
+                  return (
                   <div
                     key={index}
                     className="p-2 rounded border border-border/30 bg-background/40 dark:bg-background/20 hover:bg-background/60 dark:hover:bg-background/40 transition-colors"
@@ -161,10 +174,19 @@ export function CalendarDesktop() {
                     <Badge variant="outline" className="text-xs mb-1">
                       {event.type}
                     </Badge>
+                    {conflictType && (
+                      <Badge
+                        variant={conflictType === "hard" ? "destructive" : "secondary"}
+                        className={cn("text-xs mb-1 ml-2", conflictType === "soft" && "bg-amber-500 text-white")}
+                      >
+                        Conflict
+                      </Badge>
+                    )}
                     <p className="text-xs font-medium line-clamp-2">{event.name}</p>
                     {event.time && <p className="text-xs text-muted-foreground mt-1">{event.time}</p>}
                   </div>
-                ))}
+                  )
+                })}
               </div>
             ) : (
               <p className="text-xs text-muted-foreground">No events</p>

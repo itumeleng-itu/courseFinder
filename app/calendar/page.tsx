@@ -8,12 +8,14 @@ import { CalendarIcon } from "lucide-react"
 import { Chatbot } from "@/components/chatbot"
 import { CalendarMobile } from "@/components/calendar-mobile"
 import { CalendarDesktop } from "@/components/calendar-desktop"
+import { useIsMobile } from "@/hooks/use-mobile"
 
 export default function CalendarPage() {
+  const isMobile = useIsMobile()
   return (
     <>
       <DashboardSidebar />
-      <SidebarInset className="w-full lg:w-auto">
+      <SidebarInset className="w-full">
         <header className="flex h-16 shrink-0 items-center gap-2 border-b px-4 hidden lg:flex">
           <Separator orientation="vertical" className="mr-2 h-4" />
           <div className="flex items-center gap-2">
@@ -22,8 +24,8 @@ export default function CalendarPage() {
           </div>
         </header>
         <div className="flex flex-1 flex-col gap-4 p-2 sm:p-4 lg:p-4">
-          {/* Mobile/Tablet View */}
-          <div className="lg:hidden">
+          {/* Conditionally render only one calendar to avoid double mounting */}
+          {isMobile ? (
             <Card className="glass-light dark:glass-dark">
               <CardHeader>
                 <CardTitle className="flex items-center gap-2 text-base sm:text-lg">
@@ -35,12 +37,9 @@ export default function CalendarPage() {
                 <CalendarMobile />
               </CardContent>
             </Card>
-          </div>
-
-          {/* Desktop View */}
-          <div className="hidden lg:block">
+          ) : (
             <CalendarDesktop />
-          </div>
+          )}
         </div>
         <Chatbot />
       </SidebarInset>

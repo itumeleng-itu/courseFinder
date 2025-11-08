@@ -6,7 +6,7 @@ import { Card } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { isSameDay } from "date-fns"
 import { cn } from "@/lib/utils"
-import { getAllEventsWithStatus } from "@/lib/calendar-events"
+import { getAllEventsWithStatus, detectConflictsForDate } from "@/lib/calendar-events"
 
 const calendarEvents = getAllEventsWithStatus()
 
@@ -36,6 +36,48 @@ export function CalendarMobile() {
             "[&_.rdp-caption]:text-sm",
             "[&_.rdp-head_cell]:text-xs py-1",
           )}
+          components={{
+            DayButton: ({ day, modifiers, ...props }) => {
+              const dayEvents = getEventsForDate(day.date)
+              const conflictSummary = detectConflictsForDate(day.date, dayEvents)
+              const isSelected = modifiers.selected
+              return (
+                <button
+                  {...props}
+                  className={cn(
+                    "relative w-full h-full min-h-12 p-1 flex flex-col items-start justify-start gap-1 text-left rounded transition-all",
+                    "hover:bg-accent/50",
+                    isSelected && "bg-primary text-primary-foreground",
+                    modifiers.outside && "text-muted-foreground opacity-50",
+                    modifiers.disabled && "opacity-50 cursor-not-allowed",
+                  )}
+                >
+                  {(conflictSummary.hard || conflictSummary.soft) && (
+                    <span
+                      aria-label={conflictSummary.hard ? "Hard conflict detected" : "Potential scheduling conflict"}
+                      className={cn(
+                        "absolute top-1 right-1 h-1.5 w-1.5 rounded-full",
+                        conflictSummary.hard ? "bg-red-500" : "bg-amber-500",
+                      )}
+                    />
+                  )}
+                  <span className="text-xs font-medium">{day.date.getDate()}</span>
+                  {dayEvents.length > 0 && (
+                    <div className="flex flex-col gap-0.5 w-full">
+                      {dayEvents.slice(0, 1).map((event, index) => (
+                        <div key={index} className="text-[10px] truncate opacity-80">
+                          {event.name.length > 8 ? `${event.name.substring(0, 8)}...` : event.name}
+                        </div>
+                      ))}
+                      {dayEvents.length > 1 && (
+                        <div className="text-[10px] text-muted-foreground">+{dayEvents.length - 1}</div>
+                      )}
+                    </div>
+                  )}
+                </button>
+              )
+            },
+          }}
         />
       </div>
 
@@ -50,7 +92,10 @@ export function CalendarMobile() {
           </h3>
           {selectedDateEvents.length > 0 ? (
             <div className="space-y-2">
-              {selectedDateEvents.map((event, index) => (
+              {selectedDateEvents.map((event, index) => {
+                const conflictMap = detectConflictsForDate(selectedDate!, selectedDateEvents).eventConflictMap
+                const conflictType = conflictMap[event.name]
+                return (
                 <div key={index} className="p-2 bg-background/50 dark:bg-background/30 rounded border border-border/50">
                   <Badge className="text-xs mb-1" variant={event.type === "public" ? "destructive" : "default"}>
                     {event.type === "public"
@@ -61,9 +106,17 @@ export function CalendarMobile() {
                           ? "Exam"
                           : "Event"}
                   </Badge>
+                  {conflictType && (
+                    <Badge
+                      variant={conflictType === "hard" ? "destructive" : "secondary"}
+                      className={cn("text-[10px] mb-1 ml-2", conflictType === "soft" && "bg-amber-500 text-white")}
+                    >
+                      Conflict
+                    </Badge>
+                  )}
                   <p className="text-xs font-medium line-clamp-2">{event.name}</p>
                 </div>
-              ))}
+              )})}
             </div>
           ) : (
             <p className="text-xs text-muted-foreground">No events</p>

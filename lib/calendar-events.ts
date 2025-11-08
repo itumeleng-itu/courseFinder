@@ -1,4 +1,4 @@
-import { addDays, isAfter, isBefore, format, differenceInDays, isPast, isToday } from "date-fns"
+import { addDays, isAfter, isBefore, format, differenceInDays, isPast, isToday, isSameDay } from "date-fns"
 
 export type CalendarEvent = {
   date: Date
@@ -238,4 +238,108 @@ export function eventsToNotifications(events: CalendarEvent[]): CalendarNotifica
 export function getCalendarNotifications(daysAhead: number = 7): CalendarNotification[] {
   const upcomingEvents = getUpcomingEvents(daysAhead)
   return eventsToNotifications(upcomingEvents)
+}
+
+// --- Conflict Detection Utilities ---
+
+export type ConflictType = "hard" | "soft"
+
+type EventInterval = {
+  event: CalendarEvent
+  start: Date
+  end: Date
+  allDay: boolean
+}
+
+function parseDurationHours(description?: string): number {
+  if (!description) return 2 // default duration when unspecified
+  // Match formats like "3hrs", "2 hr", and handle half-hours like "2½hrs"
+  const hrsMatch = description.match(/(\d+)\s*(?:½)?\s*hr[s]?/i)
+  if (hrsMatch) {
+    let hours = parseInt(hrsMatch[1], 10)
+    if (/½/.test(description)) hours += 0.5
+    return hours
+  }
+  return 2
+}
+
+function toEventInterval(event: CalendarEvent): EventInterval {
+  if (event.time) {
+    const [hours, minutes] = event.time.split(":").map(Number)
+    const start = new Date(event.date)
+    start.setHours(hours ?? 0, minutes ?? 0, 0, 0)
+    const durationHours = parseDurationHours(event.description)
+    const end = new Date(start)
+    end.setMinutes(start.getMinutes() + Math.round(durationHours * 60))
+    return { event, start, end, allDay: false }
+  }
+  const dayStart = new Date(event.date)
+  dayStart.setHours(0, 0, 0, 0)
+  const dayEnd = new Date(event.date)
+  dayEnd.setHours(23, 59, 59, 999)
+  return { event, start: dayStart, end: dayEnd, allDay: true }
+}
+
+/**
+ * Detect conflicts for a given date among provided or global calendarEvents.
+ * - hard: overlapping timed events (interval overlap)
+ * - soft: multiple all-day events or mix of all-day and timed events on same date
+ */
+export function detectConflictsForDate(
+  date: Date,
+  events?: CalendarEvent[],
+): {
+  hard: boolean
+  soft: boolean
+  eventConflictMap: Record<string, ConflictType>
+  groups: { type: ConflictType; events: string[] }[]
+  dayEvents: CalendarEvent[]
+} {
+  const source = events ?? calendarEvents
+  const dayEvents = source.filter((e) => isSameDay(e.date, date))
+  const intervals = dayEvents.map(toEventInterval)
+  const timed = intervals.filter((i) => !i.allDay)
+  const allDay = intervals.filter((i) => i.allDay)
+
+  const eventConflictMap: Record<string, ConflictType> = {}
+  const groups: { type: ConflictType; events: string[] }[] = []
+
+  // Hard conflicts: overlapping timed events
+  timed.sort((a, b) => a.start.getTime() - b.start.getTime())
+  for (let i = 0; i < timed.length; i++) {
+    for (let j = i + 1; j < timed.length; j++) {
+      if (timed[j].start.getTime() < timed[i].end.getTime()) {
+        const names = [timed[i].event.name, timed[j].event.name]
+        groups.push({ type: "hard", events: names })
+        eventConflictMap[timed[i].event.name] = "hard"
+        eventConflictMap[timed[j].event.name] = "hard"
+      } else {
+        // sorted by start; if next starts after current ends, subsequent ones won't overlap
+        break
+      }
+    }
+  }
+
+  // Soft conflicts: multiple all-day events on the same date
+  if (allDay.length > 1) {
+    const names = allDay.map((i) => i.event.name)
+    groups.push({ type: "soft", events: names })
+    for (const i of allDay) {
+      if (!eventConflictMap[i.event.name]) eventConflictMap[i.event.name] = "soft"
+    }
+  }
+
+  // Soft conflicts: mix of all-day and timed events on the same date
+  if (allDay.length >= 1 && timed.length >= 1) {
+    const names = [...allDay.map((i) => i.event.name), ...timed.map((i) => i.event.name)]
+    groups.push({ type: "soft", events: names })
+    for (const i of allDay) {
+      if (!eventConflictMap[i.event.name]) eventConflictMap[i.event.name] = "soft"
+    }
+  }
+
+  const hard = Object.values(eventConflictMap).some((t) => t === "hard")
+  const soft = groups.some((g) => g.type === "soft")
+
+  return { hard, soft, eventConflictMap, groups, dayEvents }
 }
