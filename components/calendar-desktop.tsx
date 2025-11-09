@@ -64,10 +64,10 @@ export function CalendarDesktop() {
   }
 
   return (
-    <div className="grid gap-5 items-start lg:grid-cols-[2fr_1fr]">
+    <div className="flex flex-col xl:flex-row gap-5 w-full">
       {/* Main Calendar with Liquid Glass */}
-      <div className="min-w-0 space-y-4">
-        <Card className="glass-light dark:glass-dark p-6">
+      <div className="flex-1 min-w-0 space-y-4">
+        <Card className="glass-light dark:glass-dark p-4 lg:p-6">
           <Calendar
             mode="single"
             selected={selectedDate}
@@ -75,11 +75,13 @@ export function CalendarDesktop() {
             modifiers={modifiers}
             modifiersStyles={modifiersStyles}
             className={cn(
-              "rounded-md w-full max-w-full overflow-hidden",
-              "[--cell-size:theme(spacing.16)]",
-              "min-h-[500px]",
-              "[&_.rdp-day]:min-h-16 [&_.rdp-day]:p-2",
-              "[&_.rdp-day_button]:w-full [&_.rdp-day_button]:h-full [&_.rdp-day_button]:min-h-16",
+              "rounded-md w-full",
+              "[--cell-size:theme(spacing.12)] xl:[--cell-size:theme(spacing.14)]",
+              "min-h-[450px]",
+              "[&_.rdp-day]:min-h-12 xl:[&_.rdp-day]:min-h-14",
+              "[&_.rdp-day]:p-1.5 xl:[&_.rdp-day]:p-2",
+              "[&_.rdp-day_button]:w-full [&_.rdp-day_button]:h-full",
+              "[&_.rdp-day_button]:min-h-12 xl:[&_.rdp-day_button]:min-h-14",
             )}
             components={{
               DayButton: ({ day, modifiers, ...props }) => {
@@ -91,7 +93,7 @@ export function CalendarDesktop() {
                   <button
                     {...props}
                     className={cn(
-                      "relative w-full h-full min-h-16 p-2 flex flex-col items-start justify-start gap-2 text-left rounded transition-all",
+                      "relative w-full h-full min-h-12 xl:min-h-14 p-1.5 xl:p-2 flex flex-col items-start justify-start gap-1 text-left rounded transition-all",
                       "border-[1.2px]",
                       getDateBorderColor(dayEvents),
                       "hover:bg-accent/50 hover:backdrop-blur",
@@ -112,24 +114,24 @@ export function CalendarDesktop() {
                       />
                     )}
                     <span className={cn(
-                      "text-sm font-medium",
+                      "text-xs xl:text-sm font-medium",
                       dayEvents.length > 0 && "text-primary font-bold"
                     )}>
                       {day.date.getDate()}
                     </span>
                     {dayEvents.length > 0 && (
-                      <div className="flex flex-col gap-1 w-full text-xs">
+                      <div className="flex flex-col gap-0.5 w-full text-[10px] xl:text-xs">
                         {dayEvents.slice(0, 2).map((event, index) => (
                           <div
                             key={index}
-                            className="px-1.5 py-0.5 rounded text-foreground/70 font-medium truncate bg-transparent"
+                            className="px-1 py-0.5 rounded text-foreground/70 font-medium truncate bg-transparent"
                             title={event.name}
                           >
-                            {event.name.substring(0, 10)}
+                            {event.name.substring(0, 8)}
                           </div>
                         ))}
                         {dayEvents.length > 2 && (
-                          <span className="text-xs text-muted-foreground">+{dayEvents.length - 2}</span>
+                          <span className="text-[10px] text-muted-foreground">+{dayEvents.length - 2}</span>
                         )}
                       </div>
                     )}
@@ -140,7 +142,7 @@ export function CalendarDesktop() {
           />
         </Card>
 
-        <div className="flex gap-2">
+        <div className="flex flex-wrap gap-2">
           <Badge variant="destructive" className="text-xs">
             Holiday
           </Badge>
@@ -149,8 +151,8 @@ export function CalendarDesktop() {
         </div>
       </div>
 
-      {/* Sidebar with Events */}
-      <div className="space-y-4 min-w-0">
+      {/* Sidebar with Events - Fixed width on desktop */}
+      <div className="w-full xl:w-80 flex-shrink-0 space-y-4">
         {/* Selected Date Events */}
         {selectedDate && (
           <Card className="glass-light dark:glass-dark p-4">

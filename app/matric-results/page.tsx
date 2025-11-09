@@ -16,6 +16,7 @@ import { Textarea } from "@/components/ui/textarea"
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
 import { FileText, Download, Search, Calculator, AlertCircle, ExternalLink, CheckCircle, Phone, Mail } from "lucide-react"
 import { Chatbot } from "@/components/chatbot"
+import { InfoDialog } from "@/components/info-dialog"
 
 export default function MatricResultsPage() {
   const [examNumber, setExamNumber] = useState("")
@@ -78,6 +79,10 @@ export default function MatricResultsPage() {
           <div className="flex items-center gap-2">
             <FileText className="h-5 w-5 text-green-600" />
             <h1 className="text-lg font-semibold">Matric Results</h1>
+          </div>
+          <div className="ml-auto">
+            {/* Info icon in top-right triggers centered POPIA modal */}
+            <InfoDialog position="center" />
           </div>
         </header>
 
