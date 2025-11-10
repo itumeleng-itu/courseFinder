@@ -90,6 +90,14 @@ export class SubjectValidator {
       if (hasHomeLanguage) return true
     }
 
+    // First Additional Language: allow only one across all languages
+    if (FIRST_ADDITIONAL_LANGUAGES.includes(subjectName)) {
+      const hasFirstAdditionalLanguage = this.subjects.some((subject) =>
+        FIRST_ADDITIONAL_LANGUAGES.includes(subject.name),
+      )
+      if (hasFirstAdditionalLanguage) return true
+    }
+
     // Other conflict groups
     for (const group of CONFLICTING_SUBJECTS) {
       if (group.includes(subjectName)) {
@@ -111,6 +119,14 @@ export class SubjectValidator {
       const existingHomeLanguage = this.subjects.find((s) => HOME_LANGUAGES.includes(s.name))
       if (existingHomeLanguage) {
         return `You can only choose ONE home language. Currently selected: ${existingHomeLanguage.name}.`
+      }
+    }
+
+    // First Additional Language conflicts (only one allowed)
+    if (FIRST_ADDITIONAL_LANGUAGES.includes(subjectName)) {
+      const existingFAL = this.subjects.find((s) => FIRST_ADDITIONAL_LANGUAGES.includes(s.name))
+      if (existingFAL) {
+        return `You can only choose ONE first additional language. Currently selected: ${existingFAL.name}.`
       }
     }
 

@@ -7,6 +7,7 @@ import { Button } from "@/components/ui/button"
 export function PWAInstallPrompt() {
   const [isVisible, setIsVisible] = useState(false)
   const [deferredPrompt, setDeferredPrompt] = useState<any>(null)
+  const SHOWN_KEY = "pwa-install-prompt-shown"
 
   useEffect(() => {
     // Check if app is already installed
@@ -15,10 +16,15 @@ export function PWAInstallPrompt() {
     }
 
     // Check for beforeinstallprompt event
-    const handleBeforeInstallPrompt = (e: Event) => {
+    const handleBeforeInstallPrompt = (e: any) => {
       e.preventDefault()
+      // Guard: only show once per app open (session)
+      if (sessionStorage.getItem(SHOWN_KEY) === "1") {
+        return
+      }
       setDeferredPrompt(e)
       setIsVisible(true)
+      sessionStorage.setItem(SHOWN_KEY, "1")
     }
 
     window.addEventListener("beforeinstallprompt", handleBeforeInstallPrompt)
@@ -57,6 +63,10 @@ export function PWAInstallPrompt() {
   const handleDismiss = () => {
     setIsVisible(false)
     setDeferredPrompt(null)
+    // Ensure the prompt won't reappear in this session
+    try {
+      sessionStorage.setItem(SHOWN_KEY, "1")
+    } catch {}
   }
 
   return (

@@ -29,7 +29,7 @@
     --chart-3: 0 0% 40%;
     --chart-4: 0 0% 50%;
     --chart-5: 0 0% 60%;
-    --sidebar-background: 0 0% 100%;
+    --sidebar-background: 0 0% 100% / 0;
     --sidebar-foreground: 0 0% 0%;
     --sidebar-primary: 0 0% 0%;
     --sidebar-primary-foreground: 0 0% 100%;
@@ -64,7 +64,7 @@
     --chart-3: 0 0% 60%;
     --chart-4: 0 0% 50%;
     --chart-5: 0 0% 40%;
-    --sidebar-background: 0 0% 0%;
+    --sidebar-background: 0 0% 0% / 0;
     --sidebar-foreground: 0 0% 100%;
     --sidebar-primary: 0 0% 100%;
     --sidebar-primary-foreground: 0 0% 0%;
@@ -190,7 +190,7 @@
   }
   
   .glass-sidebar {
-    @apply bg-white/90 dark:bg-black/90 backdrop-blur-xl border-r border-white/20 dark:border-white/10 shadow-2xl;
+    @apply bg-transparent dark:bg-transparent backdrop-blur-xl border-r border-white/20 dark:border-white/10 shadow-2xl;
   }
   
   .glass-modal {
