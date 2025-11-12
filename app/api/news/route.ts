@@ -115,6 +115,8 @@ async function fetchRealNews(): Promise<NewsArticle[]> {
       headers: {
         "Content-Type": "application/json",
       },
+      // Avoid long hangs; fail fast so we can fallback
+      signal: AbortSignal.timeout(8000),
     })
 
     if (!response.ok) {
@@ -149,7 +151,7 @@ async function fetchRealNews(): Promise<NewsArticle[]> {
       const eduUrl = `https://newsdata.io/api/1/news?apikey=${NEWS_API_KEY}&country=za&language=en&q=matric OR education OR student OR university&category=education`
 
       // ⭐️ FIXED: Removed next: { revalidate: 0 }
-      const eduResponse = await fetch(eduUrl)
+      const eduResponse = await fetch(eduUrl, { signal: AbortSignal.timeout(8000) })
 
       if (eduResponse.ok) {
         const eduData = await eduResponse.json()
@@ -186,7 +188,7 @@ export async function GET() {
 
     // Process articles
     const now = new Date()
-    const normalized: NewsArticle[] = fetchedArticles
+    let normalized: NewsArticle[] = fetchedArticles
       .map((a) => {
         let pubDate = a.pubDate
         if (!pubDate || isNaN(new Date(pubDate).getTime())) {
@@ -212,13 +214,30 @@ export async function GET() {
       .filter((a) => isWithin48Hours(a.pubDate))
       .slice(0, 8)
 
-    console.log(`Returning ${normalized.length} articles (cached by Vercel for 24h)`)
+    // If external API failed or yielded no recent articles, provide server-side fallback
+    if (normalized.length === 0) {
+      normalized = FALLBACK_ARTICLES.map((a) => {
+        const { image_url, alt_text } = buildImageForArticle(a)
+        return {
+          ...a,
+          image_url: a.image_url && a.image_url.trim().length > 0 ? a.image_url : image_url,
+          alt_text: a.alt_text && a.alt_text.trim().length > 0 ? a.alt_text : alt_text,
+        }
+      })
+        .filter((a) => isWithin48Hours(a.pubDate))
+        .slice(0, 8)
+    }
+
+    console.log(`Returning ${normalized.length} articles (cached by Vercel for 24h)`) 
 
     return NextResponse.json(
       {
         success: true,
         articles: normalized,
-        source: "Live News Feed (Cached at Vercel for 24h)",
+        source:
+          fetchedArticles.length > 0
+            ? "Live News Feed (Cached at Vercel for 24h)"
+            : "Fallback News (Server-side)",
         year: new Date().getFullYear(),
         cacheInfo: "This response is cached globally by Next.js/Vercel and shared across all users",
         nextUpdate: new Date(Date.now() + 86400000).toISOString(),
@@ -251,3 +270,46 @@ export async function GET() {
     )
   }
 }
+// Local server-side fallback articles to guarantee content even if the API fails
+const FALLBACK_ARTICLES: NewsArticle[] = [
+  {
+    title: "Matric results: What to do next",
+    description: "Guidance for students on options after receiving results.",
+    link: "/study-tips",
+    pubDate: new Date().toISOString(),
+    source_id: "coursefinder",
+    category: ["education"],
+    image_url: "",
+    alt_text: "Students planning next steps",
+  },
+  {
+    title: "New bursaries and scholarships for 2025",
+    description: "Explore funding options and deadlines for applications.",
+    link: "/bursaries",
+    pubDate: new Date().toISOString(),
+    source_id: "coursefinder",
+    category: ["education"],
+    image_url: "",
+    alt_text: "Student reading bursary info",
+  },
+  {
+    title: "University application timelines",
+    description: "Check key dates and how to apply effectively.",
+    link: "/universities",
+    pubDate: new Date().toISOString(),
+    source_id: "coursefinder",
+    category: ["education"],
+    image_url: "",
+    alt_text: "Campus walkway",
+  },
+  {
+    title: "Study tips to boost performance",
+    description: "Practical strategies for exam preparation and retention.",
+    link: "/study-tips",
+    pubDate: new Date().toISOString(),
+    source_id: "coursefinder",
+    category: ["education"],
+    image_url: "",
+    alt_text: "Student studying",
+  },
+]

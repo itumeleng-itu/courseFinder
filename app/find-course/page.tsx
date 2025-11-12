@@ -294,6 +294,19 @@ export default function FindCoursePage() {
     setApsScore(calculatedDefaultAPS)
     setNscResult(evaluateNSC(subjects))
 
+    // Guard: avoid generating matches when APS is zero or invalid
+    if (!calculatedDefaultAPS || calculatedDefaultAPS <= 0) {
+      toast({
+        title: "APS is 0",
+        description: "Please review your subject marks and ensure valid percentages.",
+        variant: "destructive",
+      })
+      setQualifyingCourses([])
+      setRecommendedColleges([])
+      setHasCalculated(true)
+      return
+    }
+
     const studentLevels: Record<string, number> = Object.fromEntries(
       subjects.map((s) => [s.name, percentageToNSCLevel(s.percentage)]),
     )
@@ -382,6 +395,10 @@ export default function FindCoursePage() {
         const requirementCheck = checkSubjectRequirements(subjects, extendedCourse.subjectRequirements)
         const additionalReqs = extendedCourse.requirements ?? extendedCourse.additionalRequirements
 
+        // Skip courses with missing/invalid APS requirements and invalid calculated APS
+        if (apsRequired <= 0 || calculatedAPS <= 0) {
+          return
+        }
         const apsMet = calculatedAPS >= apsRequired
         const meetsAll = apsMet && requirementCheck.meets && meetsAdditionalAcademicRequirements(additionalReqs, subjects)
 
@@ -398,7 +415,8 @@ export default function FindCoursePage() {
     })
 
     const collegeMatches: CourseMatch[] = []
-    if (uniMatches.length < 25) {
+    const fullyQualifiedUniCount = uniMatches.filter((m) => m.meetsRequirements).length
+    if (fullyQualifiedUniCount < 30) {
       const colleges = getAllColleges()
       colleges.forEach((college) => {
         const universityFormatCollege = collegeToUniversityFormat(college)
@@ -416,6 +434,8 @@ export default function FindCoursePage() {
 
           if (
             isUndergraduateCourse(extendedCourse.name) &&
+            apsRequired > 0 &&
+            calculatedAPS > 0 &&
             calculatedAPS >= apsRequired &&
             requirementCheck.meets &&
             meetsAdditionalAcademicRequirements(additionalReqs, subjects)
@@ -446,7 +466,12 @@ export default function FindCoursePage() {
     })
 
     setQualifyingCourses(
-      uniMatches.filter(({ course }) => !!course.name && course.name.trim().length > 0),
+      uniMatches.filter(
+        ({ course }) =>
+          !!course.name &&
+          course.name.trim().length > 0 &&
+          (course.apsMin ?? course.apsRequired ?? 0) > 0,
+      ),
     )
     setRecommendedColleges(
       collegeMatches.filter(
@@ -866,7 +891,7 @@ export default function FindCoursePage() {
                       </div>
                     )}
 
-                    {qualifyingCourses.length < 25 && filteredColleges.length > 0 && (
+                    {qualifiedCount < 30 && filteredColleges.length > 0 && (
                       <>
                         <Separator className="my-6" />
                         <div className="mb-4">

@@ -1,5 +1,7 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  // Use a custom build directory to avoid OneDrive/.next lock issues on Windows
+  distDir: "build",
   trailingSlash: true,
   images: {
     unoptimized: true,

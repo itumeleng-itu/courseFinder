@@ -1,10 +1,12 @@
+/**
+ * @jest-environment node
+ */
 import { GET } from "@/app/api/news/route"
-import { NextRequest } from "next/server"
+// No request object needed; GET() doesn’t use it
 
 describe("News API", () => {
   it("should return news articles", async () => {
-    const request = new NextRequest("http://localhost:3000/api/news")
-    const response = await GET(request)
+    const response = await GET()
     const data = await response.json()
 
     expect(response.status).toBe(200)
@@ -14,27 +16,26 @@ describe("News API", () => {
     expect(Array.isArray(data.articles)).toBe(true)
   })
 
-  it("should return only 2024 articles", async () => {
-    const request = new NextRequest("http://localhost:3000/api/news")
-    const response = await GET(request)
+  it("should return only current-year articles", async () => {
+    const response = await GET()
     const data = await response.json()
 
-    expect(data.year).toBe(2024)
+    const currentYear = new Date().getFullYear()
+    expect(data.year).toBe(currentYear)
 
     // Check that all articles are from 2024
     if (data.articles && data.articles.length > 0) {
       data.articles.forEach((article: any) => {
         if (article.pubDate) {
           const year = new Date(article.pubDate).getFullYear()
-          expect(year).toBe(2024)
+          expect(year).toBe(currentYear)
         }
       })
     }
   })
 
   it("should return articles with required fields", async () => {
-    const request = new NextRequest("http://localhost:3000/api/news")
-    const response = await GET(request)
+    const response = await GET()
     const data = await response.json()
 
     if (data.articles && data.articles.length > 0) {
@@ -49,8 +50,7 @@ describe("News API", () => {
   })
 
   it("should have proper cache headers", async () => {
-    const request = new NextRequest("http://localhost:3000/api/news")
-    const response = await GET(request)
+    const response = await GET()
 
     const cacheControl = response.headers.get("Cache-Control")
     expect(cacheControl).toBeTruthy()
@@ -58,8 +58,7 @@ describe("News API", () => {
   })
 
   it("should limit articles to 8 or fewer", async () => {
-    const request = new NextRequest("http://localhost:3000/api/news")
-    const response = await GET(request)
+    const response = await GET()
     const data = await response.json()
 
     if (data.articles) {
