@@ -1,7 +1,9 @@
 /** @type {import('next').NextConfig} */
+const isWindows = process.platform === "win32"
+const isVercel = !!process.env.VERCEL
 const nextConfig = {
-  // Use a custom build directory to avoid OneDrive/.next lock issues on Windows
-  distDir: "build",
+  // Use a custom build directory locally on Windows only; keep default on Vercel
+  ...(isWindows && !isVercel ? { distDir: "build" } : {}),
   trailingSlash: true,
   images: {
     unoptimized: true,
