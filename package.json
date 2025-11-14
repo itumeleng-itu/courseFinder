@@ -13,6 +13,7 @@
   },
   "dependencies": {
     "@ai-sdk/google": "^1.0.8",
+    "@ai-sdk/groq": "^1.2.9",
     "@ai-sdk/openai": "^1.0.8",
     "@babel/core": "latest",
     "@babel/template": "latest",
@@ -69,6 +70,7 @@
     "next-themes": "latest",
     "node-appwrite": "latest",
     "node-notifier": "latest",
+    "pdf-parse": "^1.1.4",
     "react": "^19.0.0",
     "react-day-picker": "latest",
     "react-dom": "^19.0.0",
@@ -79,6 +81,7 @@
     "streamdown": "latest",
     "tailwind-merge": "^2.5.5",
     "tailwindcss-animate": "^1.0.7",
+    "tesseract.js": "^5.1.1",
     "vaul": "latest",
     "zod": "^3.24.1"
   },

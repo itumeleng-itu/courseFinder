@@ -187,6 +187,12 @@ async function fetchRealNews(): Promise<NewsArticle[]> {
 
 async function fetchMatricPassRatesNews(): Promise<NewsArticle[]> {
   try {
+    // Skip fetching during static generation/build to avoid dynamic server usage errors
+    // This prevents build-time errors when Next.js tries to statically generate pages
+    if (typeof window === 'undefined' && process.env.NEXT_PHASE === 'phase-production-build') {
+      return []
+    }
+
     // Construct the base URL for internal API calls
     const baseUrl = process.env.VERCEL_URL 
       ? `https://${process.env.VERCEL_URL}`
