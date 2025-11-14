@@ -105,6 +105,12 @@ function buildImageForArticle(article: NewsArticle): { image_url: string; alt_te
 
 async function fetchRealNews(): Promise<NewsArticle[]> {
   try {
+    // Early return if API key is not configured
+    if (!NEWS_API_KEY) {
+      console.warn("NEWSDATA_API_KEY not configured. Using fallback articles.")
+      return []
+    }
+
     // Fetch general South African news
     const url = `https://newsdata.io/api/1/news?apikey=${NEWS_API_KEY}&country=za&language=en&category=top,politics,education,technology,science`
 
@@ -179,9 +185,56 @@ async function fetchRealNews(): Promise<NewsArticle[]> {
   }
 }
 
+async function fetchMatricPassRatesNews(): Promise<NewsArticle[]> {
+  try {
+    // Construct the base URL for internal API calls
+    const baseUrl = process.env.VERCEL_URL 
+      ? `https://${process.env.VERCEL_URL}`
+      : process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000'
+    
+    // Fetch Matric Pass Rates news from our dedicated endpoint
+    const response = await fetch(`${baseUrl}/api/matric-pass-rates-news`, {
+      cache: 'no-store', // Always get fresh data
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    })
+    
+    if (!response.ok) {
+      console.warn("Failed to fetch Matric Pass Rates news:", response.status, response.statusText)
+      return []
+    }
+
+    const data = await response.json()
+    if (data.success && Array.isArray(data.articles) && data.articles.length > 0) {
+      // Transform to match NewsArticle format and add images
+      return data.articles.map((article: any) => {
+        const { image_url, alt_text } = buildImageForArticle(article)
+        return {
+          title: article.title,
+          description: article.description,
+          link: article.link,
+          pubDate: article.pubDate || new Date().toISOString(),
+          source_id: article.source_id || "Matric Pass Rates",
+          category: article.category || ["education", "matric"],
+          image_url: article.image_url && article.image_url.trim().length > 0 ? article.image_url : image_url,
+          alt_text: article.alt_text || alt_text || article.title
+        }
+      })
+    }
+    return []
+  } catch (error) {
+    console.error("Error fetching Matric Pass Rates news:", error)
+    return []
+  }
+}
+
 export async function GET() {
   try {
     console.log("Fetching news from API (cached by Next.js/Vercel CDN for 24 hours)")
+
+    // Fetch Matric Pass Rates news (prioritized)
+    const matricNews = await fetchMatricPassRatesNews()
 
     // Fetch fresh news from API
     const fetchedArticles = await fetchRealNews()
@@ -213,6 +266,12 @@ export async function GET() {
       })
       .filter((a) => isWithin48Hours(a.pubDate))
       .slice(0, 8)
+
+    // Prepend Matric Pass Rates news at the beginning (prioritized)
+    // These articles are fetched yearly and should always be shown when available
+    if (matricNews.length > 0) {
+      normalized = [...matricNews, ...normalized].slice(0, 8)
+    }
 
     // If external API failed or yielded no recent articles, provide server-side fallback
     if (normalized.length === 0) {

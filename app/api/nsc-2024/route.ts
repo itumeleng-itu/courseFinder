@@ -2,9 +2,9 @@ import { NextResponse } from "next/server"
 
 export const dynamic = "force-dynamic"
 
-// Source: DBE article "Historic NSC pass rate reflects the continued upward trajectory of the education system"
-// https://www.education.gov.za/ArchivedDocuments/ArchivedArticles/HistoricNSCpassrate.aspx
-const DBE_ARTICLE_URL = "https://www.education.gov.za/ArchivedDocuments/ArchivedArticles/HistoricNSCpassrate.aspx"
+// Source: SAnews.gov.za - "Class of 2024 achieves historic pass rate"
+// https://www.sanews.gov.za/south-africa/class-2024-achieves-historic-pass-rate
+const DBE_ARTICLE_URL = "https://www.sanews.gov.za/south-africa/class-2024-achieves-historic-pass-rate"
 
 // 24h cache
 const cache: { data?: any; ts?: number } = {}
@@ -12,11 +12,14 @@ const TTL_MS = 24 * 60 * 60 * 1000
 
 const FALLBACK = {
   year: 2024,
-  passRate: 82.2, // Official 2024 pass rate
-  passes: 505_868,
-  wrote: 615_532,
-  failed: 109_664,
-  source: "Department of Basic Education - 2024 NSC Results",
+  passRate: 87.3, // Official 2024 pass rate - highest in history (up from 82.9% in 2023)
+  passes: 615_429, // Total learners who passed
+  wrote: 705_291, // Full-time candidates who wrote
+  failed: 89_862, // Calculated: wrote - passes
+  bachelorPasses: 337_158, // 47.8% of candidates qualified for Bachelor studies
+  bachelorPassRate: 47.8, // Percentage who qualified for Bachelor studies
+  distinctions: 319_651, // Total distinctions achieved
+  source: "Department of Basic Education - 2024 NSC Results (SAnews.gov.za)",
 }
 
 export async function GET() {

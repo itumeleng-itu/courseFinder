@@ -1,3 +1,13 @@
 {
-  "buildCommand": "npm run build"
+  "buildCommand": "npm run build",
+  "crons": [
+    {
+      "path": "/api/matric-pass-rates-news",
+      "schedule": "0 0 31 1 *"
+    },
+    {
+      "path": "/api/provincial-pass-rates",
+      "schedule": "0 0 31 1 *"
+    }
+  ]
 }

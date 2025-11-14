@@ -12,7 +12,8 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Badge } from "@/components/ui/badge"
 import { ScrollArea } from "@/components/ui/scroll-area"
 import { Separator } from "@/components/ui/separator"
-import { Search, GraduationCap, X, Plus, Calculator, CheckCircle2, XCircle, AlertCircle } from "lucide-react"
+import { Search, GraduationCap, X, Plus, Calculator, CheckCircle2, XCircle, AlertCircle, Edit2, Check, X as XIcon } from "lucide-react"
+import { SubjectDropzone } from "@/components/subject-dropzone"
 import { getAllUniversities } from "@/data/universities"
 import type { Course, University, BaseUniversity } from "@/data/universities/base-university"
 import { getAllColleges, collegeToUniversityFormat } from "@/data/colleges"
@@ -278,6 +279,280 @@ export default function FindCoursePage() {
     setHasCalculated(false)
     setApsScore(null)
     setQualifyingCourses([])
+  }
+
+  const [editingSubjectId, setEditingSubjectId] = useState<string | null>(null)
+  const [editingPercentage, setEditingPercentage] = useState<string>("")
+
+  const handleSubjectsExtracted = (extractedSubjects: Array<{ name: string; percentage: number }>) => {
+    // Replace existing subjects with extracted ones (or merge if needed)
+    // For now, we'll replace all subjects with extracted ones
+    const newSubjects = extractedSubjects.map((s) => ({
+      id: Date.now().toString() + Math.random().toString(),
+      name: s.name,
+      percentage: s.percentage,
+    }))
+
+    if (newSubjects.length > 0) {
+      setSubjects(newSubjects)
+      setHasCalculated(false)
+      
+      const subjectCount = newSubjects.length
+      toast({
+        title: "Subjects extracted",
+        description: `Found ${subjectCount} subject(s). ${subjectCount >= 7 ? "Finding courses automatically..." : "Add more subjects to find courses."}`,
+      })
+      
+      // Auto-trigger course finding if we have at least 7 subjects
+      // Use a longer delay to ensure state is fully updated
+      if (subjectCount >= 7) {
+        setTimeout(() => {
+          // Re-read subjects from state to ensure we have the latest
+          const currentSubjects = newSubjects
+          if (currentSubjects.length >= 7) {
+            // Temporarily set subjects to trigger the calculation
+            setSubjects(currentSubjects)
+            // Use requestAnimationFrame to ensure state update is processed
+            requestAnimationFrame(() => {
+              // Call findCourses logic directly
+              const calculatedDefaultAPS = calculateDefaultAPSForDisplay(currentSubjects)
+              if (calculatedDefaultAPS && calculatedDefaultAPS > 0) {
+                setApsScore(calculatedDefaultAPS)
+                setNscResult(evaluateNSC(currentSubjects))
+                // Trigger the full course finding
+                findCoursesWithSubjects(currentSubjects)
+              }
+            })
+          }
+        }, 200)
+      }
+    } else {
+      toast({
+        title: "No subjects found",
+        description: "Could not extract subjects from the file. Please try again or enter manually.",
+        variant: "destructive",
+      })
+    }
+  }
+
+  // Extract course finding logic to a separate function that can be called with specific subjects
+  const findCoursesWithSubjects = (subjectList: Subject[]) => {
+    const calculatedDefaultAPS = calculateDefaultAPSForDisplay(subjectList)
+    if (!calculatedDefaultAPS || calculatedDefaultAPS <= 0) {
+      toast({
+        title: "APS is 0",
+        description: "Please review your subject marks and ensure valid percentages.",
+        variant: "destructive",
+      })
+      setQualifyingCourses([])
+      setRecommendedColleges([])
+      setHasCalculated(true)
+      return
+    }
+
+    setApsScore(calculatedDefaultAPS)
+    setNscResult(evaluateNSC(subjectList))
+
+    const studentLevels: Record<string, number> = Object.fromEntries(
+      subjectList.map((s) => [s.name, percentageToNSCLevel(s.percentage)]),
+    )
+
+    const universities = getAllUniversities()
+    const uniMatches: CourseMatch[] = []
+
+    const isUndergraduateCourse = (name: string) => {
+      const n = name.toLowerCase()
+      const exclude = [
+        "honours",
+        "postgraduate",
+        "pgdip",
+        "pgcert",
+        "master",
+        "masters",
+        "msc",
+        "ma ",
+        "llm",
+        "phd",
+        "doctor",
+        "doctorate",
+        "mba",
+      ]
+      if (exclude.some((t) => n.includes(t))) return false
+      const include = [
+        "bachelor",
+        "bsc",
+        "ba ",
+        "beng",
+        "bcom",
+        "diploma",
+        "higher certificate",
+        "national diploma",
+        "advanced diploma",
+        "undergraduate",
+      ]
+      return include.some((t) => n.includes(t)) || !exclude.some((t) => n.includes(t))
+    }
+
+    const meetsAdditionalAcademicRequirements = (
+      reqs: string[] | string | undefined,
+      studentSubjects: Subject[],
+    ): boolean => {
+      if (!reqs) return true
+      const reqList = Array.isArray(reqs) ? reqs : [reqs]
+      const findSubject = (needle: string) =>
+        studentSubjects.find((s) => s.name.toLowerCase().includes(needle.toLowerCase()))
+
+      for (const r of reqList) {
+        const text = r.toLowerCase()
+        if (/(portfolio|interview|assessment|admission test|entrance test)/.test(text)) continue
+
+        const percMatch = text.match(/(mathematics|mathematical literacy|english|afrikaans|physical sciences|life sciences)[^\d]*(\d{2})%/)
+        if (percMatch) {
+          const subj = percMatch[1]
+          const minPerc = Number(percMatch[2])
+          const student = findSubject(subj)
+          if (!student || student.percentage < minPerc) return false
+          continue
+        }
+
+        const levelMatch = text.match(/(mathematics|mathematical literacy|english|afrikaans|physical sciences|life sciences)[^\d]*level\s*(\d+)/)
+        if (levelMatch) {
+          const subj = levelMatch[1]
+          const minLevel = Number(levelMatch[2])
+          const student = findSubject(subj)
+          const studentLevel = student ? percentageToNSCLevel(student.percentage) : 0
+          if (studentLevel < minLevel) return false
+          continue
+        }
+      }
+      return true
+    }
+
+    universities.forEach((university) => {
+      university.courses.forEach((course) => {
+        const extendedCourse = course as ExtendedCourse
+      
+        // Use university-specific APS calculation if available
+        const calculatedAPS = (university as unknown as BaseUniversity).calculateApsScore
+          ? (university as unknown as BaseUniversity).calculateApsScore(studentLevels, extendedCourse as Course)
+          : calculatedDefaultAPS
+
+        const apsRequired = extendedCourse.apsMin ?? extendedCourse.apsRequired ?? 0
+        const requirementCheck = checkSubjectRequirements(subjectList, extendedCourse.subjectRequirements)
+        const additionalReqs = extendedCourse.requirements ?? extendedCourse.additionalRequirements
+
+        // Skip courses with missing/invalid APS requirements and invalid calculated APS
+        if (apsRequired <= 0 || calculatedAPS <= 0) {
+          return
+        }
+        const apsMet = calculatedAPS >= apsRequired
+        const meetsAll = apsMet && requirementCheck.meets && meetsAdditionalAcademicRequirements(additionalReqs, subjectList)
+
+        if (isUndergraduateCourse(extendedCourse.name)) {
+          uniMatches.push({
+            course: extendedCourse,
+            university,
+            meetsRequirements: meetsAll,
+            missingRequirements: requirementCheck.missing,
+            metRequirements: requirementCheck.met,
+          })
+        }
+      })
+    })
+
+    const collegeMatches: CourseMatch[] = []
+    const fullyQualifiedUniCount = uniMatches.filter((m) => m.meetsRequirements).length
+    if (fullyQualifiedUniCount < 30) {
+      const colleges = getAllColleges()
+      colleges.forEach((college) => {
+        const universityFormatCollege = collegeToUniversityFormat(college)
+  
+        universityFormatCollege.courses.forEach((course) => {
+          const extendedCourse = course as ExtendedCourse
+        
+          const calculatedAPS = (universityFormatCollege as unknown as BaseUniversity).calculateApsScore
+            ? (universityFormatCollege as unknown as BaseUniversity).calculateApsScore(studentLevels, extendedCourse as Course)
+            : calculatedDefaultAPS
+        
+          const apsRequired = extendedCourse.apsMin ?? extendedCourse.apsRequired ?? 0
+          const requirementCheck = checkSubjectRequirements(subjectList, extendedCourse.subjectRequirements)
+          const additionalReqs = extendedCourse.requirements ?? extendedCourse.additionalRequirements
+
+          if (
+            isUndergraduateCourse(extendedCourse.name) &&
+            apsRequired > 0 &&
+            calculatedAPS > 0 &&
+            calculatedAPS >= apsRequired &&
+            requirementCheck.meets &&
+            meetsAdditionalAcademicRequirements(additionalReqs, subjectList)
+          ) {
+            collegeMatches.push({
+              course: extendedCourse,
+              university: universityFormatCollege,
+              meetsRequirements: true,
+              missingRequirements: [],
+              metRequirements: requirementCheck.met,
+            })
+          }
+        })
+      })
+    }
+
+    uniMatches.sort((a, b) => {
+      if (a.meetsRequirements && !b.meetsRequirements) return -1
+      if (!a.meetsRequirements && b.meetsRequirements) return 1
+      const apsA = a.course.apsMin ?? a.course.apsRequired ?? 0
+      const apsB = b.course.apsMin ?? b.course.apsRequired ?? 0
+      return apsB - apsA
+    })
+    collegeMatches.sort((a, b) => {
+      const apsA = a.course.apsMin ?? a.course.apsRequired ?? 0
+      const apsB = b.course.apsMin ?? b.course.apsRequired ?? 0
+      return apsB - apsA
+    })
+
+    setQualifyingCourses(
+      uniMatches.filter(
+        ({ course }) =>
+          !!course.name &&
+          course.name.trim().length > 0 &&
+          (course.apsMin ?? course.apsRequired ?? 0) > 0,
+      ),
+    )
+    setRecommendedColleges(
+      collegeMatches.filter(
+        ({ course }) => (course.apsMin ?? course.apsRequired ?? 0) > 0 && !!course.name && course.name.trim().length > 0,
+      ),
+    )
+    setHasCalculated(true)
+  }
+
+  const saveEdit = (id: string) => {
+    const percentage = Number.parseFloat(editingPercentage)
+    if (isNaN(percentage) || percentage < 0 || percentage > 100) {
+      toast({
+        title: "Invalid percentage",
+        description: "Enter a number between 0 and 100.",
+        variant: "destructive",
+      })
+      return
+    }
+
+    setSubjects(
+      subjects.map((s) => (s.id === id ? { ...s, percentage } : s))
+    )
+    setEditingSubjectId(null)
+    setEditingPercentage("")
+    setHasCalculated(false)
+    toast({
+      title: "Subject updated",
+      description: "Mark has been updated.",
+    })
+  }
+
+  const cancelEdit = () => {
+    setEditingSubjectId(null)
+    setEditingPercentage("")
   }
 
   const findCourses = () => {
@@ -595,51 +870,63 @@ export default function FindCoursePage() {
 
                 <Separator />
 
-                <Card className="glass-card">
-                  <CardHeader className="pb-3">
-                    <CardTitle className="text-base">Add Subject</CardTitle>
-                  </CardHeader>
-                  <CardContent className="space-y-3">
-                    <Select value={currentSubject} onValueChange={setCurrentSubject}>
-                      <SelectTrigger className="text-sm glass-input">
-                        <SelectValue placeholder="Select subject" />
-                      </SelectTrigger>
-                      <SelectContent className="glass-modal">
-                        {SUBJECTS.map((subject) => {
-                          const disabled = isSubjectDisabled(subject)
-                          return (
-                            <SelectItem
-                              key={subject}
-                              value={subject}
-                              disabled={disabled}
-                              className={disabled ? "opacity-50 cursor-not-allowed" : ""}
-                            >
-                              {subject}
-                            </SelectItem>
-                          )
-                        })}
-                      </SelectContent>
-                    </Select>
+                <div className="space-y-3">
+                  <div>
+                    <h3 className="text-sm font-medium mb-2">Upload Matric Results</h3>
+                    <p className="text-xs text-muted-foreground mb-3">
+                      Upload an image of your matric results to automatically extract subjects and marks
+                    </p>
+                    <SubjectDropzone onSubjectsExtracted={handleSubjectsExtracted} />
+                  </div>
 
-                    <Input
-                      type="number"
-                      placeholder="Percentage (0-100)"
-                      value={currentPercentage}
-                      onChange={(e) => setCurrentPercentage(e.target.value)}
-                      min="0"
-                      max="100"
-                      className="text-sm glass-input"
-                    />
-                    <Button
-                      onClick={addSubject}
-                      disabled={!currentSubject || !currentPercentage}
-                      className="w-full text-sm glass-button"
-                    >
-                      <Plus className="h-4 w-4 mr-2" />
-                      Add Subject ({subjects.length})
-                    </Button>
-                  </CardContent>
-                </Card>
+                  <Separator />
+
+                  <Card className="glass-card">
+                    <CardHeader className="pb-3">
+                      <CardTitle className="text-base">Add Subject Manually</CardTitle>
+                    </CardHeader>
+                    <CardContent className="space-y-3">
+                      <Select value={currentSubject} onValueChange={setCurrentSubject}>
+                        <SelectTrigger className="text-sm glass-input">
+                          <SelectValue placeholder="Select subject" />
+                        </SelectTrigger>
+                        <SelectContent className="glass-modal">
+                          {SUBJECTS.map((subject) => {
+                            const disabled = isSubjectDisabled(subject)
+                            return (
+                              <SelectItem
+                                key={subject}
+                                value={subject}
+                                disabled={disabled}
+                                className={disabled ? "opacity-50 cursor-not-allowed" : ""}
+                              >
+                                {subject}
+                              </SelectItem>
+                            )
+                          })}
+                        </SelectContent>
+                      </Select>
+
+                      <Input
+                        type="number"
+                        placeholder="Percentage (0-100)"
+                        value={currentPercentage}
+                        onChange={(e) => setCurrentPercentage(e.target.value)}
+                        min="0"
+                        max="100"
+                        className="text-sm glass-input"
+                      />
+                      <Button
+                        onClick={addSubject}
+                        disabled={!currentSubject || !currentPercentage}
+                        className="w-full text-sm glass-button"
+                      >
+                        <Plus className="h-4 w-4 mr-2" />
+                        Add Subject ({subjects.length})
+                      </Button>
+                    </CardContent>
+                  </Card>
+                </div>
 
                 {subjects.length > 0 && (
                   <Card className="glass-card">
@@ -647,26 +934,77 @@ export default function FindCoursePage() {
                       <CardTitle className="text-base">Your Subjects</CardTitle>
                     </CardHeader>
                     <CardContent>
-                      <div className="space-y-2 max-h-[200px] overflow-y-auto">
+                      <div className="space-y-2 max-h-[300px] overflow-y-auto">
                         {subjects.map((subject) => (
                           <div
                             key={subject.id}
-                            className="flex items-center justify-between p-2 glass-button rounded-md"
+                            className="flex items-center justify-between p-2 glass-button rounded-md gap-2"
                           >
-                            <div className="flex-1">
-                              <p className="font-medium text-sm">{subject.name}</p>
-                              <p className="text-xs text-muted-foreground">
-                                {subject.percentage}% (Level {percentageToNSCLevel(subject.percentage)})
-                              </p>
+                            <div className="flex-1 min-w-0">
+                              <p className="font-medium text-sm truncate">{subject.name}</p>
+                              {editingSubjectId === subject.id ? (
+                                <div className="flex items-center gap-2 mt-1">
+                                  <Input
+                                    type="number"
+                                    value={editingPercentage}
+                                    onChange={(e) => setEditingPercentage(e.target.value)}
+                                    min="0"
+                                    max="100"
+                                    className="h-7 text-xs w-20"
+                                    autoFocus
+                                    onKeyDown={(e) => {
+                                      if (e.key === "Enter") {
+                                        saveEdit(subject.id)
+                                      } else if (e.key === "Escape") {
+                                        cancelEdit()
+                                      }
+                                    }}
+                                  />
+                                  <span className="text-xs text-muted-foreground">%</span>
+                                  <Button
+                                    variant="ghost"
+                                    size="sm"
+                                    onClick={() => saveEdit(subject.id)}
+                                    className="h-6 w-6 p-0"
+                                  >
+                                    <Check className="h-3 w-3 text-green-600" />
+                                  </Button>
+                                  <Button
+                                    variant="ghost"
+                                    size="sm"
+                                    onClick={cancelEdit}
+                                    className="h-6 w-6 p-0"
+                                  >
+                                    <XIcon className="h-3 w-3 text-red-600" />
+                                  </Button>
+                                </div>
+                              ) : (
+                                <div className="flex items-center gap-2 mt-1">
+                                  <p className="text-xs text-muted-foreground">
+                                    {subject.percentage}% (Level {percentageToNSCLevel(subject.percentage)})
+                                  </p>
+                                  <Button
+                                    variant="ghost"
+                                    size="sm"
+                                    onClick={() => startEditing(subject)}
+                                    className="h-6 w-6 p-0"
+                                    title="Edit mark"
+                                  >
+                                    <Edit2 className="h-3 w-3" />
+                                  </Button>
+                                </div>
+                              )}
                             </div>
-                            <Button
-                              variant="ghost"
-                              size="sm"
-                              onClick={() => removeSubject(subject.id)}
-                              className="h-8 w-8 p-0 glass-hover"
-                            >
-                              <X className="h-4 w-4" />
-                            </Button>
+                            {editingSubjectId !== subject.id && (
+                              <Button
+                                variant="ghost"
+                                size="sm"
+                                onClick={() => removeSubject(subject.id)}
+                                className="h-8 w-8 p-0 glass-hover flex-shrink-0"
+                              >
+                                <X className="h-4 w-4" />
+                              </Button>
+                            )}
                           </div>
                         ))}
                       </div>
