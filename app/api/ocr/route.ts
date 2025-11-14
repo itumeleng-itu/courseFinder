@@ -12,10 +12,14 @@ export async function POST(request: Request) {
     const GROQ_API_KEY = process.env.GROQ_API_KEY
 
     if (!GROQ_API_KEY) {
-      console.error("GROQ_API_KEY is not configured. Available env vars:", Object.keys(process.env).filter(k => k.includes('GROQ')))
+      // Return a friendly "in development" message instead of an error
       return NextResponse.json(
-        { error: "GROQ_API_KEY is not configured. Please add GROQ_API_KEY to your .env.local file and restart the dev server." },
-        { status: 500 }
+        { 
+          success: false,
+          inDevelopment: true,
+          message: "OCR feature is not yet available, still in development."
+        },
+        { status: 200 } // Return 200 to avoid error status
       )
     }
 

@@ -44,6 +44,17 @@ export function SubjectDropzone({ onSubjectsExtracted }: SubjectDropzoneProps) {
 
         const data = await response.json()
 
+        // Check if OCR is in development
+        if (data.inDevelopment) {
+          toast({
+            title: "Feature in Development",
+            description: data.message || "OCR feature is not yet available, still in development.",
+            variant: "default",
+          })
+          setIsProcessing(false)
+          return
+        }
+
         if (!response.ok || !data.success) {
           throw new Error(data.error || "Failed to process image")
         }
