@@ -14,6 +14,7 @@ import { ScrollArea } from "@/components/ui/scroll-area"
 import { Separator } from "@/components/ui/separator"
 import { Search, GraduationCap, X, Plus, Calculator, CheckCircle2, XCircle, AlertCircle, Edit2, Check, X as XIcon } from "lucide-react"
 import { SubjectDropzone } from "@/components/subject-dropzone"
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
 import { getAllUniversities } from "@/data/universities"
 import type { Course, University, BaseUniversity } from "@/data/universities/base-university"
 import { getAllColleges, collegeToUniversityFormat } from "@/data/colleges"
@@ -876,6 +877,14 @@ export default function FindCoursePage() {
                     <p className="text-xs text-muted-foreground mb-3">
                       Upload an image of your matric results to automatically extract subjects and marks
                     </p>
+                    <Alert className="mb-3" aria-live="polite">
+                      <AlertCircle className="h-4 w-4" aria-hidden="true" />
+                      <AlertTitle>⚠️ OCR Disclaimer</AlertTitle>
+                      <AlertDescription>
+                        Please verify scanned results as OCR (Optical Character Recognition) accuracy may vary depending on
+                        document quality and formatting.
+                      </AlertDescription>
+                    </Alert>
                     <SubjectDropzone onSubjectsExtracted={handleSubjectsExtracted} />
                   </div>
 
@@ -932,6 +941,9 @@ export default function FindCoursePage() {
                   <Card className="glass-card">
                     <CardHeader className="pb-3">
                       <CardTitle className="text-base">Your Subjects</CardTitle>
+                      <CardDescription>
+                        ⚠️ Please verify scanned results. OCR accuracy may vary by document quality and formatting.
+                      </CardDescription>
                     </CardHeader>
                     <CardContent>
                       <div className="space-y-2 max-h-[300px] overflow-y-auto">

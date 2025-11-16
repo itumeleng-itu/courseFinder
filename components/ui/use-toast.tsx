@@ -6,13 +6,16 @@ import * as React from "react"
 import type { ToastActionElement, ToastProps } from "@/components/ui/toast"
 
 const TOAST_LIMIT = 5
-const TOAST_REMOVE_DELAY = 1000000
+const TOAST_REMOVE_DELAY = 1000
+const MAX_DURATION = 30000
+const LOG_KEY = "__toast_logs__"
 
 type ToasterToast = ToastProps & {
   id: string
   title?: React.ReactNode
   description?: React.ReactNode
   action?: ToastActionElement
+  createdAt?: number
 }
 
 const actionTypes = {
@@ -98,6 +101,7 @@ const reducer = (state: State, action: Action): State => {
           t.id === toastId || toastId === undefined
             ? {
                 ...t,
+                open: false,
               }
             : t,
         ),
@@ -123,6 +127,23 @@ let memoryState: State = { toasts: [] }
 
 function dispatch(action: Action) {
   memoryState = reducer(memoryState, action)
+  try {
+    const e = {
+      type: action.type,
+      toastId: (action as any).toastId || (action as any).toast?.id || undefined,
+      payload: (action as any).toast
+        ? {
+            title: (action as any).toast.title,
+            description: (action as any).toast.description,
+            duration: (action as any).toast.duration,
+          }
+        : undefined,
+      ts: Date.now(),
+    }
+    const arr = JSON.parse(localStorage.getItem(LOG_KEY) || "[]")
+    arr.push(e)
+    localStorage.setItem(LOG_KEY, JSON.stringify(arr))
+  } catch {}
   listeners.forEach((listener) => {
     listener(memoryState)
   })
@@ -146,7 +167,8 @@ function toast({ ...props }: Toast) {
       ...props,
       id,
       open: true,
-      duration: props.duration ?? 5000,
+      duration: Math.min(props.duration ?? MAX_DURATION, MAX_DURATION),
+      createdAt: Date.now(),
       onOpenChange: (open) => {
         if (!open) dismiss()
       },

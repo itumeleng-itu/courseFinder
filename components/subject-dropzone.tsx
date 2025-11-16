@@ -4,6 +4,7 @@ import { useCallback, useState } from "react"
 import { Upload, X, Loader2, FileImage, FileText } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
+import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip"
 import { useToast } from "@/components/ui/use-toast"
 
 interface SubjectDropzoneProps {
@@ -14,10 +15,24 @@ export function SubjectDropzone({ onSubjectsExtracted }: SubjectDropzoneProps) {
   const [isDragging, setIsDragging] = useState(false)
   const [isProcessing, setIsProcessing] = useState(false)
   const [uploadedFile, setUploadedFile] = useState<File | null>(null)
+  const [tooLarge, setTooLarge] = useState(false)
   const { toast } = useToast()
 
   const handleFile = useCallback(
     async (file: File) => {
+      const maxBytes = 1024 * 1024
+      if (file.size > maxBytes) {
+        setTooLarge(true)
+        toast({
+          title: "File too large",
+          description: "Maximum file size is 1MB. Please compress or choose a smaller file.",
+          variant: "destructive",
+          duration: 30000,
+        })
+        return
+      } else {
+        setTooLarge(false)
+      }
       const isImage = file.type.startsWith("image/")
       const isPDF = file.type === "application/pdf" || file.name.toLowerCase().endsWith(".pdf")
       
@@ -50,6 +65,7 @@ export function SubjectDropzone({ onSubjectsExtracted }: SubjectDropzoneProps) {
             title: "Feature in Development",
             description: data.message || "OCR feature is not yet available, still in development.",
             variant: "default",
+            duration: 30000,
           })
           setIsProcessing(false)
           return
@@ -89,6 +105,7 @@ export function SubjectDropzone({ onSubjectsExtracted }: SubjectDropzoneProps) {
               ? error.message
               : "Please try again or enter subjects manually",
           variant: "destructive",
+          duration: 30000,
         })
       } finally {
         setIsProcessing(false)
@@ -137,6 +154,17 @@ export function SubjectDropzone({ onSubjectsExtracted }: SubjectDropzoneProps) {
   return (
     <Card className="glass-card">
       <CardContent className="pt-6">
+        <div className="flex items-center justify-between mb-2">
+          <div className="text-xs text-muted-foreground">Maximum file size: 1MB</div>
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <span className="text-xs underline cursor-help">Details</span>
+            </TooltipTrigger>
+            <TooltipContent>
+              Files larger than 1MB are not accepted. Compress images or split PDFs before upload.
+            </TooltipContent>
+          </Tooltip>
+        </div>
         <div
           onDrop={handleDrop}
           onDragOver={handleDragOver}
@@ -146,6 +174,8 @@ export function SubjectDropzone({ onSubjectsExtracted }: SubjectDropzoneProps) {
             ${
               isDragging
                 ? "border-primary bg-primary/5"
+                : tooLarge
+                ? "border-red-500 bg-red-50"
                 : "border-muted-foreground/25 hover:border-muted-foreground/50"
             }
             ${isProcessing ? "opacity-50 cursor-wait" : "cursor-pointer"}
@@ -183,7 +213,11 @@ export function SubjectDropzone({ onSubjectsExtracted }: SubjectDropzoneProps) {
                       Upload your matric results
                     </p>
                     <p className="text-xs text-muted-foreground mt-1">
-                      Drag and drop or click to select (Image or PDF)
+                      {tooLarge ? (
+                        <span className="text-red-600">Selected file exceeds 1MB</span>
+                      ) : (
+                        "Drag and drop or click to select (Image or PDF)"
+                      )}
                     </p>
                   </div>
                 </>
@@ -199,7 +233,7 @@ export function SubjectDropzone({ onSubjectsExtracted }: SubjectDropzoneProps) {
               <div className="flex-1 min-w-0">
                 <p className="text-sm font-medium truncate">{uploadedFile.name}</p>
                 <p className="text-xs text-muted-foreground">
-                  {isProcessing ? "Processing..." : "Ready"}
+                  {isProcessing ? "Processing..." : tooLarge ? "File exceeds 1MB" : "Ready"}
                 </p>
               </div>
               {!isProcessing && (

@@ -10,6 +10,12 @@
 This repository will stay in sync with your deployed chats on [v0.dev](https://v0.dev).
 Any changes you make to your deployed app will be automatically pushed to this repository from [v0.dev](https://v0.dev).
 
+### OCR Provider
+
+- OCR for matric results is powered by `OCR.space`.
+- Configure the API key in `.env.local` as `ocrSpaceApiKey`.
+- Endpoint: `/api/ocr` accepts `file` (PDF/JPG/PNG) and optional `language` (default `eng`).
+
 ## Deployment
 
 Your project is live at:
