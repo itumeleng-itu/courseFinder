@@ -258,6 +258,9 @@ export async function GET() {
     // Fetch fresh news from API
     const fetchedArticles = await fetchRealNews()
 
+    const MIN_ARTICLES = 4
+    const MAX_ARTICLES = 8
+
     // Process articles
     const now = new Date()
     let normalized: NewsArticle[] = fetchedArticles
@@ -284,17 +287,17 @@ export async function GET() {
         }
       })
       .filter((a) => isWithin48Hours(a.pubDate))
-      .slice(0, 8)
+      .slice(0, MAX_ARTICLES)
 
     // Prepend Matric Pass Rates news at the beginning (prioritized)
     // These articles are fetched yearly and should always be shown when available
     if (matricNews.length > 0) {
-      normalized = [...matricNews, ...normalized].slice(0, 8)
+      normalized = [...matricNews, ...normalized].slice(0, MAX_ARTICLES)
     }
 
-    // If external API failed or yielded no recent articles, provide server-side fallback
-    if (normalized.length === 0) {
-      normalized = FALLBACK_ARTICLES.map((a) => {
+    // Ensure minimum count using server-side fallback if needed
+    if (normalized.length < MIN_ARTICLES) {
+      const fallbackProcessed = FALLBACK_ARTICLES.map((a) => {
         const { image_url, alt_text } = buildImageForArticle(a)
         return {
           ...a,
@@ -302,8 +305,14 @@ export async function GET() {
           alt_text: a.alt_text && a.alt_text.trim().length > 0 ? a.alt_text : alt_text,
         }
       })
-        .filter((a) => isWithin48Hours(a.pubDate))
-        .slice(0, 8)
+
+      const byKey = new Map<string, NewsArticle>()
+      const keyFor = (x: NewsArticle) => `${x.title}|${x.link}`
+      for (const a of [...normalized, ...fallbackProcessed]) {
+        const k = keyFor(a)
+        if (!byKey.has(k)) byKey.set(k, a)
+      }
+      normalized = Array.from(byKey.values()).slice(0, MAX_ARTICLES)
     }
 
     console.log(`Returning ${normalized.length} articles (cached by Vercel for 24h)`) 
