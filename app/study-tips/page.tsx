@@ -5,7 +5,6 @@ import { SidebarInset } from "@/components/ui/sidebar"
 import { Separator } from "@/components/ui/separator"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
-import { Button } from "@/components/ui/button"
 import { 
   BookOpen, 
   Brain, 
@@ -13,12 +12,10 @@ import {
   Users, 
   Target, 
   Lightbulb, 
-  Calendar,
   CheckCircle2,
   Star,
   Timer,
   PenTool,
-  Headphones,
   Eye,
   Repeat,
   FileText,

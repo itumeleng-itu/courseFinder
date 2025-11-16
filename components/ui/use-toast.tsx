@@ -128,20 +128,33 @@ let memoryState: State = { toasts: [] }
 function dispatch(action: Action) {
   memoryState = reducer(memoryState, action)
   try {
+    let toastId: string | undefined
+    let payload: { title?: React.ReactNode; description?: React.ReactNode; duration?: number } | undefined
+
+    switch (action.type) {
+      case actionTypes.ADD_TOAST:
+      case actionTypes.UPDATE_TOAST:
+        toastId = action.toast.id
+        payload = {
+          title: action.toast.title,
+          description: action.toast.description,
+          duration: action.toast.duration,
+        }
+        break
+      case actionTypes.DISMISS_TOAST:
+      case actionTypes.REMOVE_TOAST:
+        toastId = action.toastId
+        break
+    }
+
     const e = {
       type: action.type,
-      toastId: (action as any).toastId || (action as any).toast?.id || undefined,
-      payload: (action as any).toast
-        ? {
-            title: (action as any).toast.title,
-            description: (action as any).toast.description,
-            duration: (action as any).toast.duration,
-          }
-        : undefined,
+      toastId,
+      payload,
       ts: Date.now(),
     }
-    const arr = JSON.parse(localStorage.getItem(LOG_KEY) || "[]")
-    arr.push(e)
+    const arr = JSON.parse(localStorage.getItem(LOG_KEY) || "[]") as unknown[]
+    ;(arr as Array<typeof e>).push(e)
     localStorage.setItem(LOG_KEY, JSON.stringify(arr))
   } catch {}
   listeners.forEach((listener) => {

@@ -8,8 +8,7 @@ import { Button } from "@/components/ui/button"
 import { DashboardSidebar } from "@/components/app-sidebar"
 import { SidebarInset } from "@/components/ui/sidebar"
 import { Separator } from "@/components/ui/separator"
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import { DollarSign, Search, Filter, ExternalLink, CheckCircle2, Calendar } from "lucide-react"
+import { DollarSign, Search, ExternalLink, CheckCircle2, Calendar } from "lucide-react"
 import { Skeleton } from "@/components/ui/skeleton"
 
 interface Bursary {
@@ -106,7 +105,7 @@ export default function BursariesPage() {
               <span>
                 Showing {filteredBursaries.length} of {bursaries.length} bursaries
               </span>
-              {searchQuery && <span className="text-blue-600">• Filtered by: "{searchQuery}"</span>}
+              {searchQuery && <span className="text-blue-600">• Filtered by: &quot;{searchQuery}&quot;</span>}
             </div>
 
             {/* Bursaries Grid */}

@@ -26,15 +26,15 @@ export class CacheManager {
         return { totalItems: 0, totalSize: 0 };
       }
 
-      const parsedCache = JSON.parse(cache);
-      const items = Object.entries(parsedCache);
+      const parsedCache = JSON.parse(cache) as Record<string, CacheItem<unknown>>;
+      const items = Object.entries(parsedCache) as Array<[string, CacheItem<unknown>]>;
       
       let oldestTimestamp = Infinity;
       let newestTimestamp = 0;
       let oldestKey = '';
       let newestKey = '';
 
-      items.forEach(([key, item]: [string, any]) => {
+      items.forEach(([key, item]) => {
         if (item.timestamp < oldestTimestamp) {
           oldestTimestamp = item.timestamp;
           oldestKey = key;
@@ -63,12 +63,12 @@ export class CacheManager {
       const cache = localStorage.getItem(this.storageKey);
       if (!cache) return 0;
 
-      const parsedCache = JSON.parse(cache);
+      const parsedCache = JSON.parse(cache) as Record<string, CacheItem<unknown>>;
       const now = Date.now();
       let removedCount = 0;
 
       Object.keys(parsedCache).forEach(key => {
-        const item: CacheItem<any> = parsedCache[key];
+        const item: CacheItem<unknown> = parsedCache[key];
         if (now - item.timestamp > item.ttl) {
           delete parsedCache[key];
           removedCount++;
@@ -134,17 +134,16 @@ export class CacheManager {
       const stats = this.getStats();
       
       if (stats.totalSize > maxSizeBytes) {
-        // First, clear expired items
-        const expiredCleared = this.clearExpired();
+        this.clearExpired();
         
         // If still too large, remove oldest items
         const newStats = this.getStats();
         if (newStats.totalSize > maxSizeBytes) {
           const cache = localStorage.getItem(this.storageKey);
           if (cache) {
-            const parsedCache = JSON.parse(cache);
+            const parsedCache = JSON.parse(cache) as Record<string, CacheItem<unknown>>;
             const items = Object.entries(parsedCache)
-              .map(([key, item]: [string, any]) => ({ key, timestamp: item.timestamp }))
+              .map(([key, item]) => ({ key, timestamp: item.timestamp }))
               .sort((a, b) => a.timestamp - b.timestamp);
 
             // Remove oldest 25% of items

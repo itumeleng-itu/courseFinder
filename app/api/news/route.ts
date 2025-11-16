@@ -15,6 +15,17 @@ interface NewsArticle {
   alt_text?: string
 }
 
+interface NewsDataItem {
+  title?: string
+  description?: string
+  content?: string
+  link?: string
+  pubDate?: string
+  source_id?: string
+  category?: string[]
+  image_url?: string
+}
+
 const FORTY_EIGHT_HOURS_MS = 48 * 60 * 60 * 1000
 
 // NewsData.io API key
@@ -61,8 +72,10 @@ function isWithin48Hours(pubDate: string): boolean {
   return now - date <= FORTY_EIGHT_HOURS_MS && date <= now
 }
 
-function isRelevantToStudents(article: any): boolean {
-  const searchText = `${article.title} ${article.description}`.toLowerCase()
+function isRelevantToStudents(article: { title?: string; description?: string; content?: string }): boolean {
+  const title = article.title ?? ""
+  const descriptionOrContent = article.description ?? article.content ?? ""
+  const searchText = `${title} ${descriptionOrContent}`.toLowerCase()
 
   // Check if article contains any student-relevant keywords
   return STUDENT_RELEVANT_KEYWORDS.some((keyword) => searchText.includes(keyword.toLowerCase()))
@@ -141,7 +154,7 @@ async function fetchRealNews(): Promise<NewsArticle[]> {
     }
 
     // Transform and filter for student-relevant articles
-    let articles: NewsArticle[] = data.results.filter(isRelevantToStudents).map((item: any) => ({
+    const articles: NewsArticle[] = data.results.filter(isRelevantToStudents).map((item: NewsDataItem) => ({
       title: item.title || "No title",
       description: item.description || item.content || "No description available",
       link: item.link || "#",
@@ -162,7 +175,7 @@ async function fetchRealNews(): Promise<NewsArticle[]> {
       if (eduResponse.ok) {
         const eduData = await eduResponse.json()
         if (eduData.results) {
-          const eduArticles = eduData.results.map((item: any) => ({
+          const eduArticles = eduData.results.map((item: NewsDataItem) => ({
             title: item.title || "No title",
             description: item.description || item.content || "No description available",
             link: item.link || "#",
@@ -214,7 +227,7 @@ async function fetchMatricPassRatesNews(): Promise<NewsArticle[]> {
     const data = await response.json()
     if (data.success && Array.isArray(data.articles) && data.articles.length > 0) {
       // Transform to match NewsArticle format and add images
-      return data.articles.map((article: any) => {
+      return data.articles.map((article: NewsArticle) => {
         const { image_url, alt_text } = buildImageForArticle(article)
         return {
           title: article.title,

@@ -82,11 +82,11 @@ async function getDownloadUrl(paperId: string): Promise<string | null> {
     // Parse the paper ID to reconstruct the download URL
     const parts = paperId.split('-')
     
-    if (parts.length < 6) {
+    if (parts.length < 7) {
       return null
     }
 
-    const [source, subject, year, grade, paper, type, language] = parts
+    const [source, subject, year, , paper, type, language] = parts
     
     if (source === 'al') {
       // AdvantageLearn URL structure
@@ -120,14 +120,14 @@ async function getDownloadUrl(paperId: string): Promise<string | null> {
 function getFilename(paperId: string): string {
   try {
     const parts = paperId.split('-')
-    const [source, subject, year, grade, paper, type, language] = parts
+    const [, subject, year, grade, paper, type, language] = parts
     
     const subjectName = formatSubjectName(subject)
     const typeLabel = type === 'question' ? 'Question' : 'Memorandum'
     const languageLabel = language === 'en' ? 'English' : 'Afrikaans'
     
     return `${subjectName}_Grade${grade}_${year}_Paper${paper}_${typeLabel}_${languageLabel}.pdf`
-  } catch (error) {
+  } catch {
     return `paper_${paperId}.pdf`
   }
 }

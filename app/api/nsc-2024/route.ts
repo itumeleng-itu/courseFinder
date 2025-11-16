@@ -7,7 +7,16 @@ export const dynamic = "force-dynamic"
 const DBE_ARTICLE_URL = "https://www.sanews.gov.za/south-africa/class-2024-achieves-historic-pass-rate"
 
 // 24h cache
-const cache: { data?: any; ts?: number } = {}
+interface NSCData {
+  year: number
+  passRate: number
+  passes: number
+  wrote: number
+  failed: number
+  source: string
+  _note?: string
+}
+const cache: { data?: NSCData; ts?: number } = {}
 const TTL_MS = 24 * 60 * 60 * 1000
 
 const FALLBACK = {
@@ -60,9 +69,6 @@ export async function GET() {
     let wrote = Math.round(passes / (passRate / 100))
 
     // If the article contains an explicit "registered learners who sat" number that is clearly the wrote count, try to use it.
-    const satDenominatorMatch = html.match(
-      /representing\s+(\d{1,3})%\s+of\s+registered\s+learners\s*$$(?:i\.e\.)?\s*([\d,]+)$$/i,
-    )
     const explicitRegisteredMatch = html.match(/registered\s+learners\s+who\s+sat[^\d]*([\d,]+)/i)
 
     if (explicitRegisteredMatch) {

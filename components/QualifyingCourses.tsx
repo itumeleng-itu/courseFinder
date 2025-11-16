@@ -280,7 +280,7 @@ export default function QualifyingCourses({ apsScore, subjects }: QualifyingCour
                       <div>
                         <p className="text-sm font-medium text-green-800">Aim Higher</p>
                         <p className="text-sm text-green-700">
-                          Meeting minimum requirements doesn't guarantee admission. Aim for marks 10-15% above the minimum.
+                          Meeting minimum requirements doesn&apos;t guarantee admission. Aim for marks 10-15% above the minimum.
                         </p>
                       </div>
                     </div>

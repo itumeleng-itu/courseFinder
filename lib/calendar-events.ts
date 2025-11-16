@@ -1,4 +1,4 @@
-import { addDays, isAfter, isBefore, format, differenceInDays, isPast, isToday, isSameDay } from "date-fns"
+import { addDays, isAfter, isBefore, format, isSameDay } from "date-fns"
 
 export type CalendarEvent = {
   date: Date
@@ -190,8 +190,6 @@ export function getAllEventsWithStatus(): CalendarEvent[] {
  * @returns Array of calendar notifications
  */
 export function eventsToNotifications(events: CalendarEvent[]): CalendarNotification[] {
-  const now = new Date()
-  
   return events.map((event, index) => {
     // Format the date as "December 15, 2024"
     let timeText = format(event.date, "MMMM d, yyyy")

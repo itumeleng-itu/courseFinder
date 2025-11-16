@@ -68,10 +68,23 @@ export async function POST(request: Request) {
         return NextResponse.json({ success: false, error: String(detail) }, { status: 502 })
       }
 
-      const parsed = Array.isArray(json?.ParsedResults) ? json.ParsedResults : []
-      const combinedText = parsed.map((p: any) => String(p?.ParsedText || "")).join("\n\n")
-      const meanConfidence = parsed.reduce((acc: number, p: any) => acc + (Number(p?.MeanConfidence || 0)), 0) / (parsed.length || 1)
-      const searchablePdfUrl = json?.SearchablePDFURL || parsed.find((p: any) => p?.SearchablePDFURL)?.SearchablePDFURL
+      type OCRParsedResult = {
+        ParsedText?: string
+        MeanConfidence?: number
+        SearchablePDFURL?: string
+      }
+      const rawParsed = Array.isArray(json?.ParsedResults) ? (json.ParsedResults as unknown[]) : []
+      const parsed: OCRParsedResult[] = rawParsed.map((p) => {
+        const obj = p as Record<string, unknown>
+        return {
+          ParsedText: typeof obj.ParsedText === "string" ? obj.ParsedText : undefined,
+          MeanConfidence: typeof obj.MeanConfidence === "number" ? obj.MeanConfidence : undefined,
+          SearchablePDFURL: typeof obj.SearchablePDFURL === "string" ? obj.SearchablePDFURL : undefined,
+        }
+      })
+      const combinedText = parsed.map((p) => String(p.ParsedText || "")).join("\n\n")
+      const meanConfidence = parsed.reduce((acc: number, p) => acc + Number(p.MeanConfidence || 0), 0) / (parsed.length || 1)
+      const searchablePdfUrl = (json as Record<string, unknown>)?.SearchablePDFURL as string | undefined || parsed.find((p) => p.SearchablePDFURL)?.SearchablePDFURL
       results.push({ text: combinedText, meanConfidence: Number.isFinite(meanConfidence) ? meanConfidence : undefined, searchablePdfUrl })
     }
 
@@ -104,7 +117,7 @@ export async function POST(request: Request) {
       searchablePdfUrl: results.find((r) => r.searchablePdfUrl)?.searchablePdfUrl || null,
       validation,
     })
-  } catch (error) {
+  } catch {
   return NextResponse.json({ success: false, error: "Internal Server Error" }, { status: 500 })
 }
 }
@@ -227,20 +240,15 @@ function applyNSCRules(subjects: Subject[]): Subject[] {
   const isLO = (n: string) => n === "Life Orientation"
   const isEngAfr = (n: string) => /English|Afrikaans/i.test(n)
 
-  let hl: Subject | undefined
-  let fal: Subject | undefined
-  let mathOrLit: Subject | undefined
-  let lo: Subject | undefined
-
   const hlCandidates = unique.filter((s) => isHL(s.name)).sort((a, b) => b.percentage - a.percentage)
   const falCandidates = unique.filter((s) => isFAL(s.name)).sort((a, b) => b.percentage - a.percentage)
   const mathCandidates = unique.filter((s) => isMath(s.name) || isMathLit(s.name)).sort((a, b) => b.percentage - a.percentage)
   const loCandidates = unique.filter((s) => isLO(s.name)).sort((a, b) => b.percentage - a.percentage)
 
-  hl = hlCandidates.find((s) => s.percentage >= 40) || hlCandidates[0]
-  fal = falCandidates.find((s) => isEngAfr(s.name)) || falCandidates[0]
-  mathOrLit = mathCandidates[0]
-  lo = loCandidates[0]
+  const hl: Subject | undefined = hlCandidates.find((s) => s.percentage >= 40) || hlCandidates[0]
+  const fal: Subject | undefined = falCandidates.find((s) => isEngAfr(s.name)) || falCandidates[0]
+  const mathOrLit: Subject | undefined = mathCandidates[0]
+  const lo: Subject | undefined = loCandidates[0]
 
   const takenNames = new Set<string>([hl?.name || "", fal?.name || "", mathOrLit?.name || "", lo?.name || ""]) 
   takenNames.delete("")

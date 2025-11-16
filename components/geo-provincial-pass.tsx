@@ -85,13 +85,13 @@ export function GeoProvincialPass() {
       if (Date.now() - parsed.timestamp > cacheTTL) return null
       return typeof parsed.province === "string" ? parsed.province : null
     } catch { return null }
-  }, [])
+  }, [cacheKey, cacheTTL])
 
   const saveToCache = useCallback((prov: string) => {
     try {
       sessionStorage.setItem(cacheKey, JSON.stringify({ province: prov, timestamp: Date.now() }))
     } catch {}
-  }, [])
+  }, [cacheKey])
 
   const detectLocation = useCallback(async () => {
     setPhase("locating")
@@ -116,7 +116,8 @@ export function GeoProvincialPass() {
       headers: { "Accept": "application/json" },
     })
     if (!resp.ok) throw new Error(`Reverse geocoding failed (${resp.status})`)
-    const json: any = await resp.json()
+    type NominatimResponse = { address?: { state?: string; county?: string; region?: string; province?: string } }
+    const json = (await resp.json()) as NominatimResponse
     const candidates = [json?.address?.state, json?.address?.county, json?.address?.region, json?.address?.province]
       .filter(Boolean)
       .map((s: string) => normalizeProvince(s))
@@ -160,9 +161,9 @@ export function GeoProvincialPass() {
         if (cancelled) return
         setData(series)
         setPhase("done")
-      } catch (e: any) {
+      } catch (e: unknown) {
         console.error("GeoProvincialPass error:", e)
-        setError(e?.message || "Unable to detect location.")
+        setError(e instanceof Error ? e.message : "Unable to detect location.")
         setPhase("error")
       } finally {
         if (!cancelled) setLoading(false)
@@ -239,7 +240,7 @@ export function GeoProvincialPass() {
                 <CartesianGrid strokeDasharray="3 3" />
                 <XAxis dataKey="year" tick={{ fontSize: 12 }} />
                 <YAxis domain={[60, 95]} tickFormatter={(v) => `${v}%`} tick={{ fontSize: 12 }} />
-                <ReTooltip formatter={(v: any) => rateFormat(Number(v))} />
+                <ReTooltip formatter={(v: number | string) => rateFormat(Number(v))} />
                 <Legend wrapperStyle={{ fontSize: 12 }} />
                 <Bar dataKey="province" name={province || "Province"} fill="#0ea5e9" />
                 <Bar dataKey="national" name="National" fill="#10b981" />
@@ -256,7 +257,7 @@ export function GeoProvincialPass() {
                 <CartesianGrid strokeDasharray="3 3" />
                 <XAxis dataKey="year" tick={{ fontSize: 12 }} />
                 <YAxis domain={[60, 95]} tickFormatter={(v) => `${v}%`} tick={{ fontSize: 12 }} />
-                <ReTooltip formatter={(v: any) => rateFormat(Number(v))} />
+                <ReTooltip formatter={(v: number | string) => rateFormat(Number(v))} />
                 <Legend wrapperStyle={{ fontSize: 12 }} />
                 <Line type="monotone" dataKey="province" name={province || "Province"} stroke="#0ea5e9" strokeWidth={2} dot={{ r: 2 }} />
                 <Line type="monotone" dataKey="national" name="National" stroke="#10b981" strokeWidth={2} dot={{ r: 2 }} />

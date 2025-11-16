@@ -49,10 +49,17 @@ export function CertificateUpload({ onSubjectsExtracted }: CertificateUploadProp
         }
 
         if (data.subjects && Array.isArray(data.subjects) && data.subjects.length > 0) {
-          // The API already returns subjects with id, name, and percentage
-          const validSubjects = data.subjects
-            .filter((s: any) => s.name && typeof s.percentage === "number")
-            .map((s: any) => ({
+          const isExtractedSubject = (
+            s: unknown,
+          ): s is { id?: string; name: string; percentage: number } => {
+            if (!s || typeof s !== "object") return false
+            const obj = s as Record<string, unknown>
+            return typeof obj.name === "string" && typeof obj.percentage === "number"
+          }
+
+          const validSubjects = (data.subjects as unknown[])
+            .filter(isExtractedSubject)
+            .map((s) => ({
               id: s.id || Date.now().toString() + Math.random().toString(36).substr(2, 9),
               name: s.name.trim(),
               percentage: Math.max(0, Math.min(100, s.percentage)),

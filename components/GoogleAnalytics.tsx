@@ -5,7 +5,7 @@ import { useEffect } from "react"
 
 declare global {
   interface Window {
-    dataLayer: any[];
+    dataLayer: unknown[];
   }
 }
 
@@ -14,7 +14,7 @@ export function GoogleAnalytics() {
     // Ensure gtag is available
     if (typeof window !== "undefined") {
       window.dataLayer = window.dataLayer || []
-      function gtag(...args: any[]) {
+      function gtag(...args: unknown[]) {
         window.dataLayer.push(args)
       }
       gtag("js", new Date())

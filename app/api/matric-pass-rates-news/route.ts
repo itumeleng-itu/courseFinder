@@ -105,26 +105,33 @@ Return ONLY valid JSON, no other text.`
       return []
     }
 
-    let articles: any[]
+    let articlesData: unknown
     try {
-      articles = JSON.parse(match[0])
+      articlesData = JSON.parse(match[0]) as unknown
     } catch (e) {
       console.error("Failed to parse JSON from OpenRouter matric-pass-rates-news", e)
       return []
     }
 
     // Validate and transform articles
-    const validatedArticles: MatricPassRateNews[] = articles
-      .filter((article: any) => article.title && article.description)
-      .map((article: any) => ({
-        title: String(article.title || ""),
-        description: String(article.description || ""),
-        link: String(article.link || "#"),
-        pubDate: article.pubDate || new Date().toISOString(),
-        source_id: String(article.source_id || "OpenRouter AI"),
-        category: Array.isArray(article.category) ? article.category : ["education", "matric"],
-        image_url: String(article.image_url || ""),
-        alt_text: String(article.alt_text || article.title || "Matric pass rates news")
+    const isArticle = (article: unknown): article is Partial<MatricPassRateNews> => {
+      if (!article || typeof article !== "object") return false
+      const a = article as Record<string, unknown>
+      return typeof a.title === "string" && typeof a.description === "string"
+    }
+
+    const arr = Array.isArray(articlesData) ? (articlesData as unknown[]) : []
+    const validatedArticles: MatricPassRateNews[] = arr
+      .filter(isArticle)
+      .map((article) => ({
+        title: String((article.title as string) || ""),
+        description: String((article.description as string) || ""),
+        link: String((article.link as string) || "#"),
+        pubDate: typeof article.pubDate === "string" ? article.pubDate : new Date().toISOString(),
+        source_id: String((article.source_id as string) || "OpenRouter AI"),
+        category: Array.isArray(article.category) ? (article.category as string[]) : ["education", "matric"],
+        image_url: String((article.image_url as string) || ""),
+        alt_text: String((article.alt_text as string) || (article.title as string) || "Matric pass rates news"),
       }))
       .slice(0, 5) // Limit to 5 articles
 

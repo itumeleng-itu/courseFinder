@@ -30,7 +30,7 @@ export default function DashboardPage() {
               <div className="space-y-2">
                 <h1 className="text-2xl sm:text-3xl font-semibold tracking-tight">Welcome back</h1>
                 <p className="text-sm sm:text-base text-muted-foreground">
-                  Here's an overview of your university search dashboard
+                  Here&apos;s an overview of your university search dashboard
                 </p>
               </div>
 

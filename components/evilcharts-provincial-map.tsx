@@ -60,7 +60,8 @@ async function fetchJSON<T>(url: string): Promise<T> {
 }
 
 // Load South Africa ADM1 GeoJSON via geoBoundaries API
-async function loadZAProvincesGeoJSON(): Promise<any> {
+type SAProvincesGeoJSON = { type: string } & Record<string, unknown>
+async function loadZAProvincesGeoJSON(): Promise<SAProvincesGeoJSON> {
   // Try session cache first
   try {
     const ttlStr = typeof window !== "undefined" ? sessionStorage.getItem(SESSION_KEYS.geojsonTTL) : null
@@ -71,12 +72,12 @@ async function loadZAProvincesGeoJSON(): Promise<any> {
   } catch {}
 
   // Get metadata to obtain gjDownloadURL
-  const meta = await fetchJSON<any[]>(
+  const meta = await fetchJSON<Array<{ gjDownloadURL?: string }>>(
     "https://www.geoboundaries.org/api/current/gbOpen/ZAF/ADM1/"
   )
   const gj = meta?.[0]?.gjDownloadURL as string | undefined
   if (!gj) throw new Error("GeoBoundaries ADM1 gjDownloadURL not found for ZAF")
-  const geo = await fetchJSON<any>(gj)
+  const geo = await fetchJSON<SAProvincesGeoJSON>(gj)
 
   // Cache for 24 hours in sessionStorage
   try {
@@ -128,7 +129,7 @@ export function EvilChartsProvincialMap() {
   const [years, setYears] = useState<number[]>([])
   const [year, setYear] = useState<number | null>(null)
   const [seriesCache, setSeriesCache] = useState<Record<string, ProvinceSeriesResponse>>({})
-  const [geoJSON, setGeoJSON] = useState<any | null>(null)
+  const [geoJSON, setGeoJSON] = useState<SAProvincesGeoJSON | null>(null)
 
   const computeProvinceValues = useCallback(
     (y: number | null): ProvinceValueMap => {
@@ -160,9 +161,9 @@ export function EvilChartsProvincialMap() {
         const yr = (data[PROVINCES[0]]?.provinceSeries || []).map((d) => d.year)
         setYears(yr)
         setYear(yr[yr.length - 1])
-      } catch (e: any) {
+      } catch (e: unknown) {
         console.error(e)
-        setError(e?.message || "Failed to load map and data")
+        setError(e instanceof Error ? e.message : "Failed to load map and data")
       } finally {
         if (!cancelled) setLoading(false)
       }
@@ -188,8 +189,9 @@ export function EvilChartsProvincialMap() {
     const resize = () => chart.resize()
     window.addEventListener("resize", resize)
 
-    chart.on("click", (params: any) => {
-      if (params?.name && PROVINCES.includes(params.name)) {
+    type EChartsClickParams = { name?: string }
+    chart.on("click", (params: EChartsClickParams) => {
+      if (params?.name && PROVINCES.includes(params.name as (typeof PROVINCES)[number])) {
         setSelectedProvince(params.name as (typeof PROVINCES)[number])
       }
     })
@@ -219,7 +221,7 @@ export function EvilChartsProvincialMap() {
       },
       tooltip: {
         trigger: "item",
-        formatter: (params: any) => {
+        formatter: (params: { name: string }) => {
           const resp = seriesCache[params.name]
           const latest = resp?.provinceSeries?.find((sp) => sp.year === year)
           const prev = resp?.provinceSeries?.find((sp) => sp.year === year! - 1)
@@ -286,8 +288,8 @@ export function EvilChartsProvincialMap() {
       const yr = (data[PROVINCES[0]]?.provinceSeries || []).map((d) => d.year)
       setYears(yr)
       if (!yr.includes(year!)) setYear(yr[yr.length - 1])
-    } catch (e: any) {
-      setError(e?.message || "Failed to refresh data")
+    } catch (e: unknown) {
+      setError(e instanceof Error ? e.message : "Failed to refresh data")
     } finally {
       setLoading(false)
     }

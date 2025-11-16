@@ -6,8 +6,22 @@ const OPENROUTER_API_KEY = process.env.OPENROUTER_API_KEY || ""
 const OPENROUTER_API_URL = "https://openrouter.ai/api/v1/chat/completions"
 const MODEL = "google/gemini-2.0-flash-exp:free"
 
+interface PassRateDataMeta {
+  model: string
+  timestamp: string
+  durationMs?: number
+  note?: string
+}
+
+interface PassRateData {
+  nationalPassRate: number
+  year: number
+  source: string
+  _metadata?: PassRateDataMeta
+}
+
 // Simple in-memory cache (auto-reset on server restart)
-const cache: { data?: any; timestamp?: number } = {}
+const cache: { data?: PassRateData; timestamp?: number } = {}
 const TTL_MS = 24 * 60 * 60 * 1000 // 24 hours
 
 // Source: https://www.sanews.gov.za/south-africa/class-2024-achieves-historic-pass-rate
@@ -99,9 +113,9 @@ Rules:
       })
     }
 
-    let data
+    let data: unknown
     try {
-      data = JSON.parse(match[0])
+      data = JSON.parse(match[0]) as unknown
     } catch (e) {
       console.error("Failed to parse JSON from OpenRouter matric-pass-rate", e)
       return NextResponse.json({ success: true, ...FALLBACK, _metadata: { model: "fallback", timestamp: new Date().toISOString(), note: "Parse error; served fallback" } }, {
@@ -110,10 +124,11 @@ Rules:
       })
     }
 
-    const responseData = {
-      nationalPassRate: Number(data?.nationalPassRate),
-      year: Number(data?.year),
-      source: String(data?.source || "Unknown")
+    const obj = (data ?? {}) as Record<string, unknown>
+    const responseData: PassRateData = {
+      nationalPassRate: Number(obj.nationalPassRate),
+      year: Number(obj.year),
+      source: String(obj.source ?? "Unknown"),
     }
 
     // Basic validation

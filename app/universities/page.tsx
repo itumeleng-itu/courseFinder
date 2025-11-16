@@ -6,7 +6,7 @@ import { Separator } from "@/components/ui/separator"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { universities } from "@/data/universities"
-import { Building2, ExternalLink, School, GraduationCap } from "lucide-react"
+import { Building2, ExternalLink, School } from "lucide-react"
 import { Chatbot } from "@/components/chatbot"
 
 export default function UniversitiesPage() {

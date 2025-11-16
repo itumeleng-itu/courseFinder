@@ -40,7 +40,6 @@ function isEnglishOrAfrikaansLanguage(name: string) {
 
 export function evaluateNSC(subjects: SubjectEntry[]): NSCResult {
   const reasons: string[] = []
-  const totalSubjects = subjects.length
 
   const hl = subjects.find((s) => HOME_LANGUAGES.includes(s.name))
   const fal = subjects.find((s) => FIRST_ADDITIONAL_LANGUAGES.includes(s.name))
@@ -51,14 +50,11 @@ export function evaluateNSC(subjects: SubjectEntry[]): NSCResult {
   if (!lo) reasons.push("Life Orientation not selected")
 
   const passes30 = subjects.filter((s) => s.percentage >= 30)
-  const passes40 = subjects.filter((s) => s.percentage >= 40)
-  const fails = subjects.filter((s) => s.percentage < 30)
 
   const hlMet = !!hl && hl.percentage >= 40
   if (hl && hl.percentage < 40) reasons.push("Home Language must be at least 40%")
 
   const othersExcludingHL = subjects.filter((s) => s !== hl)
-  const othersExcludingLO = subjects.filter((s) => s.name !== "Life Orientation")
   const othersExcludingLOAndHL = subjects.filter((s) => s !== hl && s.name !== "Life Orientation")
 
   // Basic NSC: HL >=40, two other subjects >=40, three other subjects >=30, pass at least 6 subjects

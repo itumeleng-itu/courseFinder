@@ -76,10 +76,14 @@ export function SubjectDropzone({ onSubjectsExtracted }: SubjectDropzoneProps) {
         }
 
         if (data.subjects && Array.isArray(data.subjects) && data.subjects.length > 0) {
-          // Filter and validate subjects
-          const validSubjects = data.subjects
-            .filter((s: any) => s.name && typeof s.percentage === "number")
-            .map((s: any) => ({
+          const isSubject = (s: unknown): s is { name: string; percentage: number } => {
+            if (!s || typeof s !== "object") return false
+            const obj = s as Record<string, unknown>
+            return typeof obj.name === "string" && typeof obj.percentage === "number"
+          }
+          const validSubjects = (data.subjects as unknown[])
+            .filter(isSubject)
+            .map((s) => ({
               name: s.name.trim(),
               percentage: Math.max(0, Math.min(100, s.percentage)),
             }))

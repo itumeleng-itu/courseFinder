@@ -36,6 +36,10 @@ type Subject = {
 type RequirementAlternative = { subject: string; level: number }
 type RequirementLevel = number | { alternatives: RequirementAlternative[] }
 
+const hasAlternatives = (val: RequirementLevel): val is { alternatives: RequirementAlternative[] } => {
+  return typeof val === "object" && val !== null && Array.isArray((val as { alternatives?: unknown }).alternatives)
+}
+
 // Extended Course interface supporting multiple university formats
 interface ExtendedCourse extends Omit<Course, 'requirements'> {
   apsMin?: number
@@ -188,8 +192,8 @@ function checkSubjectRequirements(
   for (const [requiredSubject, requiredValue] of Object.entries(courseRequirements)) {
     if (typeof requiredValue === "number") {
       evaluateNumberRequirement(requiredSubject, requiredValue)
-    } else if (requiredValue && typeof requiredValue === "object" && Array.isArray((requiredValue as any).alternatives)) {
-      evaluateAlternatives(requiredSubject, (requiredValue as any).alternatives)
+    } else if (hasAlternatives(requiredValue)) {
+      evaluateAlternatives(requiredSubject, requiredValue.alternatives)
     } else {
       missing.push(`${requiredSubject}: invalid requirement definition`)
     }
@@ -209,7 +213,7 @@ export default function FindCoursePage() {
   const [apsScore, setApsScore] = useState<number | null>(null)
   const [qualifyingCourses, setQualifyingCourses] = useState<CourseMatch[]>([])
   const [recommendedColleges, setRecommendedColleges] = useState<CourseMatch[]>([])
-  const [compareKeys, setCompareKeys] = useState<string[]>([])
+  const [compareKeys] = useState<string[]>([])
   const [searchQuery, setSearchQuery] = useState("")
   const [hasCalculated, setHasCalculated] = useState(false)
   const [nscResult, setNscResult] = useState<NSCResult | null>(null)
@@ -830,10 +834,6 @@ export default function FindCoursePage() {
 
   const courseKey = (course: ExtendedCourse, university: University) => `${university.id}::${course.name}`
   const isCompared = (course: ExtendedCourse, university: University) => compareKeys.includes(courseKey(course, university))
-  const toggleCompare = (course: ExtendedCourse, university: University) => {
-    const key = courseKey(course, university)
-    setCompareKeys((prev) => (prev.includes(key) ? prev.filter((k) => k !== key) : [...prev, key]))
-  }
 
   const qualifiedCount = qualifyingCourses.filter((c) => c.meetsRequirements).length
   const partialCount = qualifyingCourses.length - qualifiedCount
@@ -1103,7 +1103,7 @@ export default function FindCoursePage() {
                   <GraduationCap className="h-12 w-12 md:h-16 md:w-16 mx-auto text-muted-foreground mb-4" />
                   <h2 className="text-xl md:text-2xl font-bold mb-2">Ready to Find Your Course?</h2>
                   <p className="text-sm md:text-base text-muted-foreground">
-                    Add your matric subjects and marks on the left, then click "Calculate APS & Find Courses" to
+                    Add your matric subjects and marks on the left, then click &quot;Calculate APS & Find Courses&quot; to
                     discover which university programs you qualify for based on both APS scores and subject
                     requirements.
                   </p>
@@ -1167,9 +1167,8 @@ export default function FindCoursePage() {
                     ) : (
                       <div className="grid gap-4 grid-cols-1 sm:grid-cols-2">
                         {filteredUniversities.map(
-                          ({ course, university, meetsRequirements, missingRequirements, metRequirements }, index) => {
+                          ({ course, university, meetsRequirements }, index) => {
                             const apsToDisplay = course.apsMin ?? course.apsRequired ?? "N/A"
-                            const additionalReqs = course.additionalRequirements ?? course.requirements
                             const careersToDisplay = formatCareers(course.careerOpportunities ?? course.careers)
                           
                             return (

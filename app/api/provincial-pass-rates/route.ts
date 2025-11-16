@@ -7,7 +7,14 @@ const OPENROUTER_API_URL = "https://openrouter.ai/api/v1/chat/completions"
 const MODEL = "google/gemini-2.0-flash-exp:free"
 
 // In-memory cache keyed by province+years
-const cache = new Map<string, { data: any; timestamp: number }>()
+interface SeriesPoint { year: number; passRate: number }
+interface ProvincialResponseData {
+  provinceSeries: SeriesPoint[]
+  nationalSeries: SeriesPoint[]
+  provinceAvg: number
+  nationalAvg: number
+}
+const cache = new Map<string, { data: ProvincialResponseData; timestamp: number }>()
 const TTL_MS = 6 * 60 * 60 * 1000 // 6 hours
 
 // Cache for fetched provincial data (yearly fetch)
@@ -76,15 +83,17 @@ async function fetchProvincialPassRatesFromOpenRouter(): Promise<{
   const previousYear = currentYear - 1 // Most recent completed exam year
   const startYear = previousYear - 4 // Last 5 years
 
-  // National pass rates from The Citizen article (verified data)
-  // Source: https://www.citizen.co.za/news/south-africa/education/matric/matric-results-over-the-last-five-years-heres-where-gwarube-is-picking-up-from/
-  const verifiedNationalRates: Record<number, number> = {
-    2019: 81.3,
-    2020: 76.2,
-    2021: 76.4,
-    2022: 80.1,
-    2023: 82.9,
-    2024: 87.3 // Historic high from Department of Basic Education
+  type OpenRouterData = {
+    nationalSeries: Array<{ year: number; passRate: number }>
+    provinces: Record<string, { provinceSeries: Array<{ year: number; passRate: number }>; passRate: number }>
+  }
+  function isOpenRouterData(val: unknown): val is OpenRouterData {
+    if (!val || typeof val !== "object") return false
+    const obj = val as Record<string, unknown>
+    const ns = obj.nationalSeries
+    const prov = obj.provinces
+    if (!Array.isArray(ns) || !prov || typeof prov !== "object") return false
+    return true
   }
 
   const prompt = `You are a data assistant. Provide accurate South African Matric Pass Rates data for all 9 provinces for the years ${startYear} to ${previousYear}.
@@ -178,19 +187,19 @@ Requirements:
       return null
     }
 
-    let data: any
+    let parsed: unknown
     try {
-      data = JSON.parse(match[0])
+      parsed = JSON.parse(match[0])
     } catch (e) {
       console.error("Failed to parse JSON from OpenRouter provincial-pass-rates", e)
       return null
     }
 
-    // Validate structure
-    if (!data.nationalSeries || !data.provinces) {
+    if (!isOpenRouterData(parsed)) {
       console.error("Invalid data structure from OpenRouter")
       return null
     }
+    const data = parsed
 
     // Verify national rates against known data from The Citizen article
     // Source: https://www.citizen.co.za/news/south-africa/education/matric/matric-results-over-the-last-five-years-heres-where-gwarube-is-picking-up-from/
@@ -204,7 +213,7 @@ Requirements:
     }
 
     // Validate and correct national series against verified data
-    const validatedNational = data.nationalSeries.map((n: any) => {
+    const validatedNational = data.nationalSeries.map((n) => {
       const year = Number(n.year)
       const verifiedRate = verifiedNationalRates[year]
       // Use verified rate if available, otherwise use provided rate
@@ -213,11 +222,11 @@ Requirements:
     })
 
     // Validate and normalize all provinces
-    const validatedProvinces: Record<string, any> = {}
+    const validatedProvinces: Record<string, { provinceSeries: Array<{ year: number; passRate: number }>; passRate: number }> = {}
     for (const province of PROVINCES) {
       if (data.provinces[province] && Array.isArray(data.provinces[province].provinceSeries)) {
         validatedProvinces[province] = {
-          provinceSeries: data.provinces[province].provinceSeries.map((p: any) => ({
+          provinceSeries: data.provinces[province].provinceSeries.map((p: { year: number; passRate: number }) => ({
             year: Number(p.year),
             passRate: Number(p.passRate)
           })),
@@ -362,7 +371,7 @@ export async function GET(req: Request) {
     }
 
     // Build data from OpenRouter cache or fallback to mock
-    let data: any
+    let data: ProvincialResponseData
     if (useOpenRouterData && openRouterData) {
       const provinceData = openRouterData.provinces[normalized]
       const nationalSeries = openRouterData.nationalSeries

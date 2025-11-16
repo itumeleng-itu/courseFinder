@@ -32,6 +32,19 @@ const VISION_MODELS = [
   "openai/gpt-4o-mini:free", // GPT-4o mini with vision support
 ]
 
+type ChatCompletion = {
+  choices?: Array<{
+    message?: {
+      content?: string
+    }
+  }>
+}
+
+interface ExtractedSubject {
+  name: string
+  percentage: number
+}
+
 async function makeOpenRouterRequest(model: string, imageBase64: string, mimeType: string) {
   const response = await fetch(OPENROUTER_API_URL, {
     method: "POST",
@@ -116,7 +129,7 @@ export async function POST(request: NextRequest) {
     console.log(`[certificate] Starting certificate extraction with ${VISION_MODELS.length} fallback models...`)
 
     let lastError: string | null = null
-    let attemptedModels: string[] = []
+    const attemptedModels: string[] = []
 
     // Try each vision model in sequence until one succeeds
     for (const model of VISION_MODELS) {
@@ -145,10 +158,10 @@ export async function POST(request: NextRequest) {
           continue
         }
 
-        let data: any
+        let data: ChatCompletion
         try {
-          data = JSON.parse(response.text)
-        } catch (parseError) {
+          data = JSON.parse(response.text) as ChatCompletion
+        } catch {
           console.error(`[certificate] Failed to parse response from ${model}:`, response.text.slice(0, 200))
           lastError = "Invalid JSON response"
           continue
@@ -164,33 +177,34 @@ export async function POST(request: NextRequest) {
         console.log(`[certificate] Raw AI response from ${model}:`, text.slice(0, 200))
 
         // Parse the AI response
-        let subjects
+        let subjectsData: unknown
         try {
           // Try to extract JSON from the response
           const jsonMatch = text.match(/\[[\s\S]*\]/)
           if (jsonMatch) {
-            subjects = JSON.parse(jsonMatch[0])
+            subjectsData = JSON.parse(jsonMatch[0])
           } else {
-            subjects = JSON.parse(text)
+            subjectsData = JSON.parse(text)
           }
 
           // Validate the structure
-          if (!Array.isArray(subjects)) {
+          if (!Array.isArray(subjectsData)) {
             throw new Error("Response is not an array")
           }
 
           // Validate each subject
-          subjects = subjects.filter((subject: any) => {
+          const isExtractedSubject = (subject: unknown): subject is ExtractedSubject => {
+            if (!subject || typeof subject !== "object") return false
+            const obj = subject as Record<string, unknown>
             return (
-              subject &&
-              typeof subject === "object" &&
-              typeof subject.name === "string" &&
-              subject.name.length > 0 &&
-              typeof subject.percentage === "number" &&
-              subject.percentage >= 0 &&
-              subject.percentage <= 100
+              typeof obj.name === "string" &&
+              obj.name.length > 0 &&
+              typeof obj.percentage === "number" &&
+              (obj.percentage as number) >= 0 &&
+              (obj.percentage as number) <= 100
             )
-          })
+          }
+          const subjects = (subjectsData as unknown[]).filter(isExtractedSubject)
 
           if (subjects.length === 0) {
             throw new Error("No valid subjects found")
@@ -200,7 +214,7 @@ export async function POST(request: NextRequest) {
 
           return NextResponse.json({
             success: true,
-            subjects: subjects.map((s: any, index: number) => ({
+            subjects: subjects.map((s: ExtractedSubject, index: number) => ({
               id: Date.now().toString() + index,
               name: s.name,
               percentage: s.percentage,
@@ -233,12 +247,12 @@ export async function POST(request: NextRequest) {
       },
       { status: 422 },
     )
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error("[certificate] Certificate extraction error:", error)
     return NextResponse.json(
       {
         success: false,
-        error: error.message || "Failed to process certificate",
+        error: error instanceof Error ? error.message : "Failed to process certificate",
       },
       { status: 500 },
     )

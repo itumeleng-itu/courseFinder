@@ -52,7 +52,7 @@ export function CalendarDesktop() {
     },
   }
 
-  const getDateBorderColor = (events: any[]) => {
+  const getDateBorderColor = (events: import("@/lib/calendar-events").CalendarEvent[]) => {
     if (events.length === 0) return "border-black/50 dark:border-white/50"
     
     // Priority: public holiday > exam > academic

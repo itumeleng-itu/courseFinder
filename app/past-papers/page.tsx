@@ -3,6 +3,8 @@ import type { QuestionPaper } from "@/lib/appwrite"
 import { PastPapersClient } from "@/components/past-papers-client"
 import { Query } from "node-appwrite"
 
+type AppwriteStorageFile = { $id: string; name: string }
+
 function parseFilename(filename: string): Partial<QuestionPaper> | null {
   // Remove .pdf extension
   const cleanName = filename.replace(/\.pdf$/i, "")
@@ -72,7 +74,7 @@ async function getPapers(): Promise<QuestionPaper[]> {
 
     // Appwrite free plan allows up to 5000 results per request
     // We'll fetch in batches of 100 to be safe and track progress
-    const allFiles: any[] = []
+    const allFiles: AppwriteStorageFile[] = []
     let offset = 0
     const limit = 100
     let hasMore = true

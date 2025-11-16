@@ -7,14 +7,11 @@ import { DashboardSidebar } from "@/components/app-sidebar"
 import { SidebarInset } from "@/components/ui/sidebar"
 import { Separator } from "@/components/ui/separator"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import { Textarea } from "@/components/ui/textarea"
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
-import { FileText, Download, Search, Calculator, AlertCircle, ExternalLink, CheckCircle, Phone, Mail } from "lucide-react"
+import { FileText, Search, AlertCircle, ExternalLink, CheckCircle, Phone, Mail } from "lucide-react"
 import { Chatbot } from "@/components/chatbot"
 import { InfoDialog } from "@/components/info-dialog"
 
@@ -236,7 +233,7 @@ export default function MatricResultsPage() {
                 </li>
                 <li className="flex items-start gap-2">
                   <span className="h-1.5 w-1.5 rounded-full bg-amber-500 mt-1.5 shrink-0" />
-                  If you're unable to access your results online, contact your school directly
+                  If you&apos;re unable to access your results online, contact your school directly
                 </li>
                 <li className="flex items-start gap-2">
                   <span className="h-1.5 w-1.5 rounded-full bg-amber-500 mt-1.5 shrink-0" />

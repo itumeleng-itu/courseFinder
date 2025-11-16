@@ -13,15 +13,18 @@ interface CourseInfoModalProps {
   onClose: () => void
 }
 
+type RequirementAlternative = { subject: string; level: number }
+type Requirement = number | { alternatives: RequirementAlternative[] }
+
 export default function CourseInfoModal({ course, isOpen, onClose }: CourseInfoModalProps) {
   if (!course) return null
 
-  const getRequirementText = (requirement: any): string => {
+  const getRequirementText = (requirement: Requirement): string => {
     if (typeof requirement === "number") {
       return `Level ${requirement} (${requirement === 7 ? "80-100%" : requirement === 6 ? "70-79%" : requirement === 5 ? "60-69%" : requirement === 4 ? "50-59%" : requirement === 3 ? "40-49%" : requirement === 2 ? "30-39%" : "0-29%"})`
     }
     if (requirement.alternatives) {
-      return requirement.alternatives.map((alt: any) => `${alt.subject} Level ${alt.level}`).join(" OR ")
+      return requirement.alternatives.map((alt: RequirementAlternative) => `${alt.subject} Level ${alt.level}`).join(" OR ")
     }
     return "Not specified"
   }
@@ -180,7 +183,7 @@ export default function CourseInfoModal({ course, isOpen, onClose }: CourseInfoM
               <h3 className="text-lg font-semibold mb-3">Study Tips</h3>
               <div className="bg-green-50 p-4 rounded-lg space-y-2">
                 <p className="text-sm text-green-800">
-                  <strong>💡 Tip:</strong> Meeting the minimum requirements doesn't guarantee admission. Aim for higher
+                  <strong>💡 Tip:</strong> Meeting the minimum requirements doesn&apos;t guarantee admission. Aim for higher
                   marks to improve your chances!
                 </p>
                 <p className="text-sm text-green-800">

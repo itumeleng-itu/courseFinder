@@ -56,9 +56,15 @@ function formatResponse(text: string): string {
     .trim()
 }
 
+type ChatHistoryItem = { role: "assistant" | "user"; content: unknown }
+
 export async function POST(request: Request) {
   try {
-    const { message, conversationHistory = [], model } = await request.json()
+    const { message, conversationHistory = [], model } = (await request.json()) as {
+      message: unknown
+      conversationHistory?: unknown[]
+      model?: string
+    }
 
     if (!message) {
       return NextResponse.json({ error: "Message is required" }, { status: 400 })
@@ -79,10 +85,11 @@ export async function POST(request: Request) {
       content: SYSTEM_PROMPT
     })
 
-    conversationHistory.forEach((msg: any) => {
+    (conversationHistory as unknown[]).forEach((msg) => {
+      const item = msg as Partial<ChatHistoryItem>
       messages.push({
-        role: msg.role === "assistant" ? "assistant" : "user",
-        content: String(msg.content || "")
+        role: item.role === "assistant" ? "assistant" : "user",
+        content: String(item.content ?? "")
       })
     })
 
@@ -94,11 +101,10 @@ export async function POST(request: Request) {
     const start = Date.now()
     
     // Determine which models to try
-    const requestedModel = model || MODELS[0]
     const modelsToTry = model ? [model, ...MODELS] : MODELS
     
-    let lastError: any = null
-    let attemptedModels: string[] = []
+    let lastError: { model?: string; error?: string; status?: number } | null = null
+    const attemptedModels: string[] = []
 
     // Try each model until one succeeds
     for (const currentModel of modelsToTry) {
