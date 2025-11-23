@@ -273,4 +273,3 @@ function applyNSCRules(subjects: Subject[]): Subject[] {
   }
   return selected
 }
-

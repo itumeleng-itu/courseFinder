@@ -21,9 +21,9 @@ The CourseFinder application now uses **Google Gemini AI with search grounding**
 - ✅ Uses verified national rates (2019-2024) from official sources
 
 **Example Search Query:**
-```
+\`\`\`
 Search for and provide accurate South African matric pass rates for Gauteng province from 2020 to 2024.
-```
+\`\`\`
 
 ### 2. Matric Stats API (`/api/matric-stats`)
 
@@ -86,12 +86,12 @@ The system uses these verified national pass rates:
 - `years` (number): Number of years to fetch (default: 5, max: 10)
 
 **Example Request:**
-```
+\`\`\`
 GET /api/provincial-pass-rates?province=Gauteng&years=5
-```
+\`\`\`
 
 **Example Response:**
-```json
+\`\`\`json
 {
   "success": true,
   "province": "Gauteng",
@@ -118,7 +118,7 @@ GET /api/provincial-pass-rates?province=Gauteng&years=5
     "note": "National rates verified from official sources"
   }
 }
-```
+\`\`\`
 
 ### 2. Matric Stats
 
@@ -128,12 +128,12 @@ GET /api/provincial-pass-rates?province=Gauteng&years=5
 - `model` (optional): Gemini model to use (default: "gemini-2.5-flash")
 
 **Example Request:**
-```
+\`\`\`
 GET /api/matric-stats
-```
+\`\`\`
 
 **Example Response:**
-```json
+\`\`\`json
 {
   "success": true,
   "stats": {
@@ -170,7 +170,7 @@ GET /api/matric-stats
     "timestamp": "2025-11-23T14:59:00.000Z"
   }
 }
-```
+\`\`\`
 
 ## Environment Setup
 
@@ -178,9 +178,9 @@ GET /api/matric-stats
 
 Add this to your `.env.local` file:
 
-```env
+\`\`\`env
 GOOGLE_API_KEY=your_google_api_key_here
-```
+\`\`\`
 
 ### Getting a Google API Key
 
@@ -217,18 +217,18 @@ GOOGLE_API_KEY=your_google_api_key_here
 ### Test the APIs
 
 1. **Provincial Pass Rates:**
-```bash
+\`\`\`bash
 # Test Gauteng
 curl "http://localhost:3000/api/provincial-pass-rates?province=Gauteng&years=5"
 
 # Test Western Cape
 curl "http://localhost:3000/api/provincial-pass-rates?province=Western%20Cape&years=3"
-```
+\`\`\`
 
 2. **Matric Stats:**
-```bash
+\`\`\`bash
 curl "http://localhost:3000/api/matric-stats"
-```
+\`\`\`
 
 ### Expected Behavior
 

@@ -43,7 +43,7 @@ Fetches matric statistics. Uses cached data if available for the current year.
 
 **Example Requests:**
 
-```bash
+\`\`\`bash
 # Normal request (uses cache if available)
 curl "http://localhost:3000/api/matric-stats"
 
@@ -52,11 +52,11 @@ curl "http://localhost:3000/api/matric-stats?refresh=true"
 
 # Use specific model
 curl "http://localhost:3000/api/matric-stats?model=gemini-2.5-pro"
-```
+\`\`\`
 
 **Response (Cached):**
 
-```json
+\`\`\`json
 {
   "success": true,
   "stats": {
@@ -80,11 +80,11 @@ curl "http://localhost:3000/api/matric-stats?model=gemini-2.5-pro"
     "year": 2025
   }
 }
-```
+\`\`\`
 
 **Response (Fresh Fetch):**
 
-```json
+\`\`\`json
 {
   "success": true,
   "stats": {
@@ -100,7 +100,7 @@ curl "http://localhost:3000/api/matric-stats?model=gemini-2.5-pro"
     "year": 2025
   }
 }
-```
+\`\`\`
 
 ### POST /api/matric-stats
 
@@ -112,24 +112,24 @@ Manually clears the cache to force a fresh fetch on the next GET request.
 
 **Example Request:**
 
-```bash
+\`\`\`bash
 # Without authentication
 curl -X POST "http://localhost:3000/api/matric-stats"
 
 # With authentication
 curl -X POST "http://localhost:3000/api/matric-stats" \
   -H "Authorization: Bearer your_admin_secret"
-```
+\`\`\`
 
 **Response:**
 
-```json
+\`\`\`json
 {
   "success": true,
   "message": "Cache cleared. Next GET request will fetch fresh data for 2025.",
   "timestamp": "2025-11-23T15:06:00.000Z"
 }
-```
+\`\`\`
 
 ## Cache Behavior
 
@@ -178,7 +178,7 @@ Cache is used in these scenarios:
 
 Check the `_metadata` field in the response:
 
-```json
+\`\`\`json
 {
   "_metadata": {
     "modelType": "cached",  // "cached" = using cache, "gemini-2.5-flash" = fresh fetch
@@ -187,7 +187,7 @@ Check the `_metadata` field in the response:
     "note": "Cached data for 2025. Stats are fetched once per year."
   }
 }
-```
+\`\`\`
 
 ### Cache Metrics
 
@@ -222,7 +222,7 @@ For production, consider using a persistent cache:
 
 ### Example: Database Implementation
 
-```typescript
+\`\`\`typescript
 // Pseudo-code for database caching
 async function getCachedStats(year: number) {
   const cached = await db.query(
@@ -238,7 +238,7 @@ async function setCachedStats(year: number, data: any) {
     [year, JSON.stringify(data), new Date()]
   )
 }
-```
+\`\`\`
 
 ## Scheduled Updates
 
@@ -246,16 +246,16 @@ async function setCachedStats(year: number, data: any) {
 
 Set up a cron job to fetch fresh data when new results are released (typically early January):
 
-```bash
+\`\`\`bash
 # Cron job to run on January 15th at 10:00 AM
 0 10 15 1 * curl -X POST "https://your-domain.com/api/matric-stats" -H "Authorization: Bearer your_admin_secret"
-```
+\`\`\`
 
 ### Vercel Cron (for Vercel deployments)
 
 Add to `vercel.json`:
 
-```json
+\`\`\`json
 {
   "crons": [
     {
@@ -264,37 +264,37 @@ Add to `vercel.json`:
     }
   ]
 }
-```
+\`\`\`
 
 ## Testing
 
 ### Test Cache Behavior
 
 1. **First Fetch:**
-```bash
+\`\`\`bash
 curl "http://localhost:3000/api/matric-stats"
 # Should take 5-10 seconds, metadata shows fresh fetch
-```
+\`\`\`
 
 2. **Cached Response:**
-```bash
+\`\`\`bash
 curl "http://localhost:3000/api/matric-stats"
 # Should be instant, metadata shows "cached"
-```
+\`\`\`
 
 3. **Force Refresh:**
-```bash
+\`\`\`bash
 curl "http://localhost:3000/api/matric-stats?refresh=true"
 # Should take 5-10 seconds, fetches fresh data
-```
+\`\`\`
 
 4. **Manual Cache Clear:**
-```bash
+\`\`\`bash
 curl -X POST "http://localhost:3000/api/matric-stats"
 # Clears cache
 curl "http://localhost:3000/api/matric-stats"
 # Next GET will fetch fresh data
-```
+\`\`\`
 
 ## Troubleshooting
 

@@ -226,4 +226,3 @@ export function CertificateUpload({ onSubjectsExtracted }: CertificateUploadProp
     </Card>
   )
 }
-

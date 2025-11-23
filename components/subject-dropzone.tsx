@@ -257,4 +257,3 @@ export function SubjectDropzone({ onSubjectsExtracted }: SubjectDropzoneProps) {
     </Card>
   )
 }
-
