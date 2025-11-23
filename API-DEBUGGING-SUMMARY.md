@@ -23,7 +23,7 @@
 4. Restarted the dev server
 
 **Code Changes:**
-```typescript
+\`\`\`typescript
 // Before (causing circular dependency):
 async function fetchMatricPassRatesNews(): Promise<NewsArticle[]> {
   try {
@@ -45,7 +45,7 @@ async function fetchMatricPassRatesNews(): Promise<NewsArticle[]> {
   // TODO: Re-enable with proper caching strategy or move to client-side
   return []
 }
-```
+\`\`\`
 
 ## API Endpoints Tested
 
@@ -98,13 +98,13 @@ async function fetchMatricPassRatesNews(): Promise<NewsArticle[]> {
    - Status: Working
    - Method: POST
    - Body:
-     ```json
+     \`\`\`json
      {
        "message": "Your question here",
        "conversationHistory": [],
        "model": "optional-model-name"
      }
-     ```
+     \`\`\`
    - Features:
      - Uses OpenRouter with multiple free models
      - Cascading fallback system (tries 4 different models)
@@ -125,7 +125,7 @@ async function fetchMatricPassRatesNews(): Promise<NewsArticle[]> {
 
 The following environment variables must be set for full functionality:
 
-```env
+\`\`\`env
 # OpenRouter API (for Chat, Certificate, Provincial Pass Rates, Matric News)
 OPENROUTER_API_KEY=your_openrouter_api_key
 
@@ -137,7 +137,7 @@ CRON_SECRET=your_cron_secret
 
 # Optional: Base URL for internal API calls
 NEXT_PUBLIC_BASE_URL=http://localhost:3000
-```
+\`\`\`
 
 ## Testing Results
 

@@ -282,6 +282,3 @@ export function getOfficialSubjects(): typeof OFFICIAL_SUBJECTS {
 export function getOfficialStatistics(): typeof OFFICIAL_STATISTICS {
   return OFFICIAL_STATISTICS
 }
-
-
-
