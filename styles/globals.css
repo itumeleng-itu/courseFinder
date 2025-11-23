@@ -48,6 +48,7 @@ body {
     --sidebar-border: 226 232 240;
     --sidebar-ring: 59 130 246;
   }
+
   .dark {
     --background: 0 0% 3.9%;
     --foreground: 0 0% 98%;
@@ -88,6 +89,7 @@ body {
   * {
     @apply border-border;
   }
+
   body {
     @apply bg-background text-foreground;
   }
@@ -98,11 +100,11 @@ body {
   .sidebar-transition {
     transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   }
-  
+
   .sidebar-hover-effect {
     transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
   }
-  
+
   .sidebar-hover-effect:hover {
     transform: translateX(2px);
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
@@ -124,6 +126,6 @@ body {
   /* Smooth content transitions */
   .content-transition {
     transition: margin-left 0.3s cubic-bezier(0.4, 0, 0.2, 1),
-                transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   }
 }

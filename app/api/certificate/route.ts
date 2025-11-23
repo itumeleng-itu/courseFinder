@@ -13,18 +13,18 @@ const VISION_MODELS = [
   "google/gemini-flash-1.5:free",
   "google/gemini-pro-vision:free",
   "google/gemini-1.5-flash:free",
-  
+
   // Qwen models (strong vision performance)
   "qwen/qwen-2-vl-7b-instruct:free",
   "qwen/qwen-vl-plus:free",
-  
+
   // Llama models with vision capabilities
   "meta-llama/llama-3.2-11b-vision-instruct:free",
   "meta-llama/llama-3.1-8b-instruct:free",
-  
+
   // Mistral models (some support vision)
   "mistralai/mistral-7b-instruct:free",
-  
+
   // Additional free vision models
   "deepseek/deepseek-v2:free",
   "perplexity/llama-3.1-sonar-large-128k-online:free",
@@ -126,7 +126,7 @@ export async function POST(request: NextRequest) {
     const base64Image = buffer.toString("base64")
     const mimeType = file.type || "image/jpeg"
 
-    console.log(`[certificate] Starting certificate extraction with ${VISION_MODELS.length} fallback models...`)
+
 
     let lastError: string | null = null
     const attemptedModels: string[] = []
@@ -135,26 +135,26 @@ export async function POST(request: NextRequest) {
     for (const model of VISION_MODELS) {
       try {
         attemptedModels.push(model)
-        console.log(`[certificate] Attempting model ${attemptedModels.length}/${VISION_MODELS.length}: ${model}`)
+
 
         const response = await makeOpenRouterRequest(model, base64Image, mimeType)
 
         if (!response.ok) {
           console.warn(`[certificate] Model ${model} failed with status: ${response.status}`)
           lastError = `Model ${model} failed with status ${response.status}`
-          
+
           // If it's a rate limit (429), continue to next model
           if (response.status === 429) {
-            console.log(`[certificate] Rate limited on ${model}, trying next model...`)
+
             continue
           }
-          
+
           // If it's a 400/401, the model might not support vision or API key issue
           if (response.status === 400 || response.status === 401) {
             console.warn(`[certificate] Model ${model} may not support vision or API key issue, trying next...`)
             continue
           }
-          
+
           continue
         }
 
@@ -174,7 +174,7 @@ export async function POST(request: NextRequest) {
         }
 
         const text = data.choices[0].message.content.trim()
-        console.log(`[certificate] Raw AI response from ${model}:`, text.slice(0, 200))
+
 
         // Parse the AI response
         let subjectsData: unknown
@@ -210,7 +210,7 @@ export async function POST(request: NextRequest) {
             throw new Error("No valid subjects found")
           }
 
-          console.log(`[certificate] ✅ Successfully extracted ${subjects.length} subjects using ${model} (attempt ${attemptedModels.length}/${VISION_MODELS.length})`)
+
 
           return NextResponse.json({
             success: true,

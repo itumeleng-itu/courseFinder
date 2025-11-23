@@ -82,19 +82,19 @@ async function getPapers(): Promise<QuestionPaper[]> {
 
     while (hasMore) {
       batchCount++
-      console.log(`[v0] Fetching batch ${batchCount} (offset: ${offset}, limit: ${limit})`)
+
 
       try {
         const response = await serverStorage.listFiles(bucketId, [Query.limit(limit), Query.offset(offset)])
 
-        console.log(`[v0] Batch ${batchCount} fetched: ${response.files.length} files`)
+
 
         allFiles.push(...response.files)
 
         // Check if there are more files to fetch
         if (response.files.length < limit) {
           hasMore = false
-          console.log(`[v0] Reached end of files. Total fetched: ${allFiles.length}`)
+
         } else {
           offset += limit
         }
@@ -112,10 +112,10 @@ async function getPapers(): Promise<QuestionPaper[]> {
       }
     }
 
-    console.log(`[v0] Total files fetched from Appwrite: ${allFiles.length}`)
+
 
     const pdfFiles = allFiles.filter((file) => file.name.toLowerCase().endsWith(".pdf"))
-    console.log(`[v0] PDF files found: ${pdfFiles.length} out of ${allFiles.length} total files`)
+
 
     const papers: QuestionPaper[] = pdfFiles
       .map((file) => {
@@ -140,11 +140,7 @@ async function getPapers(): Promise<QuestionPaper[]> {
         return a.paper_type.localeCompare(b.paper_type)
       })
 
-    console.log(`[v0] Successfully parsed ${papers.length} question papers`)
-    console.log(
-      `[v0] Year range: ${Math.min(...papers.map((p) => p.year))} - ${Math.max(...papers.map((p) => p.year))}`,
-    )
-    console.log(`[v0] Unique subjects: ${new Set(papers.map((p) => p.subject)).size}`)
+
 
     return papers
   } catch (error) {

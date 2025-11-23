@@ -81,7 +81,7 @@ export default function RootLayout({
                   if (window.caches) {
                     caches.keys().then(names => names.forEach(name => caches.delete(name)))
                   }
-                  console.log('[PWA] Dev: unregistered Service Workers and cleared caches')
+
                 }
               `,
             }}

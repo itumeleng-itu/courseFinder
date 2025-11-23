@@ -19,7 +19,7 @@ export function meetsSubjectRequirements(
   requirements: Record<string, number | AlternativeRequirement>,
 ): boolean {
   // Debug the subject levels and requirements
-  console.log("Checking subject requirements:", { subjectLevels, requirements })
+
 
   for (const [subject, requirement] of Object.entries(requirements)) {
     // Case 1: Simple requirement (e.g., Mathematics: 5)
@@ -39,16 +39,14 @@ export function meetsSubjectRequirements(
         ) {
           if (level >= requirement) {
             foundMatch = true
-            console.log(
-              `Subject match found: ${studentSubject} (level ${level}) matches ${subject} (required level ${requirement})`,
-            )
+
             break
           }
         }
       }
 
       if (!foundMatch) {
-        console.log(`Failed to find match for ${subject} with level ${requirement}`)
+
         return false
       }
     }
@@ -72,9 +70,7 @@ export function meetsSubjectRequirements(
           ) {
             if (level >= alt.level) {
               meetsAnyAlternative = true
-              console.log(
-                `Alternative match found: ${studentSubject} (level ${level}) matches ${alt.subject} (required level ${alt.level})`,
-              )
+
               break
             }
           }
@@ -84,7 +80,7 @@ export function meetsSubjectRequirements(
       }
 
       if (!meetsAnyAlternative) {
-        console.log(`Failed to meet any alternative for ${subject}`)
+
         return false
       }
     }

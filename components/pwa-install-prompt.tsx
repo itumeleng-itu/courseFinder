@@ -35,7 +35,7 @@ export function PWAInstallPrompt() {
 
     // Check if app is installed
     window.addEventListener("appinstalled", () => {
-      console.log("[PWA] App installed successfully")
+
       setIsVisible(false)
       setDeferredPrompt(null)
     })
@@ -55,7 +55,7 @@ export function PWAInstallPrompt() {
     deferredPrompt.prompt()
     const { outcome } = await deferredPrompt.userChoice
 
-    console.log(`[PWA] User response to install prompt: ${outcome}`)
+
 
     if (outcome === "accepted") {
       setIsVisible(false)

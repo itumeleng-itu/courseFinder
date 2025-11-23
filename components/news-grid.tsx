@@ -28,7 +28,7 @@ export function NewsGrid() {
         const response = await fetch("/api/news")
         const data = await response.json()
         if (data.success || data.articles) {
-          setNews(data.articles.slice(0, 4))
+          setNews(data.articles.slice(0, 5))
         }
       } catch (err) {
         console.error("Error fetching news:", err)

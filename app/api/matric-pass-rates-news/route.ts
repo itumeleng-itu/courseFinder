@@ -65,7 +65,6 @@ Requirements:
 Return ONLY valid JSON, no other text.`
 
   try {
-    const start = Date.now()
     const resp = await fetch(OPENROUTER_API_URL, {
       method: "POST",
       headers: {
@@ -135,7 +134,7 @@ Return ONLY valid JSON, no other text.`
       }))
       .slice(0, 5) // Limit to 5 articles
 
-    console.log(`Fetched ${validatedArticles.length} Matric Pass Rates news articles in ${Date.now() - start}ms`)
+
     return validatedArticles
   } catch (error) {
     console.error("Error fetching Matric Pass Rates news:", error)
@@ -159,8 +158,8 @@ export async function GET() {
     if (month === 0 && day === 31) {
       // Check if we've already fetched for this year
       if (newsCache.fetchYear !== currentYear) {
-        console.log(`Cron job triggered: Fetching Matric Pass Rates news for ${currentYear} on January 31st`)
-        
+
+
         // Fetch new articles
         const articles = await fetchMatricPassRatesNews()
 
@@ -169,7 +168,7 @@ export async function GET() {
         newsCache.fetchYear = currentYear
         newsCache.lastFetched = new Date().toISOString()
 
-        console.log(`Successfully fetched and cached ${articles.length} Matric Pass Rates news articles for ${currentYear}`)
+
       }
     }
 
@@ -221,7 +220,7 @@ export async function POST(request?: Request) {
     // Verify this is a cron job request (optional: add authentication)
     const authHeader = request?.headers.get("authorization")
     const cronSecret = process.env.CRON_SECRET
-    
+
     // If CRON_SECRET is set, verify the request
     if (cronSecret && authHeader !== `Bearer ${cronSecret}`) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
@@ -251,7 +250,7 @@ export async function POST(request?: Request) {
     }
 
     // Fetch new articles
-    console.log(`Fetching Matric Pass Rates news for ${currentYear} on January 31st`)
+
     const articles = await fetchMatricPassRatesNews()
 
     // Cache the results

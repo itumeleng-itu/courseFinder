@@ -198,61 +198,16 @@ async function fetchRealNews(): Promise<NewsArticle[]> {
   }
 }
 
+// Disabled to prevent circular API calls during server startup
 async function fetchMatricPassRatesNews(): Promise<NewsArticle[]> {
-  try {
-    // Skip fetching during static generation/build to avoid dynamic server usage errors
-    // This prevents build-time errors when Next.js tries to statically generate pages
-    if (typeof window === 'undefined' && process.env.NEXT_PHASE === 'phase-production-build') {
-      return []
-    }
-
-    // Construct the base URL for internal API calls
-    const baseUrl = process.env.VERCEL_URL 
-      ? `https://${process.env.VERCEL_URL}`
-      : process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000'
-    
-    // Fetch Matric Pass Rates news from our dedicated endpoint
-    const response = await fetch(`${baseUrl}/api/matric-pass-rates-news`, {
-      cache: 'no-store', // Always get fresh data
-      headers: {
-        'Content-Type': 'application/json'
-      }
-    })
-    
-    if (!response.ok) {
-      console.warn("Failed to fetch Matric Pass Rates news:", response.status, response.statusText)
-      return []
-    }
-
-    const data = await response.json()
-    if (data.success && Array.isArray(data.articles) && data.articles.length > 0) {
-      // Transform to match NewsArticle format and add images
-      return data.articles.map((article: NewsArticle) => {
-        const { image_url, alt_text } = buildImageForArticle(article)
-        return {
-          title: article.title,
-          description: article.description,
-          link: article.link,
-          pubDate: article.pubDate || new Date().toISOString(),
-          source_id: article.source_id || "Matric Pass Rates",
-          category: article.category || ["education", "matric"],
-          image_url: article.image_url && article.image_url.trim().length > 0 ? article.image_url : image_url,
-          alt_text: article.alt_text || alt_text || article.title
-        }
-      })
-    }
-    return []
-  } catch (error) {
-    console.error("Error fetching Matric Pass Rates news:", error)
-    return []
-  }
+  // This function was causing the dev server to hang due to circular dependency
+  // TODO: Re-enable with proper caching strategy or move to client-side
+  return []
 }
 
 export async function GET() {
   try {
-    console.log("Fetching news from API (cached by Next.js/Vercel CDN for 24 hours)")
-
-    // Fetch Matric Pass Rates news (prioritized)
+    // Fetch Matric Pass Rates news (prioritized) - currently disabled
     const matricNews = await fetchMatricPassRatesNews()
 
     // Fetch fresh news from API
@@ -315,8 +270,6 @@ export async function GET() {
       normalized = Array.from(byKey.values()).slice(0, MAX_ARTICLES)
     }
 
-    console.log(`Returning ${normalized.length} articles (cached by Vercel for 24h)`) 
-
     return NextResponse.json(
       {
         success: true,
@@ -357,6 +310,7 @@ export async function GET() {
     )
   }
 }
+
 // Local server-side fallback articles to guarantee content even if the API fails
 const FALLBACK_ARTICLES: NewsArticle[] = [
   {
