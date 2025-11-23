@@ -9,6 +9,7 @@ import { Toaster } from "@/components/ui/toaster"
 import { MobileNav } from "@/components/mobile-nav"
 import { PWAInstallPrompt } from "@/components/pwa-install-prompt"
 import { Analytics } from "@vercel/analytics/next"
+import { GoogleAnalytics } from "@/components/GoogleAnalytics"
 
 export const metadata: Metadata = {
   title: "CourseFinder - Find Your Perfect University Course",
@@ -52,6 +53,7 @@ export default function RootLayout({
         </ThemeProvider>
 
         <Analytics />
+        <GoogleAnalytics />
 
         {process.env.NODE_ENV === "production" && (
           <script

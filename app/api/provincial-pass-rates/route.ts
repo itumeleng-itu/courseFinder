@@ -1,10 +1,7 @@
 import { NextResponse } from "next/server"
-import { GoogleGenerativeAI } from "@google/generative-ai"
 
 export const dynamic = "force-dynamic"
 
-const GOOGLE_API_KEY = process.env.GOOGLE_API_KEY
-const genAI = GOOGLE_API_KEY ? new GoogleGenerativeAI(GOOGLE_API_KEY) : null
 
 interface SeriesPoint {
   year: number
