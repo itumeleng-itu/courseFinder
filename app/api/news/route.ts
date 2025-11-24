@@ -128,12 +128,13 @@ async function fetchRealNews(): Promise<NewsArticle[]> {
     const url = `https://newsdata.io/api/1/news?apikey=${NEWS_API_KEY}&country=za&language=en&category=top,politics,education,technology,science`
 
     // ⭐️ FIXED: Removed next: { revalidate: 0 }
-    // Let the route-level revalidate handle caching
+    // Let the route-level revalidate handle caching, but ensure the fetch itself doesn't return stale data
     const response = await fetch(url, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
       },
+      cache: "no-store",
       // Avoid long hangs; fail fast so we can fallback
       signal: AbortSignal.timeout(8000),
     })
@@ -170,7 +171,10 @@ async function fetchRealNews(): Promise<NewsArticle[]> {
       const eduUrl = `https://newsdata.io/api/1/news?apikey=${NEWS_API_KEY}&country=za&language=en&q=matric OR education OR student OR university&category=education`
 
       // ⭐️ FIXED: Removed next: { revalidate: 0 }
-      const eduResponse = await fetch(eduUrl, { signal: AbortSignal.timeout(8000) })
+      const eduResponse = await fetch(eduUrl, {
+        signal: AbortSignal.timeout(8000),
+        cache: "no-store"
+      })
 
       if (eduResponse.ok) {
         const eduData = await eduResponse.json()
@@ -213,7 +217,7 @@ export async function GET() {
     // Fetch fresh news from API
     const fetchedArticles = await fetchRealNews()
 
-    const MIN_ARTICLES = 4
+    const MIN_ARTICLES = 1
     const MAX_ARTICLES = 8
 
     // Process articles

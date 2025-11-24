@@ -28,7 +28,7 @@ async function makeOpenRouterRequest(
     body: JSON.stringify({
       model,
       messages,
-      temperature: 0.7,
+      temperature: 0.5,
       max_tokens: 4096
     })
   })
@@ -76,13 +76,13 @@ export async function POST(request: Request) {
     const messages: Array<{ role: "system" | "user" | "assistant"; content: string }> = []
     messages.push({ role: "system", content: SYSTEM_PROMPT })
 
-    ;(conversationHistory as unknown[]).forEach((msg) => {
-      const item = msg as Partial<ChatHistoryItem>
-      messages.push({
-        role: item.role === "assistant" ? "assistant" : "user",
-        content: String(item.content ?? "")
+      ; (conversationHistory as unknown[]).forEach((msg) => {
+        const item = msg as Partial<ChatHistoryItem>
+        messages.push({
+          role: item.role === "assistant" ? "assistant" : "user",
+          content: String(item.content ?? "")
+        })
       })
-    })
 
     messages.push({ role: "user", content: String(message) })
 

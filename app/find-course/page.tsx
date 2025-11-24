@@ -532,6 +532,11 @@ export default function FindCoursePage() {
     setHasCalculated(true)
   }
 
+  const startEditing = (subject: Subject) => {
+    setEditingSubjectId(subject.id)
+    setEditingPercentage(subject.percentage.toString())
+  }
+
   const saveEdit = (id: string) => {
     const percentage = Number.parseFloat(editingPercentage)
     if (isNaN(percentage) || percentage < 0 || percentage > 100) {
@@ -872,7 +877,7 @@ export default function FindCoursePage() {
                 <Separator />
 
                 <div className="space-y-3">
-                  <div>
+                  {/* <div>
                     <h3 className="text-sm font-medium mb-2">Upload Matric Results</h3>
                     <p className="text-xs text-muted-foreground mb-3">
                       Upload an image of your matric results to automatically extract subjects and marks
@@ -886,7 +891,7 @@ export default function FindCoursePage() {
                       </AlertDescription>
                     </Alert>
                     <SubjectDropzone onSubjectsExtracted={handleSubjectsExtracted} />
-                  </div>
+                  </div> */}
 
                   <Separator />
 
@@ -941,9 +946,7 @@ export default function FindCoursePage() {
                   <Card className="glass-card">
                     <CardHeader className="pb-3">
                       <CardTitle className="text-base">Your Subjects</CardTitle>
-                      <CardDescription>
-                        ⚠️ Please verify scanned results. OCR accuracy may vary by document quality and formatting.
-                      </CardDescription>
+
                     </CardHeader>
                     <CardContent>
                       <div className="space-y-2 max-h-[300px] overflow-y-auto">
@@ -1033,38 +1036,7 @@ export default function FindCoursePage() {
                     <Button onClick={reset} variant="outline" className="w-full glass-button">
                       Reset All
                     </Button>
-                    <Card className="glass-card">
-                      <CardHeader className="pb-3">
-                        <CardTitle className="text-base">NSC Progress</CardTitle>
-                      </CardHeader>
-                      <CardContent>
-                        <div className="space-y-2">
-                          {progress.map((item) => (
-                            <div key={item.key} className="flex items-center gap-2 text-sm">
-                              {item.status === "done" ? (
-                                <CheckCircle2 className="h-4 w-4 text-green-600" />
-                              ) : item.status === "warning" ? (
-                                <AlertCircle className="h-4 w-4 text-amber-600" />
-                              ) : (
-                                <XCircle className="h-4 w-4 text-red-600" />
-                              )}
-                              <span>{item.label}</span>
-                              {item.detail && <span className="text-muted-foreground ml-1">({item.detail})</span>}
-                            </div>
-                          ))}
-                          {errors.length > 0 && (
-                            <div className="mt-2 text-xs text-amber-700 bg-amber-50 border border-amber-200 p-2 rounded">
-                              <div className="font-semibold mb-1">Notes</div>
-                              <ul className="ml-5 list-disc space-y-1">
-                                {errors.map((msg, i) => (
-                                  <li key={i}>{msg}</li>
-                                ))}
-                              </ul>
-                            </div>
-                          )}
-                        </div>
-                      </CardContent>
-                    </Card>
+
                   </div>
                 )}
 

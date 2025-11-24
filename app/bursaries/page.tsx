@@ -65,6 +65,35 @@ export default function BursariesPage() {
     }
   }, [searchQuery, bursaries])
 
+  // Helper function to render description with clickable links
+  const renderDescriptionWithLinks = (text: string) => {
+    // Regular expression to match URLs
+    const urlRegex = /(https?:\/\/[^\s,)]+)/g
+    const parts = text.split(urlRegex)
+
+    return (
+      <>
+        {parts.map((part, index) => {
+          if (part.match(urlRegex)) {
+            return (
+              <a
+                key={index}
+                href={part}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-blue-600 hover:text-blue-800 underline"
+              >
+                {part}
+              </a>
+            )
+          }
+          return <span key={index}>{part}</span>
+        })}
+      </>
+    )
+  }
+
+
   return (
     <>
       <DashboardSidebar />
@@ -159,7 +188,7 @@ export default function BursariesPage() {
                           <DollarSign className="h-4 w-4 text-green-600" />
                           <span className="font-semibold text-green-600">{bursary.amount}</span>
                         </div>
-                        <p className="text-sm text-muted-foreground">{bursary.description}</p>
+                        <p className="text-sm text-muted-foreground">{renderDescriptionWithLinks(bursary.description)}</p>
                       </div>
 
                       <div>
