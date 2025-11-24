@@ -1052,7 +1052,58 @@ export class Wits extends BaseUniversity {
   }
 
   /**
-   * Get sports facilities information
+   * Wits-specific APS calculation
+   * Based on Wits 2026 Undergraduate Prospectus
+   * 
+   * Key differences from standard APS:
+   * - English and Mathematics receive +2 bonus points each
+   * - Life Orientation uses a 4-point scale (not the standard 7-point scale)
+   * - Top 6 subjects excluding Life Orientation
+   */
+  calculateApsScore(subjects: Record<string, number>): number {
+    const subjectScores: number[] = []
+
+    for (const [subjectName, percentage] of Object.entries(subjects)) {
+      const normalizedName = subjectName.toLowerCase()
+
+      // Life Orientation uses special 4-point scale
+      if (normalizedName.includes('life orientation')) {
+        if (percentage >= 80) subjectScores.push(4)
+        else if (percentage >= 70) subjectScores.push(3)
+        else if (percentage >= 60) subjectScores.push(2)
+        else if (percentage >= 50) subjectScores.push(1)
+        else subjectScores.push(0)
+        continue
+      }
+
+      // Standard 8-point scale for other subjects
+      let points = 0
+      if (percentage >= 90) points = 8
+      else if (percentage >= 80) points = 7
+      else if (percentage >= 70) points = 6
+      else if (percentage >= 60) points = 5
+      else if (percentage >= 50) points = 4
+      else if (percentage >= 40) points = 3
+      else if (percentage >= 30) points = 2
+      else if (percentage >= 0) points = 1
+
+      // Add +2 bonus for English and Mathematics
+      if (normalizedName.includes('english') || normalizedName.includes('mathematics')) {
+        points += 2
+      }
+
+      subjectScores.push(points)
+    }
+
+    // Sort descending and take top 6 subjects
+    subjectScores.sort((a, b) => b - a)
+    const top6 = subjectScores.slice(0, 6)
+
+    return top6.reduce((sum, score) => sum + score, 0)
+  }
+
+  /**
+   * Get scholarship information
    */
   getSportsFacilities() {
     return {

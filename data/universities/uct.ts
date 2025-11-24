@@ -719,10 +719,11 @@ export class UCT extends BaseUniversity {
   ]
 
   /**
-   * Custom APS calculation for UCT
+   * UCT-specific APS calculation
    * UCT uses different FPS calculations for different faculties
+   * Base APS: Sum of best 6 subjects excluding Life Orientation
    */
-  calculateAPS(subjects: Record<string, number>): number {
+  calculateApsScore(subjects: Record<string, number>): number {
     // Standard APS calculation (sum of best 6 subjects excluding LO)
     const validSubjects = Object.entries(subjects)
       .filter(([subject]) => subject !== "Life Orientation")
@@ -737,7 +738,7 @@ export class UCT extends BaseUniversity {
    * Calculate Faculty Points Score for different faculties
    */
   calculateFPS(subjects: Record<string, number>, faculty: string): number {
-    const aps = this.calculateAPS(subjects)
+    const aps = this.calculateApsScore(subjects)
 
     switch (faculty) {
       case "Science":

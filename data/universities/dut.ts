@@ -23,7 +23,7 @@ export class DUT extends BaseUniversity {
    * Calculate APS score based on DUT's requirements
    * DUT uses NSC points system where each subject level contributes to the total
    */
-  calculateAPSScore(subjects: Record<string, number>): number {
+  calculateApsScore(subjects: Record<string, number>): number {
     // Filter out Life Orientation as per standard practice
     const filteredSubjects = Object.entries(subjects).filter(
       ([subject]) => subject.toLowerCase() !== "life orientation",

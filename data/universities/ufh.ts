@@ -786,4 +786,36 @@ export class UFH extends BaseUniversity {
         "Agricultural extension officer, rural development specialist, agricultural trainer, community development worker.",
     },
   ]
+
+  /**
+   * UFH-specific APS calculation
+   * Uses standard South African APS system
+   * - Best 6 subjects excluding Life Orientation
+   * - Standard 7-point NSC scale
+   */
+  calculateApsScore(subjects: Record<string, number>): number {
+    const subjectScores: number[] = []
+    
+    for (const [subjectName, percentage] of Object.entries(subjects)) {
+      if (subjectName.toLowerCase().includes('life orientation')) {
+        continue
+      }
+      
+      let points = 0
+      if (percentage >= 80) points = 7
+      else if (percentage >= 70) points = 6
+      else if (percentage >= 60) points = 5
+      else if (percentage >= 50) points = 4
+      else if (percentage >= 40) points = 3
+      else if (percentage >= 30) points = 2
+      else if (percentage >= 0) points = 1
+      
+      subjectScores.push(points)
+    }
+    
+    subjectScores.sort((a, b) => b - a)
+    const top6 = subjectScores.slice(0, 6)
+    
+    return top6.reduce((sum, score) => sum + score, 0)
+  }
 }
