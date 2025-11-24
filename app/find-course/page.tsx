@@ -12,9 +12,8 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Badge } from "@/components/ui/badge"
 import { ScrollArea } from "@/components/ui/scroll-area"
 import { Separator } from "@/components/ui/separator"
-import { Search, GraduationCap, X, Plus, Calculator, CheckCircle2, XCircle, AlertCircle, Edit2, Check, X as XIcon } from "lucide-react"
-import { SubjectDropzone } from "@/components/subject-dropzone"
-import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
+import { Search, GraduationCap, X, Plus, Calculator, CheckCircle2, AlertCircle, Edit2, Check, X as XIcon } from "lucide-react"
+
 import { getAllUniversities } from "@/data/universities"
 import type { Course, University, BaseUniversity } from "@/data/universities/base-university"
 import { getAllColleges, collegeToUniversityFormat } from "@/data/colleges"
@@ -232,7 +231,7 @@ export default function FindCoursePage() {
 
   const isSubjectDisabled = (subjectName: string) => validator.isSubjectDisabled(subjectName)
   const getDisabledReason = (subjectName: string) => validator.getDisabledReason(subjectName)
-  const { canCalculate, progress, errors } = nsc
+  const { canCalculate } = nsc
 
   const addSubject = () => {
     if (!currentSubject || !currentPercentage) {
@@ -289,56 +288,6 @@ export default function FindCoursePage() {
   const [editingSubjectId, setEditingSubjectId] = useState<string | null>(null)
   const [editingPercentage, setEditingPercentage] = useState<string>("")
 
-  const handleSubjectsExtracted = (extractedSubjects: Array<{ name: string; percentage: number }>) => {
-    // Replace existing subjects with extracted ones (or merge if needed)
-    // For now, we'll replace all subjects with extracted ones
-    const newSubjects = extractedSubjects.map((s) => ({
-      id: Date.now().toString() + Math.random().toString(),
-      name: s.name,
-      percentage: s.percentage,
-    }))
-
-    if (newSubjects.length > 0) {
-      setSubjects(newSubjects)
-      setHasCalculated(false)
-      
-      const subjectCount = newSubjects.length
-      toast({
-        title: "Subjects extracted",
-        description: `Found ${subjectCount} subject(s). ${subjectCount >= 7 ? "Finding courses automatically..." : "Add more subjects to find courses."}`,
-      })
-      
-      // Auto-trigger course finding if we have at least 7 subjects
-      // Use a longer delay to ensure state is fully updated
-      if (subjectCount >= 7) {
-        setTimeout(() => {
-          // Re-read subjects from state to ensure we have the latest
-          const currentSubjects = newSubjects
-          if (currentSubjects.length >= 7) {
-            // Temporarily set subjects to trigger the calculation
-            setSubjects(currentSubjects)
-            // Use requestAnimationFrame to ensure state update is processed
-            requestAnimationFrame(() => {
-              // Call findCourses logic directly
-              const calculatedDefaultAPS = calculateDefaultAPSForDisplay(currentSubjects)
-              if (calculatedDefaultAPS && calculatedDefaultAPS > 0) {
-                setApsScore(calculatedDefaultAPS)
-                setNscResult(evaluateNSC(currentSubjects))
-                // Trigger the full course finding
-                findCoursesWithSubjects(currentSubjects)
-              }
-            })
-          }
-        }, 200)
-      }
-    } else {
-      toast({
-        title: "No subjects found",
-        description: "Could not extract subjects from the file. Please try again or enter manually.",
-        variant: "destructive",
-      })
-    }
-  }
 
   // Extract course finding logic to a separate function that can be called with specific subjects
   const findCoursesWithSubjects = (subjectList: Subject[]) => {
