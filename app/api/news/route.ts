@@ -1,6 +1,8 @@
 import { NextResponse } from "next/server"
 
-// ⭐️ FIX: Next.js segment config for Incremental Static Regeneration (ISR)
+// ⭐️ FIX: Next.js segment config
+// Mark this route as dynamic since it uses cache: "no-store" for fresh news
+export const dynamic = "force-dynamic"
 // Revalidate the entire API route every 24 hours (86400 seconds)
 export const revalidate = 86400
 

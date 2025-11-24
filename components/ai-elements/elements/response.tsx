@@ -4,6 +4,7 @@ import * as React from "react"
 import { cn } from "@/lib/utils"
 import ReactMarkdown from "react-markdown"
 import remarkGfm from "remark-gfm"
+import Link from "next/link"
 
 export type ResponseProps = React.PropsWithChildren<{
   className?: string
@@ -22,6 +23,7 @@ export function Response({ className, children }: ResponseProps) {
         "prose-ul:my-2 prose-li:my-1",
         "prose-strong:font-semibold prose-strong:text-foreground",
         "prose-blockquote:border-l-4 prose-blockquote:border-primary prose-blockquote:pl-4 prose-blockquote:italic",
+        "prose-a:text-primary prose-a:underline prose-a:font-medium hover:prose-a:text-primary/80",
         className
       )}
     >
@@ -43,6 +45,27 @@ export function Response({ className, children }: ResponseProps) {
           code: ({ children }) => (
             <code className="bg-muted px-1 py-0.5 rounded text-sm font-mono">{children}</code>
           ),
+          a: ({ href, children }) => {
+            // Check if it's an internal link (starts with /)
+            if (href && href.startsWith("/")) {
+              return (
+                <Link href={href} className="text-primary underline font-medium hover:text-primary/80 transition-colors">
+                  {children}
+                </Link>
+              )
+            }
+            // External link
+            return (
+              <a 
+                href={href} 
+                target="_blank" 
+                rel="noopener noreferrer"
+                className="text-primary underline font-medium hover:text-primary/80 transition-colors"
+              >
+                {children}
+              </a>
+            )
+          },
         }}
       >
         {content}
