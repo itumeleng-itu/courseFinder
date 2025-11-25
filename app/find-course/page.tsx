@@ -25,7 +25,6 @@ import SecondChanceCard from "@/components/SecondChanceCard"
 import { calculateAPS as calculateAPSFromLib } from "@/lib/aps-calculator"
 import type { SubjectEntry } from "@/lib/types"
 import { findMatchingSubject } from "@/lib/subject-aliases"
-import { detectSpecialRequirements, getSpecialRequirementLabels } from "@/lib/special-admissions"
 
 type Subject = {
   id: string

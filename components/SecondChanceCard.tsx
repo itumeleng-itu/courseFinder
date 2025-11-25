@@ -36,7 +36,7 @@ export function SecondChanceCard() {
       <CardContent>
         <div className="space-y-3">
           <p className="text-sm text-muted-foreground line-clamp-3">
-            Explore the Department of Education's Second Chance Programme to improve your results and eligibility. 
+            Explore the Department of Education&apos;s Second Chance Programme to improve your results and eligibility. 
             The programme offers support for learners to rewrite subjects and enhance admission prospects.
           </p>
 
