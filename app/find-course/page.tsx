@@ -14,7 +14,7 @@ import { ScrollArea } from "@/components/ui/scroll-area"
 import { Separator } from "@/components/ui/separator"
 import { Search, GraduationCap, X, Plus, Calculator, CheckCircle2, AlertCircle, Edit2, Check, X as XIcon } from "lucide-react"
 
-import { getAllUniversities } from "@/data/universities"
+import { getAllUniversities, getAllUniversityInstances } from "@/data/universities"
 import type { Course, University, BaseUniversity } from "@/data/universities/base-university"
 import { getAllColleges, collegeToUniversityFormat } from "@/data/colleges"
 import { Chatbot } from "@/components/chatbot"
@@ -24,6 +24,8 @@ import { ToastAction } from "@/components/ui/toast"
 import SecondChanceCard from "@/components/SecondChanceCard"
 import { calculateAPS as calculateAPSFromLib } from "@/lib/aps-calculator"
 import type { SubjectEntry } from "@/lib/types"
+import { findMatchingSubject } from "@/lib/subject-aliases"
+import { detectSpecialRequirements, getSpecialRequirementLabels } from "@/lib/special-admissions"
 
 type Subject = {
   id: string
@@ -134,32 +136,24 @@ function checkSubjectRequirements(
   const missing: string[] = []
   const met: string[] = []
 
-  const normalize = (s: string) =>
-    s
-      .toLowerCase()
-      .replace(/&/g, "and")
-      .replace(/language/g, "")
-      .replace(/first additional/g, "fal")
-      .replace(/\s+/g, " ")
-      .trim()
-
-  const matchesName = (studentName: string, reqName: string) => {
-    const sn = normalize(studentName)
-    const rn = normalize(reqName)
-    if (rn === "english") return sn.includes("english")
-    if (rn.includes("english home")) return sn.includes("english home")
-    if (rn.includes("english fal")) return sn.includes("english fal")
-    if (rn.includes("engineering graphics and design")) return sn.includes("engineering graphics and design")
-    if (rn.includes("agricultural science")) return sn.includes("agricultural science")
-    return sn.includes(rn) || rn.includes(sn)
+  /**
+   * Find student subject using enhanced matching (aliases + language levels)
+   */
+  const findStudentSubject = (requiredSubject: string): Subject | undefined => {
+    return findMatchingSubject(studentSubjects, requiredSubject)
   }
 
+  /**
+   * Evaluate a numeric requirement (NSC level)
+   */
   const evaluateNumberRequirement = (requiredSubject: string, requiredLevelNumber: number) => {
-    const studentSubject = studentSubjects.find((s) => matchesName(s.name, requiredSubject))
+    const studentSubject = findStudentSubject(requiredSubject)
+    
     if (!studentSubject) {
       missing.push(`${requiredSubject} (Level ${requiredLevelNumber}: ${nscLevelToPercentage(requiredLevelNumber)})`)
       return
     }
+    
     const studentLevel = percentageToNSCLevel(studentSubject.percentage)
     if (studentLevel < requiredLevelNumber) {
       missing.push(
@@ -170,26 +164,36 @@ function checkSubjectRequirements(
     }
   }
 
+  /**
+   * Evaluate alternative requirements (OR conditions)
+   * Example: Mathematics 4 OR Mathematical Literacy 5
+   */
   const evaluateAlternatives = (requiredSubject: string, alts: RequirementAlternative[]) => {
     let satisfied = false
+    let matchedAlt: string | null = null
+    
     for (const alt of alts) {
-      const studentSubject = studentSubjects.find((s) => matchesName(s.name, alt.subject))
+      const studentSubject = findStudentSubject(alt.subject)
       if (!studentSubject) continue
+      
       const studentLevel = percentageToNSCLevel(studentSubject.percentage)
       if (studentLevel >= alt.level) {
         satisfied = true
-        met.push(`${alt.subject} Level ${alt.level}+ ✓ (you have ${studentSubject.percentage}%)`)
+        matchedAlt = `${alt.subject} Level ${alt.level}+ ✓ (you have ${studentSubject.percentage}%)`
         break
       }
     }
-    if (!satisfied) {
-      const list = alts.map((a) => `${a.subject} (Level ${a.level})`).join(" OR ")
+    
+    if (satisfied && matchedAlt) {
+      met.push(matchedAlt)
+    } else {
+      const list = alts.map((a) => `${a.subject} (Level ${a.level})`).join(' OR ')
       missing.push(`${requiredSubject}: need one of ${list}`)
     }
   }
 
   for (const [requiredSubject, requiredValue] of Object.entries(courseRequirements)) {
-    if (typeof requiredValue === "number") {
+    if (typeof requiredValue === 'number') {
       evaluateNumberRequirement(requiredSubject, requiredValue)
     } else if (hasAlternatives(requiredValue)) {
       evaluateAlternatives(requiredSubject, requiredValue.alternatives)
@@ -212,6 +216,7 @@ export default function FindCoursePage() {
   const [apsScore, setApsScore] = useState<number | null>(null)
   const [qualifyingCourses, setQualifyingCourses] = useState<CourseMatch[]>([])
   const [recommendedColleges, setRecommendedColleges] = useState<CourseMatch[]>([])
+  const [extendedPrograms, setExtendedPrograms] = useState<CourseMatch[]>([])
   const [compareKeys] = useState<string[]>([])
   const [searchQuery, setSearchQuery] = useState("")
   const [hasCalculated, setHasCalculated] = useState(false)
@@ -519,6 +524,51 @@ export default function FindCoursePage() {
         ({ course }) => (course.apsMin ?? course.apsRequired ?? 0) > 0 && !!course.name && course.name.trim().length > 0,
       ),
     )
+
+    // Find extended program matches for students who don't meet standard APS
+    // Use university instances (with methods) instead of plain data objects
+    const extendedMatches: CourseMatch[] = []
+    const universityInstances = getAllUniversityInstances()
+    
+    universityInstances.forEach((universityInstance) => {
+      const extendedCourses = universityInstance.getExtendedCurriculumPrograms()
+      
+      extendedCourses.forEach((course) => {
+        const extendedCourse = course as ExtendedCourse
+        const apsMin = extendedCourse.apsMin ?? extendedCourse.apsRequired ?? 0
+        
+        // Student must meet extended program APS (lower threshold)
+        if (apsMin > 0 && calculatedDefaultAPS >= apsMin) {
+          const requirementCheck = checkSubjectRequirements(subjects, extendedCourse.subjectRequirements)
+          const additionalReqs = extendedCourse.requirements ?? extendedCourse.additionalRequirements
+          
+          if (
+            requirementCheck.meets &&
+            meetsAdditionalAcademicRequirements(additionalReqs, subjects)
+          ) {
+            // Create a plain university object for display (matching University type)
+            const universityForDisplay: University = {
+              id: universityInstance.id,
+              name: universityInstance.name,
+              shortName: universityInstance.shortName,
+              location: universityInstance.getLocationString(),
+              website: universityInstance.website,
+              courses: [] // Not needed for display
+            }
+            
+            extendedMatches.push({
+              course: extendedCourse,
+              university: universityForDisplay,
+              meetsRequirements: true,
+              missingRequirements: [],
+              metRequirements: requirementCheck.met,
+            })
+          }
+        }
+      })
+    })
+
+    setExtendedPrograms(extendedMatches)
     setHasCalculated(true)
   }
 
@@ -529,6 +579,7 @@ export default function FindCoursePage() {
     setApsScore(null)
     setQualifyingCourses([])
     setRecommendedColleges([])
+    setExtendedPrograms([])
     setSearchQuery("")
     setHasCalculated(false)
     setShowOnlyQualified(false)
@@ -870,12 +921,6 @@ export default function FindCoursePage() {
                   </div>
                 </div>
 
-                {showSecondChanceInfo && (
-                  <div className="px-4 md:px-6 mt-4">
-                    <SecondChanceCard showUnlink onUnlink={() => setShowSecondChanceInfo(false)} />
-                  </div>
-                )}
-
                 <ScrollArea className="flex-1">
                   <div className="p-4 md:p-6">
                     {filteredUniversities.length === 0 ? (
@@ -941,7 +986,7 @@ export default function FindCoursePage() {
                                 <CardContent>
                                   <div className="space-y-3">
                                     {course.description && (
-                                      <p className="text-sm text-muted-foreground">{course.description}</p>
+                                      <p className="text-sm text-muted-foreground line-clamp-3">{course.description}</p>
                                     )}
 
                                     {/* Qualification banner and additional requirements intentionally hidden */}
@@ -966,6 +1011,69 @@ export default function FindCoursePage() {
                           },
                         )}
                       </div>
+                    )}
+
+                    {extendedPrograms.length > 0 && (
+                      <>
+                        <Separator className="my-6" />
+                        <Card className="border-amber-200 bg-amber-50/50">
+                          <CardHeader>
+                            <CardTitle className="flex items-center gap-2 text-amber-900">
+                              <AlertCircle className="h-5 w-5 text-amber-600" />
+                              Extended Curriculum Programmes
+                            </CardTitle>
+                            <CardDescription className="text-amber-800">
+                              Alternative entry pathways with foundation year • Lower APS requirements • Same qualification
+                            </CardDescription>
+                          </CardHeader>
+                          <CardContent>
+                            <div className="grid gap-4 grid-cols-1 md:grid-cols-2">
+                              {extendedPrograms.map(({ course, university }, index) => {
+                                const apsToDisplay = course.apsMin ?? course.apsRequired ?? "N/A"
+                                const hasDuration = course.duration || course.extendedDuration
+                                
+                                return (
+                                  <Card key={`ext-${index}`} className="border-l-4 border-amber-500">
+                                    <CardHeader className="pb-3">
+                                      <CardTitle className="text-sm leading-tight">{course.name}</CardTitle>
+                                      <CardDescription className="text-xs">
+                                        {university.shortName} • {university.location.city}
+                                      </CardDescription>
+                                    </CardHeader>
+                                    <CardContent className="space-y-2">
+                                      <div className="flex flex-wrap gap-2">
+                                        <Badge variant="outline" className="bg-amber-100 text-amber-800 border-amber-300">
+                                          APS: {apsToDisplay}
+                                        </Badge>
+                                        {hasDuration && (
+                                          <Badge variant="outline" className="text-xs">
+                                            {course.extendedDuration || course.duration}
+                                          </Badge>
+                                        )}
+                                        {course.faculty && (
+                                          <Badge variant="secondary" className="text-xs">{course.faculty}</Badge>
+                                        )}
+                                      </div>
+                                      
+                                      {course.foundationYear?.description && (
+                                        <p className="text-xs text-muted-foreground mt-2">
+                                          {course.foundationYear.description}
+                                        </p>
+                                      )}
+                                      
+                                      {course.description && (
+                                        <p className="text-xs text-muted-foreground">
+                                          {course.description}
+                                        </p>
+                                      )}
+                                    </CardContent>
+                                  </Card>
+                                )
+                              })}
+                            </div>
+                          </CardContent>
+                        </Card>
+                      </>
                     )}
 
                     {qualifiedCount < 30 && filteredColleges.length > 0 && (
@@ -1040,6 +1148,18 @@ export default function FindCoursePage() {
                               )
                             })}
                         </div>
+                      </>
+                    )}
+
+                    {/* Second Chance Programme - shown at the end so it doesn't distract from course results */}
+                    {showSecondChanceInfo && (
+                      <>
+                        <Separator className="my-6" />
+                        <div className="mb-4">
+                          <h3 className="text-lg font-semibold">Alternative Pathways</h3>
+                          <p className="text-sm text-muted-foreground">Explore other options to improve your results</p>
+                        </div>
+                        <SecondChanceCard />
                       </>
                     )}
                   </div>

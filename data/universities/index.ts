@@ -97,6 +97,13 @@ export function getAllUniversities(): University[] {
   return universities
 }
 
+/**
+ * Get actual BaseUniversity instances with methods (for extended programs, etc.)
+ */
+export function getAllUniversityInstances(): BaseUniversity[] {
+  return instances
+}
+
 export function getUniversityById(id: string): University | undefined {
   return universities.find((uni) => uni.id === id)
 }
