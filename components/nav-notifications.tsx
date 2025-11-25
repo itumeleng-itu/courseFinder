@@ -13,6 +13,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { BellIcon, Calendar, GraduationCap, Building } from "lucide-react";
 import { CalendarNotification } from "@/lib/calendar-events";
+import Link from "next/link";
 
 type RegularNotification = {
   id: string;
@@ -85,6 +86,44 @@ export function NotificationsPopover({
             const isCalendarEvent = notification.type === "calendar";
             const calendarNotification = notification as CalendarNotification;
             
+            // If it's a calendar event, make it clickable and navigate to calendar
+            if (isCalendarEvent) {
+              return (
+                <DropdownMenuItem 
+                  key={notification.id} 
+                  className="flex items-start gap-3 p-3 cursor-pointer hover:bg-accent"
+                  asChild
+                >
+                  <Link href="/calendar" className="flex items-start gap-3 w-full">
+                    <Avatar className="size-8">
+                      <AvatarImage src={notification.avatar} alt="Avatar" />
+                      <AvatarFallback className="text-xs">
+                        {notification.fallback}
+                      </AvatarFallback>
+                    </Avatar>
+                    <div className="flex flex-col flex-1 gap-1">
+                      <div className="flex items-start justify-between gap-2">
+                        <span className="text-sm font-medium leading-tight">
+                          {notification.text}
+                        </span>
+                        <Badge 
+                          variant="secondary" 
+                          className={`text-xs px-1.5 py-0.5 flex items-center gap-1 ${getEventTypeBadgeColor(calendarNotification.eventType)}`}
+                        >
+                          {getEventTypeIcon(calendarNotification.eventType)}
+                          {calendarNotification.eventType}
+                        </Badge>
+                      </div>
+                      <span className="text-xs text-muted-foreground">
+                        {notification.time}
+                      </span>
+                    </div>
+                  </Link>
+                </DropdownMenuItem>
+              );
+            }
+
+            // Regular notification (non-calendar)
             return (
               <DropdownMenuItem key={notification.id} className="flex items-start gap-3 p-3">
                 <Avatar className="size-8">
@@ -94,20 +133,9 @@ export function NotificationsPopover({
                   </AvatarFallback>
                 </Avatar>
                 <div className="flex flex-col flex-1 gap-1">
-                  <div className="flex items-start justify-between gap-2">
-                    <span className="text-sm font-medium leading-tight">
-                      {notification.text}
-                    </span>
-                    {isCalendarEvent && (
-                      <Badge 
-                        variant="secondary" 
-                        className={`text-xs px-1.5 py-0.5 flex items-center gap-1 ${getEventTypeBadgeColor(calendarNotification.eventType)}`}
-                      >
-                        {getEventTypeIcon(calendarNotification.eventType)}
-                        {calendarNotification.eventType}
-                      </Badge>
-                    )}
-                  </div>
+                  <span className="text-sm font-medium leading-tight">
+                    {notification.text}
+                  </span>
                   <span className="text-xs text-muted-foreground">
                     {notification.time}
                   </span>

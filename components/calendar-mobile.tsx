@@ -7,6 +7,7 @@ import { Badge } from "@/components/ui/badge"
 import { isSameDay } from "date-fns"
 import { cn } from "@/lib/utils"
 import { getAllEventsWithStatus, detectConflictsForDate } from "@/lib/calendar-events"
+import { Calendar as CalendarIcon } from "lucide-react"
 
 const calendarEvents = getAllEventsWithStatus()
 
@@ -63,14 +64,12 @@ export function CalendarMobile() {
                   )}
                   <span className="text-xs font-medium">{day.date.getDate()}</span>
                   {dayEvents.length > 0 && (
-                    <div className="flex flex-col gap-0.5 w-full">
-                      {dayEvents.slice(0, 1).map((event, index) => (
-                        <div key={index} className="text-[10px] truncate opacity-80">
-                          {event.name.length > 8 ? `${event.name.substring(0, 8)}...` : event.name}
-                        </div>
-                      ))}
+                    <div className="flex items-center gap-0.5 mt-auto">
+                      <CalendarIcon className="h-2.5 w-2.5 text-primary" />
                       {dayEvents.length > 1 && (
-                        <div className="text-[10px] text-muted-foreground">+{dayEvents.length - 1}</div>
+                        <span className="text-[9px] font-medium text-primary">
+                          {dayEvents.length}
+                        </span>
                       )}
                     </div>
                   )}
