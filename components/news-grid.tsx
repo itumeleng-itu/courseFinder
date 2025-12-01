@@ -4,9 +4,10 @@ import { useEffect, useState } from "react"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { Skeleton } from "@/components/ui/skeleton"
-import { ExternalLink } from "lucide-react"
+import { ExternalLink, Share2 } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import Image from "next/image"
+import { useToast } from "@/components/ui/use-toast"
 
 interface NewsArticle {
   title: string
@@ -21,6 +22,7 @@ interface NewsArticle {
 export function NewsGrid() {
   const [news, setNews] = useState<NewsArticle[]>([])
   const [loading, setLoading] = useState(true)
+  const { toast } = useToast()
 
   useEffect(() => {
     async function fetchNews() {
@@ -39,6 +41,30 @@ export function NewsGrid() {
 
     fetchNews()
   }, [])
+
+  const handleShare = async (article: NewsArticle) => {
+    const shareData = {
+      title: article.title,
+      text: article.description,
+      url: article.link,
+    }
+
+    try {
+      if (navigator.share) {
+        await navigator.share(shareData)
+      } else {
+        await navigator.clipboard.writeText(article.link)
+      }
+    } catch (error) {
+      if (error instanceof Error && error.name !== "AbortError") {
+        toast({
+          title: "Share failed",
+          description: "Unable to share article. Please try again.",
+          variant: "destructive",
+        })
+      }
+    }
+  }
 
   if (loading) {
     return (
@@ -103,17 +129,28 @@ export function NewsGrid() {
                 </CardDescription>
               </CardHeader>
               <CardContent className="p-4 sm:p-6 pt-0">
-                <Button
-                  asChild
-                  variant="ghost"
-                  size="sm"
-                  className="w-full justify-start px-0 h-auto font-normal text-xs sm:text-sm"
-                >
-                  <a href={article.link} target="_blank" rel="noopener noreferrer" className="flex items-center gap-2">
-                    Read article
-                    <ExternalLink className="h-3 w-3" />
-                  </a>
-                </Button>
+                <div className="flex items-center gap-2">
+                  <Button
+                    asChild
+                    variant="ghost"
+                    size="sm"
+                    className="flex-1 justify-start px-0 h-auto font-normal text-xs sm:text-sm"
+                  >
+                    <a href={article.link} target="_blank" rel="noopener noreferrer" className="flex items-center gap-2">
+                      Read article
+                      <ExternalLink className="h-3 w-3" />
+                    </a>
+                  </Button>
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    onClick={() => handleShare(article)}
+                    className="h-auto p-2"
+                    aria-label="Share article"
+                  >
+                    <Share2 className="h-3 w-3 sm:h-4 sm:w-4" />
+                  </Button>
+                </div>
               </CardContent>
             </Card>
           )
