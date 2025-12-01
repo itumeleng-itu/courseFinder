@@ -16,7 +16,7 @@ export default function DashboardPage() {
       <SidebarInset>
         <div className="flex flex-col h-full">
           {/* Header - Hidden on mobile/tablet */}
-          <header className="sticky top-0 z-10 flex h-14 items-center gap-4 border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 px-4 sm:px-6 hidden lg:flex">
+          <header className="sticky top-0 z-10 flex h-14 items-center gap-4 border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 px-4 sm:px-6 hidden xl:flex">
             <div className="flex items-center gap-2 text-sm">
               <LayoutDashboard className="h-4 w-4" />
               <span className="font-semibold">Dashboard</span>

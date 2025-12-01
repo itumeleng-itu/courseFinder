@@ -661,7 +661,7 @@ export default function FindCoursePage() {
     <>
       <DashboardSidebar />
       <SidebarInset>
-        <header className="flex h-16 shrink-0 items-center gap-2 border-b px-4 hidden lg:flex">
+        <header className="flex h-16 shrink-0 items-center gap-2 border-b px-4 hidden xl:flex">
           <Separator orientation="vertical" className="mr-2 h-4" />
           <div className="flex items-center gap-2">
             <Search className="h-5 w-5 text-purple-600" />
