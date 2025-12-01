@@ -49,6 +49,11 @@ interface ExtendedCourse extends Omit<Course, 'requirements'> {
   requirements?: string
   careers?: string
   careerOpportunities?: string | string[]
+  extendedDuration?: string
+  foundationYear?: {
+    subjects?: string[]
+    description?: string
+  }
 }
 
 type CourseMatch = {
@@ -138,7 +143,7 @@ function checkSubjectRequirements(
   /**
    * Find student subject using enhanced matching (aliases + language levels)
    */
-  const findStudentSubject = (requiredSubject: string): Subject | undefined => {
+  const findStudentSubject = (requiredSubject: string): { name: string; percentage: number } | undefined => {
     return findMatchingSubject(studentSubjects, requiredSubject)
   }
 
@@ -669,183 +674,20 @@ export default function FindCoursePage() {
           </div>
         </header>
 
-        <div className="flex flex-col lg:flex-row h-[calc(100vh-4rem)] overflow-hidden">
-          <div className="w-full lg:w-[400px] border-b lg:border-b-0 lg:border-r bg-card flex-shrink-0">
-            <ScrollArea className="h-[50vh] lg:h-full">
+        <div className="flex flex-col lg:flex-row h-[calc(100vh-4rem)] lg:h-[calc(100vh-4rem)] overflow-hidden">
+          <div className="w-full lg:w-[400px] border-b lg:border-b-0 lg:border-r bg-card flex-shrink-0 flex flex-col h-[calc(100vh-8rem)] lg:h-full">
+            {/* Title Section */}
+            <div className="p-4 border-b">
+              <h2 className="text-lg md:text-xl font-bold mb-1">Calculate Your APS</h2>
+              <p className="text-sm text-muted-foreground">
+                Enter your matric subjects and marks
+              </p>
+            </div>
+
+            {/* Scrollable Subjects Section */}
+            <ScrollArea className="flex-1">
               <div className="p-4 space-y-4">
-                <div>
-                  <h2 className="text-lg md:text-xl font-bold mb-2">Calculate Your APS</h2>
-                  <p className="text-sm text-muted-foreground">
-                    Enter your matric subjects and marks to find qualifying courses
-                  </p>
-                </div>
-
-                <Separator />
-
-                <div className="space-y-3">
-                  {/* <div>
-                    <h3 className="text-sm font-medium mb-2">Upload Matric Results</h3>
-                    <p className="text-xs text-muted-foreground mb-3">
-                      Upload an image of your matric results to automatically extract subjects and marks
-                    </p>
-                    <Alert className="mb-3" aria-live="polite">
-                      <AlertCircle className="h-4 w-4" aria-hidden="true" />
-                      <AlertTitle>⚠️ OCR Disclaimer</AlertTitle>
-                      <AlertDescription>
-                        Please verify scanned results as OCR (Optical Character Recognition) accuracy may vary depending on
-                        document quality and formatting.
-                      </AlertDescription>
-                    </Alert>
-                    <SubjectDropzone onSubjectsExtracted={handleSubjectsExtracted} />
-                  </div> */}
-
-                  <Separator />
-
-                  <Card className="glass-card">
-                    <CardHeader className="pb-3">
-                      <CardTitle className="text-base">Add Subject Manually</CardTitle>
-                    </CardHeader>
-                    <CardContent className="space-y-3">
-                      <Select value={currentSubject} onValueChange={setCurrentSubject}>
-                        <SelectTrigger className="text-sm glass-input">
-                          <SelectValue placeholder="Select subject" />
-                        </SelectTrigger>
-                        <SelectContent className="glass-modal">
-                          {SUBJECTS.map((subject) => {
-                            const disabled = isSubjectDisabled(subject)
-                            return (
-                              <SelectItem
-                                key={subject}
-                                value={subject}
-                                disabled={disabled}
-                                className={disabled ? "opacity-50 cursor-not-allowed" : ""}
-                              >
-                                {subject}
-                              </SelectItem>
-                            )
-                          })}
-                        </SelectContent>
-                      </Select>
-
-                      <Input
-                        type="number"
-                        placeholder="Percentage (0-100)"
-                        value={currentPercentage}
-                        onChange={(e) => setCurrentPercentage(e.target.value)}
-                        min="0"
-                        max="100"
-                        className="text-sm glass-input"
-                      />
-                      <Button
-                        onClick={addSubject}
-                        disabled={!currentSubject || !currentPercentage}
-                        className="w-full text-sm glass-button"
-                      >
-                        <Plus className="h-4 w-4 mr-2" />
-                        Add Subject ({subjects.length})
-                      </Button>
-                    </CardContent>
-                  </Card>
-                </div>
-
-                {subjects.length > 0 && (
-                  <Card className="glass-card">
-                    <CardHeader className="pb-3">
-                      <CardTitle className="text-base">Your Subjects</CardTitle>
-
-                    </CardHeader>
-                    <CardContent>
-                      <div className="space-y-2 max-h-[300px] overflow-y-auto">
-                        {subjects.map((subject) => (
-                          <div
-                            key={subject.id}
-                            className="flex items-center justify-between p-2 glass-button rounded-md gap-2"
-                          >
-                            <div className="flex-1 min-w-0">
-                              <p className="font-medium text-sm truncate">{subject.name}</p>
-                              {editingSubjectId === subject.id ? (
-                                <div className="flex items-center gap-2 mt-1">
-                                  <Input
-                                    type="number"
-                                    value={editingPercentage}
-                                    onChange={(e) => setEditingPercentage(e.target.value)}
-                                    min="0"
-                                    max="100"
-                                    className="h-7 text-xs w-20"
-                                    autoFocus
-                                    onKeyDown={(e) => {
-                                      if (e.key === "Enter") {
-                                        saveEdit(subject.id)
-                                      } else if (e.key === "Escape") {
-                                        cancelEdit()
-                                      }
-                                    }}
-                                  />
-                                  <span className="text-xs text-muted-foreground">%</span>
-                                  <Button
-                                    variant="ghost"
-                                    size="sm"
-                                    onClick={() => saveEdit(subject.id)}
-                                    className="h-6 w-6 p-0"
-                                  >
-                                    <Check className="h-3 w-3 text-green-600" />
-                                  </Button>
-                                  <Button
-                                    variant="ghost"
-                                    size="sm"
-                                    onClick={cancelEdit}
-                                    className="h-6 w-6 p-0"
-                                  >
-                                    <XIcon className="h-3 w-3 text-red-600" />
-                                  </Button>
-                                </div>
-                              ) : (
-                                <div className="flex items-center gap-2 mt-1">
-                                  <p className="text-xs text-muted-foreground">
-                                    {subject.percentage}% (Level {percentageToNSCLevel(subject.percentage)})
-                                  </p>
-                                  <Button
-                                    variant="ghost"
-                                    size="sm"
-                                    onClick={() => startEditing(subject)}
-                                    className="h-6 w-6 p-0"
-                                    title="Edit mark"
-                                  >
-                                    <Edit2 className="h-3 w-3" />
-                                  </Button>
-                                </div>
-                              )}
-                            </div>
-                            {editingSubjectId !== subject.id && (
-                              <Button
-                                variant="ghost"
-                                size="sm"
-                                onClick={() => removeSubject(subject.id)}
-                                className="h-8 w-8 p-0 glass-hover flex-shrink-0"
-                              >
-                                <X className="h-4 w-4" />
-                              </Button>
-                            )}
-                          </div>
-                        ))}
-                      </div>
-                    </CardContent>
-                  </Card>
-                )}
-
-                {subjects.length > 0 && (
-                  <div className="space-y-2">
-                    <Button onClick={findCourses} className="w-full glass-button" size="lg" disabled={!canCalculate}>
-                      <Calculator className="h-4 w-4 mr-2" />
-                      Calculate APS & Find Courses
-                    </Button>
-                    <Button onClick={reset} variant="outline" className="w-full glass-button">
-                      Reset All
-                    </Button>
-
-                  </div>
-                )}
-
+                {/* APS Score Display */}
                 {apsScore !== null && (
                   <Card className="glass-card liquid-gradient liquid-border">
                     <CardContent className="pt-6">
@@ -870,24 +712,165 @@ export default function FindCoursePage() {
                     </CardContent>
                   </Card>
                 )}
+
+                {/* Entered Subjects List */}
+                {subjects.length > 0 ? (
+                  <>
+                    <Card className="glass-card">
+                      <CardHeader className="pb-3">
+                        <CardTitle className="text-base">Your Subjects ({subjects.length})</CardTitle>
+                      </CardHeader>
+                      <CardContent>
+                        <div className="space-y-2">
+                          {subjects.map((subject) => (
+                            <div
+                              key={subject.id}
+                              className="flex items-center justify-between p-2 glass-button rounded-md gap-2"
+                            >
+                              <div className="flex-1 min-w-0">
+                                <p className="font-medium text-sm truncate">{subject.name}</p>
+                                {editingSubjectId === subject.id ? (
+                                  <div className="flex items-center gap-2 mt-1">
+                                    <Input
+                                      type="number"
+                                      value={editingPercentage}
+                                      onChange={(e) => setEditingPercentage(e.target.value)}
+                                      min="0"
+                                      max="100"
+                                      className="h-7 text-xs w-20"
+                                      autoFocus
+                                      onKeyDown={(e) => {
+                                        if (e.key === "Enter") {
+                                          saveEdit(subject.id)
+                                        } else if (e.key === "Escape") {
+                                          cancelEdit()
+                                        }
+                                      }}
+                                    />
+                                    <span className="text-xs text-muted-foreground">%</span>
+                                    <Button
+                                      variant="ghost"
+                                      size="sm"
+                                      onClick={() => saveEdit(subject.id)}
+                                      className="h-6 w-6 p-0"
+                                    >
+                                      <Check className="h-3 w-3 text-green-600" />
+                                    </Button>
+                                    <Button
+                                      variant="ghost"
+                                      size="sm"
+                                      onClick={cancelEdit}
+                                      className="h-6 w-6 p-0"
+                                    >
+                                      <XIcon className="h-3 w-3 text-red-600" />
+                                    </Button>
+                                  </div>
+                                ) : (
+                                  <div className="flex items-center gap-2 mt-1">
+                                    <p className="text-xs text-muted-foreground">
+                                      {subject.percentage}% (Level {percentageToNSCLevel(subject.percentage)})
+                                    </p>
+                                    <Button
+                                      variant="ghost"
+                                      size="sm"
+                                      onClick={() => startEditing(subject)}
+                                      className="h-6 w-6 p-0"
+                                      title="Edit mark"
+                                    >
+                                      <Edit2 className="h-3 w-3" />
+                                    </Button>
+                                  </div>
+                                )}
+                              </div>
+                              {editingSubjectId !== subject.id && (
+                                <Button
+                                  variant="ghost"
+                                  size="sm"
+                                  onClick={() => removeSubject(subject.id)}
+                                  className="h-8 w-8 p-0 glass-hover flex-shrink-0"
+                                >
+                                  <X className="h-4 w-4" />
+                                </Button>
+                              )}
+                            </div>
+                          ))}
+                        </div>
+                      </CardContent>
+                    </Card>
+
+                    <div className="space-y-2">
+                      <Button onClick={findCourses} className="w-full glass-button" size="lg" disabled={!canCalculate}>
+                        <Calculator className="h-4 w-4 mr-2" />
+                        Calculate APS & Find Courses
+                      </Button>
+                      <Button onClick={reset} variant="outline" className="w-full glass-button">
+                        Reset All
+                      </Button>
+                    </div>
+                  </>
+                ) : (
+                  <div className="text-center py-8">
+                    <GraduationCap className="h-12 w-12 mx-auto text-muted-foreground mb-3 opacity-50" />
+                    <p className="text-sm text-muted-foreground">
+                      Add at least 7 subjects using the form below
+                    </p>
+                  </div>
+                )}
               </div>
             </ScrollArea>
+
+            {/* Fixed Form at Bottom */}
+            <div className="border-t bg-card p-4">
+              <Card className="glass-card">
+                <CardHeader className="pb-3">
+                  <CardTitle className="text-base">Add Subject Manually</CardTitle>
+                </CardHeader>
+                <CardContent className="space-y-3">
+                  <Select value={currentSubject} onValueChange={setCurrentSubject}>
+                    <SelectTrigger className="text-sm glass-input">
+                      <SelectValue placeholder="Select subject" />
+                    </SelectTrigger>
+                    <SelectContent className="glass-modal">
+                      {SUBJECTS.map((subject) => {
+                        const disabled = isSubjectDisabled(subject)
+                        return (
+                          <SelectItem
+                            key={subject}
+                            value={subject}
+                            disabled={disabled}
+                            className={disabled ? "opacity-50 cursor-not-allowed" : ""}
+                          >
+                            {subject}
+                          </SelectItem>
+                        )
+                      })}
+                    </SelectContent>
+                  </Select>
+
+                  <Input
+                    type="number"
+                    placeholder="Percentage (0-100)"
+                    value={currentPercentage}
+                    onChange={(e) => setCurrentPercentage(e.target.value)}
+                    min="0"
+                    max="100"
+                    className="text-sm glass-input"
+                  />
+                  <Button
+                    onClick={addSubject}
+                    disabled={!currentSubject || !currentPercentage}
+                    className="w-full text-sm glass-button"
+                  >
+                    <Plus className="h-4 w-4 mr-2" />
+                    Add Subject ({subjects.length})
+                  </Button>
+                </CardContent>
+              </Card>
+            </div>
           </div>
 
           <div className="flex-1 flex flex-col overflow-hidden">
-            {!hasCalculated ? (
-              <div className="hidden md:flex flex-1 items-center justify-center p-4 md:p-8">
-                <div className="text-center max-w-md">
-                  <GraduationCap className="h-12 w-12 md:h-16 md:w-16 mx-auto text-muted-foreground mb-4" />
-                  <h2 className="text-xl md:text-2xl font-bold mb-2">Ready to Find Your Course?</h2>
-                  <p className="text-sm md:text-base text-muted-foreground">
-                    Add your matric subjects and marks on the left, then click &quot;Calculate APS & Find Courses&quot; to
-                    discover which university programs you qualify for based on both APS scores and subject
-                    requirements.
-                  </p>
-                </div>
-              </div>
-            ) : (
+            {!hasCalculated ? null : (
               <>
                 <div className="p-4 md:p-6 border-b glass-nav">
                   <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-4">
@@ -1036,7 +1019,7 @@ export default function FindCoursePage() {
                                     <CardHeader className="pb-3">
                                       <CardTitle className="text-sm leading-tight">{course.name}</CardTitle>
                                       <CardDescription className="text-xs">
-                                        {university.shortName} • {university.location.city}
+                                        {university.shortName} • {university.location}
                                       </CardDescription>
                                     </CardHeader>
                                     <CardContent className="space-y-2">
