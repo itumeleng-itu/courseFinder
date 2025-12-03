@@ -50,18 +50,44 @@ export function NewsGrid() {
     }
 
     try {
-      if (navigator.share) {
+      if (navigator.share && navigator.canShare && navigator.canShare(shareData)) {
         await navigator.share(shareData)
+        toast({
+          title: "Shared successfully",
+          description: "Article shared!",
+        })
+      } else if (navigator.share) {
+        // Web Share API exists but can't share this data, try anyway
+        await navigator.share(shareData)
+        toast({
+          title: "Shared successfully",
+          description: "Article shared!",
+        })
       } else {
+        // Fallback to clipboard
         await navigator.clipboard.writeText(article.link)
+        toast({
+          title: "Link copied",
+          description: "Article link copied to clipboard!",
+        })
       }
     } catch (error) {
       if (error instanceof Error && error.name !== "AbortError") {
-        toast({
-          title: "Share failed",
-          description: "Unable to share article. Please try again.",
-          variant: "destructive",
-        })
+        console.error("Share error:", error)
+        // Try clipboard as final fallback
+        try {
+          await navigator.clipboard.writeText(article.link)
+          toast({
+            title: "Link copied instead",
+            description: "Couldn't share, but link copied to clipboard!",
+          })
+        } catch (clipboardError) {
+          toast({
+            title: "Share failed",
+            description: "Unable to share article. Please try again.",
+            variant: "destructive",
+          })
+        }
       }
     }
   }
@@ -145,10 +171,10 @@ export function NewsGrid() {
                     variant="ghost"
                     size="sm"
                     onClick={() => handleShare(article)}
-                    className="h-auto p-2"
+                    className="h-auto p-2 min-w-[44px] min-h-[44px] flex items-center justify-center"
                     aria-label="Share article"
                   >
-                    <Share2 className="h-3 w-3 sm:h-4 sm:w-4" />
+                    <Share2 className="h-4 w-4" />
                   </Button>
                 </div>
               </CardContent>
