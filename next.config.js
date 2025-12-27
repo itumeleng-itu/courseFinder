@@ -4,6 +4,7 @@ const isVercel = !!process.env.VERCEL
 const path = require("path")
 const rootDir = path.resolve(__dirname).replace(/\\/g, "/")
 const nextConfig = {
+  distDir: "build",
   trailingSlash: true,
   images: {
     unoptimized: true,

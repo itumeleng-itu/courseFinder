@@ -10,7 +10,7 @@ import {
 } from "@/components/ui/sidebar"
 import { cn } from "@/lib/utils"
 import { motion } from "framer-motion"
-import { DollarSign, LayoutDashboard, Search, FileText, Building2, BookOpen, Calendar, Lightbulb } from "lucide-react"
+import { DollarSign, LayoutDashboard, Search, FileText, BookOpen, Calendar, Lightbulb } from "lucide-react"
 import { Logo } from "@/components/logo"
 import type { Route } from "./nav-main"
 import DashboardNavigation from "@/components/nav-main"
@@ -68,12 +68,6 @@ const dashboardRoutes: Route[] = [
     title: "Bursaries",
     icon: <DollarSign className="size-4" />,
     link: "/bursaries",
-  },
-  {
-    id: "universities",
-    title: "Universities",
-    icon: <Building2 className="size-4" />,
-    link: "/universities",
   },
 ]
 
