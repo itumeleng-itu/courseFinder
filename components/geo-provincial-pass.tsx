@@ -17,6 +17,7 @@ import {
   CartesianGrid,
   BarChart,
   Bar,
+  Cell,
 } from "recharts"
 import { useIsMobile } from "@/hooks/use-mobile"
 
@@ -119,9 +120,9 @@ export function GeoProvincialPass() {
     type NominatimResponse = { address?: { state?: string; county?: string; region?: string; province?: string } }
     const json = (await resp.json()) as NominatimResponse
     const candidates = [json?.address?.state, json?.address?.county, json?.address?.region, json?.address?.province]
-      .filter(Boolean)
-      .map((s: string) => normalizeProvince(s))
-      .filter(Boolean)
+      .filter((s): s is string => Boolean(s))
+      .map((s) => normalizeProvince(s))
+      .filter((s): s is string => Boolean(s))
     const prov = candidates[0] || null
     if (!prov) throw new Error("Unable to determine province from coordinates.")
     return prov as string
@@ -237,13 +238,13 @@ export function GeoProvincialPass() {
                 }))}
                 margin={{ top: 10, right: 24, left: 0, bottom: 0 }}
               >
-                <CartesianGrid strokeDasharray="3 3" />
-                <XAxis dataKey="year" tick={{ fontSize: 12 }} />
-                <YAxis domain={[60, 95]} tickFormatter={(v) => `${v}%`} tick={{ fontSize: 12 }} />
+                <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#e5e7eb" />
+                <XAxis dataKey="year" tick={{ fontSize: 12 }} axisLine={false} tickLine={false} />
+                <YAxis domain={[60, 95]} tickFormatter={(v) => `${v}%`} tick={{ fontSize: 12 }} axisLine={false} tickLine={false} />
                 <ReTooltip formatter={(v: number | string) => rateFormat(Number(v))} />
                 <Legend wrapperStyle={{ fontSize: 12 }} />
-                <Bar dataKey="province" name={province || "Province"} fill="#0ea5e9" />
-                <Bar dataKey="national" name="National" fill="#10b981" />
+                <Bar dataKey="province" name={province || "Province"} fill="#0ea5e9" radius={[4, 4, 0, 0]} />
+                <Bar dataKey="national" name="National" fill="#10b981" radius={[4, 4, 0, 0]} />
               </BarChart>
             ) : (
               <LineChart
@@ -252,15 +253,63 @@ export function GeoProvincialPass() {
                   province: p.passRate,
                   national: data.nationalSeries[i]?.passRate ?? null,
                 }))}
-                margin={{ top: 10, right: 24, left: 0, bottom: 0 }}
+                margin={{ top: 20, right: 30, left: 0, bottom: 10 }}
               >
-                <CartesianGrid strokeDasharray="3 3" />
-                <XAxis dataKey="year" tick={{ fontSize: 12 }} />
-                <YAxis domain={[60, 95]} tickFormatter={(v) => `${v}%`} tick={{ fontSize: 12 }} />
-                <ReTooltip formatter={(v: number | string) => rateFormat(Number(v))} />
-                <Legend wrapperStyle={{ fontSize: 12 }} />
-                <Line type="monotone" dataKey="province" name={province || "Province"} stroke="#0ea5e9" strokeWidth={2} dot={{ r: 2 }} />
-                <Line type="monotone" dataKey="national" name="National" stroke="#10b981" strokeWidth={2} dot={{ r: 2 }} />
+                {/* Minimal grid - horizontal only */}
+                <CartesianGrid strokeDasharray="0" vertical={false} className="stroke-muted" />
+                <XAxis 
+                  dataKey="year" 
+                  tick={{ fontSize: 12 }} 
+                  axisLine={false} 
+                  tickLine={false}
+                  dy={10}
+                  className="text-muted-foreground"
+                />
+                <YAxis 
+                  domain={[60, 95]} 
+                  tickFormatter={(v) => `${v}%`} 
+                  tick={{ fontSize: 12 }} 
+                  axisLine={false} 
+                  tickLine={false}
+                  dx={-5}
+                  className="text-muted-foreground"
+                />
+                <ReTooltip 
+                  formatter={(v: number | string) => rateFormat(Number(v))}
+                  contentStyle={{ 
+                    backgroundColor: 'hsl(var(--card))',
+                    border: '1px solid hsl(var(--border))',
+                    borderRadius: '8px', 
+                    boxShadow: '0 4px 12px rgba(0,0,0,0.1)',
+                    padding: '8px 12px'
+                  }}
+                />
+                <Legend 
+                  wrapperStyle={{ fontSize: 12, paddingTop: 15 }} 
+                  iconType="circle"
+                />
+                {/* B/W themed smooth curved lines */}
+                <Line 
+                  type="natural" 
+                  dataKey="province" 
+                  name={province || "Province"} 
+                  stroke="currentColor"
+                  strokeWidth={2.5} 
+                  dot={false}
+                  className="text-foreground"
+                  activeDot={{ r: 5, strokeWidth: 2, className: "fill-foreground stroke-background" }}
+                />
+                <Line 
+                  type="natural" 
+                  dataKey="national" 
+                  name="National" 
+                  stroke="currentColor"
+                  strokeWidth={2} 
+                  strokeDasharray="4 4"
+                  dot={false}
+                  className="text-muted-foreground"
+                  activeDot={{ r: 5, strokeWidth: 2, className: "fill-muted-foreground stroke-background" }}
+                />
               </LineChart>
             )}
           </ResponsiveContainer>
@@ -288,15 +337,74 @@ export function GeoProvincialPass() {
           </div>
         </div>
 
-        <div className="mt-4 grid grid-cols-1 sm:grid-cols-5 gap-2" aria-label="Year-over-year changes">
-          {yoy.map((y) => (
-            <div key={y.year} className="p-2 rounded-md border flex items-center justify-between">
-              <span className="text-sm">{y.year}</span>
-              <span className={"text-sm font-medium " + (y.delta >= 0 ? "text-green-600" : "text-red-600")}>
-                {y.delta >= 0 ? "↑" : "↓"} {Math.abs(y.delta).toFixed(1)}%
-              </span>
+        {/* Year-over-Year Bar Chart */}
+        <div className="mt-6 p-4 rounded-lg border bg-card" aria-label="Year-over-year performance">
+          <div className="flex items-center justify-between mb-2">
+            <div>
+              <div className="text-2xl font-bold text-foreground">
+                {rateFormat(data.provinceSeries[data.provinceSeries.length - 1]?.passRate || 0)}
+              </div>
+              <div className="text-sm text-muted-foreground">Latest pass rate</div>
             </div>
-          ))}
+            {yoy.length > 0 && (
+              <div className={`text-sm font-medium px-2 py-1 rounded ${
+                yoy[yoy.length - 1]?.delta >= 0 
+                  ? 'bg-muted text-foreground' 
+                  : 'bg-muted text-foreground'
+              }`}>
+                {yoy[yoy.length - 1]?.delta >= 0 ? '↗' : '↘'} {yoy[yoy.length - 1]?.delta >= 0 ? '+' : ''}{yoy[yoy.length - 1]?.delta.toFixed(1)}%
+              </div>
+            )}
+          </div>
+          
+          {/* Recharts Bar Chart - B/W Theme */}
+          <div className="w-full h-32 mt-4">
+            <ResponsiveContainer width="100%" height="100%">
+              <BarChart
+                data={data.provinceSeries.map((point, index) => ({
+                  year: point.year.toString(),
+                  passRate: point.passRate,
+                  isLatest: index === data.provinceSeries.length - 1
+                }))}
+                margin={{ top: 5, right: 5, left: 5, bottom: 5 }}
+              >
+                <XAxis 
+                  dataKey="year" 
+                  tick={{ fontSize: 11, fill: 'currentColor' }} 
+                  axisLine={false} 
+                  tickLine={false}
+                  className="text-muted-foreground"
+                />
+                <ReTooltip 
+                  formatter={(value: number) => [`${value.toFixed(1)}%`, 'Pass Rate']}
+                  contentStyle={{ 
+                    backgroundColor: 'hsl(var(--card))',
+                    border: '1px solid hsl(var(--border))',
+                    borderRadius: '6px',
+                    color: 'hsl(var(--foreground))'
+                  }}
+                  cursor={{ fill: 'hsl(var(--muted))' }}
+                />
+                <Bar 
+                  dataKey="passRate" 
+                  radius={[2, 2, 0, 0]}
+                  maxBarSize={24}
+                >
+                  {data.provinceSeries.map((_, index) => {
+                    const isLatest = index === data.provinceSeries.length - 1
+                    return (
+                      <Cell 
+                        key={`bar-${index}`}
+                        fill={isLatest ? 'currentColor' : 'currentColor'}
+                        opacity={isLatest ? 1 : 0.25}
+                        className="text-foreground"
+                      />
+                    )
+                  })}
+                </Bar>
+              </BarChart>
+            </ResponsiveContainer>
+          </div>
         </div>
       </CardContent>
     </Card>
