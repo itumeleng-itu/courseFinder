@@ -5,31 +5,7 @@ import { evaluateNSC } from "@/lib/nsc"
 
 export type Subject = { id: string; name: string; percentage: number }
 
-const HOME_LANGUAGES = [
-  "English Home Language",
-  "Afrikaans Home Language",
-  "IsiZulu Home Language",
-  "IsiXhosa Home Language",
-  "Sepedi Home Language",
-  "Sesotho Home Language",
-  "Setswana Home Language",
-  "Tshivenda Home Language",
-  "Xitsonga Home Language",
-  "SiSwati Home Language",
-]
-
-const FIRST_ADDITIONAL_LANGUAGES = [
-  "English First Additional Language",
-  "Afrikaans First Additional Language",
-  "IsiZulu First Additional Language",
-  "IsiXhosa First Additional Language",
-  "Sepedi First Additional Language",
-  "Sesotho First Additional Language",
-  "Setswana First Additional Language",
-  "Tshivenda First Additional Language",
-  "Xitsonga First Additional Language",
-  "SiSwati First Additional Language",
-]
+import { HOME_LANGUAGES, FIRST_ADDITIONAL_LANGUAGES } from "@/lib/matric/constants"
 
 function getLanguageBase(name: string) {
   return name.split(" ")[0]
@@ -156,10 +132,10 @@ export function useNSCValidation(subjects: Subject[]): UseNSCValidationResult {
       label: "Language of Learning & Teaching (English/Afrikaans in HL/FAL)",
       status:
         homeLanguage && firstAdditionalLanguage &&
-        (homeLanguage.name.startsWith("English") ||
-          homeLanguage.name.startsWith("Afrikaans") ||
-          firstAdditionalLanguage.name.startsWith("English") ||
-          firstAdditionalLanguage.name.startsWith("Afrikaans"))
+          (homeLanguage.name.startsWith("English") ||
+            homeLanguage.name.startsWith("Afrikaans") ||
+            firstAdditionalLanguage.name.startsWith("English") ||
+            firstAdditionalLanguage.name.startsWith("Afrikaans"))
           ? "done"
           : "missing",
     },

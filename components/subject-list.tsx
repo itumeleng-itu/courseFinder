@@ -7,7 +7,7 @@ import type { SubjectEntry } from "@/lib/types"
 
 interface SubjectListProps {
   subjects: SubjectEntry[]
-  onRemove: (id: number) => void
+  onRemove: (id: string | number) => void
 }
 
 export default function SubjectList({ subjects, onRemove }: SubjectListProps) {

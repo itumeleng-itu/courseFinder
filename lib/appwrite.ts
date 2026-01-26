@@ -44,6 +44,12 @@ export const getDownloadUrl = (fileId: string, bucketId?: string): string => {
   const endpoint = requiredEnvVars.endpoint
   const projectId = requiredEnvVars.projectId
   const bucket = bucketId || process.env.NEXT_PUBLIC_APPWRITE_PAPERS_BUCKET_ID
+
+  if (!endpoint || !projectId || !bucket) {
+    console.error("Missing Appwrite config for download URL")
+    return "#"
+  }
+
   return `${endpoint}/storage/buckets/${bucket}/files/${fileId}/view?project=${projectId}`
 }
 
@@ -51,5 +57,11 @@ export const getPreviewUrl = (fileId: string, bucketId?: string): string => {
   const endpoint = requiredEnvVars.endpoint
   const projectId = requiredEnvVars.projectId
   const bucket = bucketId || process.env.NEXT_PUBLIC_APPWRITE_PAPERS_BUCKET_ID
+
+  if (!endpoint || !projectId || !bucket) {
+    console.error("Missing Appwrite config for preview URL")
+    return "#"
+  }
+
   return `${endpoint}/storage/buckets/${bucket}/files/${fileId}/preview?project=${projectId}`
 }
