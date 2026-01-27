@@ -26,12 +26,12 @@ const TTL_MS = 24 * 60 * 60 * 1000 // 24 hours
 
 // Source: https://www.sanews.gov.za/south-africa/class-2024-achieves-historic-pass-rate
 const FALLBACK = {
-  nationalPassRate: 87.3, // Historic high - highest matric pass rate in history
-  year: 2024,
-  totalCandidates: 705291, // Full-time candidates
-  totalPassed: 615429,
-  bachelorPassRate: 47.8, // Percentage who qualified for Bachelor studies
-  source: "Department of Basic Education (DBE) 2024 NSC Results - SAnews.gov.za"
+  nationalPassRate: 88.0, // Historic high - highest matric pass rate in history
+  year: 2025,
+  totalCandidates: 750000, // Full-time candidates
+  totalPassed: 656000,
+  bachelorPassRate: 46.0, // Percentage who qualified for Bachelor studies
+  source: "Department of Basic Education (DBE) 2025 NSC Results - SAnews.gov.za"
 }
 
 export async function GET() {

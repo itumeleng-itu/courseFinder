@@ -28,11 +28,6 @@ const mobileNavItems = [
     icon: FileText,
     href: "/matric-results",
   },
-  {
-    title: "Bursaries",
-    icon: DollarSign,
-    href: "/bursaries",
-  },
   // The last item will be replaced by a Study Tools menu
 ]
 

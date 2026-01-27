@@ -63,12 +63,6 @@ const dashboardRoutes: Route[] = [
       },
     ],
   },
-  {
-    id: "bursaries",
-    title: "Bursaries",
-    icon: <DollarSign className="size-4" />,
-    link: "/bursaries",
-  },
 ]
 
 export function DashboardSidebar() {

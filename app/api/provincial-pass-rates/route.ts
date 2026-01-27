@@ -54,6 +54,7 @@ const VERIFIED_NATIONAL_RATES: Record<number, number> = {
   2022: 80.1,
   2023: 82.9,
   2024: 87.3, // Historic high - highest in SA history
+  2025: 88.0, // New historic high
 }
 
 // VERIFIED PROVINCIAL PASS RATES (2020-2024)
@@ -65,21 +66,24 @@ const VERIFIED_PROVINCIAL_RATES: Record<string, Record<number, number>> = {
     2021: 85.7,
     2022: 88.5,
     2023: 89.0,
-    2024: 91.0, // Highest in 2024
+    2024: 91.0,
+    2025: 89.3,
   },
   "KwaZulu-Natal": {
     2020: 77.6,
     2021: 76.8,
     2022: 83.0,
     2023: 86.4,
-    2024: 89.5, // Second highest in 2024
+    2024: 89.5,
+    2025: 90.6, // Highest in 2025
   },
   Gauteng: {
     2020: 83.8,
     2021: 82.8,
     2022: 84.4,
     2023: 85.4,
-    2024: 88.4, // Third highest in 2024
+    2024: 88.4,
+    2025: 89.1,
   },
   "North West": {
     2020: 76.2,
@@ -87,6 +91,7 @@ const VERIFIED_PROVINCIAL_RATES: Record<string, Record<number, number>> = {
     2022: 79.8,
     2023: 81.6,
     2024: 87.5,
+    2025: 88.5,
   },
   "Western Cape": {
     2020: 79.9,
@@ -94,13 +99,15 @@ const VERIFIED_PROVINCIAL_RATES: Record<string, Record<number, number>> = {
     2022: 81.4,
     2023: 81.5,
     2024: 86.6,
+    2025: 88.2,
   },
   Limpopo: {
     2020: 68.2,
     2021: 66.7,
     2022: 72.1,
     2023: 79.5,
-    2024: 85.0, // Most improved province (5.5% increase from 2023)
+    2024: 85.1,
+    2025: 86.2,
   },
   Mpumalanga: {
     2020: 73.7,
@@ -108,13 +115,15 @@ const VERIFIED_PROVINCIAL_RATES: Record<string, Record<number, number>> = {
     2022: 76.8,
     2023: 77.0,
     2024: 84.9,
+    2025: 86.5,
   },
   "Eastern Cape": {
     2020: 68.1,
     2021: 73.0,
     2022: 77.3,
     2023: 81.4,
-    2024: 84.8,
+    2024: 84.9,
+    2025: 84.2,
   },
   "Northern Cape": {
     2020: 66.0,
@@ -122,6 +131,7 @@ const VERIFIED_PROVINCIAL_RATES: Record<string, Record<number, number>> = {
     2022: 74.2,
     2023: 75.8,
     2024: 84.2,
+    2025: 87.8, // Most improved
   },
 }
 

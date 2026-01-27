@@ -10,6 +10,8 @@ import { MobileNav } from "@/components/mobile-nav"
 import { PWAInstallPrompt } from "@/components/pwa-install-prompt"
 import { Analytics } from "@vercel/analytics/next"
 import { GoogleAnalytics } from "@/components/GoogleAnalytics"
+import { LocationProvider } from "@/components/providers/location-provider"
+import { LocationRequestDialog } from "@/components/location-request-dialog"
 
 export const metadata: Metadata = {
   title: "CourseFinder - Find Your Perfect University Course",
@@ -46,10 +48,13 @@ export default function RootLayout({
       </head>
       <body className="font-sans antialiased">
         <ThemeProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange>
-          <SidebarProvider>{children}</SidebarProvider>
-          <MobileNav />
-          <PWAInstallPrompt />
-          <Toaster />
+          <LocationProvider>
+            <SidebarProvider>{children}</SidebarProvider>
+            <MobileNav />
+            <PWAInstallPrompt />
+            <LocationRequestDialog />
+            <Toaster />
+          </LocationProvider>
         </ThemeProvider>
 
         <Analytics />

@@ -17,6 +17,7 @@ import { GeoErrorCard } from "./geo-stats/geo-error-card"
 import { PassRateCharts } from "./geo-stats/pass-rate-charts"
 import { GeoStatsSummary } from "./geo-stats/geo-stats-summary"
 import { YoYBarChart } from "./geo-stats/yoy-bar-chart"
+import { GeoPermissionCard } from "./geo-stats/geo-permission-card"
 
 export function GeoProvincialPass() {
   const isMobile = useIsMobile()
@@ -28,8 +29,18 @@ export function GeoProvincialPass() {
     data,
     yoy,
     handleRetry,
+    handleAllow,
     handleManualSelect,
   } = useGeoStats()
+
+  if (phase === "requesting-permission") {
+    return (
+      <GeoPermissionCard 
+        onAllow={handleAllow} 
+        onManualSelect={handleManualSelect} 
+      />
+    )
+  }
 
   if (loading) {
     return <GeoLoadingCard />

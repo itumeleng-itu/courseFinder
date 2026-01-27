@@ -18,7 +18,6 @@ const routeMap: Record<string, { title: string; description?: string }> = {
   "/": { title: "Dashboard", description: "Home dashboard" },
   "/find-course": { title: "Find Course", description: "Search for university courses" },
   "/matric-results": { title: "Matric Results", description: "View matric examination results" },
-  "/bursaries": { title: "Bursaries", description: "Available bursary opportunities" },
   "/colleges": { title: "Colleges", description: "Technical and vocational colleges" },
 }
 

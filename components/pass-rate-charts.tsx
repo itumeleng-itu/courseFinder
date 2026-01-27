@@ -10,6 +10,8 @@ interface MatricStats {
   national: {
     passRate: number
     totalCandidates: number
+    totalPassed?: number
+    failed?: number
     year: number
   }
   provinces: Array<{
@@ -32,7 +34,7 @@ export function PassRateCharts() {
   useEffect(() => {
     async function fetchStats() {
       try {
-        const [statsRes, nscRes] = await Promise.allSettled([fetch("/api/matric-stats"), fetch("/api/nsc-2024")])
+        const [statsRes, nscRes] = await Promise.allSettled([fetch("/api/matric-stats"), fetch("/api/nsc-2025")])
 
         let data: MatricStats | null = null
 
@@ -43,14 +45,15 @@ export function PassRateCharts() {
               national: {
                 passRate: Number(nscJson.passRate),
                 totalCandidates: Number(nscJson.wrote),
+                totalPassed: Number(nscJson.passes), // Map explicit passes
+                failed: Number(nscJson.failed), // Map explicit failed
                 year: Number(nscJson.year),
               },
               provinces: [],
-              // Mock qualification data - in a real app, this would come from the API
               qualifications: {
-                bachelors: Math.round(Number(nscJson.passes) * 0.45), // ~45% qualify for bachelors
-                diplomas: Math.round(Number(nscJson.passes) * 0.35), // ~35% qualify for diplomas
-                higherCertificate: Math.round(Number(nscJson.passes) * 0.20), // ~20% qualify for HC
+                bachelors: nscJson.bachelorPasses || Math.round(Number(nscJson.passes) * 0.548),
+                diplomas: nscJson.diplomaPasses || Math.round(Number(nscJson.passes) * 0.28),
+                higherCertificate: nscJson.higherCertificatePasses || Math.round(Number(nscJson.passes) * 0.135),
               }
             }
           }
@@ -62,9 +65,9 @@ export function PassRateCharts() {
             data = {
               ...statsJson.stats,
               qualifications: {
-                bachelors: Math.round(statsJson.stats.national.totalCandidates * statsJson.stats.national.passRate * 0.45 / 100),
-                diplomas: Math.round(statsJson.stats.national.totalCandidates * statsJson.stats.national.passRate * 0.35 / 100),
-                higherCertificate: Math.round(statsJson.stats.national.totalCandidates * statsJson.stats.national.passRate * 0.20 / 100),
+                bachelors: statsJson.stats.national.bachelorPasses || Math.round(statsJson.stats.national.totalCandidates * 0.478),
+                diplomas: statsJson.stats.national.diplomaPasses || Math.round(statsJson.stats.national.totalCandidates * 0.28),
+                higherCertificate: statsJson.stats.national.higherCertificatePasses || Math.round(statsJson.stats.national.totalCandidates * 0.135),
               }
             }
           }
@@ -102,8 +105,8 @@ export function PassRateCharts() {
     return null
   }
 
-  const passed = Math.round((stats.national.totalCandidates * stats.national.passRate) / 100)
-  const failed = stats.national.totalCandidates - passed
+  const passed = stats.national.totalPassed || Math.round((stats.national.totalCandidates * stats.national.passRate) / 100)
+  const failed = stats.national.failed || (stats.national.totalCandidates - passed)
 
   return (
     <div className={isMobile ? "grid gap-4 grid-cols-2" : "grid gap-4 md:grid-cols-2 lg:grid-cols-6"}>
