@@ -1,5 +1,6 @@
 import { events2024 } from "./calendar/data-2024"
 import { events2025 } from "./calendar/data-2025"
+import { events2026 } from "./calendar/data-2026"
 import {
   getUpcomingEvents as getUpcoming,
   getAllEventsWithStatus as getAllWithStatus,
@@ -10,7 +11,7 @@ import { CalendarEvent, CalendarNotification } from "./calendar/types"
 
 export * from "./calendar/types"
 
-export const calendarEvents: CalendarEvent[] = [...events2024, ...events2025]
+export const calendarEvents: CalendarEvent[] = [...events2024, ...events2025, ...events2026]
 
 export const getUpcomingEvents = (daysAhead: number = 7) => getUpcoming(calendarEvents, daysAhead)
 export const getAllEventsWithStatus = () => getAllWithStatus(calendarEvents)

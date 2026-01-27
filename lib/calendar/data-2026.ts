@@ -1,0 +1,26 @@
+import { CalendarEvent } from "./types"
+
+export const events2026: CalendarEvent[] = [
+    { date: new Date(2026, 0, 1), name: "New Year's Day", type: "public" },
+    { date: new Date(2026, 2, 21), name: "Human Rights Day", type: "public" },
+    { date: new Date(2026, 3, 3), name: "Good Friday", type: "public" },
+    { date: new Date(2026, 3, 6), name: "Family Day", type: "public" },
+    { date: new Date(2026, 3, 27), name: "Freedom Day", type: "public" },
+    { date: new Date(2026, 4, 1), name: "Workers' Day", type: "public" },
+    { date: new Date(2026, 5, 15), name: "Special School Holiday", type: "public" },
+    { date: new Date(2026, 5, 16), name: "Youth Day", type: "public" },
+    { date: new Date(2026, 7, 9), name: "National Women's Day", type: "public" },
+    { date: new Date(2026, 7, 10), name: "Public Holiday", type: "public" },
+    { date: new Date(2026, 8, 24), name: "Heritage Day", type: "public" },
+    { date: new Date(2026, 11, 16), name: "Day of Reconciliation", type: "public" },
+    { date: new Date(2026, 11, 25), name: "Christmas Day", type: "public" },
+    { date: new Date(2026, 11, 26), name: "Day of Goodwill", type: "public" },
+    { date: new Date(2026, 0, 14), name: "Schools Reopen", type: "academic" },
+    { date: new Date(2026, 2, 27), name: "Term 1 Ends", type: "academic" },
+    { date: new Date(2026, 3, 8), name: "Term 2 Begins", type: "academic" },
+    { date: new Date(2026, 5, 26), name: "Term 2 Ends", type: "academic" },
+    { date: new Date(2026, 6, 21), name: "Term 3 Begins", type: "academic" },
+    { date: new Date(2026, 8, 23), name: "Term 3 Ends", type: "academic" },
+    { date: new Date(2026, 9, 6), name: "Term 4 Begins", type: "academic" },
+    { date: new Date(2026, 11, 11), name: "Schools Close", type: "academic" },
+]
