@@ -60,7 +60,7 @@ export function PastPapersClient({ papers }: { papers: QuestionPaper[] }) {
               <div className="space-y-4">
                 <h1 className="text-3xl font-bold tracking-tight">Past Question Papers</h1>
                 <p className="text-muted-foreground text-lg">
-                  Search and download past examination papers from the Department of Basic Education
+                  Search and download past examination papers sourced from <a href="https://www.teachme2.com/matric-past-exam-papers" target="_blank" rel="noopener noreferrer" className="text-primary hover:underline">TeachMe2.com</a>.
                 </p>
               </div>
 

@@ -91,8 +91,8 @@ export default function FindCoursePage() {
           <Separator orientation="vertical" className="mr-2 h-4" /><Search className="h-5 w-5 text-purple-600" /><h1 className="text-lg font-semibold">Find a Course</h1>
         </header>
 
-        <div className="flex flex-col lg:flex-row h-[calc(100vh-4rem)] overflow-hidden">
-          <div className="w-full lg:w-[400px] border-b lg:border-r bg-card flex-shrink-0 flex flex-col h-full overflow-y-auto">
+        <div className="flex flex-col lg:flex-row lg:h-[calc(100vh-4rem)] lg:overflow-hidden">
+          <div className="w-full lg:w-[400px] border-b lg:border-r bg-card flex-shrink-0 flex flex-col h-auto lg:h-full lg:overflow-y-auto">
             <div className="p-4 border-b">
               <h2 className="text-lg font-bold">Calculate Your APS</h2>
             </div>
@@ -115,11 +115,11 @@ export default function FindCoursePage() {
             <SubjectInputForm currentSubject={currentSubject} setCurrentSubject={setCurrentSubject} currentPercentage={currentPercentage} setCurrentPercentage={setCurrentPercentage} isSubjectDisabled={(name) => validator.isSubjectDisabled(name)} onAddSubject={addSubject} subjectsCount={subjects.length} />
           </div>
 
-          <div className="flex-1 flex flex-col overflow-hidden">
+          <div className="flex-1 flex flex-col lg:overflow-hidden h-auto">
             {hasCalculated && (
               <>
                 <CourseFilters searchQuery={searchQuery} setSearchQuery={setSearchQuery} showOnlyQualified={showOnlyQualified} setShowOnlyQualified={setShowOnlyQualified} qualifiedCount={qualifiedCount} partialCount={qualifyingCourses.length - qualifiedCount} />
-                <ScrollArea className="flex-1">
+                <ScrollArea className="lg:flex-1 h-auto">
                   <div className="p-4 md:p-6">
                     {filteredCourses.length === 0 ? (
                       <Card><CardContent className="pt-6 text-center py-8 text-muted-foreground">No courses match your search or APS score.</CardContent></Card>
