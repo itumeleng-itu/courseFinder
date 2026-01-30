@@ -19,13 +19,18 @@ export function LocationRequestDialog() {
   const [hasDeclined, setHasDeclined] = useState(false);
 
   useEffect(() => {
-    // Check if user has previously declined in this session (or load from localstorage if needed persistence across sessions)
+    // Check if user has previously declined (permanent) or seen in this session
     const declined = localStorage.getItem('locationp_declined');
+    const seen = sessionStorage.getItem('locationp_seen');
+    
     if (declined) setHasDeclined(true);
 
-    if (permissionStatus === 'prompt' && !declined) {
+    if (permissionStatus === 'prompt' && !declined && !seen) {
       // Delay slightly for better UX on load
-      const timer = setTimeout(() => setIsOpen(true), 1500);
+      const timer = setTimeout(() => {
+        setIsOpen(true);
+        sessionStorage.setItem('locationp_seen', 'true');
+      }, 1500);
       return () => clearTimeout(timer);
     } else if (permissionStatus === 'granted') {
       setIsOpen(false);
@@ -38,8 +43,6 @@ export function LocationRequestDialog() {
       setIsOpen(false);
     } catch (e) {
       console.error(e);
-      // Keep dialog open if error? or close it. 
-      // Usually if they deny in the browser prompt, permissionStatus becomes 'denied' which closes this.
     }
   };
 
@@ -49,10 +52,18 @@ export function LocationRequestDialog() {
     setIsOpen(false);
   };
 
+  const handleOpenChange = (open: boolean) => {
+    setIsOpen(open);
+    if (!open) {
+      // If user dismisses by clicking outside, remember for this session
+      sessionStorage.setItem('locationp_seen', 'true');
+    }
+  };
+
   if (permissionStatus === 'granted' || permissionStatus === 'denied') return null;
 
   return (
-    <Dialog open={isOpen} onOpenChange={setIsOpen}>
+    <Dialog open={isOpen} onOpenChange={handleOpenChange}>
       <DialogContent className="sm:max-w-[425px]">
         <DialogHeader>
           <div className="mx-auto bg-blue-100 dark:bg-blue-900/30 p-3 rounded-full w-fit mb-4">

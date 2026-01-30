@@ -30,17 +30,35 @@ export function LocationProvider({ children }: { children: React.ReactNode }) {
       return;
     }
 
+    // Detect iOS - iOS Safari doesn't properly support the Permissions API for geolocation
+    // and querying it can sometimes trigger prompts or behave unexpectedly
+    const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) || 
+                  (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+
+    if (isIOS) {
+      // On iOS, we don't query permissions - just set to 'prompt' state
+      // The user will need to explicitly trigger location request
+      setPermissionStatus('prompt');
+      setIsLoading(false);
+      return;
+    }
+
     try {
+      // Check if permissions API is available (not available on all browsers)
+      if (!navigator.permissions || typeof navigator.permissions.query !== 'function') {
+        setPermissionStatus('prompt');
+        setIsLoading(false);
+        return;
+      }
+
       const result = await navigator.permissions.query({ name: 'geolocation' });
       setPermissionStatus(result.state);
       
       if (result.state === 'granted') {
         getCurrentLocation();
-      } else if (result.state === 'prompt') {
-        // We wait for user action to request
-        setIsLoading(false);
       } else {
-        // Denied
+        // For 'prompt' or 'denied', just set loading to false
+        // Don't automatically request location - wait for user action
         setIsLoading(false);
       }
 
@@ -51,8 +69,8 @@ export function LocationProvider({ children }: { children: React.ReactNode }) {
         }
       };
     } catch (e) {
-      console.error('Error checking permissions:', e);
       // Fallback for browsers that don't support permissions API fully
+      setPermissionStatus('prompt');
       setIsLoading(false);
     }
   };

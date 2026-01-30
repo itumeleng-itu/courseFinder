@@ -26,16 +26,16 @@ const TTL_MS = 24 * 60 * 60 * 1000
 
 const FALLBACK = {
     year: 2025,
-    passRate: 88.0, // Historic high - highest matric pass rate in history (up from 87.3% in 2024)
-    passes: 660_000, // Over 656,000 learners passed
-    wrote: 900_000, // More than 900,000 candidates wrote
-    failed: 110_000, // Calculated/Estimate
-    bachelorPasses: 345_000, // Over 345,000 matriculants achieved bachelor's pass
-    bachelorPassRate: 46.0, // 46% of candidates qualifying for Bachelor studies
-    diplomaPasses: 210_000, // ~28%
-    higherCertificatePasses: 101_000, // ~13.5%
-    distinctions: 350_000, // Estimate based on trend (previous was 320k)
-    source: "Department of Basic Education - 2025 NSC Results (SAnews.gov.za)",
+    passRate: 88.1, // Official 2025 Pass Rate
+    passes: 794_376, // 88.1% of 901,790
+    wrote: 901_790, // Official total candidates
+    failed: 107_414, // 901,790 - 794,376
+    bachelorPasses: 398_500, // 50.2%
+    bachelorPassRate: 50.2,
+    diplomaPasses: 238_312, // 30.0%
+    higherCertificatePasses: 157_564, // 19.8%
+    distinctions: 350_000,
+    source: "Department of Basic Education - Official 2025 Results",
 }
 
 export async function GET() {

@@ -7,6 +7,20 @@ const nextConfig = {
   trailingSlash: true,
   images: {
     unoptimized: true,
+    remotePatterns: [
+      {
+        protocol: 'https',
+        hostname: 'picsum.photos',
+      },
+      {
+        protocol: 'https',
+        hostname: '*.newsdata.io',
+      },
+      {
+        protocol: 'https',
+        hostname: '**',
+      },
+    ],
   },
   assetPrefix: process.env.NODE_ENV === "production" ? "" : "",
   basePath: "",

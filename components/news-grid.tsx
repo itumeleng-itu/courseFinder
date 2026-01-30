@@ -4,9 +4,10 @@ import { useEffect, useState } from "react"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { Skeleton } from "@/components/ui/skeleton"
-import { ExternalLink, Share2 } from "lucide-react"
+import { ExternalLink, ArrowRight, Share2 } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import Image from "next/image"
+import Link from "next/link"
 import { useToast } from "@/components/ui/use-toast"
 
 interface NewsArticle {
@@ -154,19 +155,35 @@ export function NewsGrid() {
                   {article.source_id && !article.source_id.includes("Fallback") && <> • {article.source_id}</>}
                 </CardDescription>
               </CardHeader>
-              <CardContent className="p-4 sm:p-6 pt-0">
+                <CardContent className="p-4 sm:p-6 pt-0">
                 <div className="flex items-center gap-2">
-                  <Button
-                    asChild
-                    variant="ghost"
-                    size="sm"
-                    className="flex-1 justify-start px-0 h-auto font-normal text-xs sm:text-sm"
-                  >
-                    <a href={article.link} target="_blank" rel="noopener noreferrer" className="flex items-center gap-2">
-                      Read article
-                      <ExternalLink className="h-3 w-3" />
-                    </a>
-                  </Button>
+                  {article.link.startsWith('http') ? (
+                    // External link - open in new tab
+                    <Button
+                      asChild
+                      variant="ghost"
+                      size="sm"
+                      className="flex-1 justify-start px-0 h-auto font-normal text-xs sm:text-sm"
+                    >
+                      <a href={article.link} target="_blank" rel="noopener noreferrer" className="flex items-center gap-2">
+                        Read article
+                        <ExternalLink className="h-3 w-3" />
+                      </a>
+                    </Button>
+                  ) : (
+                    // Internal link - use Next.js Link for SPA navigation
+                    <Button
+                      asChild
+                      variant="ghost"
+                      size="sm"
+                      className="flex-1 justify-start px-0 h-auto font-normal text-xs sm:text-sm"
+                    >
+                      <Link href={article.link} className="flex items-center gap-2">
+                        Read more
+                        <ArrowRight className="h-3 w-3" />
+                      </Link>
+                    </Button>
+                  )}
                   <Button
                     variant="ghost"
                     size="sm"

@@ -21,8 +21,14 @@ export default function QualifyingCourses({ apsScore, subjects }: QualifyingCour
   const [query, setQuery] = useState("")
   const [selected, setSelected] = useState<CourseWithUniversity | null>(null)
   
-  const allCourses = universities.flatMap(u => u.courses.map(c => ({ ...c, universityName: u.name, universityShortName: u.shortName, universityWebsite: u.website })))
-  const qualifying = allCourses.filter(c => apsScore >= c.minimumAPS && (query === "" || c.name.toLowerCase().includes(query.toLowerCase()) || c.universityName.toLowerCase().includes(query.toLowerCase()) || c.faculty?.toLowerCase().includes(query.toLowerCase())))
+  const allCourses = universities.flatMap(u => u.courses.map(c => ({
+    ...c,
+    universityName: u.name,
+    universityShortName: u.shortName,
+    universityWebsite: u.website || "",
+    minimumAPS: c.apsMin ?? c.apsRequired ?? 0,
+  })))
+  const qualifying = allCourses.filter(c => apsScore >= (c.apsRequired ?? 0) && (query === "" || c.name.toLowerCase().includes(query.toLowerCase()) || c.universityName.toLowerCase().includes(query.toLowerCase()) || c.faculty?.toLowerCase().includes(query.toLowerCase())))
 
   return (
     <>

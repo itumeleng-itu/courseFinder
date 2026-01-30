@@ -15,6 +15,7 @@ interface SubjectInputFormProps {
   subjectsCount: number
 }
 
+
 export function SubjectInputForm({
   currentSubject,
   setCurrentSubject,
@@ -24,21 +25,25 @@ export function SubjectInputForm({
   onAddSubject,
   subjectsCount,
 }: SubjectInputFormProps) {
+  const handleKeyDown = (e: React.KeyboardEvent) => {
+    if (e.key === "Enter" && currentSubject && currentPercentage) {
+      onAddSubject()
+    }
+  }
+
   return (
-    <div className="border-t bg-card p-4">
-      <Card className="glass-card">
-        <CardHeader className="pb-3">
-          <CardTitle className="text-base">Add Subject Manually</CardTitle>
-        </CardHeader>
-        <CardContent className="space-y-3">
+    <div className="border-t bg-card/50 backdrop-blur-sm p-4 sticky bottom-0 z-10">
+      <div className="flex flex-col gap-3">
+        <p className="text-sm font-medium text-muted-foreground mb-1">Add a Subject</p>
+        <div className="flex gap-2">
           <Select value={currentSubject} onValueChange={setCurrentSubject}>
-            <SelectTrigger className="text-sm glass-input">
-              <SelectValue placeholder="Select subject" />
+            <SelectTrigger className="flex-1 glass-input">
+              <SelectValue placeholder="Select subject..." />
             </SelectTrigger>
-            <SelectContent className="glass-modal">
+            <SelectContent className="glass-modal max-h-[300px]">
               {SUBJECT_CATEGORIES.map((category) => (
                 <SelectGroup key={category.label}>
-                  <SelectLabel className="text-primary font-bold">{category.label}</SelectLabel>
+                  <SelectLabel className="text-primary font-bold sticky top-0 bg-background/95 backdrop-blur z-10 py-2">{category.label}</SelectLabel>
                   {category.options.map((option) => {
                     const disabled = isSubjectDisabled(option.value)
                     return (
@@ -56,26 +61,33 @@ export function SubjectInputForm({
               ))}
             </SelectContent>
           </Select>
+        </div>
 
-          <Input
-            type="number"
-            placeholder="Percentage (0-100)"
-            value={currentPercentage}
-            onChange={(e) => setCurrentPercentage(e.target.value)}
-            min="0"
-            max="100"
-            className="text-sm glass-input"
-          />
+        <div className="flex gap-2">
+          <div className="relative w-24 flex-shrink-0">
+             <Input
+              type="number"
+              placeholder="%"
+              value={currentPercentage}
+              onChange={(e) => setCurrentPercentage(e.target.value)}
+              onKeyDown={handleKeyDown}
+              min="0"
+              max="100"
+              className="glass-input pr-6"
+            />
+             <span className="absolute right-3 top-2.5 text-xs text-muted-foreground pointer-events-none">%</span>
+          </div>
+         
           <Button
             onClick={onAddSubject}
             disabled={!currentSubject || !currentPercentage}
-            className="w-full text-sm glass-button"
+            className="flex-1 glass-button"
           >
             <Plus className="h-4 w-4 mr-2" />
-            Add Subject ({subjectsCount})
+            Add Subject
           </Button>
-        </CardContent>
-      </Card>
+        </div>
+      </div>
     </div>
   )
 }

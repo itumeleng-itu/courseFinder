@@ -1,127 +1,161 @@
 "use client"
 
+import * as React from "react"
 import { useState } from "react"
-import { Calendar } from "@/components/ui/calendar"
-import { Card } from "@/components/ui/card"
-import { Badge } from "@/components/ui/badge"
-import { isSameDay } from "date-fns"
+import { 
+  format, 
+  addMonths, 
+  subMonths, 
+  startOfMonth, 
+  endOfMonth, 
+  startOfWeek, 
+  endOfWeek, 
+  eachDayOfInterval, 
+  isSameMonth, 
+  isSameDay 
+} from "date-fns"
+import { ChevronLeft, ChevronRight } from "lucide-react"
 import { cn } from "@/lib/utils"
-import { getAllEventsWithStatus, detectConflictsForDate } from "@/lib/calendar-events"
-import { Calendar as CalendarIcon } from "lucide-react"
+import { getAllEventsWithStatus } from "@/lib/calendar-events"
 
 const calendarEvents = getAllEventsWithStatus()
 
 export function CalendarMobile() {
-  const [selectedDate, setSelectedDate] = useState<Date | undefined>(new Date())
+  const [currentDate, setCurrentDate] = useState(new Date())
+  const [selectedDate, setSelectedDate] = useState(new Date())
 
+  // Calendar Logic
+  const monthStart = startOfMonth(currentDate)
+  const monthEnd = endOfMonth(monthStart)
+  const startDate = startOfWeek(monthStart, { weekStartsOn: 1 }) // Monday start
+  const endDate = endOfWeek(monthEnd, { weekStartsOn: 1 })
+
+  const calendarDays = eachDayOfInterval({
+    start: startDate,
+    end: endDate,
+  })
+
+  // Navigation
+  const nextMonth = () => setCurrentDate(addMonths(currentDate, 1))
+  const prevMonth = () => setCurrentDate(subMonths(currentDate, 1))
+
+  // Event checking
   const getEventsForDate = (date: Date) => {
     return calendarEvents.filter((event) => isSameDay(event.date, date))
   }
 
-  const selectedDateEvents = selectedDate ? getEventsForDate(selectedDate) : []
+  // Selected Date Info
+  const displayDate = selectedDate.getDate()
+  const displayMonth = format(selectedDate, "MMMM").toUpperCase()
+  const displayYear = format(selectedDate, "yyyy")
+  const displayDayName = format(selectedDate, "EEE")
 
   return (
-    <div className="space-y-4">
-      {/* Compact Calendar for Mobile */}
-      <div className="glass-light dark:glass-dark p-4 rounded-lg">
-        <Calendar
-          mode="single"
-          selected={selectedDate}
-          onSelect={setSelectedDate}
-          className={cn(
-            "w-full",
-            "[&_.rdp-day]:text-xs",
-            "[&_.rdp-day_button]:p-1",
-            "[&_.rdp-cell]:p-0",
-            "[&_.rdp-month]:w-full",
-            "[&_.rdp-caption]:text-sm",
-            "[&_.rdp-head_cell]:text-xs py-1",
-          )}
-          components={{
-            DayButton: ({ day, modifiers, ...props }) => {
-              const dayEvents = getEventsForDate(day.date)
-              const conflictSummary = detectConflictsForDate(day.date, dayEvents)
-              const isSelected = modifiers.selected
-              return (
-                <button
-                  {...props}
-                  className={cn(
-                    "relative w-full h-full min-h-12 p-1 flex flex-col items-start justify-start gap-1 text-left rounded transition-all",
-                    "hover:bg-accent/50",
-                    isSelected && "bg-primary text-primary-foreground",
-                    modifiers.outside && "text-muted-foreground opacity-50",
-                    modifiers.disabled && "opacity-50 cursor-not-allowed",
-                  )}
-                >
-                  {(conflictSummary.hard || conflictSummary.soft) && (
-                    <span
-                      aria-label={conflictSummary.hard ? "Hard conflict detected" : "Potential scheduling conflict"}
-                      className={cn(
-                        "absolute top-1 right-1 h-1.5 w-1.5 rounded-full",
-                        conflictSummary.hard ? "bg-red-500" : "bg-amber-500",
-                      )}
-                    />
-                  )}
-                  <span className="text-xs font-medium">{day.date.getDate()}</span>
-                  {dayEvents.length > 0 && (
-                    <div className="flex items-center gap-0.5 mt-auto">
-                      <CalendarIcon className="h-2.5 w-2.5 text-primary" />
-                      {dayEvents.length > 1 && (
-                        <span className="text-[9px] font-medium text-primary">
-                          {dayEvents.length}
-                        </span>
-                      )}
-                    </div>
-                  )}
-                </button>
-              )
-            },
-          }}
-        />
+    <div className="flex flex-col w-full mx-auto bg-[#EBEBEB] text-[#111111] overflow-hidden rounded-xl shadow-sm min-h-[500px] font-sans">
+      
+      {/* Header Section */}
+      <div className="pt-8 pb-4 px-6 flex justify-between items-start">
+        <div className="flex flex-col">
+          {/* Big Date Number */}
+          <span className="text-[6rem] leading-[0.9] font-bold tracking-tighter">
+            {displayDate}
+          </span>
+          
+          {/* Month and Year */}
+          <div className="mt-2 text-xl font-normal tracking-wide space-y-0">
+            <div className="uppercase">{displayMonth}</div>
+            <div className="text-black/60">{displayYear}</div>
+          </div>
+        </div>
+
+        {/* Day Name (Sun, Mon, etc) */}
+        <div className="pt-2">
+          <span className="text-xl font-medium">{displayDayName}</span>
+        </div>
       </div>
 
-      {/* Events for Selected Date */}
-      {selectedDate && (
-        <Card className="glass-light dark:glass-dark p-4 space-y-3">
-          <h3 className="font-semibold text-sm">
-            {selectedDate.toLocaleDateString("en-ZA", {
-              month: "short",
-              day: "numeric",
-            })}
-          </h3>
-          {selectedDateEvents.length > 0 ? (
-            <div className="space-y-2">
-              {selectedDateEvents.map((event, index) => {
-                const conflictMap = detectConflictsForDate(selectedDate!, selectedDateEvents).eventConflictMap
-                const conflictType = conflictMap[event.name]
-                return (
-                <div key={index} className="p-2 bg-background/50 dark:bg-background/30 rounded border border-border/50">
-                  <Badge className="text-xs mb-1" variant={event.type === "public" ? "destructive" : "default"}>
-                    {event.type === "public"
-                      ? "Holiday"
-                      : event.type === "academic"
-                        ? "Academic"
-                        : event.type === "exam"
-                          ? "Exam"
-                          : "Event"}
-                  </Badge>
-                  {conflictType && (
-                    <Badge
-                      variant={conflictType === "hard" ? "destructive" : "secondary"}
-                      className={cn("text-[10px] mb-1 ml-2", conflictType === "soft" && "bg-amber-500 text-white")}
-                    >
-                      Conflict
-                    </Badge>
-                  )}
-                  <p className="text-xs font-medium line-clamp-2">{event.name}</p>
-                </div>
-              )})}
+      {/* Navigation */}
+      <div className="flex gap-8 px-8 py-4">
+        <button onClick={prevMonth} className="p-2 hover:bg-black/5 rounded-full transition-colors">
+          <ChevronLeft className="w-5 h-5 text-black" />
+        </button>
+        <button onClick={nextMonth} className="p-2 hover:bg-black/5 rounded-full transition-colors">
+          <ChevronRight className="w-5 h-5 text-black" />
+        </button>
+      </div>
+
+      {/* Calendar Grid */}
+      <div className="flex flex-col px-6 mt-4">
+        {/* Weekday Headers */}
+        <div className="grid grid-cols-7 mb-4">
+          {["M", "T", "W", "T", "F", "S", "S"].map((day, i) => (
+            <div key={i} className="text-center text-xs font-semibold text-black/50">
+              {day}
             </div>
-          ) : (
-            <p className="text-xs text-muted-foreground">No events</p>
-          )}
-        </Card>
-      )}
+          ))}
+        </div>
+
+        {/* Days */}
+        <div className="grid grid-cols-7 gap-y-4 justify-items-center">
+          {calendarDays.map((day, dayIdx) => {
+            const isSelected = isSameDay(day, selectedDate)
+            const isCurrentMonth = isSameMonth(day, monthStart)
+            const events = getEventsForDate(day)
+            const hasEvents = events.length > 0
+            
+            // "Grid of circles" aesthetic
+            // Selected: Orange circle
+            // Others: Black circle (filled) or text? 
+            // Based on Braun aesthetics, likely black filled circles for generic 'active' elements, 
+            // but for a calendar, you need to read the numbers.
+            // I'll stick to: Standard days are readable numbers. 
+            // The "dots" look might be achieved by the high contrast circles.
+
+            return (
+              <button
+                key={day.toString()}
+                onClick={() => setSelectedDate(day)}
+                className={cn(
+                  "relative w-10 h-10 flex items-center justify-center rounded-full text-sm font-medium transition-all duration-200",
+                  !isCurrentMonth && "opacity-20",
+                  isSelected 
+                    ? "bg-[#FF5F00] text-white shadow-md scale-110" // Distinctive orange
+                    : "bg-[#1A1A1A] text-white hover:bg-black/80" // Dark circles for all other days to match "grid of circles" description
+                )}
+              >
+                {format(day, "d")}
+                
+                {/* Event Dot (if not selected, since selected helps visibility) */}
+                {hasEvents && !isSelected && (
+                  <div className="absolute -bottom-1 w-1 h-1 bg-[#FF5F00] rounded-full" />
+                )}
+              </button>
+            )
+          })}
+        </div>
+      </div>
+
+      {/* Footer */}
+      {/* Selected Day Events */}
+      <div className="mt-auto p-6 bg-white/50 border-t border-black/5 min-h-[120px]">
+        {getEventsForDate(selectedDate).length > 0 ? (
+          <div className="space-y-3">
+            {getEventsForDate(selectedDate).map((event, i) => (
+              <div key={i} className="flex items-start gap-3">
+                <div className={`w-2 h-2 mt-2 rounded-full flex-shrink-0 ${event.type === 'public' ? 'bg-[#FF5F00]' : 'bg-blue-600'}`} />
+                <div>
+                  <h4 className="text-sm font-semibold text-gray-900">{event.name}</h4>
+                  {event.description && (
+                    <p className="text-xs text-gray-500 mt-1 line-clamp-1">{event.description}</p>
+                  )}
+                </div>
+              </div>
+            ))}
+          </div>
+        ) : (
+          <p className="text-sm text-center text-gray-400 py-2">No events scheduled</p>
+        )}
+      </div>
     </div>
   )
 }

@@ -26,11 +26,11 @@ export class UCT extends BaseUniversity {
       id: "uct-bcom-general",
       name: "Bachelor of Commerce (General)",
       faculty: "Commerce",
-      apsRequired: 435, // Updated FPS from 35 to 435 (out of 600) per 2026 prospectus Band A
+      apsMin: 32, // Traditional APS (FPS 435/600 equivalent)
       duration: "3 years",
       subjectRequirements: {
-        Mathematics: 60,
-        English: 50, // HL or 60 for FAL
+        Mathematics: 5, // 60% = Level 5
+        English: 4, // 50% = Level 4 (HL) or Level 5 for FAL
       },
       additionalRequirements: [
         "NBT scores of Upper Intermediate or above for AL & QL",
@@ -49,11 +49,11 @@ export class UCT extends BaseUniversity {
       id: "uct-bbussc-general",
       name: "Bachelor of Business Science (General)",
       faculty: "Commerce",
-      apsRequired: 435, // Updated to 435 FPS Band A per 2026 prospectus
+      apsMin: 32, // Traditional APS (FPS 435/600 equivalent)
       duration: "4 years",
       subjectRequirements: {
-        Mathematics: 60,
-        English: 50, // HL or 60 for FAL
+        Mathematics: 5, // 60% = Level 5
+        English: 4, // 50% = Level 4 (HL) or Level 5 for FAL
       },
       additionalRequirements: [
         "NBT scores of Upper Intermediate or above for AL & QL",
@@ -71,11 +71,11 @@ export class UCT extends BaseUniversity {
       id: "uct-bbussc-actuarial",
       name: "Bachelor of Business Science in Actuarial Science",
       faculty: "Commerce",
-      apsRequired: 435, // Updated to 435 FPS Band A per 2026 prospectus
+      apsMin: 34, // Traditional APS - highly competitive (FPS 435/600 equivalent)
       duration: "4 years",
       subjectRequirements: {
-        Mathematics: 80,
-        English: 60, // HL or 80 for FAL
+        Mathematics: 7, // 80% = Level 7
+        English: 5, // 60% = Level 5 (HL) or Level 7 for FAL
       },
       additionalRequirements: [
         "NBT scores of Proficient for AL & QL (FAL applicants)",
@@ -95,11 +95,11 @@ export class UCT extends BaseUniversity {
       id: "uct-bcom-computer-science",
       name: "Bachelor of Commerce in Computer Science",
       faculty: "Commerce",
-      apsRequired: 435, // Updated to 435 FPS Band A
+      apsMin: 32, // Traditional APS (FPS 435/600 equivalent)
       duration: "3 years",
       subjectRequirements: {
-        Mathematics: 70,
-        English: 50, // HL or 60 for FAL
+        Mathematics: 6, // 70% = Level 6
+        English: 4, // 50% = Level 4 (HL) or Level 5 for FAL
       },
       additionalRequirements: [
         "NBT scores of Upper Intermediate or above for AL & QL",
@@ -119,11 +119,11 @@ export class UCT extends BaseUniversity {
       id: "uct-bsc-eng-civil",
       name: "BSc Engineering (Civil)",
       faculty: "Engineering & the Built Environment",
-      apsRequired: 500, // FPS 500 Band A per 2026 prospectus
+      apsMin: 35, // Traditional APS (FPS 500/600 equivalent)
       duration: "4 years",
       subjectRequirements: {
-        Mathematics: 75,
-        "Physical Sciences": 70,
+        Mathematics: 6, // 75% = Level 6
+        "Physical Sciences": 6, // 70% = Level 6
       },
       additionalRequirements: [
         "NBT in Mathematics, AL & QL required",
@@ -143,11 +143,11 @@ export class UCT extends BaseUniversity {
       id: "uct-bsc-eng-electrical",
       name: "BSc Engineering (Electrical, Electrical and Computer Engineering and Mechatronics)",
       faculty: "Engineering & the Built Environment",
-      apsRequired: 500, // FPS 500 Band A per 2026 prospectus
+      apsMin: 36, // Traditional APS (FPS 500/600 equivalent)
       duration: "4 years",
       subjectRequirements: {
-        Mathematics: 80,
-        "Physical Sciences": 75,
+        Mathematics: 7, // 80% = Level 7
+        "Physical Sciences": 6, // 75% = Level 6
       },
       additionalRequirements: [
         "NBT in Mathematics, AL & QL required",
@@ -167,11 +167,11 @@ export class UCT extends BaseUniversity {
       id: "uct-bsc-eng-mechanical",
       name: "BSc Engineering (Mechanical)",
       faculty: "Engineering & the Built Environment",
-      apsRequired: 500, // FPS 500 Band A per 2026 prospectus
+      apsMin: 36, // Traditional APS (FPS 500/600 equivalent)
       duration: "4 years",
       subjectRequirements: {
-        Mathematics: 80,
-        "Physical Sciences": 75,
+        Mathematics: 7, // 80% = Level 7
+        "Physical Sciences": 6, // 75% = Level 6
       },
       additionalRequirements: [
         "NBT in Mathematics, AL & QL required",
@@ -190,11 +190,11 @@ export class UCT extends BaseUniversity {
       id: "uct-bsc-eng-chemical",
       name: "BSc Engineering (Chemical)",
       faculty: "Engineering & the Built Environment",
-      apsRequired: 500, // FPS 500 Band A per 2026 prospectus
+      apsMin: 36, // Traditional APS (FPS 500/600 equivalent)
       duration: "4 years",
       subjectRequirements: {
-        Mathematics: 80,
-        "Physical Sciences": 70,
+        Mathematics: 7, // 80% = Level 7
+        "Physical Sciences": 6, // 70% = Level 6
       },
       additionalRequirements: [
         "NBT in Mathematics, AL & QL required",
@@ -213,11 +213,11 @@ export class UCT extends BaseUniversity {
       id: "uct-bas",
       name: "Bachelor of Architectural Studies",
       faculty: "Engineering & the Built Environment",
-      apsRequired: 400, // Updated from 40 to 400 FPS (out of 600)
+      apsMin: 30, // Traditional APS (FPS 400/600 equivalent)
       duration: "3 years",
       subjectRequirements: {
-        Mathematics: 50,
-        English: 50,
+        Mathematics: 4, // 50% = Level 4
+        English: 4, // 50% = Level 4
       },
       additionalRequirements: [
         "Portfolio submission required (75% or above for guaranteed admission)",
@@ -236,11 +236,11 @@ export class UCT extends BaseUniversity {
       id: "uct-bsc-construction",
       name: "BSc Construction Studies",
       faculty: "Engineering & the Built Environment",
-      apsRequired: 450, // Updated to 450 FPS Band A
+      apsMin: 33, // Traditional APS (FPS 450/600 equivalent)
       duration: "3 years",
       subjectRequirements: {
-        Mathematics: 65,
-        "Physical Sciences": 60,
+        Mathematics: 5, // 65% = Level 5
+        "Physical Sciences": 5, // 60% = Level 5
       },
       additionalRequirements: [
         "NBT in Mathematics, AL & QL required",
@@ -261,12 +261,12 @@ export class UCT extends BaseUniversity {
       id: "uct-mbchb",
       name: "Bachelor of Medicine and Bachelor of Surgery (MBChB)",
       faculty: "Health Sciences",
-      apsRequired: 628, // Updated from 810 to 628 FPS (out of 900) Band A per 2026 prospectus
+      apsMin: 38, // Traditional APS - highly competitive (FPS 628/900 equivalent)
       duration: "6 years",
       subjectRequirements: {
-        Mathematics: 70,
-        "Physical Sciences": 70,
-        English: 65,
+        Mathematics: 6, // 70% = Level 6
+        "Physical Sciences": 6, // 70% = Level 6
+        English: 5, // 65% = Level 5
       },
       additionalRequirements: [
         "NBT scores of Proficient for AL, QL and Mathematics",
@@ -286,12 +286,12 @@ export class UCT extends BaseUniversity {
       id: "uct-bsc-physiotherapy",
       name: "BSc Physiotherapy",
       faculty: "Health Sciences",
-      apsRequired: 550, // Updated from 730 to 550 FPS (out of 900) Band A
+      apsMin: 35, // Traditional APS (FPS 550/900 equivalent)
       duration: "4 years",
       subjectRequirements: {
-        Mathematics: 60,
-        "Physical Sciences": 65, // or Life Sciences
-        English: 65,
+        Mathematics: 5, // 60% = Level 5
+        "Physical Sciences": 5, // 65% = Level 5 (or Life Sciences)
+        English: 5, // 65% = Level 5
       },
       additionalRequirements: [
         "NBT scores of Intermediate or above for AL, QL and Mathematics",
@@ -310,12 +310,12 @@ export class UCT extends BaseUniversity {
       id: "uct-bsc-occupational-therapy",
       name: "BSc Occupational Therapy",
       faculty: "Health Sciences",
-      apsRequired: 540, // Updated from 730 to 540 FPS (out of 900) Band A
+      apsMin: 34, // Traditional APS (FPS 540/900 equivalent)
       duration: "4 years",
       subjectRequirements: {
-        Mathematics: 60, // or Mathematical Literacy 70%
-        "Physical Sciences": 65, // or Life Sciences
-        English: 65,
+        Mathematics: 5, // 60% = Level 5 (or Mathematical Literacy Level 6)
+        "Physical Sciences": 5, // 65% = Level 5 (or Life Sciences)
+        English: 5, // 65% = Level 5
       },
       additionalRequirements: [
         "NBT scores of Intermediate or above for AL, QL and Mathematics",
@@ -334,12 +334,12 @@ export class UCT extends BaseUniversity {
       id: "uct-bsc-audiology",
       name: "BSc Audiology",
       faculty: "Health Sciences",
-      apsRequired: 530, // Updated from 720 to 530 FPS (out of 900) Band A
+      apsMin: 34, // Traditional APS (FPS 530/900 equivalent)
       duration: "4 years",
       subjectRequirements: {
-        Mathematics: 60, // or Mathematical Literacy 70%
-        "Physical Sciences": 65, // or Life Sciences
-        English: 65,
+        Mathematics: 5, // 60% = Level 5 (or Mathematical Literacy Level 6)
+        "Physical Sciences": 5, // 65% = Level 5 (or Life Sciences)
+        English: 5, // 65% = Level 5
       },
       additionalRequirements: [
         "NBT scores of Intermediate or above for AL, QL and Mathematics",
@@ -358,12 +358,12 @@ export class UCT extends BaseUniversity {
       id: "uct-bsc-speech-language",
       name: "BSc Speech-Language Pathology",
       faculty: "Health Sciences",
-      apsRequired: 525, // Updated from 715 to 525 FPS (out of 900) Band A
+      apsMin: 34, // Traditional APS (FPS 525/900 equivalent)
       duration: "4 years",
       subjectRequirements: {
-        Mathematics: 60, // or Mathematical Literacy 70%
-        "Physical Sciences": 65, // or Life Sciences
-        English: 65,
+        Mathematics: 5, // 60% = Level 5 (or Mathematical Literacy Level 6)
+        "Physical Sciences": 5, // 65% = Level 5 (or Life Sciences)
+        English: 5, // 65% = Level 5
       },
       additionalRequirements: [
         "NBT scores of Intermediate or above for AL, QL and Mathematics",
@@ -384,10 +384,10 @@ export class UCT extends BaseUniversity {
       id: "uct-ba",
       name: "Bachelor of Arts",
       faculty: "Humanities",
-      apsRequired: 435, // Updated from 450 to 435 FPS Band A per 2026 prospectus
+      apsMin: 30, // Traditional APS (FPS 435/600 equivalent)
       duration: "3 years",
       subjectRequirements: {
-        English: 50, // HL or 60 for FAL
+        English: 4, // 50% = Level 4 (HL) or Level 5 for FAL
       },
       additionalRequirements: [
         "NBT AL: Proficient for guaranteed admission",
@@ -408,10 +408,10 @@ export class UCT extends BaseUniversity {
       id: "uct-bsocsci",
       name: "Bachelor of Social Science",
       faculty: "Humanities",
-      apsRequired: 435, // Updated from 450 to 435 FPS Band A
+      apsMin: 30, // Traditional APS (FPS 435/600 equivalent)
       duration: "3 years",
       subjectRequirements: {
-        English: 50, // HL or 60 for FAL
+        English: 4, // 50% = Level 4 (HL) or Level 5 for FAL
       },
       additionalRequirements: [
         "NBT AL: Proficient for guaranteed admission",
@@ -431,11 +431,11 @@ export class UCT extends BaseUniversity {
       id: "uct-bsocsci-ppe",
       name: "Bachelor of Social Science in Philosophy, Politics and Economics",
       faculty: "Humanities",
-      apsRequired: 435, // Updated from 450 to 435 FPS Band A
+      apsMin: 30, // Traditional APS (FPS 435/600 equivalent)
       duration: "3 years",
       subjectRequirements: {
-        Mathematics: 60,
-        English: 50, // HL or 60 for FAL
+        Mathematics: 5, // 60% = Level 5
+        English: 4, // 50% = Level 4 (HL) or Level 5 for FAL
       },
       additionalRequirements: [
         "NBT AL: Proficient",
@@ -455,10 +455,10 @@ export class UCT extends BaseUniversity {
       id: "uct-bsw",
       name: "Bachelor of Social Work",
       faculty: "Humanities",
-      apsRequired: 435, // Updated from 450 to 435 FPS Band A
+      apsMin: 30, // Traditional APS (FPS 435/600 equivalent)
       duration: "4 years",
       subjectRequirements: {
-        English: 50, // HL or 60 for FAL
+        English: 4, // 50% = Level 4 (HL) or Level 5 for FAL
       },
       additionalRequirements: [
         "NBT AL: Proficient for guaranteed admission",
@@ -477,10 +477,10 @@ export class UCT extends BaseUniversity {
       id: "uct-ba-fine-art",
       name: "Bachelor of Arts in Fine Art",
       faculty: "Humanities",
-      apsRequired: 380, // Kept at 380 as no update found in prospectus
+      apsMin: 28, // Traditional APS (FPS 380/600 equivalent)
       duration: "4 years",
       subjectRequirements: {
-        English: 50, // HL or 60 for FAL
+        English: 4, // 50% = Level 4 (HL) or Level 5 for FAL
       },
       additionalRequirements: [
         "Portfolio evaluation required",
@@ -500,11 +500,11 @@ export class UCT extends BaseUniversity {
       id: "uct-bmus",
       name: "Bachelor of Music",
       faculty: "Humanities",
-      apsRequired: 380, // Kept at 380 as no update found in prospectus
+      apsMin: 28, // Traditional APS (FPS 380/600 equivalent)
       duration: "4 years",
       subjectRequirements: {
-        English: 50, // HL or 60 for FAL
-        Music: 60,
+        English: 4, // 50% = Level 4 (HL) or Level 5 for FAL
+        Music: 5, // 60% = Level 5
       },
       additionalRequirements: [
         "Audition, interview and music theory test required",
@@ -526,10 +526,10 @@ export class UCT extends BaseUniversity {
       id: "uct-llb-undergraduate",
       name: "Bachelor of Laws (LLB) - 4 year",
       faculty: "Law",
-      apsRequired: 470, // Updated from 500 to 470 FPS Band A per 2026 prospectus
+      apsMin: 34, // Traditional APS (FPS 470/600 equivalent)
       duration: "4 years",
       subjectRequirements: {
-        English: 50, // HL or 60 for FAL
+        English: 4, // 50% = Level 4 (HL) or Level 5 for FAL
       },
       additionalRequirements: [
         "NBT scores of proficient for AL and intermediate or above for QL",
@@ -552,11 +552,11 @@ export class UCT extends BaseUniversity {
       id: "uct-bsc",
       name: "Bachelor of Science",
       faculty: "Science",
-      apsRequired: 550, // Updated from 660 to 550 FPS Band A (out of 800) per 2026 prospectus
+      apsMin: 36, // Traditional APS (FPS 550/800 equivalent)
       duration: "3 years",
       subjectRequirements: {
-        Mathematics: 70,
-        "Physical Sciences": 60,
+        Mathematics: 6, // 70% = Level 6
+        "Physical Sciences": 5, // 60% = Level 5
       },
       additionalRequirements: [
         "NBT in Mathematics, AL & QL required",
@@ -576,11 +576,11 @@ export class UCT extends BaseUniversity {
       id: "uct-bsc-computer-science",
       name: "BSc Computer Science",
       faculty: "Science",
-      apsRequired: 550, // Updated from 660 to 550 FPS Band A
+      apsMin: 36, // Traditional APS (FPS 550/800 equivalent)
       duration: "3 years",
       subjectRequirements: {
-        Mathematics: 70,
-        "Physical Sciences": 60, // or Information Technology
+        Mathematics: 6, // 70% = Level 6
+        "Physical Sciences": 5, // 60% = Level 5 (or Information Technology)
       },
       additionalRequirements: [
         "NBT in Mathematics, AL & QL required",
@@ -600,11 +600,11 @@ export class UCT extends BaseUniversity {
       id: "uct-bsc-mathematics",
       name: "BSc Mathematics",
       faculty: "Science",
-      apsRequired: 550, // Updated from 660 to 550 FPS Band A
+      apsMin: 36, // Traditional APS (FPS 550/800 equivalent)
       duration: "3 years",
       subjectRequirements: {
-        Mathematics: 70,
-        "Physical Sciences": 60,
+        Mathematics: 6, // 70% = Level 6
+        "Physical Sciences": 5, // 60% = Level 5
       },
       additionalRequirements: [
         "NBT in Mathematics, AL & QL required",
@@ -624,11 +624,11 @@ export class UCT extends BaseUniversity {
       id: "uct-bsc-physics",
       name: "BSc Physics",
       faculty: "Science",
-      apsRequired: 550, // Updated from 660 to 550 FPS Band A
+      apsMin: 36, // Traditional APS (FPS 550/800 equivalent)
       duration: "3 years",
       subjectRequirements: {
-        Mathematics: 70,
-        "Physical Sciences": 60,
+        Mathematics: 6, // 70% = Level 6
+        "Physical Sciences": 5, // 60% = Level 5
       },
       additionalRequirements: [
         "NBT in Mathematics, AL & QL required",
@@ -648,11 +648,11 @@ export class UCT extends BaseUniversity {
       id: "uct-bsc-chemistry",
       name: "BSc Chemistry",
       faculty: "Science",
-      apsRequired: 550, // Updated from 660 to 550 FPS Band A
+      apsMin: 36, // Traditional APS (FPS 550/800 equivalent)
       duration: "3 years",
       subjectRequirements: {
-        Mathematics: 70,
-        "Physical Sciences": 60,
+        Mathematics: 6, // 70% = Level 6
+        "Physical Sciences": 5, // 60% = Level 5
       },
       additionalRequirements: [
         "NBT in Mathematics, AL & QL required",
@@ -672,11 +672,11 @@ export class UCT extends BaseUniversity {
       id: "uct-bsc-biology",
       name: "BSc Biology",
       faculty: "Science",
-      apsRequired: 550, // Updated from 660 to 550 FPS Band A
+      apsMin: 36, // Traditional APS (FPS 550/800 equivalent)
       duration: "3 years",
       subjectRequirements: {
-        Mathematics: 70,
-        "Physical Sciences": 60,
+        Mathematics: 6, // 70% = Level 6
+        "Physical Sciences": 5, // 60% = Level 5
       },
       additionalRequirements: [
         "NBT in Mathematics, AL & QL required",
@@ -696,11 +696,11 @@ export class UCT extends BaseUniversity {
       id: "uct-bsc-geology",
       name: "BSc Geology",
       faculty: "Science",
-      apsRequired: 550, // Updated from 660 to 550 FPS Band A
+      apsMin: 36, // Traditional APS (FPS 550/800 equivalent)
       duration: "3 years",
       subjectRequirements: {
-        Mathematics: 70,
-        "Physical Sciences": 60,
+        Mathematics: 6, // 70% = Level 6
+        "Physical Sciences": 5, // 60% = Level 5
       },
       additionalRequirements: [
         "NBT in Mathematics, AL & QL required",
@@ -762,7 +762,7 @@ export class UCT extends BaseUniversity {
    * Get qualifying courses based on subjects and APS
    */
   getQualifyingCourses(subjects: Record<string, number>): Course[] {
-    const aps = this.calculateAPS(subjects)
+    const aps = this.calculateApsScore(subjects)
 
     return this._courses.filter((course) => {
       // Check minimum APS
@@ -789,7 +789,7 @@ export class UCT extends BaseUniversity {
    * Get all available faculties
    */
   getFaculties(): string[] {
-    return [...new Set(this._courses.map((course) => course.faculty))]
+    return [...new Set(this._courses.map((course) => course.faculty).filter((f): f is string => !!f))]
   }
 
   /**

@@ -6,7 +6,7 @@ import { SubjectValidator } from "@/lib/utils/subject-validator"
 import { SidebarInset } from "@/components/ui/sidebar"
 import { ScrollArea } from "@/components/ui/scroll-area"
 import { Separator } from "@/components/ui/separator"
-import { Calculator, GraduationCap, Search } from "lucide-react"
+import { Calculator, GraduationCap, Search, PlusCircle } from "lucide-react"
 import { useToast } from "@/components/ui/use-toast"
 import { calculateAPS as calculateAPSFromLib } from "@/lib/aps-calculator"
 import { evaluateNSC } from "@/lib/nsc"
@@ -92,27 +92,90 @@ export default function FindCoursePage() {
         </header>
 
         <div className="flex flex-col lg:flex-row lg:h-[calc(100vh-4rem)] lg:overflow-hidden">
-          <div className="w-full lg:w-[400px] border-b lg:border-r bg-card flex-shrink-0 flex flex-col h-auto lg:h-full lg:overflow-y-auto">
+          <div className="w-full lg:w-[400px] border-b lg:border-r bg-card flex-shrink-0 flex flex-col h-auto lg:h-full lg:overflow-hidden">
             <div className="p-4 border-b">
               <h2 className="text-lg font-bold">Calculate Your APS</h2>
             </div>
-            <div className="p-4 space-y-4">
-              <APSDisplay apsScore={apsScore} nscResult={nscResult} />
-              {subjects.length > 0 ? (
-                <div className="space-y-2">
-                  {subjects.map((s) => (
-                    <SubjectItem key={s.id} subject={s} editingSubjectId={editingSubjectId} editingPercentage={editingPercentage} setEditingPercentage={setEditingPercentage} onSaveEdit={(id) => {
-                      const p = parseFloat(editingPercentage); setSubjects(subjects.map(sub => sub.id === id ? { ...sub, percentage: p } : sub)); setEditingSubjectId(null); setHasCalculated(false)
-                    }} onCancelEdit={() => setEditingSubjectId(null)} onStartEditing={(sub) => { setEditingSubjectId(sub.id); setEditingPercentage(sub.percentage.toString()) }} onRemove={(id) => { setSubjects(subjects.filter(sub => sub.id !== id)); setHasCalculated(false) }} />
-                  ))}
-                  <Button onClick={findCourses} className="w-full glass-button" size="lg" disabled={!canCalculate}><Calculator className="h-4 w-4 mr-2" />Calculate APS & Find Courses</Button>
-                  <Button onClick={() => { setSubjects([]); setHasCalculated(false); setQualifyingCourses([]) }} variant="outline" className="w-full glass-button">Reset All</Button>
-                </div>
-              ) : (
-                <div className="text-center py-8"><GraduationCap className="h-12 w-12 mx-auto text-muted-foreground opacity-50 mb-3" /><p className="text-sm text-muted-foreground">Add at least 7 subjects</p></div>
-              )}
+            <div className="flex-1 overflow-y-auto min-h-0 bg-muted/10">
+              <div className="p-4 space-y-4">
+                <APSDisplay apsScore={apsScore} nscResult={nscResult} />
+                
+                {subjects.length > 0 ? (
+                  <div className="space-y-2">
+                    <div className="flex items-center justify-between text-xs text-muted-foreground px-1 mb-2">
+                      <span>{subjects.length}/7 Subjects</span>
+                      {subjects.length < 7 && <span className="text-orange-600 font-medium">Add {7 - subjects.length} more</span>}
+                    </div>
+                    {subjects.map((s) => (
+                      <SubjectItem
+                        key={s.id}
+                        subject={s}
+                        editingSubjectId={editingSubjectId}
+                        editingPercentage={editingPercentage}
+                        setEditingPercentage={setEditingPercentage}
+                        onSaveEdit={(id) => {
+                          const p = parseFloat(editingPercentage)
+                          setSubjects(subjects.map(sub => sub.id === id ? { ...sub, percentage: p } : sub))
+                          setEditingSubjectId(null)
+                          setHasCalculated(false)
+                        }}
+                        onCancelEdit={() => setEditingSubjectId(null)}
+                        onStartEditing={(sub) => {
+                          setEditingSubjectId(sub.id)
+                          setEditingPercentage(sub.percentage.toString())
+                        }}
+                        onRemove={(id) => {
+                          setSubjects(subjects.filter(sub => sub.id !== id))
+                          setHasCalculated(false)
+                        }}
+                      />
+                    ))}
+                    <div className="pt-4 space-y-3">
+                      <Button onClick={findCourses} className="w-full glass-button text-lg font-bold h-12 shadow-lg hover:shadow-xl transition-all" size="lg" disabled={!canCalculate}>
+                        <Calculator className="h-5 w-5 mr-2" />
+                        Calculate APS
+                      </Button>
+                      <Button onClick={() => { setSubjects([]); setHasCalculated(false); setQualifyingCourses([]) }} variant="ghost" className="w-full text-muted-foreground hover:text-destructive">
+                        Reset All Subjects
+                      </Button>
+                    </div>
+                  </div>
+                ) : (
+                  <div className="text-center py-12 px-4 rounded-xl border-2 border-dashed border-muted/50 bg-card/30">
+                    <div className="bg-primary/10 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
+                        <GraduationCap className="h-8 w-8 text-primary" />
+                    </div>
+                    <h3 className="text-lg font-semibold mb-2">Start your journey</h3>
+                    <p className="text-sm text-muted-foreground mb-6 max-w-[250px] mx-auto">
+                      Add your matric subjects to see which courses you qualify for.
+                    </p>
+                    <Button 
+                      onClick={() => {
+                        const core = [
+                          { id: Date.now().toString(), name: "Life Orientation", percentage: 50 }
+                        ];
+                        setSubjects(core);
+                      }} 
+                      variant="outline" 
+                      className="glass-button w-full sm:w-auto"
+                    >
+                      <PlusCircle className="h-4 w-4 mr-2" />
+                      Add Life Orientation
+                    </Button>
+                  </div>
+                )}
+              </div>
             </div>
-            <SubjectInputForm currentSubject={currentSubject} setCurrentSubject={setCurrentSubject} currentPercentage={currentPercentage} setCurrentPercentage={setCurrentPercentage} isSubjectDisabled={(name) => validator.isSubjectDisabled(name)} onAddSubject={addSubject} subjectsCount={subjects.length} />
+            
+            <SubjectInputForm
+              currentSubject={currentSubject}
+              setCurrentSubject={setCurrentSubject}
+              currentPercentage={currentPercentage}
+              setCurrentPercentage={setCurrentPercentage}
+              isSubjectDisabled={(name) => validator.isSubjectDisabled(name)}
+              onAddSubject={addSubject}
+              subjectsCount={subjects.length}
+            />
           </div>
 
           <div className="flex-1 flex flex-col lg:overflow-hidden h-auto">

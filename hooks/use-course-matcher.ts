@@ -74,7 +74,7 @@ export function useCourseMatcher(subjects: Subject[], calculatedDefaultAPS: numb
                 if (isUndergraduateCourse(extendedCourse.name)) {
                     uniMatches.push({
                         course: extendedCourse,
-                        university,
+                        university: { ...university, website: university.website || "" },
                         meetsRequirements: meetsAll,
                         missingRequirements: requirementCheck.missing,
                         metRequirements: requirementCheck.met,
@@ -99,7 +99,7 @@ export function useCourseMatcher(subjects: Subject[], calculatedDefaultAPS: numb
                     const requirementCheck = checkSubjectRequirements(subjects, extendedCourse.subjectRequirements)
                     const additionalReqs = extendedCourse.requirements ?? extendedCourse.additionalRequirements
                     if (isUndergraduateCourse(extendedCourse.name) && apsRequired > 0 && calculatedAPS > 0 && calculatedAPS >= apsRequired && requirementCheck.meets && meetsAdditionalAcademicRequirements(additionalReqs, subjects)) {
-                        collegeMatches.push({ course: extendedCourse, university: universityFormatCollege, meetsRequirements: true, missingRequirements: [], metRequirements: requirementCheck.met })
+                        collegeMatches.push({ course: extendedCourse, university: { ...universityFormatCollege, website: universityFormatCollege.website || "" }, meetsRequirements: true, missingRequirements: [], metRequirements: requirementCheck.met })
                     }
                 })
             })
@@ -117,7 +117,7 @@ export function useCourseMatcher(subjects: Subject[], calculatedDefaultAPS: numb
                     const requirementCheck = checkSubjectRequirements(subjects, extendedCourse.subjectRequirements)
                     const additionalReqs = extendedCourse.requirements ?? extendedCourse.additionalRequirements
                     if (requirementCheck.meets && meetsAdditionalAcademicRequirements(additionalReqs, subjects)) {
-                        const universityForDisplay: University = { id: universityInstance.id, name: universityInstance.name, shortName: universityInstance.shortName, location: universityInstance.getLocationString(), website: universityInstance.website, courses: [] }
+                        const universityForDisplay = { id: universityInstance.id, name: universityInstance.name, shortName: universityInstance.shortName, location: universityInstance.getLocationString(), website: universityInstance.website || "", courses: [] }
                         extendedMatches.push({ course: extendedCourse, university: universityForDisplay, meetsRequirements: true, missingRequirements: [], metRequirements: requirementCheck.met })
                     }
                 }
