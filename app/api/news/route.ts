@@ -1,9 +1,10 @@
 import { NextResponse } from "next/server"
-import { NewsArticle, FALLBACK_ARTICLES } from "@/data/fallback-news"
+import { NewsArticle } from "@/data/fallback-news"
 import { isWithin48Hours, isRelevantToStudents, buildImageForArticle } from "@/lib/news-utils"
+import { saveToCache, getCachedNews, hasCachedNews } from "@/lib/news-cache"
 
 export const dynamic = "force-dynamic"
-export const revalidate = 3600
+export const revalidate = 86400 // 24 hours
 
 const NEWS_API_KEY = process.env.NEWS_API_KEY
 
@@ -71,8 +72,16 @@ export async function GET() {
       .filter((a) => isWithin48Hours(a.pubDate))
       .slice(0, MAX)
 
-    if (normalized.length < 1) {
-      normalized = FALLBACK_ARTICLES.map(article => {
+    // Determine source type for response
+    let source: "Live Feed" | "Cached" | "Static Fallback" = "Live Feed"
+
+    if (normalized.length > 0) {
+      // Save successful fetch to cache for future fallback
+      saveToCache(normalized)
+    } else {
+      // Use cached news as fallback (falls back to static if no cache)
+      const cachedNews = getCachedNews()
+      normalized = cachedNews.map(article => {
         const { image_url, alt_text } = buildImageForArticle(article)
         return {
           ...article,
@@ -80,16 +89,17 @@ export async function GET() {
           alt_text: article.alt_text || alt_text
         }
       })
+      source = hasCachedNews() ? "Cached" : "Static Fallback"
     }
 
     return NextResponse.json(
       {
         success: true,
         articles: normalized,
-        source: fetchedArticles.length > 0 ? "Live Feed" : "Fallback",
+        source,
         count: normalized.length
       },
-      { headers: { "Cache-Control": "public, s-maxage=3600" } }
+      { headers: { "Cache-Control": "public, s-maxage=86400" } }
     )
   } catch (error) {
     console.error("News API GET error:", error)
