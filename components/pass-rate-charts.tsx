@@ -4,7 +4,6 @@ import { useEffect, useState } from "react"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Skeleton } from "@/components/ui/skeleton"
 import { TrendingUp, Users, Target, GraduationCap, Award, ScrollText } from "lucide-react"
-import { useIsMobile } from "@/hooks/use-mobile"
 
 interface MatricStats {
   national: {
@@ -29,7 +28,6 @@ interface MatricStats {
 export function PassRateCharts() {
   const [stats, setStats] = useState<MatricStats | null>(null)
   const [loading, setLoading] = useState(true)
-  const isMobile = useIsMobile()
 
   useEffect(() => {
     async function fetchStats() {
@@ -86,9 +84,9 @@ export function PassRateCharts() {
 
   if (loading) {
     return (
-      <div className={isMobile ? "grid gap-4 grid-cols-2" : "grid gap-4 md:grid-cols-2 lg:grid-cols-6"}>
+      <div className="flex overflow-x-auto snap-x snap-mandatory gap-4 pb-4 -mx-4 px-4 sm:grid sm:gap-4 sm:grid-cols-2 lg:grid-cols-6 sm:pb-0 sm:mx-0 sm:px-0 scrollbar-hide">
         {[1, 2, 3, 4, 5, 6].map((i) => (
-          <Card key={i}>
+          <Card key={i} className="min-w-[85vw] snap-center sm:min-w-0">
             <CardHeader className="pb-2">
               <Skeleton className="h-4 w-24" />
             </CardHeader>
@@ -108,73 +106,59 @@ export function PassRateCharts() {
   const passed = stats.national.totalPassed || Math.round((stats.national.totalCandidates * stats.national.passRate) / 100)
   const failed = stats.national.failed || (stats.national.totalCandidates - passed)
 
+  const cards = [
+    {
+      title: "Pass Rate",
+      icon: TrendingUp,
+      value: `${stats.national.passRate}%`,
+      subText: `National Average ${stats.national.year}`
+    },
+    {
+      title: "Total Candidates",
+      icon: Users,
+      value: stats.national.totalCandidates.toLocaleString(),
+      subText: "Wrote NSC exams"
+    },
+    {
+      title: "Passed",
+      icon: Target,
+      value: passed.toLocaleString(),
+      subText: `${failed.toLocaleString()} failed`
+    },
+    {
+      title: "Bachelors",
+      icon: GraduationCap,
+      value: stats.qualifications?.bachelors?.toLocaleString() || "0",
+      subText: "Qualify for degree"
+    },
+    {
+      title: "Diplomas",
+      icon: Award,
+      value: stats.qualifications?.diplomas?.toLocaleString() || "0",
+      subText: "Qualify for diploma"
+    },
+    {
+      title: "Higher Certificate",
+      icon: ScrollText,
+      value: stats.qualifications?.higherCertificate?.toLocaleString() || "0",
+      subText: "Qualify for HC"
+    }
+  ]
+
   return (
-    <div className={isMobile ? "grid gap-4 grid-cols-2" : "grid gap-4 md:grid-cols-2 lg:grid-cols-6"}>
-      <Card>
-        <CardHeader className="flex flex-row items-center justify-between pb-2">
-          <CardTitle className="text-sm font-medium">Pass Rate</CardTitle>
-          <TrendingUp className="h-4 w-4 text-muted-foreground" />
-        </CardHeader>
-        <CardContent>
-          <div className="text-2xl font-semibold">{stats.national.passRate}%</div>
-          <p className="text-xs text-muted-foreground mt-1">National Average {stats.national.year}</p>
-        </CardContent>
-      </Card>
-
-      <Card>
-        <CardHeader className="flex flex-row items-center justify-between pb-2">
-          <CardTitle className="text-sm font-medium">Total Candidates</CardTitle>
-          <Users className="h-4 w-4 text-muted-foreground" />
-        </CardHeader>
-        <CardContent>
-          <div className="text-2xl font-semibold">{stats.national.totalCandidates.toLocaleString()}</div>
-          <p className="text-xs text-muted-foreground mt-1">Wrote NSC exams</p>
-        </CardContent>
-      </Card>
-
-      <Card>
-        <CardHeader className="flex flex-row items-center justify-between pb-2">
-          <CardTitle className="text-sm font-medium">Passed</CardTitle>
-          <Target className="h-4 w-4 text-muted-foreground" />
-        </CardHeader>
-        <CardContent>
-          <div className="text-2xl font-semibold">{passed.toLocaleString()}</div>
-          <p className="text-xs text-muted-foreground mt-1">{failed.toLocaleString()} failed</p>
-        </CardContent>
-      </Card>
-
-      <Card>
-        <CardHeader className="flex flex-row items-center justify-between pb-2">
-          <CardTitle className="text-sm font-medium">Bachelors</CardTitle>
-          <GraduationCap className="h-4 w-4 text-muted-foreground" />
-        </CardHeader>
-        <CardContent>
-          <div className="text-2xl font-semibold">{stats.qualifications?.bachelors?.toLocaleString() || "0"}</div>
-          <p className="text-xs text-muted-foreground mt-1">Qualify for degree</p>
-        </CardContent>
-      </Card>
-
-      <Card>
-        <CardHeader className="flex flex-row items-center justify-between pb-2">
-          <CardTitle className="text-sm font-medium">Diplomas</CardTitle>
-          <Award className="h-4 w-4 text-muted-foreground" />
-        </CardHeader>
-        <CardContent>
-          <div className="text-2xl font-semibold">{stats.qualifications?.diplomas?.toLocaleString() || "0"}</div>
-          <p className="text-xs text-muted-foreground mt-1">Qualify for diploma</p>
-        </CardContent>
-      </Card>
-
-      <Card>
-        <CardHeader className="flex flex-row items-center justify-between pb-2">
-          <CardTitle className="text-sm font-medium">Higher Certificate</CardTitle>
-          <ScrollText className="h-4 w-4 text-muted-foreground" />
-        </CardHeader>
-        <CardContent>
-          <div className="text-2xl font-semibold">{stats.qualifications?.higherCertificate?.toLocaleString() || "0"}</div>
-          <p className="text-xs text-muted-foreground mt-1">Qualify for HC</p>
-        </CardContent>
-      </Card>
+    <div className="flex overflow-x-auto snap-x snap-mandatory gap-4 pb-4 -mx-4 px-4 sm:grid sm:gap-4 sm:grid-cols-2 lg:grid-cols-6 sm:pb-0 sm:mx-0 sm:px-0 scrollbar-hide">
+      {cards.map((card, index) => (
+        <Card key={index} className="min-w-[85vw] snap-center sm:min-w-0">
+          <CardHeader className="flex flex-row items-center justify-between pb-2">
+            <CardTitle className="text-sm font-medium">{card.title}</CardTitle>
+            <card.icon className="h-4 w-4 text-muted-foreground" />
+          </CardHeader>
+          <CardContent>
+            <div className="text-2xl font-semibold">{card.value}</div>
+            <p className="text-xs text-muted-foreground mt-1">{card.subText}</p>
+          </CardContent>
+        </Card>
+      ))}
     </div>
   )
 }

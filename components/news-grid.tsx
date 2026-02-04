@@ -121,21 +121,21 @@ export function NewsGrid() {
 
   return (
     <div className="space-y-4">
-      <div className="grid gap-4 grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 lg:grid-rows-2 auto-rows-fr">
+      <div className="flex overflow-x-auto snap-x snap-mandatory gap-4 pb-4 -mx-4 px-4 sm:grid sm:grid-cols-2 sm:pb-0 sm:mx-0 sm:px-0 lg:grid-cols-4 lg:grid-rows-2 auto-rows-fr scrollbar-hide">
         {news.map((article, index) => {
           const isLarge = index === 0
           const gridClass = isLarge ? "sm:col-span-2 sm:row-span-2" : "sm:col-span-1 sm:row-span-1"
 
           return (
-            <Card key={index} className={`group overflow-hidden hover:shadow-lg transition-shadow ${gridClass}`}>
-              <div className={`relative overflow-hidden bg-muted ${isLarge ? "aspect-[16/10]" : "aspect-[16/9]"}`}>
+            <Card key={index} className={`group overflow-hidden hover:shadow-lg transition-shadow min-w-[85vw] sm:min-w-0 snap-center ${gridClass}`}>
+              <div className={`relative overflow-hidden bg-muted ${isLarge ? "aspect-[16/9] sm:aspect-[16/10]" : "aspect-[16/9]"}`}>
                 {article.image_url ? (
                   <Image
                     src={article.image_url || "/placeholder.svg"}
                     alt={article.title}
                     fill
                     className="object-cover transition-transform group-hover:scale-105"
-                    sizes={isLarge ? "(max-width: 768px) 100vw, 50vw" : "(max-width: 768px) 100vw, 25vw"}
+                    sizes={isLarge ? "(max-width: 768px) 85vw, 50vw" : "(max-width: 768px) 85vw, 25vw"}
                   />
                 ) : (
                   <div className="w-full h-full bg-gradient-to-br from-muted to-muted/50" />
@@ -147,7 +147,7 @@ export function NewsGrid() {
                     {article.category[0]}
                   </Badge>
                 )}
-                <CardTitle className={`line-clamp-2 ${isLarge ? "text-sm sm:text-base" : "text-xs sm:text-sm"}`}>
+                <CardTitle className={`line-clamp-2 ${isLarge ? "text-base sm:text-base mr-1" : "text-sm sm:text-sm"}`}>
                   {article.title}
                 </CardTitle>
                 <CardDescription className="text-xs">
