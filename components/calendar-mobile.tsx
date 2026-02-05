@@ -50,8 +50,31 @@ export function CalendarMobile() {
   const displayYear = format(selectedDate, "yyyy")
   const displayDayName = format(selectedDate, "EEE")
 
+  // Determine color based on event type
+  const getEventColor = (events: any[]) => {
+    if (!events.length) return "bg-[#FF5F00]" // Default orange
+    const type = events[0].type
+    switch (type) {
+      case "public": return "bg-[#FF5F00]" // Orange
+      case "exam": return "bg-red-600"      // Red
+      case "academic": return "bg-blue-600" // Blue
+      default: return "bg-[#FF5F00]"
+    }
+  }
+
+  const getEventTextColor = (events: any[]) => {
+    if (!events.length) return "text-[#FF5F00]"
+    const type = events[0].type
+    switch (type) {
+      case "public": return "text-[#FF5F00]"
+      case "exam": return "text-red-600"
+      case "academic": return "text-blue-600"
+      default: return "text-[#FF5F00]"
+    }
+  }
+
   return (
-    <div className="flex flex-col w-full mx-auto bg-[#EBEBEB] text-[#111111] overflow-hidden rounded-xl shadow-sm min-h-[500px] font-sans">
+    <div className="flex flex-col w-full mx-auto bg-[#EBEBEB] text-[#111111] overflow-hidden rounded-xl shadow-sm min-h-[500px] mb-8 font-sans">
       
       {/* Header Section */}
       <div className="pt-8 pb-4 px-6 flex justify-between items-start">
@@ -111,6 +134,9 @@ export function CalendarMobile() {
             // I'll stick to: Standard days are readable numbers. 
             // The "dots" look might be achieved by the high contrast circles.
 
+            const eventBgColor = hasEvents ? getEventColor(events) : "bg-[#FF5F00]"
+            const eventDotColor = hasEvents ? getEventColor(events) : "bg-[#FF5F00]"
+
             return (
               <button
                 key={day.toString()}
@@ -119,7 +145,7 @@ export function CalendarMobile() {
                   "relative w-10 h-10 flex items-center justify-center rounded-full text-sm font-medium transition-all duration-200",
                   !isCurrentMonth && "opacity-20",
                   isSelected 
-                    ? "bg-[#FF5F00] text-white shadow-md scale-110" // Distinctive orange
+                    ? `${hasEvents ? eventBgColor : "bg-[#FF5F00]"} text-white shadow-md scale-110` 
                     : "bg-[#1A1A1A] text-white hover:bg-black/80" // Dark circles for all other days to match "grid of circles" description
                 )}
               >
@@ -127,7 +153,7 @@ export function CalendarMobile() {
                 
                 {/* Event Dot (if not selected, since selected helps visibility) */}
                 {hasEvents && !isSelected && (
-                  <div className="absolute -bottom-1 w-1 h-1 bg-[#FF5F00] rounded-full" />
+                  <div className={`absolute -bottom-1 w-1 h-1 ${eventDotColor} rounded-full`} />
                 )}
               </button>
             )
@@ -137,7 +163,7 @@ export function CalendarMobile() {
 
       {/* Footer */}
       {/* Selected Day Events */}
-      <div className="mt-auto p-6 bg-white/50 border-t border-black/5 min-h-[120px]">
+      <div className="mt-auto p-5 mt-10 bg-white/50 border-t border-black/5 min-h-[120px]">
         {getEventsForDate(selectedDate).length > 0 ? (
           <div className="space-y-3">
             {getEventsForDate(selectedDate).map((event, i) => (
