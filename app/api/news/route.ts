@@ -68,6 +68,14 @@ export async function GET() {
     const fetchedArticles = await fetchRealNews()
     const MAX = 8
 
+    // Always save raw fetched articles to persistent cache so the latest
+    // data survives server restarts, even if the time-window filter below
+    // yields zero results.
+    if (fetchedArticles.length > 0) {
+      saveToCache(fetchedArticles)
+    }
+
+    // Apply time-window filter to live articles
     let normalized = fetchedArticles
       .filter((a) => isWithin48Hours(a.pubDate))
       .slice(0, MAX)
@@ -75,13 +83,11 @@ export async function GET() {
     // Determine source type for response
     let source: "Live Feed" | "Cached" | "Static Fallback" = "Live Feed"
 
-    if (normalized.length > 0) {
-      // Save successful fetch to cache for future fallback
-      saveToCache(normalized)
-    } else {
-      // Use cached news as fallback (falls back to static if no cache)
+    if (normalized.length === 0) {
+      // No fresh live articles — fall back to cached data (skip time filter
+      // since cached articles are our best available data)
       const cachedNews = getCachedNews()
-      normalized = cachedNews.map(article => {
+      normalized = cachedNews.slice(0, MAX).map(article => {
         const { image_url, alt_text } = buildImageForArticle(article)
         return {
           ...article,

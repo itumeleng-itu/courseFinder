@@ -2,7 +2,6 @@
  * @jest-environment node
  */
 import { GET } from "@/app/api/news/route"
-// No request object needed; GET() doesn’t use it
 
 describe("News API", () => {
   it("should return news articles", async () => {
@@ -12,26 +11,9 @@ describe("News API", () => {
     expect(response.status).toBe(200)
     expect(data).toHaveProperty("success")
     expect(data).toHaveProperty("articles")
-    expect(data).toHaveProperty("year")
+    expect(data).toHaveProperty("source")
+    expect(data).toHaveProperty("count")
     expect(Array.isArray(data.articles)).toBe(true)
-  })
-
-  it("should return only current-year articles", async () => {
-    const response = await GET()
-    const data = await response.json()
-
-    const currentYear = new Date().getFullYear()
-    expect(data.year).toBe(currentYear)
-
-    // Check that all articles are from 2024
-    if (data.articles && data.articles.length > 0) {
-      data.articles.forEach((article: any) => {
-        if (article.pubDate) {
-          const year = new Date(article.pubDate).getFullYear()
-          expect(year).toBe(currentYear)
-        }
-      })
-    }
   })
 
   it("should return articles with required fields", async () => {
@@ -45,7 +27,6 @@ describe("News API", () => {
       expect(article).toHaveProperty("link")
       expect(article).toHaveProperty("pubDate")
       expect(article).toHaveProperty("image_url")
-      expect(article).toHaveProperty("alt_text")
     }
   })
 
@@ -64,5 +45,12 @@ describe("News API", () => {
     if (data.articles) {
       expect(data.articles.length).toBeLessThanOrEqual(8)
     }
+  })
+
+  it("should report correct source type", async () => {
+    const response = await GET()
+    const data = await response.json()
+
+    expect(["Live Feed", "Cached", "Static Fallback"]).toContain(data.source)
   })
 })

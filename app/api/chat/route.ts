@@ -1,5 +1,6 @@
 import { SYSTEM_PROMPT } from "@/constants/prompts"
 import { NextResponse } from "next/server"
+import { generateLocalFallback } from "@/lib/chatbot-fallback"
 
 export const dynamic = "force-dynamic"
 
@@ -73,6 +74,43 @@ function getCacheStats() {
 }
 
 // =============================================================================
+// PER-IP RATE LIMITING — 20 requests per minute
+// =============================================================================
+
+interface RateLimitEntry {
+    count: number
+    resetTime: number
+}
+
+const rateLimitMap = new Map<string, RateLimitEntry>()
+const RATE_LIMIT_MAX = 20
+const RATE_LIMIT_WINDOW_MS = 60 * 1000 // 1 minute
+
+// Clean stale entries every 5 minutes
+setInterval(() => {
+    const now = Date.now()
+    for (const [ip, entry] of rateLimitMap.entries()) {
+        if (now > entry.resetTime) rateLimitMap.delete(ip)
+    }
+}, 5 * 60 * 1000)
+
+function checkRateLimit(request: Request): { allowed: boolean; remaining: number } {
+    const forwarded = request.headers.get("x-forwarded-for")
+    const ip = forwarded?.split(",")[0]?.trim() || request.headers.get("x-real-ip") || "unknown"
+    const now = Date.now()
+
+    let entry = rateLimitMap.get(ip)
+    if (!entry || now > entry.resetTime) {
+        entry = { count: 0, resetTime: now + RATE_LIMIT_WINDOW_MS }
+        rateLimitMap.set(ip, entry)
+    }
+
+    entry.count++
+    const remaining = Math.max(0, RATE_LIMIT_MAX - entry.count)
+    return { allowed: entry.count <= RATE_LIMIT_MAX, remaining }
+}
+
+// =============================================================================
 // API REQUEST HANDLING
 // =============================================================================
 
@@ -103,6 +141,15 @@ type ChatHistoryItem = { role: "assistant" | "user"; content: unknown }
 
 export async function POST(request: Request) {
     try {
+        // --- Rate limiting ---
+        const rateLimit = checkRateLimit(request)
+        if (!rateLimit.allowed) {
+            return NextResponse.json(
+                { success: false, error: "Too many requests. Please wait a moment before sending another message." },
+                { status: 429, headers: { "Retry-After": "60", "X-RateLimit-Remaining": "0" } }
+            )
+        }
+
         const { message, conversationHistory = [], model } = (await request.json()) as {
             message: unknown
             conversationHistory?: unknown[]
@@ -123,11 +170,20 @@ export async function POST(request: Request) {
                     success: true,
                     response: cachedResponse,
                     _metadata: { model: "cache", cached: true, cacheStats: getCacheStats(), timestamp: new Date().toISOString(), tokensUsed: 0 }
-                }, { headers: { "X-Model-Used": "cache" } })
+                }, { headers: { "X-Model-Used": "cache", "X-RateLimit-Remaining": String(rateLimit.remaining) } })
             }
         }
 
+        // If no API key, try local fallback instead of returning an error
         if (!OPENROUTER_API_KEY) {
+            const localResponse = generateLocalFallback(userMessage)
+            if (localResponse) {
+                return NextResponse.json({
+                    success: true,
+                    response: localResponse,
+                    _metadata: { model: "local-fallback", cached: false, timestamp: new Date().toISOString(), tokensUsed: 0 }
+                }, { headers: { "X-Model-Used": "local-fallback", "X-RateLimit-Remaining": String(rateLimit.remaining) } })
+            }
             return NextResponse.json({ error: "Server is not configured with OpenRouter API key" }, { status: 500 })
         }
 
@@ -174,6 +230,16 @@ export async function POST(request: Request) {
             } catch (error) {
                 lastError = { model: currentModel, error: error instanceof Error ? error.message : "Unknown error" }
             }
+        }
+
+        // All models failed — try local fallback from app data
+        const localResponse = generateLocalFallback(userMessage)
+        if (localResponse) {
+            return NextResponse.json({
+                success: true,
+                response: localResponse,
+                _metadata: { model: "local-fallback", attemptedModels, cached: false, timestamp: new Date().toISOString(), tokensUsed: 0 }
+            }, { headers: { "X-Model-Used": "local-fallback" } })
         }
 
         return NextResponse.json({
