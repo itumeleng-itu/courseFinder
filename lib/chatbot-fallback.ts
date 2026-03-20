@@ -295,5 +295,5 @@ Try asking about one of these topics, or browse the app directly:
             return null
     }
 
-    return response + "\n\n*ℹ️ This response was generated from local data because the AI service is temporarily unavailable.*"
+    return response
 }

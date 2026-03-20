@@ -1,12 +1,35 @@
 export interface NewsArticle {
+    // ── Identity ────────────────────────────────────────────────────────────────
+    article_id: string           // "da149f9291a8b899b13037b71fd354fc"
+    link: string           // full article URL
+
+    // ── Content ─────────────────────────────────────────────────────────────────
     title: string
-    description: string
-    link: string
-    pubDate: string
-    source_id: string
-    category: string[]
-    image_url: string
-    alt_text?: string
+    description: string           // item.content is paywalled on free tier — never use it
+
+    // ── Dates ───────────────────────────────────────────────────────────────────
+    pubDate: string           // "2026-03-19 19:35:00"
+    pubDateTZ: string           // "UTC"
+
+    // ── Source ──────────────────────────────────────────────────────────────────
+    source_id: string           // "landeszeitung"
+    source_name: string           // "Lz – Landeszeitung"
+    source_url: string | null
+    source_icon: string | null
+    source_priority: number | null
+
+    // ── Taxonomy ────────────────────────────────────────────────────────────────
+    category: string[]         // ["top", "lifestyle"]
+    language: string           // "german"
+    country: string[]         // ["germany"]
+    keywords: string[] | null
+    datatype: string           // "news"
+    duplicate: boolean
+
+    // ── Media ───────────────────────────────────────────────────────────────────
+    image_url: string | null    // null when not provided by API
+    video_url: string | null
+    alt_text: string           // fallback to title
 }
 
 export const STUDENT_RELEVANT_KEYWORDS = [
@@ -17,45 +40,4 @@ export const STUDENT_RELEVANT_KEYWORDS = [
     "gap year", "study tips", "final exam", "university application", "nbts", "university acceptance",
 ]
 
-export const FALLBACK_ARTICLES: NewsArticle[] = [
-    {
-        title: "Matric results: What to do next",
-        description: "Guidance for students on options after receiving results.",
-        link: "https://www.education.gov.za/Curriculum/NationalSeniorCertificate.aspx",
-        pubDate: new Date().toISOString(),
-        source_id: "Department of Education",
-        category: ["education"],
-        image_url: "",
-        alt_text: "Students planning next steps",
-    },
-    {
-        title: "New bursaries and scholarships for 2025",
-        description: "Explore funding options and deadlines for applications.",
-        link: "https://www.nsfas.org.za/",
-        pubDate: new Date().toISOString(),
-        source_id: "NSFAS",
-        category: ["education"],
-        image_url: "",
-        alt_text: "Student reading bursary info",
-    },
-    {
-        title: "University application timelines",
-        description: "Check key dates and how to apply effectively.",
-        link: "https://www.usaf.ac.za/universities-in-south-africa/",
-        pubDate: new Date().toISOString(),
-        source_id: "Universities SA",
-        category: ["education"],
-        image_url: "",
-        alt_text: "Campus walkway",
-    },
-    {
-        title: "Study tips to boost performance",
-        description: "Practical strategies for exam preparation and retention.",
-        link: "https://www.education.gov.za/Curriculum/LearningandTeachingSupportMaterials.aspx",
-        pubDate: new Date().toISOString(),
-        source_id: "Department of Education",
-        category: ["education"],
-        image_url: "",
-        alt_text: "Student studying",
-    },
-]
+export const FALLBACK_ARTICLES: NewsArticle[] = [];
