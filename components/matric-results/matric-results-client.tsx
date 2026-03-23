@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useMemo, useEffect, useRef } from 'react';
-import { Search, Filter, MapPin, Award, BookOpen, GraduationCap, X, ChevronDown, Check, LayoutDashboard } from 'lucide-react';
+import { Search, Filter, MapPin, Award, BookOpen, GraduationCap, X, ChevronDown, Check, LayoutDashboard, ExternalLink } from 'lucide-react';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
 
 interface SchoolResult {
@@ -125,7 +125,7 @@ export default function MatricResultsClient({ schools }: MatricResultsClientProp
 
         {/* Search and Filters */}
         <div className="max-w-4xl space-y-6">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             <div className="relative">
               <MapPin className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground w-4 h-4" />
               <select
@@ -161,6 +161,16 @@ export default function MatricResultsClient({ schools }: MatricResultsClientProp
               </select>
               <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground w-4 h-4 pointer-events-none" />
             </div>
+
+            <a
+              href="https://www.education.gov.za/MatricResults/ExamResults.aspx"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex items-center justify-center gap-2 h-10 px-4 bg-foreground text-background rounded-md font-medium text-sm hover:opacity-90 transition-opacity"
+            >
+              <ExternalLink className="w-4 h-4" />
+              View My Results
+            </a>
           </div>
 
           <div className="relative" ref={dropdownRef}>
