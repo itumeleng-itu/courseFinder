@@ -1,12 +1,12 @@
 import { NextResponse } from "next/server"
 
-export const dynamic = "force-dynamic"
+// Static verified stats — revalidate once per day
+export const revalidate = 86400
 
 // Source: Department of Basic Education - "Class of 2025 achieves historic pass rate"
 // Announced Jan 12, 2026
 const DBE_ARTICLE_URL = "https://www.sanews.gov.za/south-africa/class-2025-achieves-historic-pass-rate"
 
-// 24h cache
 interface NSCData {
     year: number
     passRate: number
@@ -21,10 +21,8 @@ interface NSCData {
     distinctions?: number
     _note?: string
 }
-const cache: { data?: NSCData; ts?: number } = {}
-const TTL_MS = 24 * 60 * 60 * 1000
 
-const FALLBACK = {
+const VERIFIED_2025: NSCData = {
     year: 2025,
     passRate: 88.1, // Official 2025 Pass Rate
     passes: 794_376, // 88.1% of 901,790
@@ -40,28 +38,8 @@ const FALLBACK = {
 
 export async function GET() {
     try {
-        if (cache.data && cache.ts && Date.now() - cache.ts < TTL_MS) {
-            return NextResponse.json(
-                { success: true, ...cache.data },
-                {
-                    headers: { "Cache-Control": "public, s-maxage=86400, stale-while-revalidate=43200" },
-                    status: 200,
-                },
-            )
-        }
-
-        // Since specific scraping logic for 2025/2026 article structure might vary, 
-        // and we have confirmed stats, we will serve the FALBACK (Verified) data initially
-        // until dynamic scraping is fully tested for the new format.
-
-        // For now, return the verified FALLBACK data as the source of truth
-        const data = { ...FALLBACK }
-
-        cache.data = data
-        cache.ts = Date.now()
-
         return NextResponse.json(
-            { success: true, ...data },
+            { success: true, ...VERIFIED_2025 },
             {
                 headers: { "Cache-Control": "public, s-maxage=86400, stale-while-revalidate=43200" },
                 status: 200,
@@ -70,7 +48,7 @@ export async function GET() {
     } catch (e) {
         console.error("NSC 2025 API error", e)
         return NextResponse.json(
-            { success: true, ...FALLBACK, _note: "Unhandled error; served fallback" },
+            { success: true, ...VERIFIED_2025, _note: "Unhandled error; served fallback" },
             {
                 headers: { "Cache-Control": "public, s-maxage=3600" },
                 status: 200,

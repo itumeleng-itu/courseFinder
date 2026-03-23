@@ -1,28 +1,8 @@
 import { NextResponse } from "next/server"
 import { NewsArticle, FALLBACK_ARTICLES } from "@/data/fallback-news"
 import { isWithin48Hours, buildImageForArticle, isRelevantToStudents } from "@/lib/news-utils"
-import fs from "fs"
-import path from "path"
 
-// ─── Auto-rotate fallback articles ───────────────────────────────────────────
-// When the API fetches successfully, overwrite fallback-news.ts with the latest
-// articles so fallbacks stay fresh. Silently skips on read-only filesystems
-// (Vercel/Netlify prod) — memory cache handles resilience there instead.
-function rotateFallbackArticles(articles: NewsArticle[]) {
-  try {
-    const filePath = path.join(process.cwd(), "src", "data", "fallback-news.ts")
-    const content = `// AUTO-GENERATED — last rotated ${new Date().toISOString()}
-// Do not edit manually. Overwritten automatically when the news API fetches successfully.
-import { NewsArticle } from "@/data/fallback-news"
 
-export const FALLBACK_ARTICLES: NewsArticle[] = ${JSON.stringify(articles, null, 2)}
-`
-    fs.writeFileSync(filePath, content, "utf-8")
-    console.log(`[News Fallback] Rotated ${articles.length} articles into fallback-news.ts`)
-  } catch {
-    console.log("[News Fallback] Filesystem read-only — skipping rotation (expected in prod)")
-  }
-}
 
 // ─── In-memory cache (survives warm instances, resets on cold start) ──────────
 let _memoryCache: { articles: NewsArticle[]; savedAt: number } | null = null
@@ -30,7 +10,6 @@ const CACHE_TTL_MS = 60 * 60 * 1000 // 1 hour
 
 function saveToCache(articles: NewsArticle[]) {
   _memoryCache = { articles, savedAt: Date.now() }
-  console.log(`[News Cache] Saved ${articles.length} articles to memory cache`)
 }
 
 function getCachedNews(): NewsArticle[] {
@@ -87,10 +66,7 @@ async function fetchRealNews(): Promise<NewsArticle[]> {
     }
 
     const raw: any[] = data.results ?? []
-    console.log(`[News Debug] Raw articles from API: ${raw.length}`)
-
     const filtered = raw.filter(isRelevantToStudents)
-    console.log(`[News Debug] After relevance filter: ${filtered.length}`)
 
     const articles: NewsArticle[] = filtered.map((item: any) => {
       // Build fallback image only if API didn't supply one
@@ -145,7 +121,6 @@ export async function GET() {
     // Serve from memory cache if still fresh — avoids burning daily API credits
     if (hasFreshCache()) {
       const cached = getCachedNews()
-      console.log(`[News] Serving ${cached.length} articles from memory cache`)
       return NextResponse.json(
         { success: true, articles: cached, source: "Cached", count: cached.length },
         { headers: { "Cache-Control": "public, s-maxage=3600, stale-while-revalidate=86400" } }
@@ -156,18 +131,10 @@ export async function GET() {
     const MAX = 8
 
     if (fetchedArticles.length > 0) {
-      // 1. Persist to in-memory cache (fast, works on all platforms)
       saveToCache(fetchedArticles)
-      // 2. Rotate fallback-news.ts with latest articles (local dev only —
-      //    silently skips on Vercel/read-only prod filesystems)
-      rotateFallbackArticles(fetchedArticles)
     }
 
-    // Prefer articles within 48 hours (free plan has 12hr delay — this window is safe)
     const fresh = fetchedArticles.filter((a) => isWithin48Hours(a.pubDate))
-    console.log(`[News Debug] After 48hr filter: ${fresh.length}`)
-    console.log(`[News Debug] Sample pubDate: ${fetchedArticles[0]?.pubDate}`)
-    console.log(`[News Debug] Server UTC time: ${new Date().toISOString()}`)
 
     let normalized = fresh.slice(0, MAX)
     let source: "Live Feed" | "Cached" | "Static Fallback" = "Live Feed"
@@ -183,7 +150,7 @@ export async function GET() {
         normalized = FALLBACK_ARTICLES.slice(0, MAX)
         source = "Static Fallback"
       }
-      console.log(`[News] Falling back to ${source} (${normalized.length} articles)`)
+
     }
 
     return NextResponse.json(

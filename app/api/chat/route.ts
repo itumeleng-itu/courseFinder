@@ -27,6 +27,7 @@ interface CachedResponse {
 const responseCache = new Map<string, CachedResponse>()
 const CACHE_TTL = 24 * 60 * 60 * 1000
 const MAX_CACHE_SIZE = 500
+let _oldestCacheKey: string | null = null
 
 function normalizeQuestion(question: string): string {
     return question
@@ -42,10 +43,10 @@ function getCachedResponse(question: string): string | null {
     if (!cached) return null
     if (Date.now() - cached.timestamp > CACHE_TTL) {
         responseCache.delete(normalizedQuestion)
+        if (_oldestCacheKey === normalizedQuestion) _oldestCacheKey = null
         return null
     }
     cached.hitCount++
-    console.log(`[Cache] HIT #${cached.hitCount}: "${normalizedQuestion.substring(0, 50)}..."`)
     return cached.response
 }
 
@@ -53,18 +54,15 @@ function cacheResponse(question: string, response: string): void {
     const normalizedQuestion = normalizeQuestion(question)
     if (normalizedQuestion.length < 10 || normalizedQuestion.length > 200) return
     if (responseCache.size >= MAX_CACHE_SIZE) {
-        let oldestKey = ''
-        let oldestTime = Infinity
-        for (const [key, value] of responseCache.entries()) {
-            if (value.timestamp < oldestTime) {
-                oldestTime = value.timestamp
-                oldestKey = key
-            }
+        // Map preserves insertion order — first key is oldest
+        const firstKey = _oldestCacheKey || responseCache.keys().next().value
+        if (firstKey) {
+            responseCache.delete(firstKey)
+            _oldestCacheKey = null
         }
-        if (oldestKey) responseCache.delete(oldestKey)
     }
+    if (!_oldestCacheKey && responseCache.size === 0) _oldestCacheKey = normalizedQuestion
     responseCache.set(normalizedQuestion, { response, timestamp: Date.now(), hitCount: 0 })
-    console.log(`[Cache] Stored: "${normalizedQuestion.substring(0, 50)}..." (Total: ${responseCache.size})`)
 }
 
 function getCacheStats() {
