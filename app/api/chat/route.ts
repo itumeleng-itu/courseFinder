@@ -1,6 +1,9 @@
 import { SYSTEM_PROMPT } from "@/constants/prompts"
 import { NextResponse } from "next/server"
 import { generateLocalFallback } from "@/lib/chatbot-fallback"
+import { studyMethods, generalStudyTips } from "@/data/study-data"
+import { getAllEventsWithStatus } from "@/lib/calendar-events"
+import { universities } from "@/data/universities"
 
 export const dynamic = "force-dynamic"
 
@@ -186,7 +189,36 @@ export async function POST(request: Request) {
         }
 
         const messages: Array<{ role: "system" | "user" | "assistant"; content: string }> = []
-        messages.push({ role: "system", content: SYSTEM_PROMPT })
+        
+        // Create an optimal data payload to give the LLM all contextual knowledge of the app
+        // We map universities down to a compact format to save strictly on token constraints.
+        const allEvents = getAllEventsWithStatus()
+        const appContextData = {
+          studyMethods,
+          generalStudyTips,
+          calendarEvents: allEvents.map((e: any) => ({ name: e.name, date: e.date.toISOString().split('T')[0], type: e.type })),
+          universities: universities.map((u: any) => ({
+             shortName: u.shortName,
+             name: u.name,
+             location: u.location,
+             courses: u.courses.map((c: any) => ({
+               name: c.name,
+               aps: c.apsRequired || c.apsMin || 'Varies',
+               duration: c.duration,
+             }))
+          }))
+        }
+        
+        const Contextual_System_Prompt = `${SYSTEM_PROMPT}
+        
+=== DATABASE CONTEXT ===
+You possess the entire CourseFinder dataset. You must use the following JSON data to directly answer user queries about specific universities, courses, requirements, study tips, or calendar dates. NEVER guess or hallucinate. Use this exact data:
+\`\`\`json
+${JSON.stringify(appContextData)}
+\`\`\`
+`
+
+        messages.push({ role: "system", content: Contextual_System_Prompt })
             ; (conversationHistory as unknown[]).forEach((msg) => {
                 const item = msg as Partial<ChatHistoryItem>
                 messages.push({ role: item.role === "assistant" ? "assistant" : "user", content: String(item.content ?? "") })

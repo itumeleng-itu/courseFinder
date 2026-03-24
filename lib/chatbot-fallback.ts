@@ -30,7 +30,7 @@ const TOPIC_KEYWORDS: Record<string, string[]> = {
     studyTips: ["study", "study tips", "study method", "how to study", "exam preparation", "revision", "exam tips"],
     university: ["university", "universities", "campus", "institution"],
     bursary: ["bursary", "bursaries", "scholarship", "scholarships", "nsfas", "funding", "financial aid"],
-    pastPapers: ["past paper", "past papers", "previous exam", "old exam", "exam paper"],
+    pastPapers: ["past paper", "past papers", "previous exam", "old exam", "exam paper", "question paper", "question papers", "previous paper"],
     matric: ["matric", "matric results", "nsc", "grade 12", "final exam"],
 }
 
@@ -227,7 +227,35 @@ Check your results and next steps on our [Matric Results](/matric-results) page.
 export function generateLocalFallback(message: string): string | null {
     const topics = detectTopics(message)
 
-    if (topics.length === 0) {
+    const primary = topics.length > 0 ? topics[0].topic : ""
+    let response: string
+
+    if (!primary) {
+        // Since no broad topic matched, try searching through all universities and courses directly
+        // This makes the offline fallback "answer based on everything in the application"
+        const searchTerms = message.toLowerCase().split(/\s+/)
+        const matchedCourses: Array<{uni: string, name: string}> = []
+        
+        universities.forEach(u => {
+            u.courses.forEach(c => {
+                const cLower = c.name.toLowerCase()
+                if (searchTerms.some(term => term.length > 3 && cLower.includes(term))) {
+                    matchedCourses.push({ uni: u.shortName, name: c.name })
+                }
+            })
+        })
+
+        if (matchedCourses.length > 0) {
+            const topMatches = matchedCourses.slice(0, 10)
+            return `**Search Results from Application Data**
+
+I found the following courses based on your message:
+${topMatches.map(m => `- **${m.uni}**: ${m.name}`).join("\n")}
+
+Browse the [Find Course](/find-course) page for full details and APS requirements.
+*(Note: I am running in offline mode using local database search because the AI configuration is unavailable).*`
+        }
+
         // Generic fallback for unrecognized questions
         return `I'm currently running in offline mode, so I can only answer questions about topics available in our app.
 
@@ -247,9 +275,6 @@ Try asking about one of these topics, or browse the app directly:
 
 *Note: I'm using local data because the AI service is temporarily unavailable. Responses may be more limited than usual.*`
     }
-
-    const primary = topics[0].topic
-    let response: string
 
     switch (primary) {
         case "aps":
