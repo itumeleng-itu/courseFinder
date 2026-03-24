@@ -4,7 +4,7 @@ import { useEffect, useState } from "react"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { Skeleton } from "@/components/ui/skeleton"
-import { ExternalLink, ArrowRight, Share2 } from "lucide-react"
+import { ExternalLink, ArrowRight, Share2, Landmark } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import Image from "next/image"
 import Link from "next/link"
@@ -32,7 +32,16 @@ export function NewsGrid() {
         const data = await response.json()
 
         if (data.success && Array.isArray(data.articles)) {
-          setNews(data.articles.slice(0, 8))
+          const universitiesStaticCard: NewsArticle = {
+            title: "View Universities and application dates",
+            description: "Explore the comprehensive admissions database for 2026. View detailed closing dates per faculty, application fees, locations, and direct application links for all 26 public universities in South Africa.",
+            link: "/universities",
+            pubDate: new Date().toISOString(),
+            source_id: "CourseFinder Updates",
+            image_url: "",
+            category: ["Admissions", "Universities"],
+          }
+          setNews([universitiesStaticCard, ...data.articles.slice(0, 7)])
         } else {
           console.error("Unexpected response:", data)
         }
@@ -141,7 +150,11 @@ export function NewsGrid() {
                     sizes={isLarge ? "(max-width: 768px) 85vw, 50vw" : "(max-width: 768px) 85vw, 25vw"}
                   />
                 ) : (
-                  <div className="w-full h-full bg-gradient-to-br from-muted to-muted/50" />
+                  <div className="w-full h-full bg-gradient-to-br from-primary/20 via-primary/10 to-muted flex items-center justify-center">
+                     {article.category?.includes("Universities") ? (
+                      <Landmark className="w-12 h-12 sm:w-16 sm:h-16 text-primary/40 group-hover:scale-110 transition-transform duration-300" />
+                    ) : null}
+                  </div>
                 )}
               </div>
               <CardHeader className="space-y-2 p-4 sm:p-6">
