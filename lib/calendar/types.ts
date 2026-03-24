@@ -3,6 +3,7 @@ export type CalendarEvent = {
     name: string
     type: "public" | "academic" | "exam"
     description?: string
+    url?: string
     time?: string
     isPast?: boolean
 }

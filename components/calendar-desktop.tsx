@@ -181,6 +181,12 @@ export function CalendarDesktop() {
                     )}
                     <p className="text-xs font-medium line-clamp-2">{event.name}</p>
                     {event.time && <p className="text-xs text-muted-foreground mt-1">{event.time}</p>}
+                    {event.description && <p className="text-[10px] text-muted-foreground mt-1 leading-tight">{event.description}</p>}
+                    {event.url && (
+                      <a href={event.url} target="_blank" rel="noreferrer" className="text-[10px] text-primary hover:underline mt-1 inline-block">
+                        Read more
+                      </a>
+                    )}
                   </div>
                   )
                 })}
@@ -212,6 +218,12 @@ export function CalendarDesktop() {
                       <span className="text-xs text-muted-foreground">{event.date.getDate()}</span>
                     </div>
                     <p className="text-xs font-medium line-clamp-1">{event.name}</p>
+                    {event.description && <p className="text-[10px] text-muted-foreground mt-1 line-clamp-2 leading-tight">{event.description}</p>}
+                    {event.url && (
+                      <a href={event.url} target="_blank" rel="noreferrer" className="text-[10px] text-primary hover:underline mt-0.5 inline-block">
+                        Read more
+                      </a>
+                    )}
                   </div>
                 ))}
             </div>

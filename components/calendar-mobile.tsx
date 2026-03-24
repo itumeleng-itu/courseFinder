@@ -172,7 +172,12 @@ export function CalendarMobile() {
                 <div>
                   <h4 className="text-sm font-semibold text-gray-900">{event.name}</h4>
                   {event.description && (
-                    <p className="text-xs text-gray-500 mt-1 line-clamp-1">{event.description}</p>
+                    <p className="text-[10px] leading-tight text-gray-500 mt-1 line-clamp-2">{event.description}</p>
+                  )}
+                  {event.url && (
+                    <a href={event.url} target="_blank" rel="noreferrer" className="text-[10px] text-[#FF5F00] hover:underline mt-0.5 inline-block">
+                      Read more
+                    </a>
                   )}
                 </div>
               </div>
