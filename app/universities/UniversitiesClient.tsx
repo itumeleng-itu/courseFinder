@@ -4,6 +4,7 @@ import React, { useState } from "react"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle, CardFooter } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { MapPin, Globe, Calendar, Info, CreditCard, ExternalLink, GraduationCap } from "lucide-react"
+import { RequiredDocumentsModal } from "@/components/universities/required-documents-modal"
 
 export type UniData = {
   id: string
@@ -93,9 +94,12 @@ export default function UniversitiesClient({ universities }: { universities: Uni
 
   return (
     <div className="space-y-6 lg:space-y-8">
-      <div className="flex flex-col gap-2">
-        <h1 className="text-3xl font-bold tracking-tight">South African Universities</h1>
-        <p className="text-muted-foreground text-lg">Browse application dates, overviews, and locations for public universities.</p>
+      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+        <div className="flex flex-col gap-2">
+          <h1 className="text-3xl font-bold tracking-tight">South African Universities</h1>
+          <p className="text-muted-foreground text-lg">Browse application dates, overviews, and locations for public universities.</p>
+        </div>
+        <RequiredDocumentsModal />
       </div>
 
       <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
