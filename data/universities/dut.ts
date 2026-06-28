@@ -1,5 +1,6 @@
 import { BaseUniversity } from "./base-university";
 import type { Course } from "@/lib/types";
+import { percentageToLevel } from "@/lib/aps/utils";
 
 /**
  * Durban University of Technology (DUT) class
@@ -24,18 +25,13 @@ export class DUT extends BaseUniversity {
    * DUT uses NSC points system where each subject level contributes to the total
    */
   calculateApsScore(subjects: Record<string, number>): number {
-    // Filter out Life Orientation as per standard practice
-    const filteredSubjects = Object.entries(subjects).filter(
-      ([subject]) => subject.toLowerCase() !== "life orientation",
-    );
-
-    // Calculate total APS from subject levels
-    const totalAPS = filteredSubjects.reduce(
-      (total, [_, level]) => total + level,
-      0,
-    );
-
-    return totalAPS;
+    // DUT APS: best 6 subjects (excl. LO) on NSC 1-7 level scale
+    return Object.entries(subjects)
+      .filter(([name]) => name.toLowerCase() !== "life orientation")
+      .map(([, pct]) => percentageToLevel(pct))
+      .sort((a, b) => b - a)
+      .slice(0, 6)
+      .reduce((sum, level) => sum + level, 0);
   }
 
   protected readonly _courses: Course[] = [

@@ -1,5 +1,6 @@
 import { BaseUniversity } from "./base-university";
 import type { Course } from "@/lib/types";
+import { percentageToLevel } from "@/lib/aps/utils";
 
 /**
  * University of Zululand (UniZulu) class
@@ -1325,18 +1326,12 @@ export class UniZulu extends BaseUniversity {
    * @returns The calculated APS score
    */
   calculateApsScore(subjects: Record<string, number>): number {
-    // UniZulu uses the standard NSC levels as points
-    // Life Orientation is excluded from the calculation
-    let totalPoints = 0;
-    let count = 0;
-
-    for (const [subject, level] of Object.entries(subjects)) {
-      if (subject.toLowerCase() !== "life orientation" && count < 6) {
-        totalPoints += level;
-        count++;
-      }
-    }
-
-    return totalPoints;
+    // UniZulu APS: best 6 subjects (excl. LO) on NSC 1-7 level scale
+    return Object.entries(subjects)
+      .filter(([name]) => name.toLowerCase() !== "life orientation")
+      .map(([, pct]) => percentageToLevel(pct))
+      .sort((a, b) => b - a)
+      .slice(0, 6)
+      .reduce((sum, level) => sum + level, 0);
   }
 }

@@ -1,5 +1,6 @@
 import { BaseUniversity } from "./base-university";
 import type { Course } from "@/lib/types";
+import { percentageToLevel } from "@/lib/aps/utils";
 
 /**
  * Cape Peninsula University of Technology (CPUT) class
@@ -29,18 +30,13 @@ export class CPUT extends BaseUniversity {
    * @returns The calculated APS score
    */
   calculateApsScore(subjects: Record<string, number>): number {
-    // Implementation would depend on the specific method required for each course
-    // For simplicity, we'll use Method 1 (Best of six subjects)
-    const validSubjects = Object.entries(subjects)
+    // CPUT M1: best 6 subjects (excl. LO) on NSC 1-7 level scale
+    return Object.entries(subjects)
       .filter(([name]) => name.toLowerCase() !== "life orientation")
-      .sort((a, b) => b[1] - a[1])
-      .slice(0, 6);
-
-    const totalScore = validSubjects.reduce(
-      (sum, [_, level]) => sum + level * 10,
-      0,
-    );
-    return totalScore / 10;
+      .map(([, pct]) => percentageToLevel(pct))
+      .sort((a, b) => b - a)
+      .slice(0, 6)
+      .reduce((sum, level) => sum + level, 0);
   }
 
   protected readonly _courses: Course[] = [
@@ -333,7 +329,7 @@ export class CPUT extends BaseUniversity {
       name: "Diploma in Accountancy",
       faculty: "Business & Management Sciences",
       department: "Accounting Sciences",
-      apsMin: 38,
+      apsMin: 25,
       duration: "3 years",
       subjectRequirements: {
         English: 4,
@@ -838,7 +834,7 @@ export class CPUT extends BaseUniversity {
       name: "Bachelor of Health Sciences in Medical Laboratory Science",
       faculty: "Health & Wellness Sciences",
       department: "Biomedical Sciences",
-      apsMin: 38,
+      apsMin: 30,
       duration: "4 years",
       subjectRequirements: {
         English: 4,

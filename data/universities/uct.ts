@@ -1,5 +1,6 @@
 import { BaseUniversity } from "./base-university";
 import type { Course } from "@/lib/types";
+import { percentageToLevel } from "@/lib/aps/utils";
 
 /**
  * University of Cape Town (UCT) class
@@ -724,14 +725,13 @@ export class UCT extends BaseUniversity {
    * Base APS: Sum of best 6 subjects excluding Life Orientation
    */
   calculateApsScore(subjects: Record<string, number>): number {
-    // Standard APS calculation (sum of best 6 subjects excluding LO)
-    const validSubjects = Object.entries(subjects)
-      .filter(([subject]) => subject !== "Life Orientation")
-      .map(([, mark]) => mark)
+    // UCT APS: best 6 subjects (excl. LO) on NSC 1-7 level scale
+    return Object.entries(subjects)
+      .filter(([name]) => name.toLowerCase() !== "life orientation")
+      .map(([, pct]) => percentageToLevel(pct))
       .sort((a, b) => b - a)
-      .slice(0, 6);
-
-    return validSubjects.reduce((sum, mark) => sum + mark, 0);
+      .slice(0, 6)
+      .reduce((sum, level) => sum + level, 0);
   }
 
   /**
