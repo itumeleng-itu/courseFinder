@@ -2,7 +2,7 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Check, Edit2, X, X as XIcon } from "lucide-react"
 import { Subject } from "@/app/find-course/types"
-import { percentageToNSCLevel } from "@/app/find-course/utils"
+import { percentageToLevel } from "@/lib/aps/utils"
 import { cn } from "@/lib/utils"
 
 interface SubjectItemProps {
@@ -35,7 +35,7 @@ export function SubjectItem({
   onRemove,
 }: SubjectItemProps) {
   const isEditing = editingSubjectId === subject.id
-  const level = percentageToNSCLevel(subject.percentage)
+  const level = percentageToLevel(subject.percentage)
 
   return (
     <div className="flex items-center justify-between p-3 glass-card hover:bg-muted/40 transition-colors rounded-lg gap-3 mb-2">

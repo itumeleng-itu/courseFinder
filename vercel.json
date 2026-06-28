@@ -2,12 +2,12 @@
   "buildCommand": "npm run build",
   "crons": [
     {
-      "path": "/api/matric-pass-rates-news",
-      "schedule": "0 0 31 1 *"
+      "path": "/api/matric-stats",
+      "schedule": "0 8 15 1 *"
     },
     {
       "path": "/api/provincial-pass-rates",
-      "schedule": "0 0 31 1 *"
+      "schedule": "0 8 15 1 *"
     }
   ]
 }

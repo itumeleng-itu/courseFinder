@@ -1,15 +1,15 @@
-import { BaseUniversity } from "./base-university"
-import type { Course } from "@/lib/types"
+import { BaseUniversity } from "./base-university";
+import type { Course } from "@/lib/types";
 
 /**
  * University of the Free State (UFS) class
  */
 export class UFS extends BaseUniversity {
-  readonly id = "ufs"
-  readonly name = "University of the Free State"
-  readonly shortName = "UFS"
-  readonly website = "https://www.ufs.ac.za"
-  readonly logo = "/logos/ufs.png"
+  readonly id = "ufs";
+  readonly name = "University of the Free State";
+  readonly shortName = "UFS";
+  readonly website = "https://www.ufs.ac.za";
+  readonly logo = "/logos/ufs.png";
   readonly location = {
     city: "Bloemfontein",
     province: "Free State",
@@ -17,7 +17,7 @@ export class UFS extends BaseUniversity {
       latitude: -29.1076,
       longitude: 26.1857,
     },
-  }
+  };
 
   protected readonly _courses: Course[] = [
     // Faculty of Economic and Management Sciences
@@ -34,8 +34,10 @@ export class UFS extends BaseUniversity {
         English: 4,
         Mathematics: 2,
       },
-      alternativeRequirements: "Mathematical Literacy at Level 5 (60%) is acceptable as alternative to Mathematics",
-      additionalRequirements: "Meeting minimum requirements does not guarantee admission due to limited space",
+      alternativeRequirements:
+        "Mathematical Literacy at Level 5 (60%) is acceptable as alternative to Mathematics",
+      additionalRequirements:
+        "Meeting minimum requirements does not guarantee admission due to limited space",
       careerOpportunities: [
         "Public Administration",
         "Government Management",
@@ -57,7 +59,13 @@ export class UFS extends BaseUniversity {
         English: 4,
         Mathematics: 4,
       },
-      careerOpportunities: ["Business Management", "Financial Management", "Marketing", "Human Resources", "Economics"],
+      careerOpportunities: [
+        "Business Management",
+        "Financial Management",
+        "Marketing",
+        "Human Resources",
+        "Economics",
+      ],
     },
     {
       id: "ufs-bcom-economics",
@@ -72,7 +80,13 @@ export class UFS extends BaseUniversity {
         English: 4,
         Mathematics: 4,
       },
-      careerOpportunities: ["Economic Analysis", "Financial Services", "Government Economics", "Research", "Banking"],
+      careerOpportunities: [
+        "Economic Analysis",
+        "Financial Services",
+        "Government Economics",
+        "Research",
+        "Banking",
+      ],
     },
     {
       id: "ufs-bcom-finance",
@@ -192,7 +206,13 @@ export class UFS extends BaseUniversity {
         English: 4,
         Mathematics: 4,
       },
-      careerOpportunities: ["Corporate Law", "Business Law", "Legal Consulting", "Compliance", "Commercial Law"],
+      careerOpportunities: [
+        "Corporate Law",
+        "Business Law",
+        "Legal Consulting",
+        "Compliance",
+        "Commercial Law",
+      ],
     },
     {
       id: "ufs-bacc",
@@ -207,7 +227,8 @@ export class UFS extends BaseUniversity {
         English: 4,
         Mathematics: 5,
       },
-      additionalRequirements: "SAICA accredited programme for aspiring Chartered Accountants",
+      additionalRequirements:
+        "SAICA accredited programme for aspiring Chartered Accountants",
       careerOpportunities: [
         "Chartered Accountant (CA)",
         "Auditing",
@@ -251,7 +272,8 @@ export class UFS extends BaseUniversity {
       subjectRequirements: {
         English: 4,
       },
-      additionalRequirements: "Specialisation options: Afrikaans HL, Sesotho HL, isiZulu HL, English HL",
+      additionalRequirements:
+        "Specialisation options: Afrikaans HL, Sesotho HL, isiZulu HL, English HL",
       careerOpportunities: [
         "Foundation Phase Teacher (Grades R-3)",
         "Early Childhood Development",
@@ -294,7 +316,8 @@ export class UFS extends BaseUniversity {
       subjectRequirements: {
         English: 4,
       },
-      additionalRequirements: "Subject combinations include Mathematics, Sciences, Languages, and Social Sciences",
+      additionalRequirements:
+        "Subject combinations include Mathematics, Sciences, Languages, and Social Sciences",
       careerOpportunities: [
         "High School Teacher (Grades 7-12)",
         "Subject Head",
@@ -505,12 +528,17 @@ export class UFS extends BaseUniversity {
       campus: "Bloemfontein",
       subjectRequirements: {
         English: 4,
-        Mathematics: 3,
-        "Mathematical Literacy": 6,
+        Math: {
+          alternatives: [
+            { subject: "Mathematics", level: 3 },
+            { subject: "Mathematical Literacy", level: 6 },
+          ],
+        },
         "Life Sciences": 5,
         "Physical Sciences": 4,
       },
-      additionalRequirements: "Subject to selection. Closing date: 31 July 2025",
+      additionalRequirements:
+        "Subject to selection. Closing date: 31 July 2025",
       careerOpportunities: [
         "Professional Nurse",
         "Clinical Specialist",
@@ -532,10 +560,15 @@ export class UFS extends BaseUniversity {
       campus: "Bloemfontein",
       subjectRequirements: {
         English: 6,
-        Mathematics: 4,
-        "Mathematical Literacy": 6,
+        Math: {
+          alternatives: [
+            { subject: "Mathematics", level: 4 },
+            { subject: "Mathematical Literacy", level: 6 },
+          ],
+        },
       },
-      alternativeRequirements: "Either Mathematics (50%) or Mathematical Literacy (70%) required",
+      alternativeRequirements:
+        "Either Mathematics (50%) or Mathematical Literacy (70%) required",
       careerOpportunities: [
         "Attorney",
         "Advocate",
@@ -612,7 +645,13 @@ export class UFS extends BaseUniversity {
         Mathematics: 6,
         "Physical Sciences": 5,
       },
-      careerOpportunities: ["Mathematician", "Data Scientist", "Actuarial Science", "Research", "Financial Analysis"],
+      careerOpportunities: [
+        "Mathematician",
+        "Data Scientist",
+        "Actuarial Science",
+        "Research",
+        "Financial Analysis",
+      ],
     },
     {
       id: "ufs-bsc-actuarial",
@@ -627,8 +666,15 @@ export class UFS extends BaseUniversity {
         English: 4,
         Mathematics: 6,
       },
-      additionalRequirements: "Subject to selection based on academic performance",
-      careerOpportunities: ["Actuary", "Risk Management", "Insurance", "Investment Analysis", "Financial Consulting"],
+      additionalRequirements:
+        "Subject to selection based on academic performance",
+      careerOpportunities: [
+        "Actuary",
+        "Risk Management",
+        "Insurance",
+        "Investment Analysis",
+        "Financial Consulting",
+      ],
     },
     {
       id: "ufs-bsc-chemical",
@@ -734,7 +780,13 @@ export class UFS extends BaseUniversity {
         Mathematics: 5,
         "Physical Sciences": 5,
       },
-      careerOpportunities: ["Geologist", "Mining Industry", "Environmental Geology", "Hydrogeology", "Geochemistry"],
+      careerOpportunities: [
+        "Geologist",
+        "Mining Industry",
+        "Environmental Geology",
+        "Hydrogeology",
+        "Geochemistry",
+      ],
     },
     {
       id: "ufs-bsc-it",
@@ -792,7 +844,8 @@ export class UFS extends BaseUniversity {
         English: 4,
         Mathematics: 2,
       },
-      alternativeRequirements: "Mathematical Literacy at Level 5 (60%) acceptable",
+      alternativeRequirements:
+        "Mathematical Literacy at Level 5 (60%) acceptable",
       careerOpportunities: [
         "Food Systems Specialist",
         "Sustainability Consultant",
@@ -816,7 +869,8 @@ export class UFS extends BaseUniversity {
         English: 4,
         Mathematics: 3,
       },
-      alternativeRequirements: "Mathematical Literacy at Level 7 (80%) acceptable if AP is 31 or above",
+      alternativeRequirements:
+        "Mathematical Literacy at Level 7 (80%) acceptable if AP is 31 or above",
       additionalRequirements:
         "Various majors available including Animal Production, Crop Production, Mixed Farming, Agricultural Extension",
       careerOpportunities: [
@@ -842,7 +896,8 @@ export class UFS extends BaseUniversity {
         "Life Sciences": 5,
         "Physical Sciences": 5,
       },
-      additionalRequirements: "Majors include Animal Science, Agronomy, Soil Science, Plant Breeding, Plant Pathology",
+      additionalRequirements:
+        "Majors include Animal Science, Agronomy, Soil Science, Plant Breeding, Plant Pathology",
       careerOpportunities: [
         "Agricultural Scientist",
         "Research and Development",
@@ -887,7 +942,8 @@ export class UFS extends BaseUniversity {
         English: 4,
         Mathematics: 4,
       },
-      additionalRequirements: "Subject to selection. Portfolio and selection form required. Closing date: 31 July 2025",
+      additionalRequirements:
+        "Subject to selection. Portfolio and selection form required. Closing date: 31 July 2025",
       careerOpportunities: [
         "Architect",
         "Urban Designer",
@@ -934,7 +990,13 @@ export class UFS extends BaseUniversity {
       },
       additionalRequirements:
         "Various major combinations available including Languages, History, Philosophy, Psychology, Political Science",
-      careerOpportunities: ["Education", "Media and Communications", "Public Service", "Research", "Cultural Heritage"],
+      careerOpportunities: [
+        "Education",
+        "Media and Communications",
+        "Public Service",
+        "Research",
+        "Cultural Heritage",
+      ],
     },
     {
       id: "ufs-ba-languages",
@@ -948,7 +1010,13 @@ export class UFS extends BaseUniversity {
       subjectRequirements: {
         English: 4,
       },
-      careerOpportunities: ["Translator", "Interpreter", "Language Teaching", "Publishing", "International Relations"],
+      careerOpportunities: [
+        "Translator",
+        "Interpreter",
+        "Language Teaching",
+        "Publishing",
+        "International Relations",
+      ],
     },
     {
       id: "ufs-ba-language-practice",
@@ -962,8 +1030,15 @@ export class UFS extends BaseUniversity {
       subjectRequirements: {
         English: 5,
       },
-      additionalRequirements: "Subject to selection. Home language Level 5 (60%) and FAL Level 65% required",
-      careerOpportunities: ["Language Practitioner", "Editor", "Translator", "Communications Specialist", "Publishing"],
+      additionalRequirements:
+        "Subject to selection. Home language Level 5 (60%) and FAL Level 65% required",
+      careerOpportunities: [
+        "Language Practitioner",
+        "Editor",
+        "Translator",
+        "Communications Specialist",
+        "Publishing",
+      ],
     },
     {
       id: "ufs-ba-governance",
@@ -1017,7 +1092,13 @@ export class UFS extends BaseUniversity {
       subjectRequirements: {
         English: 4,
       },
-      careerOpportunities: ["Journalist", "News Reporter", "Editor", "Media Producer", "Digital Media Specialist"],
+      careerOpportunities: [
+        "Journalist",
+        "News Reporter",
+        "Editor",
+        "Media Producer",
+        "Digital Media Specialist",
+      ],
     },
     {
       id: "ufs-ba-fine-arts",
@@ -1031,8 +1112,15 @@ export class UFS extends BaseUniversity {
       subjectRequirements: {
         English: 4,
       },
-      additionalRequirements: "Subject to selection. Portfolio required. Closing date: 30 September 2025",
-      careerOpportunities: ["Visual Artist", "Art Director", "Gallery Curator", "Art Teacher", "Graphic Designer"],
+      additionalRequirements:
+        "Subject to selection. Portfolio required. Closing date: 30 September 2025",
+      careerOpportunities: [
+        "Visual Artist",
+        "Art Director",
+        "Gallery Curator",
+        "Art Teacher",
+        "Graphic Designer",
+      ],
     },
     {
       id: "ufs-ba-drama",
@@ -1046,8 +1134,15 @@ export class UFS extends BaseUniversity {
       subjectRequirements: {
         English: 4,
       },
-      additionalRequirements: "Subject to selection. Audition and interview required. Closing date: 30 September 2025",
-      careerOpportunities: ["Actor", "Theatre Director", "Drama Teacher", "Arts Administrator", "Performance Artist"],
+      additionalRequirements:
+        "Subject to selection. Audition and interview required. Closing date: 30 September 2025",
+      careerOpportunities: [
+        "Actor",
+        "Theatre Director",
+        "Drama Teacher",
+        "Arts Administrator",
+        "Performance Artist",
+      ],
     },
     {
       id: "ufs-bmusic",
@@ -1061,7 +1156,8 @@ export class UFS extends BaseUniversity {
       subjectRequirements: {
         English: 4,
       },
-      additionalRequirements: "Subject to selection. Music Theory Grade 5, Performance Grade 7, audition required",
+      additionalRequirements:
+        "Subject to selection. Music Theory Grade 5, Performance Grade 7, audition required",
       careerOpportunities: [
         "Professional Musician",
         "Music Teacher",
@@ -1104,7 +1200,8 @@ export class UFS extends BaseUniversity {
       subjectRequirements: {
         English: 5,
       },
-      additionalRequirements: "Subject to selection. Closing date: 31 July 2025",
+      additionalRequirements:
+        "Subject to selection. Closing date: 31 July 2025",
       careerOpportunities: [
         "Social Worker",
         "Community Development Worker",
@@ -1125,7 +1222,8 @@ export class UFS extends BaseUniversity {
       subjectRequirements: {
         English: 5,
       },
-      additionalRequirements: "Subject to selection. AP 30 OR Diploma in Vocational Skills with Level 4 English",
+      additionalRequirements:
+        "Subject to selection. AP 30 OR Diploma in Vocational Skills with Level 4 English",
       careerOpportunities: [
         "Community Development Practitioner",
         "Project Manager",
@@ -1148,7 +1246,8 @@ export class UFS extends BaseUniversity {
       subjectRequirements: {
         English: 4,
       },
-      additionalRequirements: "Selection form required. All applicants must complete selection form",
+      additionalRequirements:
+        "Selection form required. All applicants must complete selection form",
       careerOpportunities: [
         "Minister/Pastor",
         "Chaplain",
@@ -1171,7 +1270,8 @@ export class UFS extends BaseUniversity {
       subjectRequirements: {
         English: 4,
       },
-      additionalRequirements: "Subject to selection. Audition and musical aptitude test required",
+      additionalRequirements:
+        "Subject to selection. Audition and musical aptitude test required",
       careerOpportunities: [
         "Music Performer",
         "Music Teacher",
@@ -1192,10 +1292,17 @@ export class UFS extends BaseUniversity {
       subjectRequirements: {
         English: 4,
       },
-      additionalRequirements: "Grade 5 principal instrument/voice, Grade 3 Music Theory advised. Audition required",
-      careerOpportunities: ["Professional Musician", "Music Educator", "Music Director", "Composer", "Music Producer"],
+      additionalRequirements:
+        "Grade 5 principal instrument/voice, Grade 3 Music Theory advised. Audition required",
+      careerOpportunities: [
+        "Professional Musician",
+        "Music Educator",
+        "Music Director",
+        "Composer",
+        "Music Producer",
+      ],
     },
-  ]
+  ];
 
   /**
    * Calculate APS using UFS method
@@ -1204,38 +1311,39 @@ export class UFS extends BaseUniversity {
   calculateAPS(subjects: Record<string, number>): number {
     // Convert percentage-based subjects to UFS levels
     const convertToLevel = (percentage: number): number => {
-      if (percentage >= 90) return 8
-      if (percentage >= 80) return 7
-      if (percentage >= 70) return 6
-      if (percentage >= 60) return 5
-      if (percentage >= 50) return 4
-      if (percentage >= 40) return 3
-      if (percentage >= 30) return 2
-      return 0
-    }
+      if (percentage >= 90) return 8;
+      if (percentage >= 80) return 7;
+      if (percentage >= 70) return 6;
+      if (percentage >= 60) return 5;
+      if (percentage >= 50) return 4;
+      if (percentage >= 40) return 3;
+      if (percentage >= 30) return 2;
+      return 0;
+    };
 
-    const levels: number[] = []
-    let lifeOrientationPoints = 0
+    const levels: number[] = [];
+    let lifeOrientationPoints = 0;
 
     for (const [subject, mark] of Object.entries(subjects)) {
-      const level = convertToLevel(mark)
+      const level = convertToLevel(mark);
 
       if (subject === "Life Orientation") {
         // Life Orientation: 1 point if Level 5 (60%) or higher
-        lifeOrientationPoints = level >= 5 ? 1 : 0
+        lifeOrientationPoints = level >= 5 ? 1 : 0;
       } else if (level >= 2) {
         // Only include subjects with Level 2 (30%) or higher
-        levels.push(level)
+        levels.push(level);
       }
     }
 
     // Take the 6 best subjects (excluding Life Orientation)
-    const bestSix = levels.sort((a, b) => b - a).slice(0, 6)
+    const bestSix = levels.sort((a, b) => b - a).slice(0, 6);
 
     // Calculate total APS
-    const totalAPS = bestSix.reduce((sum, level) => sum + level, 0) + lifeOrientationPoints
+    const totalAPS =
+      bestSix.reduce((sum, level) => sum + level, 0) + lifeOrientationPoints;
 
-    return totalAPS
+    return totalAPS;
   }
 
   /**
@@ -1245,28 +1353,28 @@ export class UFS extends BaseUniversity {
    * - Standard 7-point NSC scale
    */
   calculateApsScore(subjects: Record<string, number>): number {
-    const subjectScores: number[] = []
-    
+    const subjectScores: number[] = [];
+
     for (const [subjectName, percentage] of Object.entries(subjects)) {
-      if (subjectName.toLowerCase().includes('life orientation')) {
-        continue
+      if (subjectName.toLowerCase().includes("life orientation")) {
+        continue;
       }
-      
-      let points = 0
-      if (percentage >= 80) points = 7
-      else if (percentage >= 70) points = 6
-      else if (percentage >= 60) points = 5
-      else if (percentage >= 50) points = 4
-      else if (percentage >= 40) points = 3
-      else if (percentage >= 30) points = 2
-      else if (percentage >= 0) points = 1
-      
-      subjectScores.push(points)
+
+      let points = 0;
+      if (percentage >= 80) points = 7;
+      else if (percentage >= 70) points = 6;
+      else if (percentage >= 60) points = 5;
+      else if (percentage >= 50) points = 4;
+      else if (percentage >= 40) points = 3;
+      else if (percentage >= 30) points = 2;
+      else if (percentage >= 0) points = 1;
+
+      subjectScores.push(points);
     }
-    
-    subjectScores.sort((a, b) => b - a)
-    const top6 = subjectScores.slice(0, 6)
-    
-    return top6.reduce((sum, score) => sum + score, 0)
+
+    subjectScores.sort((a, b) => b - a);
+    const top6 = subjectScores.slice(0, 6);
+
+    return top6.reduce((sum, score) => sum + score, 0);
   }
 }

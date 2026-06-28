@@ -3,7 +3,8 @@
 import React, { useState } from "react"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle, CardFooter } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
-import { MapPin, Globe, Calendar, Info, CreditCard, ExternalLink, GraduationCap } from "lucide-react"
+import { Badge } from "@/components/ui/badge"
+import { MapPin, Globe, Calendar, Info, CreditCard, ExternalLink, AlertCircle, Clock, CheckCircle2 } from "lucide-react"
 import { RequiredDocumentsModal } from "@/components/universities/required-documents-modal"
 
 export type UniData = {
@@ -16,6 +17,49 @@ export type UniData = {
   province: string
   courseCount: number
   locationString: string
+}
+
+type DateStatus = "closed" | "some-closed" | "closing-soon" | "open"
+
+function parseDateStr(dateStr: string): Date | null {
+  // Strip time hints like "(12:00)" and trim
+  const cleaned = dateStr.replace(/\s*\([^)]*\)/, "").trim()
+  const d = new Date(cleaned)
+  return isNaN(d.getTime()) ? null : d
+}
+
+function getUniversityDateStatus(close: Record<string, string>): DateStatus {
+  const today = new Date()
+  today.setHours(0, 0, 0, 0)
+
+  const dates = Object.values(close)
+    .map(parseDateStr)
+    .filter((d): d is Date => d !== null)
+
+  if (dates.length === 0) return "open"
+
+  const allPast = dates.every(d => d < today)
+  if (allPast) return "closed"
+
+  const somePast = dates.some(d => d < today)
+  if (somePast) return "some-closed"
+
+  const soonestMs = Math.min(...dates.map(d => d.getTime()))
+  const daysUntil = (soonestMs - today.getTime()) / (1000 * 60 * 60 * 24)
+  if (daysUntil <= 30) return "closing-soon"
+
+  return "open"
+}
+
+function getDateLineStatus(dateStr: string): "past" | "soon" | "open" {
+  const today = new Date()
+  today.setHours(0, 0, 0, 0)
+  const d = parseDateStr(dateStr)
+  if (!d) return "open"
+  if (d < today) return "past"
+  const daysUntil = (d.getTime() - today.getTime()) / (1000 * 60 * 60 * 24)
+  if (daysUntil <= 30) return "soon"
+  return "open"
 }
 
 export default function UniversitiesClient({ universities }: { universities: UniData[] }) {
@@ -107,49 +151,94 @@ export default function UniversitiesClient({ universities }: { universities: Uni
           const appInfo = getUniAppInfo(uni.id)
           const logoUrl = getLogo(uni.id) || uni.logo
           const isExpanded = expandedId === uni.id
+          const dateStatus = appInfo ? getUniversityDateStatus(appInfo.close) : "open"
+
+          const statusBadge = {
+            closed: (
+              <Badge variant="destructive" className="flex items-center gap-1 text-xs shrink-0">
+                <AlertCircle className="w-3 h-3" /> Closed
+              </Badge>
+            ),
+            "some-closed": (
+              <Badge className="flex items-center gap-1 text-xs shrink-0 bg-orange-500 hover:bg-orange-600 text-white">
+                <AlertCircle className="w-3 h-3" /> Some Closed
+              </Badge>
+            ),
+            "closing-soon": (
+              <Badge className="flex items-center gap-1 text-xs shrink-0 bg-amber-500 hover:bg-amber-600 text-white">
+                <Clock className="w-3 h-3" /> Closing Soon
+              </Badge>
+            ),
+            open: (
+              <Badge className="flex items-center gap-1 text-xs shrink-0 bg-green-600 hover:bg-green-700 text-white">
+                <CheckCircle2 className="w-3 h-3" /> Open
+              </Badge>
+            ),
+          }[dateStatus]
 
           return (
-            <Card 
-              key={uni.id} 
+            <Card
+              key={uni.id}
               className={`transition-all duration-300 flex flex-col ${isExpanded ? "ring-2 ring-primary shadow-lg scale-[1.02] dark:bg-card dark:ring-primary/50" : "hover:border-primary/50"}`}
             >
               <CardHeader className="pb-3 flex-none">
                 <div className="flex justify-between items-start gap-4">
-                  <div>
-                    <CardTitle className="text-xl">{uni.shortName}</CardTitle>
+                  <div className="flex-1 min-w-0">
+                    <div className="flex items-center gap-2 flex-wrap">
+                      <CardTitle className="text-xl">{uni.shortName}</CardTitle>
+                      {statusBadge}
+                    </div>
                     <CardDescription className="text-sm mt-1 line-clamp-2" title={uni.name}>{uni.name}</CardDescription>
                   </div>
                   {logoUrl && (
                     <div className="h-12 w-12 bg-white rounded-md flex px-1 py-1 shrink-0 items-center justify-center border shadow-sm">
-                      <img 
-                        src={logoUrl} 
-                        alt={uni.shortName} 
-                        className="object-contain w-full h-full" 
-                        onError={(e) => { e.currentTarget.style.display = 'none'; }} 
+                      <img
+                        src={logoUrl}
+                        alt={uni.shortName}
+                        className="object-contain w-full h-full"
+                        onError={(e) => { e.currentTarget.style.display = 'none'; }}
                       />
                     </div>
                   )}
                 </div>
               </CardHeader>
-              
+
               <CardContent className="flex-grow flex flex-col">
                 <div className="space-y-4">
                   <div className="flex items-center text-sm text-primary font-medium bg-primary/10 dark:bg-primary/20 p-2.5 rounded-md">
                     <Calendar className="w-4 h-4 mr-2 shrink-0" />
                     <span className="truncate">Opens: {appInfo ? appInfo.open : "1 April 2026"}</span>
                   </div>
-                  
+
                   {isExpanded && (
                     <div className="pt-2 border-t space-y-4 animate-in slide-in-from-top-2 fade-in duration-300">
-                      
+
                       {appInfo && (
                         <div className="space-y-3">
                           <div className="bg-muted/30 p-3 rounded-md border text-sm space-y-2">
                             <p className="font-semibold flex items-center gap-1.5"><Calendar className="w-3.5 h-3.5" /> Closing Dates:</p>
-                            <ul className="space-y-1.5 ml-5 list-disc text-muted-foreground">
-                              {Object.entries(appInfo.close).map(([faculty, date], idx) => (
-                                <li key={idx}><span className="font-medium text-foreground">{faculty}:</span> {date}</li>
-                              ))}
+                            <ul className="space-y-1.5 ml-5 list-disc">
+                              {Object.entries(appInfo.close).map(([faculty, date], idx) => {
+                                const lineStatus = getDateLineStatus(date)
+                                return (
+                                  <li key={idx} className={
+                                    lineStatus === "past" ? "text-destructive" :
+                                    lineStatus === "soon" ? "text-amber-600 dark:text-amber-400" :
+                                    "text-muted-foreground"
+                                  }>
+                                    <span className="font-medium text-foreground">{faculty}:</span>{" "}
+                                    <span className={lineStatus === "past" ? "line-through opacity-70" : ""}>
+                                      {date}
+                                    </span>
+                                    {lineStatus === "past" && (
+                                      <span className="ml-1 text-xs font-semibold text-destructive">(Closed)</span>
+                                    )}
+                                    {lineStatus === "soon" && (
+                                      <span className="ml-1 text-xs font-semibold text-amber-600 dark:text-amber-400">(Closing soon)</span>
+                                    )}
+                                  </li>
+                                )
+                              })}
                             </ul>
                           </div>
 
@@ -191,9 +280,9 @@ export default function UniversitiesClient({ universities }: { universities: Uni
               </CardContent>
 
               <CardFooter className="pt-0 mt-auto">
-                <Button 
-                  variant={isExpanded ? "secondary" : "outline"} 
-                  className="w-full flex items-center justify-center" 
+                <Button
+                  variant={isExpanded ? "secondary" : "outline"}
+                  className="w-full flex items-center justify-center"
                   onClick={() => setExpandedId(isExpanded ? null : uni.id)}
                 >
                   <Info className="w-4 h-4 mr-2 shrink-0" />

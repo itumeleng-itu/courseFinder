@@ -1,15 +1,15 @@
-import { BaseUniversity } from "./base-university"
-import type { Course } from "@/lib/types"
+import { BaseUniversity } from "./base-university";
+import type { Course } from "@/lib/types";
 
 /**
  * Durban University of Technology (DUT) class
  */
 export class DUT extends BaseUniversity {
-  readonly id = "dut"
-  readonly name = "Durban University of Technology"
-  readonly shortName = "DUT"
-  readonly website = "https://www.dut.ac.za"
-  readonly logo = "/logos/dut.png"
+  readonly id = "dut";
+  readonly name = "Durban University of Technology";
+  readonly shortName = "DUT";
+  readonly website = "https://www.dut.ac.za";
+  readonly logo = "/logos/dut.png";
   readonly location = {
     city: "Durban",
     province: "KwaZulu-Natal",
@@ -17,7 +17,7 @@ export class DUT extends BaseUniversity {
       latitude: -29.8536,
       longitude: 31.0066,
     },
-  }
+  };
 
   /**
    * Calculate APS score based on DUT's requirements
@@ -27,12 +27,15 @@ export class DUT extends BaseUniversity {
     // Filter out Life Orientation as per standard practice
     const filteredSubjects = Object.entries(subjects).filter(
       ([subject]) => subject.toLowerCase() !== "life orientation",
-    )
+    );
 
     // Calculate total APS from subject levels
-    const totalAPS = filteredSubjects.reduce((total, [_, level]) => total + level, 0)
+    const totalAPS = filteredSubjects.reduce(
+      (total, [_, level]) => total + level,
+      0,
+    );
 
-    return totalAPS
+    return totalAPS;
   }
 
   protected readonly _courses: Course[] = [
@@ -46,13 +49,18 @@ export class DUT extends BaseUniversity {
       duration: "3 years",
       location: "Durban",
       subjectRequirements: {
-        "English Home Language": 4,
-        "English First Additional Language": 4,
+        Language: {
+          alternatives: [
+            { subject: "English Home Language", level: 4 },
+            { subject: "English First Additional Language", level: 4 },
+          ],
+        },
         Mathematics: 4,
       },
       additionalRequirements:
         "At least three of the designated 20 credit subjects at level 4 (not more than one language)",
-      careers: "Software development, systems analysis, network administration, IT management",
+      careers:
+        "Software development, systems analysis, network administration, IT management",
     },
     {
       id: "dut-bict-iot",
@@ -63,15 +71,20 @@ export class DUT extends BaseUniversity {
       duration: "3 years",
       location: "Durban",
       subjectRequirements: {
-        "English Home Language": 4,
-        "English First Additional Language": 4,
+        Language: {
+          alternatives: [
+            { subject: "English Home Language", level: 4 },
+            { subject: "English First Additional Language", level: 4 },
+          ],
+        },
         Mathematics: 4,
         "Physical Sciences": 4,
         "Information Technology": 4,
       },
       additionalRequirements:
         "Physical Sciences OR Information Technology at level 4, and two designated 20 credit subjects at level 4 (not more than one language)",
-      careers: "IoT specialist, embedded systems developer, smart systems engineer",
+      careers:
+        "IoT specialist, embedded systems developer, smart systems engineer",
     },
     {
       id: "dut-dip-app-dev",
@@ -82,13 +95,23 @@ export class DUT extends BaseUniversity {
       duration: "3 years",
       location: "Durban",
       subjectRequirements: {
-        "English Home Language": 3,
-        "English First Additional Language": 4,
-        Mathematics: 3,
-        "Mathematical Literacy": 6,
+        Language: {
+          alternatives: [
+            { subject: "English Home Language", level: 3 },
+            { subject: "English First Additional Language", level: 4 },
+          ],
+        },
+        Math: {
+          alternatives: [
+            { subject: "Mathematics", level: 3 },
+            { subject: "Mathematical Literacy", level: 6 },
+          ],
+        },
       },
-      additionalRequirements: "Three 20 credit subjects (not more than one language) at level 3",
-      careers: "Software developer, programmer, web developer, mobile app developer",
+      additionalRequirements:
+        "Three 20 credit subjects (not more than one language) at level 3",
+      careers:
+        "Software developer, programmer, web developer, mobile app developer",
     },
     {
       id: "dut-dip-app-dev-indumiso",
@@ -99,13 +122,23 @@ export class DUT extends BaseUniversity {
       duration: "3 years",
       location: "Pietermaritzburg (Indumiso)",
       subjectRequirements: {
-        "English Home Language": 3,
-        "English First Additional Language": 4,
-        Mathematics: 3,
-        "Mathematical Literacy": 6,
+        Language: {
+          alternatives: [
+            { subject: "English Home Language", level: 3 },
+            { subject: "English First Additional Language", level: 4 },
+          ],
+        },
+        Math: {
+          alternatives: [
+            { subject: "Mathematics", level: 3 },
+            { subject: "Mathematical Literacy", level: 6 },
+          ],
+        },
       },
-      additionalRequirements: "Three 20 credit subjects (not more than one language) at level 3",
-      careers: "Software developer, programmer, web developer, mobile app developer",
+      additionalRequirements:
+        "Three 20 credit subjects (not more than one language) at level 3",
+      careers:
+        "Software developer, programmer, web developer, mobile app developer",
     },
     {
       id: "dut-dip-business-analysis",
@@ -116,12 +149,21 @@ export class DUT extends BaseUniversity {
       duration: "3 years",
       location: "Durban",
       subjectRequirements: {
-        "English Home Language": 3,
-        "English First Additional Language": 4,
-        Mathematics: 3,
-        "Mathematical Literacy": 6,
+        Language: {
+          alternatives: [
+            { subject: "English Home Language", level: 3 },
+            { subject: "English First Additional Language", level: 4 },
+          ],
+        },
+        Math: {
+          alternatives: [
+            { subject: "Mathematics", level: 3 },
+            { subject: "Mathematical Literacy", level: 6 },
+          ],
+        },
       },
-      additionalRequirements: "Three 20 credit subjects (not more than one language) at level 3",
+      additionalRequirements:
+        "Three 20 credit subjects (not more than one language) at level 3",
       careers: "Business analyst, systems analyst, IT consultant",
     },
     {
@@ -133,10 +175,18 @@ export class DUT extends BaseUniversity {
       duration: "3 years",
       location: "Durban",
       subjectRequirements: {
-        "English Home Language": 3,
-        "English First Additional Language": 4,
-        Mathematics: 3,
-        "Mathematical Literacy": 4,
+        Language: {
+          alternatives: [
+            { subject: "English Home Language", level: 3 },
+            { subject: "English First Additional Language", level: 4 },
+          ],
+        },
+        Math: {
+          alternatives: [
+            { subject: "Mathematics", level: 3 },
+            { subject: "Mathematical Literacy", level: 4 },
+          ],
+        },
       },
       additionalRequirements:
         "Four 20 credit subjects (excluding Life Orientation & not more than one language) at level 3",
@@ -151,15 +201,24 @@ export class DUT extends BaseUniversity {
       duration: "3 years",
       location: "Durban",
       subjectRequirements: {
-        "English Home Language": 3,
-        "English First Additional Language": 4,
-        Mathematics: 3,
-        "Mathematical Literacy": 5,
+        Language: {
+          alternatives: [
+            { subject: "English Home Language", level: 3 },
+            { subject: "English First Additional Language", level: 4 },
+          ],
+        },
+        Math: {
+          alternatives: [
+            { subject: "Mathematics", level: 3 },
+            { subject: "Mathematical Literacy", level: 5 },
+          ],
+        },
         Accounting: 4,
       },
       additionalRequirements:
         "Mathematics 3 OR Mathematical Literacy 5 OR Accounting 4, and three 20 credit subjects (not more than one language) at level 3",
-      careers: "Accountant, financial administrator, bookkeeper, auditing clerk",
+      careers:
+        "Accountant, financial administrator, bookkeeper, auditing clerk",
     },
     {
       id: "dut-dip-internal-auditing",
@@ -170,10 +229,18 @@ export class DUT extends BaseUniversity {
       duration: "3 years",
       location: "Durban",
       subjectRequirements: {
-        "English Home Language": 3,
-        "English First Additional Language": 4,
-        Mathematics: 4,
-        "Mathematical Literacy": 5,
+        Language: {
+          alternatives: [
+            { subject: "English Home Language", level: 3 },
+            { subject: "English First Additional Language", level: 4 },
+          ],
+        },
+        Math: {
+          alternatives: [
+            { subject: "Mathematics", level: 4 },
+            { subject: "Mathematical Literacy", level: 5 },
+          ],
+        },
         Accounting: 4,
       },
       additionalRequirements:
@@ -189,10 +256,18 @@ export class DUT extends BaseUniversity {
       duration: "3 years",
       location: "Durban",
       subjectRequirements: {
-        "English Home Language": 3,
-        "English First Additional Language": 4,
-        Mathematics: 3,
-        "Mathematical Literacy": 5,
+        Language: {
+          alternatives: [
+            { subject: "English Home Language", level: 3 },
+            { subject: "English First Additional Language", level: 4 },
+          ],
+        },
+        Math: {
+          alternatives: [
+            { subject: "Mathematics", level: 3 },
+            { subject: "Mathematical Literacy", level: 5 },
+          ],
+        },
         Accounting: 4,
       },
       additionalRequirements:
@@ -215,8 +290,10 @@ export class DUT extends BaseUniversity {
         "Life Sciences": 4,
         "Physical Sciences": 4,
       },
-      additionalRequirements: "One additional 20 credit subject at level 4 (not more than one language)",
-      careers: "Biotechnologist, laboratory technician, research scientist, quality control analyst",
+      additionalRequirements:
+        "One additional 20 credit subject at level 4 (not more than one language)",
+      careers:
+        "Biotechnologist, laboratory technician, research scientist, quality control analyst",
     },
     {
       id: "dut-bachelor-food-science",
@@ -232,8 +309,10 @@ export class DUT extends BaseUniversity {
         "Life Sciences": 4,
         "Physical Sciences": 4,
       },
-      additionalRequirements: "One additional 20 credit subject at level 4 (not more than one language)",
-      careers: "Food technologist, quality assurance manager, product developer, food safety specialist",
+      additionalRequirements:
+        "One additional 20 credit subject at level 4 (not more than one language)",
+      careers:
+        "Food technologist, quality assurance manager, product developer, food safety specialist",
     },
     {
       id: "dut-dip-analytical-chemistry",
@@ -249,7 +328,8 @@ export class DUT extends BaseUniversity {
         "Physical Sciences": 3,
       },
       additionalRequirements: "Two additional 20 credit subjects at level 3",
-      careers: "Analytical chemist, laboratory technician, quality control analyst",
+      careers:
+        "Analytical chemist, laboratory technician, quality control analyst",
     },
     {
       id: "dut-dip-consumer-sciences",
@@ -260,14 +340,23 @@ export class DUT extends BaseUniversity {
       duration: "3 years",
       location: "Durban",
       subjectRequirements: {
-        "English Home Language": 3,
-        "English First Additional Language": 4,
-        Mathematics: 3,
-        "Mathematical Literacy": 4,
+        Language: {
+          alternatives: [
+            { subject: "English Home Language", level: 3 },
+            { subject: "English First Additional Language", level: 4 },
+          ],
+        },
+        Math: {
+          alternatives: [
+            { subject: "Mathematics", level: 3 },
+            { subject: "Mathematical Literacy", level: 4 },
+          ],
+        },
       },
       additionalRequirements:
         "One of Accounting, Business Studies, Consumer Studies, Physical Sciences or Life Sciences at level 3, and three 20 credit subjects (not more than one language) at level 3",
-      careers: "Food and nutrition advisor, consumer scientist, food service manager",
+      careers:
+        "Food and nutrition advisor, consumer scientist, food service manager",
     },
 
     // Faculty of Engineering and the Built Environment
@@ -286,7 +375,8 @@ export class DUT extends BaseUniversity {
       },
       additionalRequirements:
         "Technical Mathematics 5 can substitute for Mathematics 4, and Technical Sciences 5 can substitute for Physical Sciences 4. Three additional 20 credit subjects (not more than one language) at level 4",
-      careers: "Civil engineer, structural engineer, construction manager, project manager",
+      careers:
+        "Civil engineer, structural engineer, construction manager, project manager",
     },
     {
       id: "dut-bachelor-mechanical-engineering",
@@ -303,7 +393,8 @@ export class DUT extends BaseUniversity {
       },
       additionalRequirements:
         "Technical Mathematics 5 can substitute for Mathematics 4, and Technical Sciences 5 can substitute for Physical Sciences 4. Three additional 20 credit subjects (not more than one language) at level 4",
-      careers: "Mechanical engineer, design engineer, manufacturing engineer, project manager",
+      careers:
+        "Mechanical engineer, design engineer, manufacturing engineer, project manager",
     },
     {
       id: "dut-bachelor-architecture",
@@ -314,12 +405,18 @@ export class DUT extends BaseUniversity {
       duration: "3 years",
       location: "Durban",
       subjectRequirements: {
-        "English Home Language": 4,
-        "English First Additional Language": 4,
+        Language: {
+          alternatives: [
+            { subject: "English Home Language", level: 4 },
+            { subject: "English First Additional Language", level: 4 },
+          ],
+        },
         Mathematics: 4,
       },
-      additionalRequirements: "Three additional 20 credit subjects at level 4 (not more than one language)",
-      careers: "Architectural technologist, architectural designer, building designer",
+      additionalRequirements:
+        "Three additional 20 credit subjects at level 4 (not more than one language)",
+      careers:
+        "Architectural technologist, architectural designer, building designer",
     },
 
     // Faculty of Health Sciences
@@ -334,8 +431,12 @@ export class DUT extends BaseUniversity {
       subjectRequirements: {
         English: 4,
         "Life Sciences": 4,
-        Mathematics: 4,
-        "Mathematical Literacy": 6,
+        Math: {
+          alternatives: [
+            { subject: "Mathematics", level: 4 },
+            { subject: "Mathematical Literacy", level: 6 },
+          ],
+        },
         "Physical Sciences": 4,
       },
       additionalRequirements:
@@ -356,7 +457,8 @@ export class DUT extends BaseUniversity {
         "Life Sciences": 4,
         "Physical Sciences": 4,
       },
-      additionalRequirements: "One additional 20 credit subject (not more than one language) at level 4",
+      additionalRequirements:
+        "One additional 20 credit subject (not more than one language) at level 4",
       careers: "Diagnostic radiographer, medical imaging specialist",
     },
     {
@@ -368,14 +470,24 @@ export class DUT extends BaseUniversity {
       duration: "3 years",
       location: "Durban",
       subjectRequirements: {
-        "English Home Language": 3,
-        "English First Additional Language": 3,
+        Language: {
+          alternatives: [
+            { subject: "English Home Language", level: 3 },
+            { subject: "English First Additional Language", level: 3 },
+          ],
+        },
         "Life Sciences": 4,
-        Mathematics: 3,
-        "Mathematical Literacy": 5,
+        Math: {
+          alternatives: [
+            { subject: "Mathematics", level: 3 },
+            { subject: "Mathematical Literacy", level: 5 },
+          ],
+        },
       },
-      additionalRequirements: "Two additional 20 credit subjects (only one of which may be a language) at level 3",
-      careers: "Somatologist, skincare therapist, spa manager, wellness consultant",
+      additionalRequirements:
+        "Two additional 20 credit subjects (only one of which may be a language) at level 3",
+      careers:
+        "Somatologist, skincare therapist, spa manager, wellness consultant",
     },
 
     // Faculty of Management Sciences
@@ -388,12 +500,21 @@ export class DUT extends BaseUniversity {
       duration: "3 years",
       location: "Durban",
       subjectRequirements: {
-        "English Home Language": 3,
-        "English First Additional Language": 4,
-        Mathematics: 3,
-        "Mathematical Literacy": 4,
+        Language: {
+          alternatives: [
+            { subject: "English Home Language", level: 3 },
+            { subject: "English First Additional Language", level: 4 },
+          ],
+        },
+        Math: {
+          alternatives: [
+            { subject: "Mathematics", level: 3 },
+            { subject: "Mathematical Literacy", level: 4 },
+          ],
+        },
       },
-      additionalRequirements: "Three additional 20 credit subjects (not more than one language) at level 3",
+      additionalRequirements:
+        "Three additional 20 credit subjects (not more than one language) at level 3",
       careers: "Business administrator, office manager, operations coordinator",
     },
     {
@@ -405,13 +526,23 @@ export class DUT extends BaseUniversity {
       duration: "3 years",
       location: "Durban",
       subjectRequirements: {
-        "English Home Language": 3,
-        "English First Additional Language": 4,
-        Mathematics: 3,
-        "Mathematical Literacy": 4,
+        Language: {
+          alternatives: [
+            { subject: "English Home Language", level: 3 },
+            { subject: "English First Additional Language", level: 4 },
+          ],
+        },
+        Math: {
+          alternatives: [
+            { subject: "Mathematics", level: 3 },
+            { subject: "Mathematical Literacy", level: 4 },
+          ],
+        },
       },
-      additionalRequirements: "Three additional 20 credit subjects (not more than one language) at level 3",
-      careers: "HR officer, recruitment specialist, training coordinator, employee relations officer",
+      additionalRequirements:
+        "Three additional 20 credit subjects (not more than one language) at level 3",
+      careers:
+        "HR officer, recruitment specialist, training coordinator, employee relations officer",
     },
     {
       id: "dut-dip-management-marketing",
@@ -422,13 +553,23 @@ export class DUT extends BaseUniversity {
       duration: "3 years",
       location: "Durban",
       subjectRequirements: {
-        "English Home Language": 3,
-        "English First Additional Language": 4,
-        Mathematics: 3,
-        "Mathematical Literacy": 4,
+        Language: {
+          alternatives: [
+            { subject: "English Home Language", level: 3 },
+            { subject: "English First Additional Language", level: 4 },
+          ],
+        },
+        Math: {
+          alternatives: [
+            { subject: "Mathematics", level: 3 },
+            { subject: "Mathematical Literacy", level: 4 },
+          ],
+        },
       },
-      additionalRequirements: "Three additional 20 credit subjects (not more than one language) at level 3",
-      careers: "Marketing coordinator, brand assistant, sales representative, digital marketing specialist",
+      additionalRequirements:
+        "Three additional 20 credit subjects (not more than one language) at level 3",
+      careers:
+        "Marketing coordinator, brand assistant, sales representative, digital marketing specialist",
     },
     {
       id: "dut-dip-tourism-management",
@@ -439,15 +580,24 @@ export class DUT extends BaseUniversity {
       duration: "3 years",
       location: "Durban",
       subjectRequirements: {
-        "English Home Language": 4,
-        "English First Additional Language": 4,
-        Mathematics: 2,
-        "Mathematical Literacy": 3,
+        Language: {
+          alternatives: [
+            { subject: "English Home Language", level: 4 },
+            { subject: "English First Additional Language", level: 4 },
+          ],
+        },
+        Math: {
+          alternatives: [
+            { subject: "Mathematics", level: 2 },
+            { subject: "Mathematical Literacy", level: 3 },
+          ],
+        },
         Accounting: 3,
       },
       additionalRequirements:
         "Mathematics 2 OR Mathematical Literacy 3 OR Accounting 3, and three additional 20 credit subjects (not more than one language) at level 3",
-      careers: "Tourism manager, tour operator, travel consultant, destination manager",
+      careers:
+        "Tourism manager, tour operator, travel consultant, destination manager",
     },
     {
       id: "dut-dip-hospitality-management",
@@ -458,15 +608,24 @@ export class DUT extends BaseUniversity {
       duration: "3 years",
       location: "Durban",
       subjectRequirements: {
-        "English Home Language": 4,
-        "English First Additional Language": 4,
-        Mathematics: 2,
-        "Mathematical Literacy": 3,
+        Language: {
+          alternatives: [
+            { subject: "English Home Language", level: 4 },
+            { subject: "English First Additional Language", level: 4 },
+          ],
+        },
+        Math: {
+          alternatives: [
+            { subject: "Mathematics", level: 2 },
+            { subject: "Mathematical Literacy", level: 3 },
+          ],
+        },
         Accounting: 3,
       },
       additionalRequirements:
         "Mathematics 2 OR Mathematical Literacy 3 OR Accounting 3, and three additional 20 credit subjects (not more than one language) at level 3",
-      careers: "Hotel manager, food and beverage manager, events coordinator, guest relations manager",
+      careers:
+        "Hotel manager, food and beverage manager, events coordinator, guest relations manager",
     },
 
     // Faculty of Arts and Design
@@ -483,7 +642,8 @@ export class DUT extends BaseUniversity {
         "Another Official Language": 4,
       },
       additionalRequirements: "Three additional 20 credit subjects at level 4",
-      careers: "Journalist, reporter, editor, content creator, media specialist",
+      careers:
+        "Journalist, reporter, editor, content creator, media specialist",
     },
     {
       id: "dut-dip-fashion-design",
@@ -496,8 +656,10 @@ export class DUT extends BaseUniversity {
       subjectRequirements: {
         English: 3,
       },
-      additionalRequirements: "Four additional 20 credit subjects (not more than one language) at level 3",
-      careers: "Fashion designer, pattern maker, fashion buyer, stylist, fashion merchandiser",
+      additionalRequirements:
+        "Four additional 20 credit subjects (not more than one language) at level 3",
+      careers:
+        "Fashion designer, pattern maker, fashion buyer, stylist, fashion merchandiser",
     },
     {
       id: "dut-dip-fine-art",
@@ -510,8 +672,9 @@ export class DUT extends BaseUniversity {
       subjectRequirements: {
         English: 3,
       },
-      additionalRequirements: "Four additional 20 credit subjects (not more than one language) at level 3",
+      additionalRequirements:
+        "Four additional 20 credit subjects (not more than one language) at level 3",
       careers: "Artist, art educator, gallery curator, art director",
     },
-  ]
+  ];
 }

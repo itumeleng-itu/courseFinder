@@ -1,16 +1,16 @@
-import { BaseUniversity } from "./base-university"
-import type { Course } from "@/lib/types"
+import { BaseUniversity } from "./base-university";
+import type { Course } from "@/lib/types";
 
 /**
  * University of the Witwatersrand (Wits) class
  * Complete course listings for 2026 admissions
  */
 export class Wits extends BaseUniversity {
-  readonly id = "wits"
-  readonly name = "University of the Witwatersrand"
-  readonly shortName = "Wits"
-  readonly website = "https://www.wits.ac.za"
-  readonly logo = "/logos/wits.png"
+  readonly id = "wits";
+  readonly name = "University of the Witwatersrand";
+  readonly shortName = "Wits";
+  readonly website = "https://www.wits.ac.za";
+  readonly logo = "/logos/wits.png";
   readonly location = {
     city: "Johannesburg",
     province: "Gauteng",
@@ -18,7 +18,7 @@ export class Wits extends BaseUniversity {
       latitude: -26.1929,
       longitude: 28.0305,
     },
-  }
+  };
 
   readonly applicationDeadlines = {
     healthSciences: "2025-06-30",
@@ -28,15 +28,19 @@ export class Wits extends BaseUniversity {
     speechLanguagePathology: "2025-06-30",
     allOtherProgrammes: "2025-09-30",
     residenceApplications: "2025-09-30",
-  }
+  };
 
   readonly scholarships = [
     { aps: 51, amount: 42000, name: "University Entrance Scholarship" },
     { aps: 48, amount: 30000, name: "University Entrance Scholarship" },
     { aps: 45, amount: 15000, name: "University Entrance Scholarship" },
     { aps: 43, amount: 10000, name: "University Entrance Scholarship" },
-    { amount: 50000, name: "Vice-Chancellor's Scholarship", description: "Top 10 matriculants" },
-  ]
+    {
+      amount: 50000,
+      name: "Vice-Chancellor's Scholarship",
+      description: "Top 10 matriculants",
+    },
+  ];
 
   /**
    * Wits APS Calculation:
@@ -55,8 +59,12 @@ export class Wits extends BaseUniversity {
       apsMin: 38,
       duration: "3 years",
       subjectRequirements: {
-        "English Home": 5,
-        "English First Additional": 5,
+        Language: {
+          alternatives: [
+            { subject: "English Home Language", level: 5 },
+            { subject: "English First Additional Language", level: 5 },
+          ],
+        },
         Mathematics: 5,
       },
     },
@@ -68,8 +76,12 @@ export class Wits extends BaseUniversity {
       apsMin: 38,
       duration: "3 years",
       subjectRequirements: {
-        "English Home": 5,
-        "English First Additional": 5,
+        Language: {
+          alternatives: [
+            { subject: "English Home Language", level: 5 },
+            { subject: "English First Additional Language", level: 5 },
+          ],
+        },
         Mathematics: 5,
       },
     },
@@ -81,8 +93,12 @@ export class Wits extends BaseUniversity {
       apsMin: 38,
       duration: "3 years",
       subjectRequirements: {
-        "English Home": 5,
-        "English First Additional": 5,
+        Language: {
+          alternatives: [
+            { subject: "English Home Language", level: 5 },
+            { subject: "English First Additional Language", level: 5 },
+          ],
+        },
         Mathematics: 5,
       },
     },
@@ -96,8 +112,12 @@ export class Wits extends BaseUniversity {
       apsMin: 44,
       duration: "3 years",
       subjectRequirements: {
-        "English Home": 5,
-        "English First Additional": 5,
+        Language: {
+          alternatives: [
+            { subject: "English Home Language", level: 5 },
+            { subject: "English First Additional Language", level: 5 },
+          ],
+        },
         Mathematics: 6,
       },
     },
@@ -109,8 +129,12 @@ export class Wits extends BaseUniversity {
       apsMin: 38,
       duration: "3 years",
       subjectRequirements: {
-        "English Home": 5,
-        "English First Additional": 5,
+        Language: {
+          alternatives: [
+            { subject: "English Home Language", level: 5 },
+            { subject: "English First Additional Language", level: 5 },
+          ],
+        },
         Mathematics: 5,
       },
     },
@@ -124,8 +148,12 @@ export class Wits extends BaseUniversity {
       apsMin: 42,
       duration: "3 years",
       subjectRequirements: {
-        "English Home": 5,
-        "English First Additional": 5,
+        Language: {
+          alternatives: [
+            { subject: "English Home Language", level: 5 },
+            { subject: "English First Additional Language", level: 5 },
+          ],
+        },
         Mathematics: 7,
       },
     },
@@ -139,8 +167,12 @@ export class Wits extends BaseUniversity {
       apsMin: 43,
       duration: "3 years",
       subjectRequirements: {
-        "English Home": 5,
-        "English First Additional": 5,
+        Language: {
+          alternatives: [
+            { subject: "English Home Language", level: 5 },
+            { subject: "English First Additional Language", level: 5 },
+          ],
+        },
         Mathematics: 5,
       },
     },
@@ -152,10 +184,18 @@ export class Wits extends BaseUniversity {
       apsMin: 46,
       duration: "4 years",
       subjectRequirements: {
-        "English Home": 6,
-        "English First Additional": 6,
-        Mathematics: 4,
-        "Mathematical Literacy": 6,
+        Language: {
+          alternatives: [
+            { subject: "English Home Language", level: 6 },
+            { subject: "English First Additional Language", level: 6 },
+          ],
+        },
+        Math: {
+          alternatives: [
+            { subject: "Mathematics", level: 4 },
+            { subject: "Mathematical Literacy", level: 6 },
+          ],
+        },
       },
     },
 
@@ -169,8 +209,12 @@ export class Wits extends BaseUniversity {
       apsMin: 42,
       duration: "4 years",
       subjectRequirements: {
-        "English Home": 5,
-        "English First Additional": 5,
+        Language: {
+          alternatives: [
+            { subject: "English Home Language", level: 5 },
+            { subject: "English First Additional Language", level: 5 },
+          ],
+        },
         Mathematics: 5,
         "Physical Sciences": 5,
       },
@@ -183,8 +227,12 @@ export class Wits extends BaseUniversity {
       apsMin: 42,
       duration: "4 years",
       subjectRequirements: {
-        "English Home": 5,
-        "English First Additional": 5,
+        Language: {
+          alternatives: [
+            { subject: "English Home Language", level: 5 },
+            { subject: "English First Additional Language", level: 5 },
+          ],
+        },
         Mathematics: 5,
         "Physical Sciences": 5,
       },
@@ -199,8 +247,12 @@ export class Wits extends BaseUniversity {
       apsMin: 42,
       duration: "4 years",
       subjectRequirements: {
-        "English Home": 5,
-        "English First Additional": 5,
+        Language: {
+          alternatives: [
+            { subject: "English Home Language", level: 5 },
+            { subject: "English First Additional Language", level: 5 },
+          ],
+        },
         Mathematics: 5,
         "Physical Sciences": 5,
       },
@@ -215,8 +267,12 @@ export class Wits extends BaseUniversity {
       apsMin: 42,
       duration: "4 years",
       subjectRequirements: {
-        "English Home": 5,
-        "English First Additional": 5,
+        Language: {
+          alternatives: [
+            { subject: "English Home Language", level: 5 },
+            { subject: "English First Additional Language", level: 5 },
+          ],
+        },
         Mathematics: 5,
         "Physical Sciences": 5,
       },
@@ -229,8 +285,12 @@ export class Wits extends BaseUniversity {
       apsMin: 42,
       duration: "3 years",
       subjectRequirements: {
-        "English Home": 5,
-        "English First Additional": 5,
+        Language: {
+          alternatives: [
+            { subject: "English Home Language", level: 5 },
+            { subject: "English First Additional Language", level: 5 },
+          ],
+        },
         Mathematics: 5,
         "Physical Sciences": 5,
       },
@@ -243,8 +303,12 @@ export class Wits extends BaseUniversity {
       apsMin: 42,
       duration: "3 years",
       subjectRequirements: {
-        "English Home": 5,
-        "English First Additional": 5,
+        Language: {
+          alternatives: [
+            { subject: "English Home Language", level: 5 },
+            { subject: "English First Additional Language", level: 5 },
+          ],
+        },
         Mathematics: 5,
         "Physical Sciences": 5,
       },
@@ -259,8 +323,12 @@ export class Wits extends BaseUniversity {
       apsMin: 42,
       duration: "4 years",
       subjectRequirements: {
-        "English Home": 5,
-        "English First Additional": 5,
+        Language: {
+          alternatives: [
+            { subject: "English Home Language", level: 5 },
+            { subject: "English First Additional Language", level: 5 },
+          ],
+        },
         Mathematics: 5,
         "Physical Sciences": 5,
       },
@@ -273,8 +341,12 @@ export class Wits extends BaseUniversity {
       apsMin: 42,
       duration: "4 years",
       subjectRequirements: {
-        "English Home": 5,
-        "English First Additional": 5,
+        Language: {
+          alternatives: [
+            { subject: "English Home Language", level: 5 },
+            { subject: "English First Additional Language", level: 5 },
+          ],
+        },
         Mathematics: 5,
         "Physical Sciences": 5,
       },
@@ -287,8 +359,12 @@ export class Wits extends BaseUniversity {
       apsMin: 42,
       duration: "4 years",
       subjectRequirements: {
-        "English Home": 5,
-        "English First Additional": 5,
+        Language: {
+          alternatives: [
+            { subject: "English Home Language", level: 5 },
+            { subject: "English First Additional Language", level: 5 },
+          ],
+        },
         Mathematics: 5,
         "Physical Sciences": 5,
       },
@@ -303,8 +379,12 @@ export class Wits extends BaseUniversity {
       apsMin: 42,
       duration: "4 years",
       subjectRequirements: {
-        "English Home": 5,
-        "English First Additional": 5,
+        Language: {
+          alternatives: [
+            { subject: "English Home Language", level: 5 },
+            { subject: "English First Additional Language", level: 5 },
+          ],
+        },
         Mathematics: 5,
         "Physical Sciences": 5,
       },
@@ -319,8 +399,12 @@ export class Wits extends BaseUniversity {
       apsMin: 34,
       duration: "3 years",
       subjectRequirements: {
-        "English Home": 4,
-        "English First Additional": 4,
+        Language: {
+          alternatives: [
+            { subject: "English Home Language", level: 4 },
+            { subject: "English First Additional Language", level: 4 },
+          ],
+        },
         Mathematics: 4,
       },
       additionalRequirements: "Written and graphic drawing exercise required",
@@ -334,8 +418,12 @@ export class Wits extends BaseUniversity {
       apsMin: 36,
       duration: "3 years",
       subjectRequirements: {
-        "English Home": 5,
-        "English First Additional": 5,
+        Language: {
+          alternatives: [
+            { subject: "English Home Language", level: 5 },
+            { subject: "English First Additional Language", level: 5 },
+          ],
+        },
         Mathematics: 5,
       },
     },
@@ -349,8 +437,12 @@ export class Wits extends BaseUniversity {
       apsMin: 36,
       duration: "3 years",
       subjectRequirements: {
-        "English Home": 5,
-        "English First Additional": 5,
+        Language: {
+          alternatives: [
+            { subject: "English Home Language", level: 5 },
+            { subject: "English First Additional Language", level: 5 },
+          ],
+        },
         Mathematics: 5,
       },
     },
@@ -362,8 +454,12 @@ export class Wits extends BaseUniversity {
       apsMin: 36,
       duration: "3 years",
       subjectRequirements: {
-        "English Home": 5,
-        "English First Additional": 5,
+        Language: {
+          alternatives: [
+            { subject: "English Home Language", level: 5 },
+            { subject: "English First Additional Language", level: 5 },
+          ],
+        },
         Mathematics: 5,
       },
     },
@@ -377,8 +473,12 @@ export class Wits extends BaseUniversity {
       duration: "3 years",
       selectionProcess: "Composite Index",
       subjectRequirements: {
-        "English Home": 5,
-        "English First Additional": 5,
+        Language: {
+          alternatives: [
+            { subject: "English Home Language", level: 5 },
+            { subject: "English First Additional Language", level: 5 },
+          ],
+        },
         Mathematics: 5,
         "Life Sciences": 5,
       },
@@ -393,8 +493,12 @@ export class Wits extends BaseUniversity {
       duration: "3 years",
       selectionProcess: "Composite Index",
       subjectRequirements: {
-        "English Home": 5,
-        "English First Additional": 5,
+        Language: {
+          alternatives: [
+            { subject: "English Home Language", level: 5 },
+            { subject: "English First Additional Language", level: 5 },
+          ],
+        },
         Mathematics: 5,
         "Life Sciences": 5,
       },
@@ -409,10 +513,18 @@ export class Wits extends BaseUniversity {
       duration: "3 years",
       selectionProcess: "Composite Index",
       subjectRequirements: {
-        "English Home": 4,
-        "English First Additional": 4,
-        Mathematics: 4,
-        "Mathematical Literacy": 7,
+        Language: {
+          alternatives: [
+            { subject: "English Home Language", level: 4 },
+            { subject: "English First Additional Language", level: 4 },
+          ],
+        },
+        Math: {
+          alternatives: [
+            { subject: "Mathematics", level: 4 },
+            { subject: "Mathematical Literacy", level: 7 },
+          ],
+        },
         "Life Sciences": 4,
       },
       additionalRequirements: "NBT by 18 August 2025",
@@ -426,8 +538,12 @@ export class Wits extends BaseUniversity {
       duration: "6 years",
       selectionProcess: "Composite Index",
       subjectRequirements: {
-        "English Home": 5,
-        "English First Additional": 5,
+        Language: {
+          alternatives: [
+            { subject: "English Home Language", level: 5 },
+            { subject: "English First Additional Language", level: 5 },
+          ],
+        },
         Mathematics: 5,
         "Life Sciences": 5,
       },
@@ -442,13 +558,18 @@ export class Wits extends BaseUniversity {
       duration: "5 years",
       selectionProcess: "Composite Index",
       subjectRequirements: {
-        "English Home": 5,
-        "English First Additional": 5,
+        Language: {
+          alternatives: [
+            { subject: "English Home Language", level: 5 },
+            { subject: "English First Additional Language", level: 5 },
+          ],
+        },
         Mathematics: 5,
         "Life Sciences": 5,
         "Physical Sciences": 5,
       },
-      additionalRequirements: "NBT by 18 August 2025, Job shadowing certificate (minimum 16 hours) between 1-31 July",
+      additionalRequirements:
+        "NBT by 18 August 2025, Job shadowing certificate (minimum 16 hours) between 1-31 July",
       applicationDeadline: "2025-06-30",
     },
     {
@@ -459,13 +580,22 @@ export class Wits extends BaseUniversity {
       duration: "3 years",
       selectionProcess: "Composite Index",
       subjectRequirements: {
-        "English Home": 4,
-        "English First Additional": 4,
-        Mathematics: 4,
-        "Mathematical Literacy": 7,
+        Language: {
+          alternatives: [
+            { subject: "English Home Language", level: 4 },
+            { subject: "English First Additional Language", level: 4 },
+          ],
+        },
+        Math: {
+          alternatives: [
+            { subject: "Mathematics", level: 4 },
+            { subject: "Mathematical Literacy", level: 7 },
+          ],
+        },
         "Life Sciences": 4,
       },
-      additionalRequirements: "NBT by 18 August 2025, Job shadowing certificate (minimum 16 hours) between 1-31 July",
+      additionalRequirements:
+        "NBT by 18 August 2025, Job shadowing certificate (minimum 16 hours) between 1-31 July",
       applicationDeadline: "2025-06-30",
     },
     {
@@ -476,8 +606,12 @@ export class Wits extends BaseUniversity {
       duration: "4 years",
       selectionProcess: "Composite Index",
       subjectRequirements: {
-        "English Home": 4,
-        "English First Additional": 4,
+        Language: {
+          alternatives: [
+            { subject: "English Home Language", level: 4 },
+            { subject: "English First Additional Language", level: 4 },
+          ],
+        },
         Mathematics: 4,
         "Life Sciences": 4,
       },
@@ -492,8 +626,12 @@ export class Wits extends BaseUniversity {
       duration: "4 years",
       selectionProcess: "Composite Index",
       subjectRequirements: {
-        "English Home": 5,
-        "English First Additional": 5,
+        Language: {
+          alternatives: [
+            { subject: "English Home Language", level: 5 },
+            { subject: "English First Additional Language", level: 5 },
+          ],
+        },
         Mathematics: 5,
         "Life Sciences": 5,
       },
@@ -508,12 +646,17 @@ export class Wits extends BaseUniversity {
       duration: "4 years",
       selectionProcess: "Composite Index",
       subjectRequirements: {
-        "English Home": 4,
-        "English First Additional": 4,
+        Language: {
+          alternatives: [
+            { subject: "English Home Language", level: 4 },
+            { subject: "English First Additional Language", level: 4 },
+          ],
+        },
         Mathematics: 4,
         "Life Sciences": 4,
       },
-      additionalRequirements: "NBT by 18 August 2025, Job shadowing certificate (minimum 16 hours) between 1-31 July",
+      additionalRequirements:
+        "NBT by 18 August 2025, Job shadowing certificate (minimum 16 hours) between 1-31 July",
       applicationDeadline: "2025-06-30",
     },
     {
@@ -524,12 +667,17 @@ export class Wits extends BaseUniversity {
       duration: "4 years",
       selectionProcess: "Composite Index",
       subjectRequirements: {
-        "English Home": 5,
-        "English First Additional": 5,
+        Language: {
+          alternatives: [
+            { subject: "English Home Language", level: 5 },
+            { subject: "English First Additional Language", level: 5 },
+          ],
+        },
         Mathematics: 5,
         "Life Sciences": 5,
       },
-      additionalRequirements: "NBT by 18 August 2025, Job shadowing certificate (minimum 16 hours) between 1-31 July",
+      additionalRequirements:
+        "NBT by 18 August 2025, Job shadowing certificate (minimum 16 hours) between 1-31 July",
       applicationDeadline: "2025-06-30",
     },
 
@@ -541,8 +689,12 @@ export class Wits extends BaseUniversity {
       apsMin: 36,
       duration: "3 years",
       subjectRequirements: {
-        "English Home": 5,
-        "English First Additional": 5,
+        Language: {
+          alternatives: [
+            { subject: "English Home Language", level: 5 },
+            { subject: "English First Additional Language", level: 5 },
+          ],
+        },
       },
     },
     {
@@ -552,10 +704,18 @@ export class Wits extends BaseUniversity {
       apsMin: 43,
       duration: "3 years",
       subjectRequirements: {
-        "English Home": 5,
-        "English First Additional": 5,
-        Mathematics: 3,
-        "Mathematical Literacy": 4,
+        Language: {
+          alternatives: [
+            { subject: "English Home Language", level: 5 },
+            { subject: "English First Additional Language", level: 5 },
+          ],
+        },
+        Math: {
+          alternatives: [
+            { subject: "Mathematics", level: 3 },
+            { subject: "Mathematical Literacy", level: 4 },
+          ],
+        },
       },
     },
 
@@ -568,8 +728,12 @@ export class Wits extends BaseUniversity {
       apsMin: 36,
       duration: "4 years",
       subjectRequirements: {
-        "English Home": 5,
-        "English First Additional": 5,
+        Language: {
+          alternatives: [
+            { subject: "English Home Language", level: 5 },
+            { subject: "English First Additional Language", level: 5 },
+          ],
+        },
       },
       additionalRequirements: "Audition, Portfolio or Written Assignment",
     },
@@ -581,8 +745,12 @@ export class Wits extends BaseUniversity {
       apsMin: 34,
       duration: "4 years",
       subjectRequirements: {
-        "English Home": 5,
-        "English First Additional": 5,
+        Language: {
+          alternatives: [
+            { subject: "English Home Language", level: 5 },
+            { subject: "English First Additional Language", level: 5 },
+          ],
+        },
       },
       additionalRequirements: "Audition, Portfolio or Written Assignment",
     },
@@ -594,8 +762,12 @@ export class Wits extends BaseUniversity {
       apsMin: 34,
       duration: "4 years",
       subjectRequirements: {
-        "English Home": 5,
-        "English First Additional": 5,
+        Language: {
+          alternatives: [
+            { subject: "English Home Language", level: 5 },
+            { subject: "English First Additional Language", level: 5 },
+          ],
+        },
       },
       additionalRequirements: "Audition, Portfolio or Written Assignment",
       applicationDeadline: "2025-06-30",
@@ -608,8 +780,12 @@ export class Wits extends BaseUniversity {
       apsMin: 34,
       duration: "4 years",
       subjectRequirements: {
-        "English Home": 5,
-        "English First Additional": 5,
+        Language: {
+          alternatives: [
+            { subject: "English Home Language", level: 5 },
+            { subject: "English First Additional Language", level: 5 },
+          ],
+        },
       },
       additionalRequirements: "Audition, Portfolio or Written Assignment",
     },
@@ -621,8 +797,12 @@ export class Wits extends BaseUniversity {
       apsMin: 34,
       duration: "4 years",
       subjectRequirements: {
-        "English Home": 5,
-        "English First Additional": 5,
+        Language: {
+          alternatives: [
+            { subject: "English Home Language", level: 5 },
+            { subject: "English First Additional Language", level: 5 },
+          ],
+        },
       },
       additionalRequirements: "Audition, Portfolio or Written Assignment",
     },
@@ -636,10 +816,18 @@ export class Wits extends BaseUniversity {
       apsMin: 37,
       duration: "4 years",
       subjectRequirements: {
-        "English Home": 5,
-        "English First Additional": 5,
-        Mathematics: 4,
-        "Mathematical Literacy": 5,
+        Language: {
+          alternatives: [
+            { subject: "English Home Language", level: 5 },
+            { subject: "English First Additional Language", level: 5 },
+          ],
+        },
+        Math: {
+          alternatives: [
+            { subject: "Mathematics", level: 4 },
+            { subject: "Mathematical Literacy", level: 5 },
+          ],
+        },
         "Technical Mathematics": 5,
       },
     },
@@ -651,10 +839,18 @@ export class Wits extends BaseUniversity {
       apsMin: 37,
       duration: "4 years",
       subjectRequirements: {
-        "English Home": 5,
-        "English First Additional": 5,
-        Mathematics: 4,
-        "Mathematical Literacy": 5,
+        Language: {
+          alternatives: [
+            { subject: "English Home Language", level: 5 },
+            { subject: "English First Additional Language", level: 5 },
+          ],
+        },
+        Math: {
+          alternatives: [
+            { subject: "Mathematics", level: 4 },
+            { subject: "Mathematical Literacy", level: 5 },
+          ],
+        },
         "Technical Mathematics": 5,
       },
     },
@@ -666,10 +862,15 @@ export class Wits extends BaseUniversity {
       apsMin: 37,
       duration: "4 years",
       subjectRequirements: {
-        "English Home": 5,
-        "English First Additional": 5,
+        Language: {
+          alternatives: [
+            { subject: "English Home Language", level: 5 },
+            { subject: "English First Additional Language", level: 5 },
+          ],
+        },
       },
-      additionalRequirements: "Teaching subjects are compulsory: Physical Sciences, Life Sciences, Engineering Graphics & Design, Geography, History, IsiZulu, Sesotho, IT, Mechanical Technology, Mathematics 65%, Technical Mathematics 65%",
+      additionalRequirements:
+        "Teaching subjects are compulsory: Physical Sciences, Life Sciences, Engineering Graphics & Design, Geography, History, IsiZulu, Sesotho, IT, Mechanical Technology, Mathematics 65%, Technical Mathematics 65%",
     },
 
     // School of Human and Community Development (SHCD)
@@ -681,8 +882,12 @@ export class Wits extends BaseUniversity {
       apsMin: 34,
       duration: "4 years",
       subjectRequirements: {
-        "English Home": 5,
-        "English First Additional": 5,
+        Language: {
+          alternatives: [
+            { subject: "English Home Language", level: 5 },
+            { subject: "English First Additional Language", level: 5 },
+          ],
+        },
         Mathematics: 4,
       },
       additionalRequirements: "NBT by 18 August 2025",
@@ -696,8 +901,12 @@ export class Wits extends BaseUniversity {
       apsMin: 34,
       duration: "4 years",
       subjectRequirements: {
-        "English Home": 5,
-        "English First Additional": 5,
+        Language: {
+          alternatives: [
+            { subject: "English Home Language", level: 5 },
+            { subject: "English First Additional Language", level: 5 },
+          ],
+        },
         Mathematics: 4,
       },
       additionalRequirements: "NBT by 18 August 2025",
@@ -711,8 +920,12 @@ export class Wits extends BaseUniversity {
       apsMin: 34,
       duration: "4 years",
       subjectRequirements: {
-        "English Home": 5,
-        "English First Additional": 5,
+        Language: {
+          alternatives: [
+            { subject: "English Home Language", level: 5 },
+            { subject: "English First Additional Language", level: 5 },
+          ],
+        },
       },
     },
 
@@ -724,8 +937,12 @@ export class Wits extends BaseUniversity {
       apsMin: 42,
       duration: "3 years",
       subjectRequirements: {
-        "English Home": 5,
-        "English First Additional": 5,
+        Language: {
+          alternatives: [
+            { subject: "English Home Language", level: 5 },
+            { subject: "English First Additional Language", level: 5 },
+          ],
+        },
         Mathematics: 5,
       },
       additionalRequirements: "NBT by 31 October 2025",
@@ -740,8 +957,12 @@ export class Wits extends BaseUniversity {
       apsMin: 43,
       duration: "3 years",
       subjectRequirements: {
-        "English Home": 5,
-        "English First Additional": 5,
+        Language: {
+          alternatives: [
+            { subject: "English Home Language", level: 5 },
+            { subject: "English First Additional Language", level: 5 },
+          ],
+        },
         Mathematics: 5,
       },
       additionalRequirements: "NBT by 31 October 2025",
@@ -756,8 +977,12 @@ export class Wits extends BaseUniversity {
       apsMin: 42,
       duration: "3 years",
       subjectRequirements: {
-        "English Home": 5,
-        "English First Additional": 5,
+        Language: {
+          alternatives: [
+            { subject: "English Home Language", level: 5 },
+            { subject: "English First Additional Language", level: 5 },
+          ],
+        },
         Mathematics: 5,
       },
       additionalRequirements: "NBT by 31 October 2025",
@@ -770,8 +995,12 @@ export class Wits extends BaseUniversity {
       apsMin: 42,
       duration: "3 years",
       subjectRequirements: {
-        "English Home": 5,
-        "English First Additional": 5,
+        Language: {
+          alternatives: [
+            { subject: "English Home Language", level: 5 },
+            { subject: "English First Additional Language", level: 5 },
+          ],
+        },
         Mathematics: 5,
       },
       additionalRequirements: "NBT by 31 October 2025",
@@ -784,8 +1013,12 @@ export class Wits extends BaseUniversity {
       apsMin: 42,
       duration: "3 years",
       subjectRequirements: {
-        "English Home": 5,
-        "English First Additional": 5,
+        Language: {
+          alternatives: [
+            { subject: "English Home Language", level: 5 },
+            { subject: "English First Additional Language", level: 5 },
+          ],
+        },
         Mathematics: 5,
       },
       additionalRequirements: "NBT by 31 October 2025",
@@ -798,8 +1031,12 @@ export class Wits extends BaseUniversity {
       apsMin: 42,
       duration: "3 years",
       subjectRequirements: {
-        "English Home": 5,
-        "English First Additional": 5,
+        Language: {
+          alternatives: [
+            { subject: "English Home Language", level: 5 },
+            { subject: "English First Additional Language", level: 5 },
+          ],
+        },
         Mathematics: 6,
         "Physical Sciences": 5,
       },
@@ -815,8 +1052,12 @@ export class Wits extends BaseUniversity {
       apsMin: 42,
       duration: "3 years",
       subjectRequirements: {
-        "English Home": 7,
-        "English First Additional": 7,
+        Language: {
+          alternatives: [
+            { subject: "English Home Language", level: 7 },
+            { subject: "English First Additional Language", level: 7 },
+          ],
+        },
         Mathematics: 7,
         "Physical Sciences": 7,
       },
@@ -830,8 +1071,12 @@ export class Wits extends BaseUniversity {
       apsMin: 44,
       duration: "3 years",
       subjectRequirements: {
-        "English Home": 5,
-        "English First Additional": 5,
+        Language: {
+          alternatives: [
+            { subject: "English Home Language", level: 5 },
+            { subject: "English First Additional Language", level: 5 },
+          ],
+        },
         Mathematics: 6,
       },
       additionalRequirements: "NBT by 31 October 2025",
@@ -844,8 +1089,12 @@ export class Wits extends BaseUniversity {
       apsMin: 44,
       duration: "3 years",
       subjectRequirements: {
-        "English Home": 5,
-        "English First Additional": 5,
+        Language: {
+          alternatives: [
+            { subject: "English Home Language", level: 5 },
+            { subject: "English First Additional Language", level: 5 },
+          ],
+        },
         Mathematics: 6,
       },
       additionalRequirements: "NBT by 31 October 2025",
@@ -858,8 +1107,12 @@ export class Wits extends BaseUniversity {
       apsMin: 42,
       duration: "3 years",
       subjectRequirements: {
-        "English Home": 7,
-        "English First Additional": 7,
+        Language: {
+          alternatives: [
+            { subject: "English Home Language", level: 7 },
+            { subject: "English First Additional Language", level: 7 },
+          ],
+        },
         Mathematics: 7,
         "Physical Sciences": 7,
       },
@@ -875,8 +1128,12 @@ export class Wits extends BaseUniversity {
       apsMin: 42,
       duration: "3 years",
       subjectRequirements: {
-        "English Home": 5,
-        "English First Additional": 5,
+        Language: {
+          alternatives: [
+            { subject: "English Home Language", level: 5 },
+            { subject: "English First Additional Language", level: 5 },
+          ],
+        },
         Mathematics: 6,
         "Physical Sciences": 5,
       },
@@ -890,8 +1147,12 @@ export class Wits extends BaseUniversity {
       apsMin: 43,
       duration: "3 years",
       subjectRequirements: {
-        "English Home": 5,
-        "English First Additional": 5,
+        Language: {
+          alternatives: [
+            { subject: "English Home Language", level: 5 },
+            { subject: "English First Additional Language", level: 5 },
+          ],
+        },
         Mathematics: 6,
         "Physical Sciences": 6,
       },
@@ -905,8 +1166,12 @@ export class Wits extends BaseUniversity {
       apsMin: 43,
       duration: "3 years",
       subjectRequirements: {
-        "English Home": 5,
-        "English First Additional": 5,
+        Language: {
+          alternatives: [
+            { subject: "English Home Language", level: 5 },
+            { subject: "English First Additional Language", level: 5 },
+          ],
+        },
         Mathematics: 6,
         "Physical Sciences": 5,
       },
@@ -920,14 +1185,18 @@ export class Wits extends BaseUniversity {
       apsMin: 43,
       duration: "3 years",
       subjectRequirements: {
-        "English Home": 5,
-        "English First Additional": 5,
+        Language: {
+          alternatives: [
+            { subject: "English Home Language", level: 5 },
+            { subject: "English First Additional Language", level: 5 },
+          ],
+        },
         Mathematics: 6,
         "Physical Sciences": 6,
       },
       additionalRequirements: "NBT by 31 October 2025",
     },
-  ]
+  ];
 
   /**
    * Calculate APS for Wits-specific rules
@@ -935,7 +1204,7 @@ export class Wits extends BaseUniversity {
    * @returns Total APS score
    */
   calculateAPS(subjects: Record<string, number>): number {
-    let totalAPS = 0
+    let totalAPS = 0;
     const apsScale = [
       { min: 90, max: 100, points: 8 },
       { min: 80, max: 89, points: 7 },
@@ -945,7 +1214,7 @@ export class Wits extends BaseUniversity {
       { min: 40, max: 49, points: 3 },
       { min: 30, max: 39, points: 0 },
       { min: 0, max: 29, points: 0 },
-    ]
+    ];
 
     const lifeOrientationScale = [
       { min: 80, max: 100, points: 4 },
@@ -953,17 +1222,17 @@ export class Wits extends BaseUniversity {
       { min: 60, max: 69, points: 2 },
       { min: 50, max: 59, points: 1 },
       { min: 0, max: 49, points: 0 },
-    ]
+    ];
 
     for (const [subject, percentage] of Object.entries(subjects)) {
-      let points = 0
+      let points = 0;
 
       // Life Orientation special scoring (max 4 points)
       if (subject.toLowerCase().includes("life orientation")) {
         const scale = lifeOrientationScale.find(
-          (s) => percentage >= s.min && percentage <= s.max
-        )
-        points = scale ? scale.points : 0
+          (s) => percentage >= s.min && percentage <= s.max,
+        );
+        points = scale ? scale.points : 0;
       }
       // English and Mathematics get +2 bonus
       else if (
@@ -971,23 +1240,23 @@ export class Wits extends BaseUniversity {
         subject.toLowerCase().includes("mathematics")
       ) {
         const scale = apsScale.find(
-          (s) => percentage >= s.min && percentage <= s.max
-        )
-        const basePoints = scale ? scale.points : 0
-        points = basePoints + 2 // Add 2 bonus points
+          (s) => percentage >= s.min && percentage <= s.max,
+        );
+        const basePoints = scale ? scale.points : 0;
+        points = basePoints + 2; // Add 2 bonus points
       }
       // All other subjects
       else {
         const scale = apsScale.find(
-          (s) => percentage >= s.min && percentage <= s.max
-        )
-        points = scale ? scale.points : 0
+          (s) => percentage >= s.min && percentage <= s.max,
+        );
+        points = scale ? scale.points : 0;
       }
 
-      totalAPS += points
+      totalAPS += points;
     }
 
-    return totalAPS
+    return totalAPS;
   }
 
   /**
@@ -1006,7 +1275,7 @@ export class Wits extends BaseUniversity {
       firstGenerationPercentage: 33,
       acceptanceRate: "6,000 out of 80,000 applicants",
       worldRanking: "Top 1% globally",
-    }
+    };
   }
 
   /**
@@ -1032,7 +1301,7 @@ export class Wits extends BaseUniversity {
         "NSFAS",
       ],
       note: "Don't forget to allocate funds for a monthly allowance or income to cover your personal expenses while studying",
-    }
+    };
   }
 
   /**
@@ -1048,58 +1317,61 @@ export class Wits extends BaseUniversity {
         "Well-maintained facilities",
         "One of the most rewarding experiences of university journey",
       ],
-    }
+    };
   }
 
   /**
    * Wits-specific APS calculation
    * Based on Wits 2026 Undergraduate Prospectus
-   * 
+   *
    * Key differences from standard APS:
    * - English and Mathematics receive +2 bonus points each
    * - Life Orientation uses a 4-point scale (not the standard 7-point scale)
    * - Top 6 subjects excluding Life Orientation
    */
   calculateApsScore(subjects: Record<string, number>): number {
-    const subjectScores: number[] = []
+    const subjectScores: number[] = [];
 
     for (const [subjectName, percentage] of Object.entries(subjects)) {
-      const normalizedName = subjectName.toLowerCase()
+      const normalizedName = subjectName.toLowerCase();
 
       // Life Orientation uses special 4-point scale
-      if (normalizedName.includes('life orientation')) {
-        if (percentage >= 80) subjectScores.push(4)
-        else if (percentage >= 70) subjectScores.push(3)
-        else if (percentage >= 60) subjectScores.push(2)
-        else if (percentage >= 50) subjectScores.push(1)
-        else subjectScores.push(0)
-        continue
+      if (normalizedName.includes("life orientation")) {
+        if (percentage >= 80) subjectScores.push(4);
+        else if (percentage >= 70) subjectScores.push(3);
+        else if (percentage >= 60) subjectScores.push(2);
+        else if (percentage >= 50) subjectScores.push(1);
+        else subjectScores.push(0);
+        continue;
       }
 
       // Standard 8-point scale for other subjects
-      let points = 0
-      if (percentage >= 90) points = 8
-      else if (percentage >= 80) points = 7
-      else if (percentage >= 70) points = 6
-      else if (percentage >= 60) points = 5
-      else if (percentage >= 50) points = 4
-      else if (percentage >= 40) points = 3
-      else if (percentage >= 30) points = 2
-      else if (percentage >= 0) points = 1
+      let points = 0;
+      if (percentage >= 90) points = 8;
+      else if (percentage >= 80) points = 7;
+      else if (percentage >= 70) points = 6;
+      else if (percentage >= 60) points = 5;
+      else if (percentage >= 50) points = 4;
+      else if (percentage >= 40) points = 3;
+      else if (percentage >= 30) points = 2;
+      else if (percentage >= 0) points = 1;
 
       // Add +2 bonus for English and Mathematics
-      if (normalizedName.includes('english') || normalizedName.includes('mathematics')) {
-        points += 2
+      if (
+        normalizedName.includes("english") ||
+        normalizedName.includes("mathematics")
+      ) {
+        points += 2;
       }
 
-      subjectScores.push(points)
+      subjectScores.push(points);
     }
 
     // Sort descending and take top 6 subjects
-    subjectScores.sort((a, b) => b - a)
-    const top6 = subjectScores.slice(0, 6)
+    subjectScores.sort((a, b) => b - a);
+    const top6 = subjectScores.slice(0, 6);
 
-    return top6.reduce((sum, score) => sum + score, 0)
+    return top6.reduce((sum, score) => sum + score, 0);
   }
 
   /**
@@ -1127,7 +1399,7 @@ export class Wits extends BaseUniversity {
           "Olympic-size pool for elite training",
         ],
       },
-    }
+    };
   }
 
   /**
@@ -1150,7 +1422,7 @@ export class Wits extends BaseUniversity {
         times: ["10:00 AM", "11:30 AM", "1:00 PM"],
       },
       website: "https://digitaldome.wits.ac.za",
-    }
+    };
   }
 
   /**
@@ -1180,7 +1452,7 @@ export class Wits extends BaseUniversity {
           "Community-building",
         ],
       },
-    }
+    };
   }
 
   /**
@@ -1194,7 +1466,7 @@ export class Wits extends BaseUniversity {
       applicationWebsite: "https://www.wits.ac.za/undergraduate/apply-to-wits",
       virtualTour: "Available on website",
       chatbot: "Kudubot",
-    }
+    };
   }
 
   /**
@@ -1208,6 +1480,6 @@ export class Wits extends BaseUniversity {
       { name: "Joanne Joseph" },
       { name: "Thuli Madonsela", role: "Former Public Protector" },
       { name: "Thuso Mbedu", role: "Actress" },
-    ]
+    ];
   }
 }

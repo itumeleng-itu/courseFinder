@@ -1,15 +1,15 @@
-import { BaseUniversity } from "./base-university"
-import type { Course } from "@/lib/types"
+import { BaseUniversity } from "./base-university";
+import type { Course } from "@/lib/types";
 
 /**
  * Vaal University of Technology (VUT) class
  */
 export class VUT extends BaseUniversity {
-  readonly id = "vut"
-  readonly name = "Vaal University of Technology"
-  readonly shortName = "VUT"
-  readonly website = "https://www.vut.ac.za"
-  readonly logo = "/logos/vut.png"
+  readonly id = "vut";
+  readonly name = "Vaal University of Technology";
+  readonly shortName = "VUT";
+  readonly website = "https://www.vut.ac.za";
+  readonly logo = "/logos/vut.png";
   readonly location = {
     city: "Vanderbijlpark",
     province: "Gauteng",
@@ -17,7 +17,7 @@ export class VUT extends BaseUniversity {
       latitude: -26.7091,
       longitude: 27.8543,
     },
-  }
+  };
 
   protected readonly _courses: Course[] = [
     // Faculty of Applied & Computer Sciences
@@ -49,7 +49,8 @@ export class VUT extends BaseUniversity {
       },
       additionalRequirements:
         "Technical Mathematics (3) can be used instead of Mathematics. Mathematical Literacy (4) can be used instead of Mathematics (APS increases to 22). Agriculture/Life Science (3) is required.",
-      careerOpportunities: "Agricultural management, farming operations, agribusiness",
+      careerOpportunities:
+        "Agricultural management, farming operations, agribusiness",
     },
     {
       id: "vut-dip-biotechnology",
@@ -693,7 +694,7 @@ export class VUT extends BaseUniversity {
         "Physical Sciences": 3,
       },
     },
-  ]
+  ];
 
   /**
    * VUT-specific APS calculation
@@ -702,28 +703,28 @@ export class VUT extends BaseUniversity {
    * - Standard 7-point NSC scale
    */
   calculateApsScore(subjects: Record<string, number>): number {
-    const subjectScores: number[] = []
-    
+    const subjectScores: number[] = [];
+
     for (const [subjectName, percentage] of Object.entries(subjects)) {
-      if (subjectName.toLowerCase().includes('life orientation')) {
-        continue
+      if (subjectName.toLowerCase().includes("life orientation")) {
+        continue;
       }
-      
-      let points = 0
-      if (percentage >= 80) points = 7
-      else if (percentage >= 70) points = 6
-      else if (percentage >= 60) points = 5
-      else if (percentage >= 50) points = 4
-      else if (percentage >= 40) points = 3
-      else if (percentage >= 30) points = 2
-      else if (percentage >= 0) points = 1
-      
-      subjectScores.push(points)
+
+      let points = 0;
+      if (percentage >= 80) points = 7;
+      else if (percentage >= 70) points = 6;
+      else if (percentage >= 60) points = 5;
+      else if (percentage >= 50) points = 4;
+      else if (percentage >= 40) points = 3;
+      else if (percentage >= 30) points = 2;
+      else if (percentage >= 0) points = 1;
+
+      subjectScores.push(points);
     }
-    
-    subjectScores.sort((a, b) => b - a)
-    const top6 = subjectScores.slice(0, 6)
-    
-    return top6.reduce((sum, score) => sum + score, 0)
+
+    subjectScores.sort((a, b) => b - a);
+    const top6 = subjectScores.slice(0, 6);
+
+    return top6.reduce((sum, score) => sum + score, 0);
   }
 }

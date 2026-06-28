@@ -34,14 +34,13 @@ export const OFFICIAL_SUBJECTS: Record<string, string[]> = {
 }
 
 export const ACHIEVEMENT_LEVELS = {
-    8: { min: 0, max: 29, label: "Not Achieved" },
-    7: { min: 30, max: 39, label: "Elementary Achievement" },
-    6: { min: 40, max: 49, label: "Moderate Achievement" },
-    5: { min: 50, max: 59, label: "Adequate Achievement" },
-    4: { min: 60, max: 69, label: "Substantial Achievement" },
-    3: { min: 70, max: 79, label: "Meritorious Achievement" },
-    2: { min: 80, max: 89, label: "Outstanding Achievement" },
-    1: { min: 90, max: 100, label: "Outstanding Achievement" },
+    1: { min: 0, max: 29, label: "Not Achieved" },
+    2: { min: 30, max: 39, label: "Elementary Achievement" },
+    3: { min: 40, max: 49, label: "Moderate Achievement" },
+    4: { min: 50, max: 59, label: "Adequate Achievement" },
+    5: { min: 60, max: 69, label: "Substantial Achievement" },
+    6: { min: 70, max: 79, label: "Meritorious Achievement" },
+    7: { min: 80, max: 100, label: "Outstanding Achievement" },
 }
 
 export const OFFICIAL_STATISTICS = {

@@ -12,6 +12,10 @@ export interface RequirementAlternative {
 
 export type RequirementLevel = number | { alternatives: RequirementAlternative[] }
 
+export function hasAlternatives(val: RequirementLevel): val is { alternatives: RequirementAlternative[] } {
+  return typeof val === "object" && val !== null && "alternatives" in val
+}
+
 export interface Course {
   id?: string
   name: string
@@ -39,12 +43,21 @@ export interface Course {
 
   // Additional common fields
   additionalRequirements?: string | string[]
-  campus?: string
+  alternativeRequirements?: string | string[] | Record<string, RequirementLevel>
+  campus?: string | string[]  // single campus name or list of campuses offering this course
+  location?: string           // course-level campus location (e.g. DUT multi-campus)
+  notes?: string              // supplementary notes attached to a course entry
+  studyMode?: string          // e.g. "Full-time", "Part-time"
+  courseStructure?: string[]  // year-by-year structure summary
+  credits?: number            // NQF credits for this qualification
+  tuitionFee?: string | number | { min: number; max: number; currency: string; year: number }
   careers?: string | string[]
   careerOpportunities?: string | string[]
   school?: string
   department?: string
   courseCode?: string
+  applicationDeadline?: string
+  selectionProcess?: string
 }
 
 export interface University {

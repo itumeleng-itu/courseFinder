@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server"
 
-export const dynamic = "force-dynamic"
+// Purely static historical data — cache for 1 year at the edge
+export const revalidate = 31536000
 
 
 interface SeriesPoint {

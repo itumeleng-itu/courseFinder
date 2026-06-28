@@ -1,15 +1,15 @@
-import { BaseUniversity } from "./base-university"
-import type { Course } from "@/lib/types"
+import { BaseUniversity } from "./base-university";
+import type { Course } from "@/lib/types";
 
 /**
  * University of Fort Hare (UFH) class
  */
 export class UFH extends BaseUniversity {
-  readonly id = "ufh"
-  readonly name = "University of Fort Hare"
-  readonly shortName = "UFH"
-  readonly website = "https://www.ufh.ac.za"
-  readonly logo = "/logos/ufh.png"
+  readonly id = "ufh";
+  readonly name = "University of Fort Hare";
+  readonly shortName = "UFH";
+  readonly website = "https://www.ufh.ac.za";
+  readonly logo = "/logos/ufh.png";
   readonly location = {
     city: "Alice",
     province: "Eastern Cape",
@@ -17,7 +17,7 @@ export class UFH extends BaseUniversity {
       latitude: -32.7833,
       longitude: 26.85,
     },
-  }
+  };
 
   /**
    * Calculate APS score based on UFH's method
@@ -25,47 +25,47 @@ export class UFH extends BaseUniversity {
    */
   calculateAps(subjects: { name: string; percent: number }[]): number {
     // Sort subjects by percentage in descending order
-    const sortedSubjects = [...subjects].sort((a, b) => b.percent - a.percent)
+    const sortedSubjects = [...subjects].sort((a, b) => b.percent - a.percent);
 
-    let totalAps = 0
-    let subjectsUsed = 0
+    let totalAps = 0;
+    let subjectsUsed = 0;
 
     for (const subject of sortedSubjects) {
       // Skip Life Orientation for now, we'll add it separately with cap
-      if (subject.name === "Life Orientation") continue
+      if (subject.name === "Life Orientation") continue;
 
       // Get APS points based on percentage
-      const points = this.getApsPoints(subject.percent)
+      const points = this.getApsPoints(subject.percent);
 
       // Add points to total
-      totalAps += points
-      subjectsUsed++
+      totalAps += points;
+      subjectsUsed++;
 
       // Only use 6 subjects excluding Life Orientation
-      if (subjectsUsed >= 6) break
+      if (subjectsUsed >= 6) break;
     }
 
     // Add Life Orientation (capped at level 4)
-    const lifeOrientation = subjects.find((s) => s.name === "Life Orientation")
+    const lifeOrientation = subjects.find((s) => s.name === "Life Orientation");
     if (lifeOrientation) {
-      const loPoints = Math.min(this.getApsPoints(lifeOrientation.percent), 4)
-      totalAps += loPoints
+      const loPoints = Math.min(this.getApsPoints(lifeOrientation.percent), 4);
+      totalAps += loPoints;
     }
 
-    return totalAps
+    return totalAps;
   }
 
   /**
    * Convert percentage to APS points based on NSC levels
    */
   private getApsPoints(percent: number): number {
-    if (percent >= 80) return 7
-    if (percent >= 70) return 6
-    if (percent >= 60) return 5
-    if (percent >= 50) return 4
-    if (percent >= 40) return 3
-    if (percent >= 30) return 2
-    return 1
+    if (percent >= 80) return 7;
+    if (percent >= 70) return 6;
+    if (percent >= 60) return 5;
+    if (percent >= 50) return 4;
+    if (percent >= 40) return 3;
+    if (percent >= 30) return 2;
+    return 1;
   }
 
   protected readonly _courses: Course[] = [
@@ -79,8 +79,12 @@ export class UFH extends BaseUniversity {
       studyMode: "Full-time",
       location: "Alice Campus",
       subjectRequirements: {
-        "English Home Language": 4,
-        "English First Additional Language": 4,
+        Language: {
+          alternatives: [
+            { subject: "English Home Language", level: 4 },
+            { subject: "English First Additional Language", level: 4 },
+          ],
+        },
         Mathematics: 4,
         "Agricultural Science": 4,
         "Life Sciences": 4,
@@ -99,8 +103,12 @@ export class UFH extends BaseUniversity {
       studyMode: "Full-time",
       location: "Alice Campus",
       subjectRequirements: {
-        "English Home Language": 4,
-        "English First Additional Language": 4,
+        Language: {
+          alternatives: [
+            { subject: "English Home Language", level: 4 },
+            { subject: "English First Additional Language", level: 4 },
+          ],
+        },
         Mathematics: 3,
         Accounting: 4,
         Economics: 4,
@@ -120,8 +128,12 @@ export class UFH extends BaseUniversity {
       studyMode: "Full-time",
       location: "Alice Campus",
       subjectRequirements: {
-        "English Home Language": 4,
-        "English First Additional Language": 4,
+        Language: {
+          alternatives: [
+            { subject: "English Home Language", level: 4 },
+            { subject: "English First Additional Language", level: 4 },
+          ],
+        },
         Mathematics: 4,
         "Physical Sciences": 4,
         "Life Sciences": 4,
@@ -142,8 +154,12 @@ export class UFH extends BaseUniversity {
       studyMode: "Full-time",
       location: "Alice Campus",
       subjectRequirements: {
-        "English Home Language": 4,
-        "English First Additional Language": 4,
+        Language: {
+          alternatives: [
+            { subject: "English Home Language", level: 4 },
+            { subject: "English First Additional Language", level: 4 },
+          ],
+        },
         "isiXhosa Home Language": 4,
         "isiXhosa First Additional Language": 4,
         "Afrikaans Home Language": 4,
@@ -165,8 +181,12 @@ export class UFH extends BaseUniversity {
       studyMode: "Full-time",
       location: "East London Campus",
       subjectRequirements: {
-        "English Home Language": 4,
-        "English First Additional Language": 4,
+        Language: {
+          alternatives: [
+            { subject: "English Home Language", level: 4 },
+            { subject: "English First Additional Language", level: 4 },
+          ],
+        },
         Mathematics: 4,
         "isiXhosa Home Language": 4,
         "isiXhosa First Additional Language": 4,
@@ -187,8 +207,12 @@ export class UFH extends BaseUniversity {
       studyMode: "Full-time",
       location: "East London Campus",
       subjectRequirements: {
-        "English Home Language": 4,
-        "English First Additional Language": 4,
+        Language: {
+          alternatives: [
+            { subject: "English Home Language", level: 4 },
+            { subject: "English First Additional Language", level: 4 },
+          ],
+        },
         Mathematics: 4,
         "isiXhosa Home Language": 4,
         "isiXhosa First Additional Language": 4,
@@ -197,7 +221,8 @@ export class UFH extends BaseUniversity {
       },
       additionalRequirements:
         "Life Orientation at level 4 (50-59%). With Mathematical Literacy, minimum APS is 29 with level 5 (60-69%). Either isiXhosa or Afrikaans (Home or First Additional) at level 4.",
-      careers: "Intermediate phase teacher (Grade 4-6), curriculum specialist, educational consultant.",
+      careers:
+        "Intermediate phase teacher (Grade 4-6), curriculum specialist, educational consultant.",
     },
 
     // FACULTY OF LAW
@@ -210,13 +235,18 @@ export class UFH extends BaseUniversity {
       studyMode: "Full-time",
       location: "East London Campus",
       subjectRequirements: {
-        "English Home Language": 4,
-        "English First Additional Language": 4,
+        Language: {
+          alternatives: [
+            { subject: "English Home Language", level: 4 },
+            { subject: "English First Additional Language", level: 4 },
+          ],
+        },
         Mathematics: 3,
       },
       additionalRequirements:
         "Life Orientation at level 4 (50-59%). Mathematical Literacy or Technical Mathematics at level 4 can substitute for Mathematics.",
-      careers: "Attorney, advocate, legal advisor, magistrate, prosecutor, legal researcher, human rights lawyer.",
+      careers:
+        "Attorney, advocate, legal advisor, magistrate, prosecutor, legal researcher, human rights lawyer.",
     },
     {
       id: "ufh-llb-extended",
@@ -227,13 +257,18 @@ export class UFH extends BaseUniversity {
       studyMode: "Full-time",
       location: "East London Campus",
       subjectRequirements: {
-        "English Home Language": 4,
-        "English First Additional Language": 4,
+        Language: {
+          alternatives: [
+            { subject: "English Home Language", level: 4 },
+            { subject: "English First Additional Language", level: 4 },
+          ],
+        },
         Mathematics: 2,
       },
       additionalRequirements:
         "Life Orientation at level 4 (50-59%). With Mathematical Literacy or Technical Mathematics at level 4, minimum APS is 28.",
-      careers: "Attorney, advocate, legal advisor, magistrate, prosecutor, legal researcher, human rights lawyer.",
+      careers:
+        "Attorney, advocate, legal advisor, magistrate, prosecutor, legal researcher, human rights lawyer.",
     },
     {
       id: "ufh-bcom-law",
@@ -244,8 +279,12 @@ export class UFH extends BaseUniversity {
       studyMode: "Full-time",
       location: "East London Campus",
       subjectRequirements: {
-        "English Home Language": 4,
-        "English First Additional Language": 4,
+        Language: {
+          alternatives: [
+            { subject: "English Home Language", level: 4 },
+            { subject: "English First Additional Language", level: 4 },
+          ],
+        },
         Mathematics: 4,
       },
       additionalRequirements:
@@ -264,8 +303,12 @@ export class UFH extends BaseUniversity {
       studyMode: "Full-time",
       location: "Alice Campus",
       subjectRequirements: {
-        "English Home Language": 4,
-        "English First Additional Language": 4,
+        Language: {
+          alternatives: [
+            { subject: "English Home Language", level: 4 },
+            { subject: "English First Additional Language", level: 4 },
+          ],
+        },
         Mathematics: 4,
         "Life Sciences": 4,
       },
@@ -283,8 +326,12 @@ export class UFH extends BaseUniversity {
       studyMode: "Full-time",
       location: "East London Campus",
       subjectRequirements: {
-        "English Home Language": 4,
-        "English First Additional Language": 4,
+        Language: {
+          alternatives: [
+            { subject: "English Home Language", level: 4 },
+            { subject: "English First Additional Language", level: 4 },
+          ],
+        },
         Mathematics: 4,
         "Physical Sciences": 4,
         "Life Sciences": 4,
@@ -303,8 +350,12 @@ export class UFH extends BaseUniversity {
       studyMode: "Full-time",
       location: "East London Campus",
       subjectRequirements: {
-        "English Home Language": 4,
-        "English First Additional Language": 4,
+        Language: {
+          alternatives: [
+            { subject: "English Home Language", level: 4 },
+            { subject: "English First Additional Language", level: 4 },
+          ],
+        },
         Mathematics: 4,
         "Physical Sciences": 4,
         "Life Sciences": 4,
@@ -325,13 +376,18 @@ export class UFH extends BaseUniversity {
       studyMode: "Full-time",
       location: "Alice Campus, East London Campus",
       subjectRequirements: {
-        "English Home Language": 4,
-        "English First Additional Language": 4,
+        Language: {
+          alternatives: [
+            { subject: "English Home Language", level: 4 },
+            { subject: "English First Additional Language", level: 4 },
+          ],
+        },
         Mathematics: 2,
       },
       additionalRequirements:
         "Life Orientation at level 4 (50-59%). With Mathematics or Mathematical Literacy, minimum APS is 28.",
-      careers: "Public administrator, government official, policy analyst, municipal manager, public service manager.",
+      careers:
+        "Public administrator, government official, policy analyst, municipal manager, public service manager.",
     },
     {
       id: "ufh-bcom",
@@ -342,12 +398,17 @@ export class UFH extends BaseUniversity {
       studyMode: "Full-time",
       location: "Alice Campus, East London Campus",
       subjectRequirements: {
-        "English Home Language": 4,
-        "English First Additional Language": 4,
+        Language: {
+          alternatives: [
+            { subject: "English Home Language", level: 4 },
+            { subject: "English First Additional Language", level: 4 },
+          ],
+        },
         Mathematics: 4,
       },
       additionalRequirements: "Life Orientation at level 4 (50-59%).",
-      careers: "Business manager, entrepreneur, marketing specialist, human resource manager, business consultant.",
+      careers:
+        "Business manager, entrepreneur, marketing specialist, human resource manager, business consultant.",
     },
     {
       id: "ufh-bcom-extended",
@@ -358,12 +419,17 @@ export class UFH extends BaseUniversity {
       studyMode: "Full-time",
       location: "Alice Campus, East London Campus",
       subjectRequirements: {
-        "English Home Language": 4,
-        "English First Additional Language": 4,
+        Language: {
+          alternatives: [
+            { subject: "English Home Language", level: 4 },
+            { subject: "English First Additional Language", level: 4 },
+          ],
+        },
         Mathematics: 3,
       },
       additionalRequirements: "Life Orientation at level 4 (50-59%).",
-      careers: "Business manager, entrepreneur, marketing specialist, human resource manager, business consultant.",
+      careers:
+        "Business manager, entrepreneur, marketing specialist, human resource manager, business consultant.",
     },
     {
       id: "ufh-bcom-accounting",
@@ -374,12 +440,18 @@ export class UFH extends BaseUniversity {
       studyMode: "Full-time",
       location: "Alice Campus, East London Campus",
       subjectRequirements: {
-        "English Home Language": 5,
-        "English First Additional Language": 5,
+        Language: {
+          alternatives: [
+            { subject: "English Home Language", level: 5 },
+            { subject: "English First Additional Language", level: 5 },
+          ],
+        },
         Mathematics: 5,
       },
-      additionalRequirements: "Life Orientation at level 4 (50-59%). Two additional subjects at level 5 (60-69%).",
-      careers: "Chartered accountant, financial manager, auditor, tax consultant, financial analyst.",
+      additionalRequirements:
+        "Life Orientation at level 4 (50-59%). Two additional subjects at level 5 (60-69%).",
+      careers:
+        "Chartered accountant, financial manager, auditor, tax consultant, financial analyst.",
     },
     {
       id: "ufh-bcom-accounting-extended",
@@ -390,12 +462,18 @@ export class UFH extends BaseUniversity {
       studyMode: "Full-time",
       location: "Alice Campus, East London Campus",
       subjectRequirements: {
-        "English Home Language": 4,
-        "English First Additional Language": 4,
+        Language: {
+          alternatives: [
+            { subject: "English Home Language", level: 4 },
+            { subject: "English First Additional Language", level: 4 },
+          ],
+        },
         Mathematics: 4,
       },
-      additionalRequirements: "Life Orientation at level 4 (50-59%). Two additional subjects at level 5 (60-69%).",
-      careers: "Chartered accountant, financial manager, auditor, tax consultant, financial analyst.",
+      additionalRequirements:
+        "Life Orientation at level 4 (50-59%). Two additional subjects at level 5 (60-69%).",
+      careers:
+        "Chartered accountant, financial manager, auditor, tax consultant, financial analyst.",
     },
     {
       id: "ufh-bcom-information-systems",
@@ -406,12 +484,17 @@ export class UFH extends BaseUniversity {
       studyMode: "Full-time",
       location: "Alice Campus, East London Campus",
       subjectRequirements: {
-        "English Home Language": 4,
-        "English First Additional Language": 4,
+        Language: {
+          alternatives: [
+            { subject: "English Home Language", level: 4 },
+            { subject: "English First Additional Language", level: 4 },
+          ],
+        },
         Mathematics: 4,
       },
       additionalRequirements: "Life Orientation at level 4 (50-59%).",
-      careers: "IT manager, systems analyst, business analyst, database administrator, IT consultant.",
+      careers:
+        "IT manager, systems analyst, business analyst, database administrator, IT consultant.",
     },
     {
       id: "ufh-bcom-information-systems-extended",
@@ -422,12 +505,17 @@ export class UFH extends BaseUniversity {
       studyMode: "Full-time",
       location: "Alice Campus, East London Campus",
       subjectRequirements: {
-        "English Home Language": 4,
-        "English First Additional Language": 4,
+        Language: {
+          alternatives: [
+            { subject: "English Home Language", level: 4 },
+            { subject: "English First Additional Language", level: 4 },
+          ],
+        },
         Mathematics: 3,
       },
       additionalRequirements: "Life Orientation at level 4 (50-59%).",
-      careers: "IT manager, systems analyst, business analyst, database administrator, IT consultant.",
+      careers:
+        "IT manager, systems analyst, business analyst, database administrator, IT consultant.",
     },
 
     // FACULTY OF SOCIAL SCIENCE AND HUMANITIES
@@ -440,11 +528,17 @@ export class UFH extends BaseUniversity {
       studyMode: "Full-time",
       location: "Alice Campus, East London Campus",
       subjectRequirements: {
-        "English Home Language": 4,
-        "English First Additional Language": 4,
+        Language: {
+          alternatives: [
+            { subject: "English Home Language", level: 4 },
+            { subject: "English First Additional Language", level: 4 },
+          ],
+        },
       },
-      additionalRequirements: "Life Orientation at level 4 (50-59%). Another language at level 4 (50-59%).",
-      careers: "Journalist, translator, writer, researcher, public relations specialist, communications officer.",
+      additionalRequirements:
+        "Life Orientation at level 4 (50-59%). Another language at level 4 (50-59%).",
+      careers:
+        "Journalist, translator, writer, researcher, public relations specialist, communications officer.",
     },
     {
       id: "ufh-ba-extended",
@@ -455,11 +549,17 @@ export class UFH extends BaseUniversity {
       studyMode: "Full-time",
       location: "Alice Campus, East London Campus",
       subjectRequirements: {
-        "English Home Language": 4,
-        "English First Additional Language": 4,
+        Language: {
+          alternatives: [
+            { subject: "English Home Language", level: 4 },
+            { subject: "English First Additional Language", level: 4 },
+          ],
+        },
       },
-      additionalRequirements: "Life Orientation at level 4 (50-59%). Another language at level 4 (50-59%).",
-      careers: "Journalist, translator, writer, researcher, public relations specialist, communications officer.",
+      additionalRequirements:
+        "Life Orientation at level 4 (50-59%). Another language at level 4 (50-59%).",
+      careers:
+        "Journalist, translator, writer, researcher, public relations specialist, communications officer.",
     },
     {
       id: "ufh-bfa",
@@ -470,12 +570,17 @@ export class UFH extends BaseUniversity {
       studyMode: "Full-time",
       location: "East London Campus",
       subjectRequirements: {
-        "English Home Language": 4,
-        "English First Additional Language": 4,
+        Language: {
+          alternatives: [
+            { subject: "English Home Language", level: 4 },
+            { subject: "English First Additional Language", level: 4 },
+          ],
+        },
       },
       additionalRequirements:
         "Life Orientation at level 4 (50-59%). Another language at level 4 (50-59%). Portfolio submission required.",
-      careers: "Artist, art director, curator, art teacher, graphic designer, illustrator.",
+      careers:
+        "Artist, art director, curator, art teacher, graphic designer, illustrator.",
     },
     {
       id: "ufh-blis",
@@ -486,11 +591,17 @@ export class UFH extends BaseUniversity {
       studyMode: "Full-time",
       location: "Alice Campus",
       subjectRequirements: {
-        "English Home Language": 4,
-        "English First Additional Language": 4,
+        Language: {
+          alternatives: [
+            { subject: "English Home Language", level: 4 },
+            { subject: "English First Additional Language", level: 4 },
+          ],
+        },
       },
-      additionalRequirements: "Life Orientation at level 4 (50-59%). Another language at level 4 (50-59%).",
-      careers: "Librarian, information specialist, archivist, records manager, knowledge manager.",
+      additionalRequirements:
+        "Life Orientation at level 4 (50-59%). Another language at level 4 (50-59%).",
+      careers:
+        "Librarian, information specialist, archivist, records manager, knowledge manager.",
     },
     {
       id: "ufh-bmusic",
@@ -501,12 +612,17 @@ export class UFH extends BaseUniversity {
       studyMode: "Full-time",
       location: "Alice Campus",
       subjectRequirements: {
-        "English Home Language": 4,
-        "English First Additional Language": 4,
+        Language: {
+          alternatives: [
+            { subject: "English Home Language", level: 4 },
+            { subject: "English First Additional Language", level: 4 },
+          ],
+        },
       },
       additionalRequirements:
         "Life Orientation at level 4 (50-59%). Another language at level 4 (50-59%). Audition and music theory test required.",
-      careers: "Musician, music teacher, composer, music producer, sound engineer, music therapist.",
+      careers:
+        "Musician, music teacher, composer, music producer, sound engineer, music therapist.",
     },
     {
       id: "ufh-bsocsc",
@@ -517,11 +633,17 @@ export class UFH extends BaseUniversity {
       studyMode: "Full-time",
       location: "Alice Campus, East London Campus",
       subjectRequirements: {
-        "English Home Language": 4,
-        "English First Additional Language": 4,
+        Language: {
+          alternatives: [
+            { subject: "English Home Language", level: 4 },
+            { subject: "English First Additional Language", level: 4 },
+          ],
+        },
       },
-      additionalRequirements: "Life Orientation at level 4 (50-59%). Another language at level 4 (50-59%).",
-      careers: "Social researcher, policy analyst, development worker, community development practitioner.",
+      additionalRequirements:
+        "Life Orientation at level 4 (50-59%). Another language at level 4 (50-59%).",
+      careers:
+        "Social researcher, policy analyst, development worker, community development practitioner.",
     },
     {
       id: "ufh-bsocsc-extended",
@@ -532,11 +654,17 @@ export class UFH extends BaseUniversity {
       studyMode: "Full-time",
       location: "Alice Campus, East London Campus",
       subjectRequirements: {
-        "English Home Language": 4,
-        "English First Additional Language": 4,
+        Language: {
+          alternatives: [
+            { subject: "English Home Language", level: 4 },
+            { subject: "English First Additional Language", level: 4 },
+          ],
+        },
       },
-      additionalRequirements: "Life Orientation at level 4 (50-59%). Another language at level 4 (50-59%).",
-      careers: "Social researcher, policy analyst, development worker, community development practitioner.",
+      additionalRequirements:
+        "Life Orientation at level 4 (50-59%). Another language at level 4 (50-59%).",
+      careers:
+        "Social researcher, policy analyst, development worker, community development practitioner.",
     },
     {
       id: "ufh-bsocsc-communication",
@@ -547,10 +675,15 @@ export class UFH extends BaseUniversity {
       studyMode: "Full-time",
       location: "East London Campus",
       subjectRequirements: {
-        "English Home Language": 4,
-        "English First Additional Language": 4,
+        Language: {
+          alternatives: [
+            { subject: "English Home Language", level: 4 },
+            { subject: "English First Additional Language", level: 4 },
+          ],
+        },
       },
-      additionalRequirements: "Life Orientation at level 4 (50-59%). Another language at level 4 (50-59%).",
+      additionalRequirements:
+        "Life Orientation at level 4 (50-59%). Another language at level 4 (50-59%).",
       careers:
         "Communications specialist, media liaison officer, public relations practitioner, journalist, content creator.",
     },
@@ -563,11 +696,17 @@ export class UFH extends BaseUniversity {
       studyMode: "Full-time",
       location: "Alice Campus",
       subjectRequirements: {
-        "English Home Language": 4,
-        "English First Additional Language": 4,
+        Language: {
+          alternatives: [
+            { subject: "English Home Language", level: 4 },
+            { subject: "English First Additional Language", level: 4 },
+          ],
+        },
       },
-      additionalRequirements: "Life Orientation at level 4 (50-59%). Another language at level 4 (50-59%).",
-      careers: "Human settlements practitioner, housing policy analyst, urban planner, community development worker.",
+      additionalRequirements:
+        "Life Orientation at level 4 (50-59%). Another language at level 4 (50-59%).",
+      careers:
+        "Human settlements practitioner, housing policy analyst, urban planner, community development worker.",
     },
     {
       id: "ufh-bsw",
@@ -578,11 +717,17 @@ export class UFH extends BaseUniversity {
       studyMode: "Full-time",
       location: "Alice Campus, East London Campus",
       subjectRequirements: {
-        "English Home Language": 4,
-        "English First Additional Language": 4,
+        Language: {
+          alternatives: [
+            { subject: "English Home Language", level: 4 },
+            { subject: "English First Additional Language", level: 4 },
+          ],
+        },
       },
-      additionalRequirements: "Life Orientation at level 4 (50-59%). Another language at level 4 (50-59%).",
-      careers: "Social worker, community development worker, counselor, case manager, child welfare specialist.",
+      additionalRequirements:
+        "Life Orientation at level 4 (50-59%). Another language at level 4 (50-59%).",
+      careers:
+        "Social worker, community development worker, counselor, case manager, child welfare specialist.",
     },
     {
       id: "ufh-bth",
@@ -593,11 +738,17 @@ export class UFH extends BaseUniversity {
       studyMode: "Full-time",
       location: "Alice Campus",
       subjectRequirements: {
-        "English Home Language": 4,
-        "English First Additional Language": 4,
+        Language: {
+          alternatives: [
+            { subject: "English Home Language", level: 4 },
+            { subject: "English First Additional Language", level: 4 },
+          ],
+        },
       },
-      additionalRequirements: "Life Orientation at level 4 (50-59%). Another language at level 4 (50-59%).",
-      careers: "Minister of religion, pastoral counselor, religious educator, chaplain, religious studies researcher.",
+      additionalRequirements:
+        "Life Orientation at level 4 (50-59%). Another language at level 4 (50-59%).",
+      careers:
+        "Minister of religion, pastoral counselor, religious educator, chaplain, religious studies researcher.",
     },
 
     // FACULTY OF SCIENCE AND AGRICULTURE
@@ -610,14 +761,19 @@ export class UFH extends BaseUniversity {
       studyMode: "Full-time",
       location: "Alice Campus",
       subjectRequirements: {
-        "English Home Language": 4,
-        "English First Additional Language": 4,
+        Language: {
+          alternatives: [
+            { subject: "English Home Language", level: 4 },
+            { subject: "English First Additional Language", level: 4 },
+          ],
+        },
         Mathematics: 4,
         "Physical Sciences": 4,
       },
       additionalRequirements:
         "Life Orientation at level 4 (50-59%). One of Life Sciences, Geography, Agriculture or Information Technology at level 4.",
-      careers: "Scientist, researcher, laboratory technician, environmental consultant, data analyst.",
+      careers:
+        "Scientist, researcher, laboratory technician, environmental consultant, data analyst.",
     },
     {
       id: "ufh-bsc-extended",
@@ -628,14 +784,19 @@ export class UFH extends BaseUniversity {
       studyMode: "Full-time",
       location: "Alice Campus",
       subjectRequirements: {
-        "English Home Language": 4,
-        "English First Additional Language": 4,
+        Language: {
+          alternatives: [
+            { subject: "English Home Language", level: 4 },
+            { subject: "English First Additional Language", level: 4 },
+          ],
+        },
         Mathematics: 3,
         "Physical Sciences": 3,
       },
       additionalRequirements:
         "Life Orientation at level 4 (50-59%). Level 3 in either Mathematics or Physical Science, but the other must be at Level 4. One of Life Sciences, Geography, Agriculture or Information Technology at level 4.",
-      careers: "Scientist, researcher, laboratory technician, environmental consultant, data analyst.",
+      careers:
+        "Scientist, researcher, laboratory technician, environmental consultant, data analyst.",
     },
     {
       id: "ufh-bsc-agric-soil-science",
@@ -646,8 +807,12 @@ export class UFH extends BaseUniversity {
       studyMode: "Full-time",
       location: "Alice Campus",
       subjectRequirements: {
-        "English Home Language": 4,
-        "English First Additional Language": 4,
+        Language: {
+          alternatives: [
+            { subject: "English Home Language", level: 4 },
+            { subject: "English First Additional Language", level: 4 },
+          ],
+        },
         Mathematics: 4,
         "Physical Sciences": 4,
       },
@@ -665,14 +830,19 @@ export class UFH extends BaseUniversity {
       studyMode: "Full-time",
       location: "Alice Campus",
       subjectRequirements: {
-        "English Home Language": 4,
-        "English First Additional Language": 4,
+        Language: {
+          alternatives: [
+            { subject: "English Home Language", level: 4 },
+            { subject: "English First Additional Language", level: 4 },
+          ],
+        },
         Mathematics: 4,
         "Physical Sciences": 4,
       },
       additionalRequirements:
         "Life Orientation at level 4 (50-59%). One of Life Sciences, Geography, Agriculture or Information Technology at level 4.",
-      careers: "Horticulturist, plant breeder, nursery manager, landscape designer, agricultural consultant.",
+      careers:
+        "Horticulturist, plant breeder, nursery manager, landscape designer, agricultural consultant.",
     },
     {
       id: "ufh-bsc-agric-crops",
@@ -683,14 +853,19 @@ export class UFH extends BaseUniversity {
       studyMode: "Full-time",
       location: "Alice Campus",
       subjectRequirements: {
-        "English Home Language": 4,
-        "English First Additional Language": 4,
+        Language: {
+          alternatives: [
+            { subject: "English Home Language", level: 4 },
+            { subject: "English First Additional Language", level: 4 },
+          ],
+        },
         Mathematics: 4,
         "Physical Sciences": 4,
       },
       additionalRequirements:
         "Life Orientation at level 4 (50-59%). One of Life Sciences, Geography, Agriculture or Information Technology at level 4.",
-      careers: "Crop scientist, agronomist, plant breeder, agricultural researcher, farm manager.",
+      careers:
+        "Crop scientist, agronomist, plant breeder, agricultural researcher, farm manager.",
     },
     {
       id: "ufh-bsc-agric-animal-production",
@@ -701,8 +876,12 @@ export class UFH extends BaseUniversity {
       studyMode: "Full-time",
       location: "Alice Campus",
       subjectRequirements: {
-        "English Home Language": 4,
-        "English First Additional Language": 4,
+        Language: {
+          alternatives: [
+            { subject: "English Home Language", level: 4 },
+            { subject: "English First Additional Language", level: 4 },
+          ],
+        },
         Mathematics: 4,
         "Physical Sciences": 4,
       },
@@ -720,14 +899,19 @@ export class UFH extends BaseUniversity {
       studyMode: "Full-time",
       location: "Alice Campus",
       subjectRequirements: {
-        "English Home Language": 4,
-        "English First Additional Language": 4,
+        Language: {
+          alternatives: [
+            { subject: "English Home Language", level: 4 },
+            { subject: "English First Additional Language", level: 4 },
+          ],
+        },
         Mathematics: 4,
         "Physical Sciences": 4,
       },
       additionalRequirements:
         "Life Orientation at level 4 (50-59%). One of Life Sciences, Geography, Agriculture or Information Technology at level 4.",
-      careers: "Pasture scientist, rangeland manager, agricultural researcher, conservation specialist, farm advisor.",
+      careers:
+        "Pasture scientist, rangeland manager, agricultural researcher, conservation specialist, farm advisor.",
     },
     {
       id: "ufh-bsc-agric-agricultural-economics",
@@ -738,8 +922,12 @@ export class UFH extends BaseUniversity {
       studyMode: "Full-time",
       location: "Alice Campus",
       subjectRequirements: {
-        "English Home Language": 4,
-        "English First Additional Language": 4,
+        Language: {
+          alternatives: [
+            { subject: "English Home Language", level: 4 },
+            { subject: "English First Additional Language", level: 4 },
+          ],
+        },
         Mathematics: 4,
         "Life Sciences": 4,
       },
@@ -757,14 +945,19 @@ export class UFH extends BaseUniversity {
       studyMode: "Full-time",
       location: "Alice Campus",
       subjectRequirements: {
-        "English Home Language": 4,
-        "English First Additional Language": 4,
+        Language: {
+          alternatives: [
+            { subject: "English Home Language", level: 4 },
+            { subject: "English First Additional Language", level: 4 },
+          ],
+        },
         Mathematics: 4,
         Agriculture: 4,
       },
       additionalRequirements:
         "Life Orientation at level 4 (50-59%). With Mathematical Literacy at level 5 (60-69%), minimum APS is 29.",
-      careers: "Farm manager, agricultural extension officer, agricultural technician, agribusiness manager.",
+      careers:
+        "Farm manager, agricultural extension officer, agricultural technician, agribusiness manager.",
     },
     {
       id: "ufh-bagric-agricultural-extension",
@@ -775,8 +968,12 @@ export class UFH extends BaseUniversity {
       studyMode: "Full-time",
       location: "Alice Campus",
       subjectRequirements: {
-        "English Home Language": 4,
-        "English First Additional Language": 4,
+        Language: {
+          alternatives: [
+            { subject: "English Home Language", level: 4 },
+            { subject: "English First Additional Language", level: 4 },
+          ],
+        },
         Mathematics: 4,
         Agriculture: 4,
       },
@@ -785,7 +982,7 @@ export class UFH extends BaseUniversity {
       careers:
         "Agricultural extension officer, rural development specialist, agricultural trainer, community development worker.",
     },
-  ]
+  ];
 
   /**
    * UFH-specific APS calculation
@@ -794,28 +991,28 @@ export class UFH extends BaseUniversity {
    * - Standard 7-point NSC scale
    */
   calculateApsScore(subjects: Record<string, number>): number {
-    const subjectScores: number[] = []
-    
+    const subjectScores: number[] = [];
+
     for (const [subjectName, percentage] of Object.entries(subjects)) {
-      if (subjectName.toLowerCase().includes('life orientation')) {
-        continue
+      if (subjectName.toLowerCase().includes("life orientation")) {
+        continue;
       }
-      
-      let points = 0
-      if (percentage >= 80) points = 7
-      else if (percentage >= 70) points = 6
-      else if (percentage >= 60) points = 5
-      else if (percentage >= 50) points = 4
-      else if (percentage >= 40) points = 3
-      else if (percentage >= 30) points = 2
-      else if (percentage >= 0) points = 1
-      
-      subjectScores.push(points)
+
+      let points = 0;
+      if (percentage >= 80) points = 7;
+      else if (percentage >= 70) points = 6;
+      else if (percentage >= 60) points = 5;
+      else if (percentage >= 50) points = 4;
+      else if (percentage >= 40) points = 3;
+      else if (percentage >= 30) points = 2;
+      else if (percentage >= 0) points = 1;
+
+      subjectScores.push(points);
     }
-    
-    subjectScores.sort((a, b) => b - a)
-    const top6 = subjectScores.slice(0, 6)
-    
-    return top6.reduce((sum, score) => sum + score, 0)
+
+    subjectScores.sort((a, b) => b - a);
+    const top6 = subjectScores.slice(0, 6);
+
+    return top6.reduce((sum, score) => sum + score, 0);
   }
 }

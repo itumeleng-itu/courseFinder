@@ -1,15 +1,15 @@
-import { BaseUniversity } from "./base-university"
-import type { Course } from "@/lib/types"
+import { BaseUniversity } from "./base-university";
+import type { Course } from "@/lib/types";
 
 /**
  * North-West University (NWU) class
  */
 export class NWU extends BaseUniversity {
-  readonly id = "nwu"
-  readonly name = "North-West University"
-  readonly shortName = "NWU"
-  readonly website = "https://www.nwu.ac.za"
-  readonly logo = "/logos/nwu.png"
+  readonly id = "nwu";
+  readonly name = "North-West University";
+  readonly shortName = "NWU";
+  readonly website = "https://www.nwu.ac.za";
+  readonly logo = "/logos/nwu.png";
   readonly location = {
     city: "Potchefstroom",
     province: "North West",
@@ -17,7 +17,7 @@ export class NWU extends BaseUniversity {
       latitude: -26.6819,
       longitude: 27.0949,
     },
-  }
+  };
 
   readonly campuses = [
     {
@@ -44,7 +44,7 @@ export class NWU extends BaseUniversity {
         province: "Gauteng",
       },
     },
-  ]
+  ];
 
   readonly apsCalculationMethod = `
     The Admission Point Score (APS) is calculated using six subjects, excluding Life Orientation.
@@ -59,7 +59,7 @@ export class NWU extends BaseUniversity {
     40-49%: 3 points
     30-39%: 2 points
     0-29%: 1 point
-  `
+  `;
 
   readonly internationalRequirements = `
     International students need to calculate their APS based on their qualification:
@@ -74,7 +74,7 @@ export class NWU extends BaseUniversity {
     - SL (Standard Level): 7 = 7 points, 6 = 6 points, 5 = 5 points, etc.
     
     Calculate APS based on six subjects, using the highest level passed in each subject.
-  `
+  `;
 
   readonly financialAid = `
     NWU offers various bursaries and financial aid options:
@@ -88,7 +88,7 @@ export class NWU extends BaseUniversity {
     - Sports Bursary: For students with provincial colors or contracted sports students
     
     External bursaries and NSFAS funding are also available.
-  `
+  `;
 
   readonly accommodationInfo = `
     NWU offers on-campus residences and day-houses (off-campus options).
@@ -99,7 +99,7 @@ export class NWU extends BaseUniversity {
     - Convenient access to dining halls and campus facilities
     
     Each residence has its own unique experiences and sense of belonging.
-  `
+  `;
 
   protected readonly _courses: Course[] = [
     // FACULTY OF ENGINEERING
@@ -113,8 +113,12 @@ export class NWU extends BaseUniversity {
       subjectRequirements: {
         Mathematics: 7,
         "Physical Sciences": 7,
-        "English Home Language": 6,
-        "English First Additional Language": 6,
+        Language: {
+          alternatives: [
+            { subject: "English Home Language", level: 6 },
+            { subject: "English First Additional Language", level: 6 },
+          ],
+        },
         "Afrikaans Home Language": 6,
         "Afrikaans First Additional Language": 6,
       },
@@ -133,8 +137,12 @@ export class NWU extends BaseUniversity {
       subjectRequirements: {
         Mathematics: 7,
         "Physical Sciences": 7,
-        "English Home Language": 6,
-        "English First Additional Language": 6,
+        Language: {
+          alternatives: [
+            { subject: "English Home Language", level: 6 },
+            { subject: "English First Additional Language", level: 6 },
+          ],
+        },
         "Afrikaans Home Language": 6,
         "Afrikaans First Additional Language": 6,
       },
@@ -153,8 +161,12 @@ export class NWU extends BaseUniversity {
       subjectRequirements: {
         Mathematics: 7,
         "Physical Sciences": 7,
-        "English Home Language": 6,
-        "English First Additional Language": 6,
+        Language: {
+          alternatives: [
+            { subject: "English Home Language", level: 6 },
+            { subject: "English First Additional Language", level: 6 },
+          ],
+        },
         "Afrikaans Home Language": 6,
         "Afrikaans First Additional Language": 6,
       },
@@ -173,8 +185,12 @@ export class NWU extends BaseUniversity {
       subjectRequirements: {
         Mathematics: 7,
         "Physical Sciences": 7,
-        "English Home Language": 6,
-        "English First Additional Language": 6,
+        Language: {
+          alternatives: [
+            { subject: "English Home Language", level: 6 },
+            { subject: "English First Additional Language", level: 6 },
+          ],
+        },
         "Afrikaans Home Language": 6,
         "Afrikaans First Additional Language": 6,
       },
@@ -193,8 +209,12 @@ export class NWU extends BaseUniversity {
       subjectRequirements: {
         Mathematics: 7,
         "Physical Sciences": 7,
-        "English Home Language": 6,
-        "English First Additional Language": 6,
+        Language: {
+          alternatives: [
+            { subject: "English Home Language", level: 6 },
+            { subject: "English First Additional Language", level: 6 },
+          ],
+        },
         "Afrikaans Home Language": 6,
         "Afrikaans First Additional Language": 6,
       },
@@ -213,8 +233,12 @@ export class NWU extends BaseUniversity {
       subjectRequirements: {
         Mathematics: 7,
         "Physical Sciences": 7,
-        "English Home Language": 6,
-        "English First Additional Language": 6,
+        Language: {
+          alternatives: [
+            { subject: "English Home Language", level: 6 },
+            { subject: "English First Additional Language", level: 6 },
+          ],
+        },
         "Afrikaans Home Language": 6,
         "Afrikaans First Additional Language": 6,
       },
@@ -233,8 +257,12 @@ export class NWU extends BaseUniversity {
       subjectRequirements: {
         Mathematics: 7,
         "Physical Sciences": 7,
-        "English Home Language": 6,
-        "English First Additional Language": 6,
+        Language: {
+          alternatives: [
+            { subject: "English Home Language", level: 6 },
+            { subject: "English First Additional Language", level: 6 },
+          ],
+        },
         "Afrikaans Home Language": 6,
         "Afrikaans First Additional Language": 6,
       },
@@ -256,7 +284,8 @@ export class NWU extends BaseUniversity {
         "Home Language": 5,
         "First Additional Language": 5,
       },
-      additionalRequirements: "Selection process applies. Academic performance is important. Limited capacity.",
+      additionalRequirements:
+        "Selection process applies. Academic performance is important. Limited capacity.",
     },
     {
       id: "nwu-ba-law-politics",
@@ -269,7 +298,8 @@ export class NWU extends BaseUniversity {
         "Home Language": 5,
         "First Additional Language": 5,
       },
-      additionalRequirements: "Selection process applies. Academic performance is important. Limited capacity.",
+      additionalRequirements:
+        "Selection process applies. Academic performance is important. Limited capacity.",
     },
     {
       id: "nwu-ba-law-industrial-psychology",
@@ -282,7 +312,8 @@ export class NWU extends BaseUniversity {
         "Home Language": 5,
         "First Additional Language": 5,
       },
-      additionalRequirements: "Selection process applies. Academic performance is important. Limited capacity.",
+      additionalRequirements:
+        "Selection process applies. Academic performance is important. Limited capacity.",
     },
     {
       id: "nwu-bcom-law",
@@ -296,7 +327,8 @@ export class NWU extends BaseUniversity {
         "First Additional Language": 5,
         Mathematics: 4,
       },
-      additionalRequirements: "Selection process applies. Academic performance is important. Limited capacity.",
+      additionalRequirements:
+        "Selection process applies. Academic performance is important. Limited capacity.",
     },
     {
       id: "nwu-llb",
@@ -309,7 +341,8 @@ export class NWU extends BaseUniversity {
         "Home Language": 5,
         "First Additional Language": 5,
       },
-      additionalRequirements: "Selection process applies. Academic performance is important. Limited capacity.",
+      additionalRequirements:
+        "Selection process applies. Academic performance is important. Limited capacity.",
     },
     {
       id: "nwu-llb-extended",
@@ -321,10 +354,15 @@ export class NWU extends BaseUniversity {
       subjectRequirements: {
         "Home Language": 4,
         "First Additional Language": 4,
-        Mathematics: 3,
-        "Mathematical Literacy": 5,
+        Math: {
+          alternatives: [
+            { subject: "Mathematics", level: 3 },
+            { subject: "Mathematical Literacy", level: 5 },
+          ],
+        },
       },
-      additionalRequirements: "Selection process applies. Academic performance is important. Limited capacity.",
+      additionalRequirements:
+        "Selection process applies. Academic performance is important. Limited capacity.",
       notes:
         "Language of instruction is English. Additional support will be provided to students in a form of peer mentoring, tutorials, and supplementary instruction in all official languages of NWU.",
     },
@@ -435,7 +473,8 @@ export class NWU extends BaseUniversity {
       subjectRequirements: {
         Mathematics: 5,
       },
-      additionalRequirements: "Mathematics level 6 (70-79%) if the student did not take Grade 12 Accounting",
+      additionalRequirements:
+        "Mathematics level 6 (70-79%) if the student did not take Grade 12 Accounting",
     },
     {
       id: "nwu-bcom-financial-accountancy",
@@ -460,7 +499,8 @@ export class NWU extends BaseUniversity {
         Afrikaans: 5,
         English: 5,
       },
-      additionalRequirements: "Mathematics level 6 (70-79%) if the student did not take Grade 12 Accounting",
+      additionalRequirements:
+        "Mathematics level 6 (70-79%) if the student did not take Grade 12 Accounting",
     },
     {
       id: "nwu-bcom-management-accountancy",
@@ -509,8 +549,10 @@ export class NWU extends BaseUniversity {
         "Physical Sciences": 5,
         "Language of Tuition": 4,
       },
-      additionalRequirements: "Life Sciences is recommended. Academic paper selection. Best average mark.",
-      notes: "Late applications will be considered on merit, depending on capacity.",
+      additionalRequirements:
+        "Life Sciences is recommended. Academic paper selection. Best average mark.",
+      notes:
+        "Late applications will be considered on merit, depending on capacity.",
     },
     {
       id: "nwu-bsc-dietetics",
@@ -539,8 +581,10 @@ export class NWU extends BaseUniversity {
         "Life Sciences": 4,
         "Language of Tuition": 4,
       },
-      additionalRequirements: "Participation in the 'job shadowing programme' (40 hours) is recommended.",
-      notes: "Due to high volumes of applications and limited capacity, a selection process will be followed.",
+      additionalRequirements:
+        "Participation in the 'job shadowing programme' (40 hours) is recommended.",
+      notes:
+        "Due to high volumes of applications and limited capacity, a selection process will be followed.",
     },
     {
       id: "nwu-bsocial-work",
@@ -634,8 +678,12 @@ export class NWU extends BaseUniversity {
       duration: "3 years",
       campus: "Mahikeng, Potchefstroom, Vanderbijlpark",
       subjectRequirements: {
-        "English Home Language": 5,
-        "English First Additional Language": 5,
+        Language: {
+          alternatives: [
+            { subject: "English Home Language", level: 5 },
+            { subject: "English First Additional Language", level: 5 },
+          ],
+        },
       },
     },
     {
@@ -697,7 +745,8 @@ export class NWU extends BaseUniversity {
       subjectRequirements: {
         English: 4,
       },
-      notes: "In consultation with Association of Christian Religious Practitioners (ACRP)",
+      notes:
+        "In consultation with Association of Christian Religious Practitioners (ACRP)",
     },
     {
       id: "nwu-bdiv",
@@ -709,9 +758,10 @@ export class NWU extends BaseUniversity {
       subjectRequirements: {
         English: 4,
       },
-      notes: "In consultation with Curators of Reformed Churches in SA, Hervormde Kerk, and Dutch Reformed Church",
+      notes:
+        "In consultation with Curators of Reformed Churches in SA, Hervormde Kerk, and Dutch Reformed Church",
     },
-  ]
+  ];
 
   /**
    * NWU-specific APS calculation
@@ -720,28 +770,28 @@ export class NWU extends BaseUniversity {
    * - Standard 7-point NSC scale
    */
   calculateApsScore(subjects: Record<string, number>): number {
-    const subjectScores: number[] = []
-    
+    const subjectScores: number[] = [];
+
     for (const [subjectName, percentage] of Object.entries(subjects)) {
-      if (subjectName.toLowerCase().includes('life orientation')) {
-        continue
+      if (subjectName.toLowerCase().includes("life orientation")) {
+        continue;
       }
-      
-      let points = 0
-      if (percentage >= 80) points = 7
-      else if (percentage >= 70) points = 6
-      else if (percentage >= 60) points = 5
-      else if (percentage >= 50) points = 4
-      else if (percentage >= 40) points = 3
-      else if (percentage >= 30) points = 2
-      else if (percentage >= 0) points = 1
-      
-      subjectScores.push(points)
+
+      let points = 0;
+      if (percentage >= 80) points = 7;
+      else if (percentage >= 70) points = 6;
+      else if (percentage >= 60) points = 5;
+      else if (percentage >= 50) points = 4;
+      else if (percentage >= 40) points = 3;
+      else if (percentage >= 30) points = 2;
+      else if (percentage >= 0) points = 1;
+
+      subjectScores.push(points);
     }
-    
-    subjectScores.sort((a, b) => b - a)
-    const top6 = subjectScores.slice(0, 6)
-    
-    return top6.reduce((sum, score) => sum + score, 0)
+
+    subjectScores.sort((a, b) => b - a);
+    const top6 = subjectScores.slice(0, 6);
+
+    return top6.reduce((sum, score) => sum + score, 0);
   }
 }

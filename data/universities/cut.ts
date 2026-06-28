@@ -1,15 +1,15 @@
-import { BaseUniversity } from "./base-university"
-import type { Course } from "@/lib/types"
+import { BaseUniversity } from "./base-university";
+import type { Course } from "@/lib/types";
 
 /**
  * Central University of Technology (CUT) class
  */
 export class CUT extends BaseUniversity {
-  readonly id = "cut"
-  readonly name = "Central University of Technology"
-  readonly shortName = "CUT"
-  readonly website = "https://www.cut.ac.za"
-  readonly logo = "/logos/cut.png"
+  readonly id = "cut";
+  readonly name = "Central University of Technology";
+  readonly shortName = "CUT";
+  readonly website = "https://www.cut.ac.za";
+  readonly logo = "/logos/cut.png";
   readonly location = {
     city: "Bloemfontein",
     province: "Free State",
@@ -17,7 +17,7 @@ export class CUT extends BaseUniversity {
       latitude: -29.1188,
       longitude: 26.2147,
     },
-  }
+  };
 
   readonly campuses = [
     {
@@ -30,13 +30,13 @@ export class CUT extends BaseUniversity {
       address: "Welkom, Free State",
       telephone: "+27 (0) 57 910 3500",
     },
-  ]
+  ];
 
   readonly apsCalculationInfo = `
     • Only seven (7) subjects can be used to calculate the student's APS
     • English, Mathematics, Science and Life Orientation are compulsory
     • Life Orientation is counted as 1 point
-  `
+  `;
 
   protected readonly _courses: Course[] = [
     // Faculty of Health & Environmental Science
@@ -148,8 +148,12 @@ export class CUT extends BaseUniversity {
       duration: "1 year",
       campus: "Bloemfontein",
       subjectRequirements: {
-        Mathematics: 3,
-        "Mathematical Literacy": 6,
+        Math: {
+          alternatives: [
+            { subject: "Mathematics", level: 3 },
+            { subject: "Mathematical Literacy", level: 6 },
+          ],
+        },
         "Information Technology": 5,
         English: 5,
       },
@@ -251,8 +255,12 @@ export class CUT extends BaseUniversity {
       duration: "1 year",
       campus: "Bloemfontein",
       subjectRequirements: {
-        Mathematics: 3,
-        "Mathematical Literacy": 6,
+        Math: {
+          alternatives: [
+            { subject: "Mathematics", level: 3 },
+            { subject: "Mathematical Literacy", level: 6 },
+          ],
+        },
         English: 4,
       },
       careers: ["Construction Technician"],
@@ -355,7 +363,11 @@ export class CUT extends BaseUniversity {
         English: 5,
       },
       additionalRequirements: "Mathematical Literacy will NOT be accepted",
-      careers: ["Technologist", "Engineer in Mechanical Engineering", "Project Engineer"],
+      careers: [
+        "Technologist",
+        "Engineer in Mechanical Engineering",
+        "Project Engineer",
+      ],
       notes:
         "Career opportunities in maintenance in mining, steel production, petrochemical, manufacturing and power generation, develop, design and testing of mechanical devices. Potential employers include Columbus Stainless Steel, Arcelor Mittal, Sasol, PetroSA, Ford, Nissan, Toyota, Denel, BHP Billiton, Anglo American",
     },
@@ -399,12 +411,17 @@ export class CUT extends BaseUniversity {
       duration: "1 year",
       campus: ["Bloemfontein", "Welkom"],
       subjectRequirements: {
-        Mathematics: 4,
-        "Mathematical Literacy": 6,
+        Math: {
+          alternatives: [
+            { subject: "Mathematics", level: 4 },
+            { subject: "Mathematical Literacy", level: 6 },
+          ],
+        },
         English: 4,
       },
       careers: ["IT Support Technician"],
-      notes: "After completion, students may continue on to engineering and other STEM-related programmes",
+      notes:
+        "After completion, students may continue on to engineering and other STEM-related programmes",
     },
     {
       id: "cut-computer-networking",
@@ -414,8 +431,12 @@ export class CUT extends BaseUniversity {
       duration: "3 years",
       campus: "Bloemfontein",
       subjectRequirements: {
-        Mathematics: 4,
-        "Mathematical Literacy": 6,
+        Math: {
+          alternatives: [
+            { subject: "Mathematics", level: 4 },
+            { subject: "Mathematical Literacy", level: 6 },
+          ],
+        },
         English: 4,
       },
       careers: [
@@ -424,7 +445,8 @@ export class CUT extends BaseUniversity {
         "IT Network Infrastructure Analyst/Developer/Manager",
         "IT Network Project Leader",
       ],
-      notes: "Career opportunities in any company, business, industry, governmental institution with a network",
+      notes:
+        "Career opportunities in any company, business, industry, governmental institution with a network",
     },
     {
       id: "cut-information-technology",
@@ -434,8 +456,12 @@ export class CUT extends BaseUniversity {
       duration: "3 years",
       campus: ["Bloemfontein", "Welkom"],
       subjectRequirements: {
-        Mathematics: 4,
-        "Mathematical Literacy": 6,
+        Math: {
+          alternatives: [
+            { subject: "Mathematics", level: 4 },
+            { subject: "Mathematical Literacy", level: 6 },
+          ],
+        },
         English: 4,
       },
       careers: [
@@ -447,7 +473,8 @@ export class CUT extends BaseUniversity {
         "Database Analyst/Developer/Manager",
         "IT Project Leader",
       ],
-      notes: "Career opportunities in any company, business, industry, governmental institution with IT needs",
+      notes:
+        "Career opportunities in any company, business, industry, governmental institution with IT needs",
     },
     {
       id: "cut-hydrology",
@@ -476,9 +503,10 @@ export class CUT extends BaseUniversity {
       additionalRequirements:
         "Minimum Senior Certificate (SC), National Senior Certificate (NSC) or the National Certificate (Vocational) (NCV) with appropriate subject combinations and levels of achievement",
       careers: ["Access to STEM-related qualifications"],
-      notes: "After completion, students may continue on to engineering and other STEM-related programmes",
+      notes:
+        "After completion, students may continue on to engineering and other STEM-related programmes",
     },
-  ]
+  ];
 
   /**
    * CUT-specific APS calculation
@@ -487,28 +515,28 @@ export class CUT extends BaseUniversity {
    * - Standard 7-point NSC scale
    */
   calculateApsScore(subjects: Record<string, number>): number {
-    const subjectScores: number[] = []
-    
+    const subjectScores: number[] = [];
+
     for (const [subjectName, percentage] of Object.entries(subjects)) {
-      if (subjectName.toLowerCase().includes('life orientation')) {
-        continue
+      if (subjectName.toLowerCase().includes("life orientation")) {
+        continue;
       }
-      
-      let points = 0
-      if (percentage >= 80) points = 7
-      else if (percentage >= 70) points = 6
-      else if (percentage >= 60) points = 5
-      else if (percentage >= 50) points = 4
-      else if (percentage >= 40) points = 3
-      else if (percentage >= 30) points = 2
-      else if (percentage >= 0) points = 1
-      
-      subjectScores.push(points)
+
+      let points = 0;
+      if (percentage >= 80) points = 7;
+      else if (percentage >= 70) points = 6;
+      else if (percentage >= 60) points = 5;
+      else if (percentage >= 50) points = 4;
+      else if (percentage >= 40) points = 3;
+      else if (percentage >= 30) points = 2;
+      else if (percentage >= 0) points = 1;
+
+      subjectScores.push(points);
     }
-    
-    subjectScores.sort((a, b) => b - a)
-    const top6 = subjectScores.slice(0, 6)
-    
-    return top6.reduce((sum, score) => sum + score, 0)
+
+    subjectScores.sort((a, b) => b - a);
+    const top6 = subjectScores.slice(0, 6);
+
+    return top6.reduce((sum, score) => sum + score, 0);
   }
 }

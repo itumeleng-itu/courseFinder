@@ -1,16 +1,16 @@
-import { BaseUniversity } from "./base-university"
-import type { Course } from "@/lib/types"
+import { BaseUniversity } from "./base-university";
+import type { Course } from "@/lib/types";
 
 /**
  * Walter Sisulu University (WSU) class
  * Comprehensive data based on 2026 prospectus
  */
 export class WSU extends BaseUniversity {
-  readonly id = "wsu"
-  readonly name = "Walter Sisulu University"
-  readonly shortName = "WSU"
-  readonly website = "https://www.wsu.ac.za"
-  readonly logo = "/logos/wsu.png"
+  readonly id = "wsu";
+  readonly name = "Walter Sisulu University";
+  readonly shortName = "WSU";
+  readonly website = "https://www.wsu.ac.za";
+  readonly logo = "/logos/wsu.png";
   readonly location = {
     city: "Mthatha",
     province: "Eastern Cape",
@@ -18,7 +18,7 @@ export class WSU extends BaseUniversity {
       latitude: -31.5889,
       longitude: 28.7731,
     },
-  }
+  };
 
   protected readonly _courses: Course[] = [
     // ============================================
@@ -75,10 +75,20 @@ export class WSU extends BaseUniversity {
       campus: "Mthatha",
       subjectRequirements: {
         "English Home": 3,
-        "Mathematics or Accounting": 3,
+        Alternatives: {
+          alternatives: [
+            { subject: "Mathematics", level: 3 },
+            { subject: "Accounting", level: 3 },
+          ],
+        },
       },
       additionalRequirements: ["Mathematics Literacy level 5 acceptable"],
-      careerOpportunities: ["Internal auditor", "Audit technician", "Junior auditor", "Compliance officer"],
+      careerOpportunities: [
+        "Internal auditor",
+        "Audit technician",
+        "Junior auditor",
+        "Compliance officer",
+      ],
     },
     {
       id: "wsu-dip-internal-auditing-ecp",
@@ -90,10 +100,19 @@ export class WSU extends BaseUniversity {
       campus: "Mthatha",
       subjectRequirements: {
         "English Home": 3,
-        "Mathematics or Accounting": 3,
+        Alternatives: {
+          alternatives: [
+            { subject: "Mathematics", level: 3 },
+            { subject: "Accounting", level: 3 },
+          ],
+        },
       },
       additionalRequirements: ["Mathematics Literacy level 4 acceptable"],
-      careerOpportunities: ["Internal auditor", "Audit technician", "Compliance specialist"],
+      careerOpportunities: [
+        "Internal auditor",
+        "Audit technician",
+        "Compliance specialist",
+      ],
     },
     {
       id: "wsu-bacc-accounting",
@@ -128,7 +147,10 @@ export class WSU extends BaseUniversity {
         "English Home": 5,
         Mathematics: 4,
       },
-      additionalRequirements: ["NSC with bachelor endorsement", "Foundation for Chartered Accountant (CA) route"],
+      additionalRequirements: [
+        "NSC with bachelor endorsement",
+        "Foundation for Chartered Accountant (CA) route",
+      ],
       careerOpportunities: [
         "Chartered Accountant (CA)",
         "Registered General Accountant",
@@ -146,10 +168,22 @@ export class WSU extends BaseUniversity {
       campus: "Mthatha",
       subjectRequirements: {
         "English Home": 4,
-        "Mathematics or Mathematics Literacy": 3,
+        Alternatives: {
+          alternatives: [
+            { subject: "Mathematics", level: 3 },
+            { subject: "Mathematics Literacy", level: 3 },
+          ],
+        },
       },
-      additionalRequirements: ["Mathematics Literacy level 5 acceptable for Maths"],
-      careerOpportunities: ["Business manager", "Financial analyst", "Entrepreneur", "Management consultant"],
+      additionalRequirements: [
+        "Mathematics Literacy level 5 acceptable for Maths",
+      ],
+      careerOpportunities: [
+        "Business manager",
+        "Financial analyst",
+        "Entrepreneur",
+        "Management consultant",
+      ],
     },
     {
       id: "wsu-bcom-business-mgmt",
@@ -161,10 +195,22 @@ export class WSU extends BaseUniversity {
       campus: "Mthatha",
       subjectRequirements: {
         "English Home": 4,
-        "Mathematics or Mathematics Literacy": 3,
+        Alternatives: {
+          alternatives: [
+            { subject: "Mathematics", level: 3 },
+            { subject: "Mathematics Literacy", level: 3 },
+          ],
+        },
       },
-      additionalRequirements: ["Mathematics Literacy level 5 acceptable for Maths"],
-      careerOpportunities: ["Business manager", "HR manager", "Operations manager", "Consultant"],
+      additionalRequirements: [
+        "Mathematics Literacy level 5 acceptable for Maths",
+      ],
+      careerOpportunities: [
+        "Business manager",
+        "HR manager",
+        "Operations manager",
+        "Consultant",
+      ],
     },
     {
       id: "wsu-bcom-economics",
@@ -176,10 +222,22 @@ export class WSU extends BaseUniversity {
       campus: "Mthatha",
       subjectRequirements: {
         "English Home": 4,
-        "Mathematics or Mathematics Literacy": 3,
+        Alternatives: {
+          alternatives: [
+            { subject: "Mathematics", level: 3 },
+            { subject: "Mathematics Literacy", level: 3 },
+          ],
+        },
       },
-      additionalRequirements: ["Mathematics Literacy level 6 acceptable for Maths"],
-      careerOpportunities: ["Economist", "Policy analyst", "Financial analyst", "Development specialist"],
+      additionalRequirements: [
+        "Mathematics Literacy level 6 acceptable for Maths",
+      ],
+      careerOpportunities: [
+        "Economist",
+        "Policy analyst",
+        "Financial analyst",
+        "Development specialist",
+      ],
     },
 
     // ============================================
@@ -196,10 +254,18 @@ export class WSU extends BaseUniversity {
       subjectRequirements: {
         "IsiXhosa Home": 4,
         "English First Additional": 4,
-        "Mathematics or Mathematics Literacy": 2,
+        Alternatives: {
+          alternatives: [
+            { subject: "Mathematics", level: 2 },
+            { subject: "Mathematics Literacy", level: 2 },
+          ],
+        },
         "Life Orientation": 5,
       },
-      additionalRequirements: ["Mathematics Literacy level 4 acceptable", "Two additional subjects totalling 8 points"],
+      additionalRequirements: [
+        "Mathematics Literacy level 4 acceptable",
+        "Two additional subjects totalling 8 points",
+      ],
       careerOpportunities: [
         "Foundation Phase teacher",
         "Early childhood development practitioner",
@@ -225,7 +291,12 @@ export class WSU extends BaseUniversity {
         "Three additional subjects totalling 8 points",
         "Music aptitude test if no Music matric",
       ],
-      careerOpportunities: ["History teacher", "Arts teacher", "Education specialist", "Subject advisor"],
+      careerOpportunities: [
+        "History teacher",
+        "Arts teacher",
+        "Education specialist",
+        "Subject advisor",
+      ],
     },
     {
       id: "wsu-bed-sp-fet-creative-arts-english",
@@ -245,7 +316,12 @@ export class WSU extends BaseUniversity {
         "Three additional subjects totalling 7 points",
         "Music aptitude test if no Music matric",
       ],
-      careerOpportunities: ["English teacher", "Arts teacher", "Drama educator", "Creative writing specialist"],
+      careerOpportunities: [
+        "English teacher",
+        "Arts teacher",
+        "Drama educator",
+        "Creative writing specialist",
+      ],
     },
     {
       id: "wsu-bed-sp-fet-consumer-mgmt-science",
@@ -258,10 +334,20 @@ export class WSU extends BaseUniversity {
       subjectRequirements: {
         English: 4,
         "African Language": 4,
-        "Consumer Studies/Hospitality/Tourism": 4,
+        Alternatives: {
+          alternatives: [
+            { subject: "Consumer Studies", level: 4 },
+            { subject: "Hospitality", level: 4 },
+            { subject: "Tourism", level: 4 },
+          ],
+        },
       },
       additionalRequirements: ["Two additional subjects totalling 10 points"],
-      careerOpportunities: ["Consumer science teacher", "Hospitality educator", "Life skills specialist"],
+      careerOpportunities: [
+        "Consumer science teacher",
+        "Hospitality educator",
+        "Life skills specialist",
+      ],
     },
     {
       id: "wsu-bed-sp-fet-economic-mgmt-science",
@@ -274,15 +360,30 @@ export class WSU extends BaseUniversity {
       subjectRequirements: {
         English: 4,
         "African Language": 4,
-        "Mathematics or Mathematics Literacy": 2,
-        "Accounting/Business Studies/Economics": 4,
+        "Mathematics Alternatives": {
+          alternatives: [
+            { subject: "Mathematics", level: 2 },
+            { subject: "Mathematics Literacy", level: 2 },
+          ],
+        },
+        "Commerce Alternatives": {
+          alternatives: [
+            { subject: "Accounting", level: 4 },
+            { subject: "Business Studies", level: 4 },
+            { subject: "Economics", level: 4 },
+          ],
+        },
       },
       additionalRequirements: [
         "Two of above subjects at level 4",
         "Mathematics Literacy level 4 acceptable",
         "Two additional subjects totalling 6 points",
       ],
-      careerOpportunities: ["Economics teacher", "Business studies teacher", "Accounting educator"],
+      careerOpportunities: [
+        "Economics teacher",
+        "Business studies teacher",
+        "Accounting educator",
+      ],
     },
     {
       id: "wsu-bed-sp-fet-humanities",
@@ -318,8 +419,15 @@ export class WSU extends BaseUniversity {
         English: 5,
         IsiXhosa: 4,
       },
-      additionalRequirements: ["Two other subjects at level 4", "Three additional subjects totalling 7 points"],
-      careerOpportunities: ["Language teacher", "Linguistics specialist", "Education advisor"],
+      additionalRequirements: [
+        "Two other subjects at level 4",
+        "Three additional subjects totalling 7 points",
+      ],
+      careerOpportunities: [
+        "Language teacher",
+        "Linguistics specialist",
+        "Education advisor",
+      ],
     },
     {
       id: "wsu-bed-sp-fet-maths-science-tech",
@@ -333,10 +441,20 @@ export class WSU extends BaseUniversity {
         English: 4,
         "African Language": 4,
         Mathematics: 4,
-        "Life Sciences or Physical Sciences": 4,
+        Alternatives: {
+          alternatives: [
+            { subject: "Life Sciences", level: 4 },
+            { subject: "Physical Sciences", level: 4 },
+          ],
+        },
       },
       additionalRequirements: ["Two additional subjects totalling 8 points"],
-      careerOpportunities: ["Mathematics teacher", "Science teacher", "Technology educator", "STEM specialist"],
+      careerOpportunities: [
+        "Mathematics teacher",
+        "Science teacher",
+        "Technology educator",
+        "STEM specialist",
+      ],
     },
     {
       id: "wsu-bed-sp-fet-technical-vocational",
@@ -351,8 +469,15 @@ export class WSU extends BaseUniversity {
         "African Language": 4,
         "Technical Subjects": 4,
       },
-      additionalRequirements: ["Two technical subjects at level 4", "Two additional subjects totalling 8 points"],
-      careerOpportunities: ["Technical education teacher", "Vocational training educator", "Curriculum developer"],
+      additionalRequirements: [
+        "Two technical subjects at level 4",
+        "Two additional subjects totalling 8 points",
+      ],
+      careerOpportunities: [
+        "Technical education teacher",
+        "Vocational training educator",
+        "Curriculum developer",
+      ],
     },
 
     // ============================================
@@ -368,11 +493,26 @@ export class WSU extends BaseUniversity {
       campus: "Buffalo City / Butterworth",
       subjectRequirements: {
         English: 4,
-        "Mathematics or Technical Mathematics": 4,
-        "Physical Science or Technical Science": 3,
+        "Mathematics Alternatives": {
+          alternatives: [
+            { subject: "Mathematics", level: 4 },
+            { subject: "Technical Mathematics", level: 4 },
+          ],
+        },
+        "Science Alternatives": {
+          alternatives: [
+            { subject: "Physical Science", level: 3 },
+            { subject: "Technical Science", level: 3 },
+          ],
+        },
       },
       additionalRequirements: ["NSC with diploma endorsement"],
-      careerOpportunities: ["Building technician", "Quantity surveyor", "Construction supervisor", "Site manager"],
+      careerOpportunities: [
+        "Building technician",
+        "Quantity surveyor",
+        "Construction supervisor",
+        "Site manager",
+      ],
     },
     {
       id: "wsu-dip-building-technology-ecp",
@@ -384,11 +524,25 @@ export class WSU extends BaseUniversity {
       campus: "Buffalo City / Butterworth",
       subjectRequirements: {
         English: 3,
-        "Mathematics or Technical Mathematics": 3,
-        "Physical Science or Technical Science": 3,
+        "Mathematics Alternatives": {
+          alternatives: [
+            { subject: "Mathematics", level: 3 },
+            { subject: "Technical Mathematics", level: 3 },
+          ],
+        },
+        "Science Alternatives": {
+          alternatives: [
+            { subject: "Physical Science", level: 3 },
+            { subject: "Technical Science", level: 3 },
+          ],
+        },
       },
       additionalRequirements: ["One subject one level below requirements"],
-      careerOpportunities: ["Building technician", "Quantity surveyor assistant", "Site coordinator"],
+      careerOpportunities: [
+        "Building technician",
+        "Quantity surveyor assistant",
+        "Site coordinator",
+      ],
     },
     {
       id: "wsu-dip-civil-engineering",
@@ -404,7 +558,12 @@ export class WSU extends BaseUniversity {
         "Physical Sciences": 4,
       },
       additionalRequirements: ["ECSA candidate technician registration"],
-      careerOpportunities: ["Civil technician", "Site engineer", "Design technician", "Project coordinator"],
+      careerOpportunities: [
+        "Civil technician",
+        "Site engineer",
+        "Design technician",
+        "Project coordinator",
+      ],
     },
     {
       id: "wsu-dip-civil-engineering-ecp",
@@ -420,7 +579,11 @@ export class WSU extends BaseUniversity {
         "Physical Sciences": 3,
       },
       additionalRequirements: ["One subject one level below requirements"],
-      careerOpportunities: ["Civil technician", "Site assistant", "Engineering support"],
+      careerOpportunities: [
+        "Civil technician",
+        "Site assistant",
+        "Engineering support",
+      ],
     },
     {
       id: "wsu-dip-electrical-engineering",
@@ -457,7 +620,11 @@ export class WSU extends BaseUniversity {
         "Physical Sciences": 3,
       },
       additionalRequirements: ["One subject one level below requirements"],
-      careerOpportunities: ["Electrical technician", "Support engineer", "Technical assistant"],
+      careerOpportunities: [
+        "Electrical technician",
+        "Support engineer",
+        "Technical assistant",
+      ],
     },
     {
       id: "wsu-dip-mechanical-engineering",
@@ -469,8 +636,18 @@ export class WSU extends BaseUniversity {
       campus: "Buffalo City",
       subjectRequirements: {
         English: 4,
-        "Mathematics or Technical Mathematics": 4,
-        "Physical Science or Technical Science": 4,
+        "Mathematics Alternatives": {
+          alternatives: [
+            { subject: "Mathematics", level: 4 },
+            { subject: "Technical Mathematics", level: 4 },
+          ],
+        },
+        "Science Alternatives": {
+          alternatives: [
+            { subject: "Physical Science", level: 4 },
+            { subject: "Technical Science", level: 4 },
+          ],
+        },
       },
       additionalRequirements: ["ECSA candidate technician registration"],
       careerOpportunities: [
@@ -490,11 +667,25 @@ export class WSU extends BaseUniversity {
       campus: "Buffalo City",
       subjectRequirements: {
         English: 3,
-        "Mathematics or Technical Mathematics": 3,
-        "Physical Science or Technical Science": 3,
+        "Mathematics Alternatives": {
+          alternatives: [
+            { subject: "Mathematics", level: 3 },
+            { subject: "Technical Mathematics", level: 3 },
+          ],
+        },
+        "Science Alternatives": {
+          alternatives: [
+            { subject: "Physical Science", level: 3 },
+            { subject: "Technical Science", level: 3 },
+          ],
+        },
       },
       additionalRequirements: ["One subject one level below requirements"],
-      careerOpportunities: ["Mechanical technician", "Engineering assistant", "Technical support"],
+      careerOpportunities: [
+        "Mechanical technician",
+        "Engineering assistant",
+        "Technical support",
+      ],
     },
     {
       id: "wsu-dip-ict-applications-dev",
@@ -506,10 +697,20 @@ export class WSU extends BaseUniversity {
       campus: "Buffalo City",
       subjectRequirements: {
         English: 4,
-        "Mathematics or Mathematics Literacy": 3,
+        Alternatives: {
+          alternatives: [
+            { subject: "Mathematics", level: 3 },
+            { subject: "Mathematics Literacy", level: 3 },
+          ],
+        },
       },
       additionalRequirements: ["Mathematics Literacy level 5 acceptable"],
-      careerOpportunities: ["Application developer", "Software developer", "Junior programmer", "Web developer"],
+      careerOpportunities: [
+        "Application developer",
+        "Software developer",
+        "Junior programmer",
+        "Web developer",
+      ],
     },
     {
       id: "wsu-dip-ict-applications-dev-ecp",
@@ -521,10 +722,19 @@ export class WSU extends BaseUniversity {
       campus: "Buffalo City",
       subjectRequirements: {
         English: 3,
-        "Mathematics or Mathematics Literacy": 3,
+        Alternatives: {
+          alternatives: [
+            { subject: "Mathematics", level: 3 },
+            { subject: "Mathematics Literacy", level: 3 },
+          ],
+        },
       },
       additionalRequirements: ["One subject one level below requirements"],
-      careerOpportunities: ["Junior developer", "Programmer assistant", "IT technician"],
+      careerOpportunities: [
+        "Junior developer",
+        "Programmer assistant",
+        "IT technician",
+      ],
     },
     {
       id: "wsu-dip-ict-business-analysis",
@@ -536,10 +746,20 @@ export class WSU extends BaseUniversity {
       campus: "Buffalo City",
       subjectRequirements: {
         English: 4,
-        "Mathematics or Mathematics Literacy": 3,
+        Alternatives: {
+          alternatives: [
+            { subject: "Mathematics", level: 3 },
+            { subject: "Mathematics Literacy", level: 3 },
+          ],
+        },
       },
       additionalRequirements: ["Mathematics Literacy level 5 acceptable"],
-      careerOpportunities: ["Business analyst", "Systems analyst", "IT consultant", "Requirements analyst"],
+      careerOpportunities: [
+        "Business analyst",
+        "Systems analyst",
+        "IT consultant",
+        "Requirements analyst",
+      ],
     },
     {
       id: "wsu-dip-ict-business-analysis-ecp",
@@ -551,10 +771,19 @@ export class WSU extends BaseUniversity {
       campus: "Buffalo City",
       subjectRequirements: {
         English: 3,
-        "Mathematics or Mathematics Literacy": 3,
+        Alternatives: {
+          alternatives: [
+            { subject: "Mathematics", level: 3 },
+            { subject: "Mathematics Literacy", level: 3 },
+          ],
+        },
       },
       additionalRequirements: ["One subject one level below requirements"],
-      careerOpportunities: ["Junior business analyst", "Systems support", "IT support analyst"],
+      careerOpportunities: [
+        "Junior business analyst",
+        "Systems support",
+        "IT support analyst",
+      ],
     },
     {
       id: "wsu-dip-ict-comm-networks",
@@ -566,7 +795,12 @@ export class WSU extends BaseUniversity {
       campus: "Buffalo City",
       subjectRequirements: {
         English: 4,
-        "Mathematics or Mathematics Literacy": 3,
+        Alternatives: {
+          alternatives: [
+            { subject: "Mathematics", level: 3 },
+            { subject: "Mathematics Literacy", level: 3 },
+          ],
+        },
       },
       additionalRequirements: ["Mathematics Literacy level 5 acceptable"],
       careerOpportunities: [
@@ -586,10 +820,19 @@ export class WSU extends BaseUniversity {
       campus: "Buffalo City",
       subjectRequirements: {
         English: 3,
-        "Mathematics or Mathematics Literacy": 3,
+        Alternatives: {
+          alternatives: [
+            { subject: "Mathematics", level: 3 },
+            { subject: "Mathematics Literacy", level: 3 },
+          ],
+        },
       },
       additionalRequirements: ["One subject one level below requirements"],
-      careerOpportunities: ["Network support", "IT technician", "Tech support assistant"],
+      careerOpportunities: [
+        "Network support",
+        "IT technician",
+        "Tech support assistant",
+      ],
     },
     {
       id: "wsu-dip-ict-support-services",
@@ -601,7 +844,12 @@ export class WSU extends BaseUniversity {
       campus: "Buffalo City",
       subjectRequirements: {
         English: 4,
-        "Mathematics or Mathematics Literacy": 3,
+        Alternatives: {
+          alternatives: [
+            { subject: "Mathematics", level: 3 },
+            { subject: "Mathematics Literacy", level: 3 },
+          ],
+        },
       },
       additionalRequirements: ["Mathematics Literacy level 5 acceptable"],
       careerOpportunities: [
@@ -621,10 +869,19 @@ export class WSU extends BaseUniversity {
       campus: "Buffalo City",
       subjectRequirements: {
         English: 3,
-        "Mathematics or Mathematics Literacy": 3,
+        Alternatives: {
+          alternatives: [
+            { subject: "Mathematics", level: 3 },
+            { subject: "Mathematics Literacy", level: 3 },
+          ],
+        },
       },
       additionalRequirements: ["One subject one level below requirements"],
-      careerOpportunities: ["IT support assistant", "Help desk support", "Technical support"],
+      careerOpportunities: [
+        "IT support assistant",
+        "Help desk support",
+        "Technical support",
+      ],
     },
 
     // ============================================
@@ -640,10 +897,21 @@ export class WSU extends BaseUniversity {
       campus: "Buffalo City",
       subjectRequirements: {
         English: 4,
-        "Mathematics or Mathematics Literacy or Accounting": 2,
+        Alternatives: {
+          alternatives: [
+            { subject: "Mathematics or Mathematics Literacy", level: 2 },
+            { subject: "Accounting", level: 2 },
+          ],
+        },
       },
       additionalRequirements: ["Portfolio evaluation required"],
-      careerOpportunities: ["Fashion designer", "Pattern maker", "Costume designer", "Stylist", "Entrepreneur"],
+      careerOpportunities: [
+        "Fashion designer",
+        "Pattern maker",
+        "Costume designer",
+        "Stylist",
+        "Entrepreneur",
+      ],
     },
     {
       id: "wsu-dip-fine-art",
@@ -660,7 +928,13 @@ export class WSU extends BaseUniversity {
         "Portfolio evaluation and interview required",
         "Exceptional portfolio may override English level 2",
       ],
-      careerOpportunities: ["Fine artist", "Illustrator", "Curator", "Gallery manager", "Art educator"],
+      careerOpportunities: [
+        "Fine artist",
+        "Illustrator",
+        "Curator",
+        "Gallery manager",
+        "Art educator",
+      ],
     },
     {
       id: "wsu-ba",
@@ -674,8 +948,16 @@ export class WSU extends BaseUniversity {
         English: 4,
         "Any two of: IsiXhosa/Sesotho/Geography/History": 4,
       },
-      additionalRequirements: ["Three subjects in first year, two majors in years 2-3"],
-      careerOpportunities: ["Educator", "Content creator", "Copywriter", "Media professional", "Cultural specialist"],
+      additionalRequirements: [
+        "Three subjects in first year, two majors in years 2-3",
+      ],
+      careerOpportunities: [
+        "Educator",
+        "Content creator",
+        "Copywriter",
+        "Media professional",
+        "Cultural specialist",
+      ],
     },
     {
       id: "wsu-ba-english",
@@ -689,8 +971,16 @@ export class WSU extends BaseUniversity {
         English: 5,
         "Any one of: IsiXhosa/Sesotho/Geography/History": 4,
       },
-      additionalRequirements: ["Specialisation in English language and literature"],
-      careerOpportunities: ["English teacher", "Editor", "Journalist", "Content specialist", "Academic"],
+      additionalRequirements: [
+        "Specialisation in English language and literature",
+      ],
+      careerOpportunities: [
+        "English teacher",
+        "Editor",
+        "Journalist",
+        "Content specialist",
+        "Academic",
+      ],
     },
     {
       id: "wsu-bsc-social-science",
@@ -728,7 +1018,12 @@ export class WSU extends BaseUniversity {
         "Any four subjects": 4,
       },
       additionalRequirements: ["Extended curriculum support"],
-      careerOpportunities: ["Social worker", "Researcher", "Development officer", "Policy advisor"],
+      careerOpportunities: [
+        "Social worker",
+        "Researcher",
+        "Development officer",
+        "Policy advisor",
+      ],
     },
     {
       id: "wsu-bsw",
@@ -768,8 +1063,17 @@ export class WSU extends BaseUniversity {
         "African Language": 4,
         "Life Science": 4,
       },
-      additionalRequirements: ["Character reference checks required", "Entrance interview required"],
-      careerOpportunities: ["Psychologist", "HR professional", "Counselor", "Researcher", "Clinical practitioner"],
+      additionalRequirements: [
+        "Character reference checks required",
+        "Entrance interview required",
+      ],
+      careerOpportunities: [
+        "Psychologist",
+        "HR professional",
+        "Counselor",
+        "Researcher",
+        "Clinical practitioner",
+      ],
     },
     {
       id: "wsu-llb",
@@ -781,10 +1085,21 @@ export class WSU extends BaseUniversity {
       campus: "Mthatha",
       subjectRequirements: {
         English: 5,
-        "Mathematics or Mathematical Literacy": 3,
+        Alternatives: {
+          alternatives: [
+            { subject: "Mathematics", level: 3 },
+            { subject: "Mathematical Literacy", level: 3 },
+          ],
+        },
       },
       additionalRequirements: ["NSC with bachelor endorsement"],
-      careerOpportunities: ["Attorney", "Advocate", "Prosecutor", "Legal advisor", "Magistrate"],
+      careerOpportunities: [
+        "Attorney",
+        "Advocate",
+        "Prosecutor",
+        "Legal advisor",
+        "Magistrate",
+      ],
     },
 
     // ============================================
@@ -804,7 +1119,12 @@ export class WSU extends BaseUniversity {
         "Any two additional subjects": 3,
       },
       additionalRequirements: [],
-      careerOpportunities: ["Radio presenter", "TV presenter", "Media technician", "Content creator"],
+      careerOpportunities: [
+        "Radio presenter",
+        "TV presenter",
+        "Media technician",
+        "Content creator",
+      ],
     },
     {
       id: "wsu-dip-admin-mgmt",
@@ -816,11 +1136,21 @@ export class WSU extends BaseUniversity {
       campus: "Butterworth",
       subjectRequirements: {
         English: 4,
-        "Mathematics or Mathematics Literacy": 2,
+        Alternatives: {
+          alternatives: [
+            { subject: "Mathematics", level: 2 },
+            { subject: "Mathematics Literacy", level: 2 },
+          ],
+        },
         "Any two additional subjects": 4,
       },
       additionalRequirements: [],
-      careerOpportunities: ["Administrative officer", "Office manager", "Executive assistant", "HR administrator"],
+      careerOpportunities: [
+        "Administrative officer",
+        "Office manager",
+        "Executive assistant",
+        "HR administrator",
+      ],
     },
     {
       id: "wsu-dip-hospitality-mgmt",
@@ -832,7 +1162,12 @@ export class WSU extends BaseUniversity {
       campus: "Butterworth",
       subjectRequirements: {
         English: 4,
-        "Mathematics or Mathematics Literacy": 3,
+        Alternatives: {
+          alternatives: [
+            { subject: "Mathematics", level: 3 },
+            { subject: "Mathematics Literacy", level: 3 },
+          ],
+        },
         "Any three relevant subjects": 3,
       },
       additionalRequirements: [],
@@ -853,11 +1188,21 @@ export class WSU extends BaseUniversity {
       campus: "Butterworth / Komani",
       subjectRequirements: {
         English: 3,
-        "Mathematics or Mathematics Literacy": 3,
+        Alternatives: {
+          alternatives: [
+            { subject: "Mathematics", level: 3 },
+            { subject: "Mathematics Literacy", level: 3 },
+          ],
+        },
         "Any two subjects": 3,
       },
       additionalRequirements: [],
-      careerOpportunities: ["HR officer", "Recruitment specialist", "Personnel administrator", "Training coordinator"],
+      careerOpportunities: [
+        "HR officer",
+        "Recruitment specialist",
+        "Personnel administrator",
+        "Training coordinator",
+      ],
     },
     {
       id: "wsu-dip-human-resources-ecp",
@@ -869,11 +1214,20 @@ export class WSU extends BaseUniversity {
       campus: "Butterworth / Komani",
       subjectRequirements: {
         English: 3,
-        "Mathematics or Mathematics Literacy": 2,
+        Alternatives: {
+          alternatives: [
+            { subject: "Mathematics", level: 2 },
+            { subject: "Mathematics Literacy", level: 2 },
+          ],
+        },
         "Any two subjects": 3,
       },
       additionalRequirements: ["Extended curriculum support"],
-      careerOpportunities: ["HR assistant", "Administrative officer", "Personnel coordinator"],
+      careerOpportunities: [
+        "HR assistant",
+        "Administrative officer",
+        "Personnel coordinator",
+      ],
     },
     {
       id: "wsu-dip-journalism",
@@ -889,7 +1243,13 @@ export class WSU extends BaseUniversity {
         "Any two additional subjects": 4,
       },
       additionalRequirements: [],
-      careerOpportunities: ["Journalist", "Reporter", "Editor", "Content creator", "Media correspondent"],
+      careerOpportunities: [
+        "Journalist",
+        "Reporter",
+        "Editor",
+        "Content creator",
+        "Media correspondent",
+      ],
     },
     {
       id: "wsu-dip-local-govt-finance",
@@ -901,10 +1261,20 @@ export class WSU extends BaseUniversity {
       campus: "Butterworth / Komani",
       subjectRequirements: {
         English: 3,
-        "Accounting or Mathematics or Mathematics Literacy": 3,
+        Alternatives: {
+          alternatives: [
+            { subject: "Accounting or Mathematics", level: 3 },
+            { subject: "Mathematics Literacy", level: 3 },
+          ],
+        },
       },
       additionalRequirements: ["Extended curriculum with lower APS (20)"],
-      careerOpportunities: ["Municipal finance officer", "Budget analyst", "Finance administrator", "Audit officer"],
+      careerOpportunities: [
+        "Municipal finance officer",
+        "Budget analyst",
+        "Finance administrator",
+        "Audit officer",
+      ],
     },
     {
       id: "wsu-dip-management",
@@ -917,10 +1287,20 @@ export class WSU extends BaseUniversity {
       subjectRequirements: {
         English: 3,
         Accounting: 3,
-        "Mathematics or Mathematics Literacy": 3,
+        Alternatives: {
+          alternatives: [
+            { subject: "Mathematics", level: 3 },
+            { subject: "Mathematics Literacy", level: 3 },
+          ],
+        },
       },
       additionalRequirements: ["Extended curriculum with lower APS (20)"],
-      careerOpportunities: ["Operations manager", "Project manager", "Department manager", "Business manager"],
+      careerOpportunities: [
+        "Operations manager",
+        "Project manager",
+        "Department manager",
+        "Business manager",
+      ],
     },
     {
       id: "wsu-dip-marketing-mgmt",
@@ -932,11 +1312,21 @@ export class WSU extends BaseUniversity {
       campus: "Butterworth",
       subjectRequirements: {
         English: 3,
-        "Mathematics or Mathematics Literacy": 3,
+        Alternatives: {
+          alternatives: [
+            { subject: "Mathematics", level: 3 },
+            { subject: "Mathematics Literacy", level: 3 },
+          ],
+        },
         "Any two subjects": 3,
       },
       additionalRequirements: [],
-      careerOpportunities: ["Marketing officer", "Sales manager", "Brand manager", "Digital marketing specialist"],
+      careerOpportunities: [
+        "Marketing officer",
+        "Sales manager",
+        "Brand manager",
+        "Digital marketing specialist",
+      ],
     },
     {
       id: "wsu-dip-policing",
@@ -968,7 +1358,12 @@ export class WSU extends BaseUniversity {
       campus: "Butterworth",
       subjectRequirements: {
         English: 4,
-        "Mathematics or Mathematics Literacy": 3,
+        Alternatives: {
+          alternatives: [
+            { subject: "Mathematics", level: 3 },
+            { subject: "Mathematics Literacy", level: 3 },
+          ],
+        },
         "Any two subjects": 4,
       },
       additionalRequirements: ["Extended curriculum with lower APS (19)"],
@@ -992,7 +1387,12 @@ export class WSU extends BaseUniversity {
         "Any four subjects": 3,
       },
       additionalRequirements: [],
-      careerOpportunities: ["Public administrator", "Government officer", "Policy analyst", "Development officer"],
+      careerOpportunities: [
+        "Public administrator",
+        "Government officer",
+        "Policy analyst",
+        "Development officer",
+      ],
     },
     {
       id: "wsu-dip-public-relations",
@@ -1025,7 +1425,12 @@ export class WSU extends BaseUniversity {
       campus: "Butterworth",
       subjectRequirements: {
         English: 3,
-        "Mathematics or Accounting or Mathematics Literacy": 3,
+        Alternatives: {
+          alternatives: [
+            { subject: "Mathematics or Accounting", level: 3 },
+            { subject: "Mathematics Literacy", level: 3 },
+          ],
+        },
         "Any two subjects": 3,
       },
       additionalRequirements: [],
@@ -1049,7 +1454,12 @@ export class WSU extends BaseUniversity {
         "Any three subjects": 3,
       },
       additionalRequirements: [],
-      careerOpportunities: ["Sports manager", "Sports administrator", "Coach", "Athletics coordinator"],
+      careerOpportunities: [
+        "Sports manager",
+        "Sports administrator",
+        "Coach",
+        "Athletics coordinator",
+      ],
     },
     {
       id: "wsu-dip-tourism-mgmt",
@@ -1061,11 +1471,21 @@ export class WSU extends BaseUniversity {
       campus: "Butterworth",
       subjectRequirements: {
         English: 4,
-        "Mathematics or Mathematics Literacy": 3,
+        Alternatives: {
+          alternatives: [
+            { subject: "Mathematics", level: 3 },
+            { subject: "Mathematics Literacy", level: 3 },
+          ],
+        },
         "Any three relevant subjects": 3,
       },
       additionalRequirements: [],
-      careerOpportunities: ["Tour operator", "Travel consultant", "Tourism officer", "Destination planner"],
+      careerOpportunities: [
+        "Tour operator",
+        "Travel consultant",
+        "Tourism officer",
+        "Destination planner",
+      ],
     },
     {
       id: "wsu-bad-admin",
@@ -1156,7 +1576,12 @@ export class WSU extends BaseUniversity {
         "Any other subject": 4,
       },
       additionalRequirements: ["Additional selection criteria apply"],
-      careerOpportunities: ["Professional nurse", "Hospital nurse", "Community health nurse", "Nursing manager"],
+      careerOpportunities: [
+        "Professional nurse",
+        "Hospital nurse",
+        "Community health nurse",
+        "Nursing manager",
+      ],
     },
     {
       id: "wsu-bhealth-sciences-orthotics-prosthetics",
@@ -1175,7 +1600,12 @@ export class WSU extends BaseUniversity {
         "Any other subject": 4,
       },
       additionalRequirements: ["Additional selection criteria apply"],
-      careerOpportunities: ["Orthotist", "Prosthetist", "Clinical technician", "Rehabilitation specialist"],
+      careerOpportunities: [
+        "Orthotist",
+        "Prosthetist",
+        "Clinical technician",
+        "Rehabilitation specialist",
+      ],
     },
     {
       id: "wsu-bmedicine-surgery",
@@ -1193,8 +1623,16 @@ export class WSU extends BaseUniversity {
         "Life Sciences": 5,
         "Any other subject": 5,
       },
-      additionalRequirements: ["Additional selection criteria apply", "PBL and community-based approach"],
-      careerOpportunities: ["Medical doctor", "Surgeon", "Health practitioner", "Medical researcher"],
+      additionalRequirements: [
+        "Additional selection criteria apply",
+        "PBL and community-based approach",
+      ],
+      careerOpportunities: [
+        "Medical doctor",
+        "Surgeon",
+        "Health practitioner",
+        "Medical researcher",
+      ],
     },
 
     // ============================================
@@ -1235,7 +1673,12 @@ export class WSU extends BaseUniversity {
         "Physical Sciences": 4,
       },
       additionalRequirements: ["Extended curriculum with lower APS (20)"],
-      careerOpportunities: ["Food scientist", "Nutritionist", "Product developer", "Food service manager"],
+      careerOpportunities: [
+        "Food scientist",
+        "Nutritionist",
+        "Product developer",
+        "Food service manager",
+      ],
     },
     {
       id: "wsu-dip-pest-management",
@@ -1273,7 +1716,12 @@ export class WSU extends BaseUniversity {
         "Physical Sciences": 4,
       },
       additionalRequirements: ["Extended curriculum with lower APS (23)"],
-      careerOpportunities: ["Mathematician", "Data scientist", "Cryptographer", "Research scientist"],
+      careerOpportunities: [
+        "Mathematician",
+        "Data scientist",
+        "Cryptographer",
+        "Research scientist",
+      ],
     },
     {
       id: "wsu-basc-applied-statistical-sciences",
@@ -1289,7 +1737,12 @@ export class WSU extends BaseUniversity {
         "Physical Sciences": 4,
       },
       additionalRequirements: ["Extended curriculum with lower APS (23)"],
-      careerOpportunities: ["Statistician", "Data analyst", "Researcher", "Risk analyst"],
+      careerOpportunities: [
+        "Statistician",
+        "Data analyst",
+        "Researcher",
+        "Risk analyst",
+      ],
     },
     {
       id: "wsu-basc-biological-sciences",
@@ -1306,7 +1759,12 @@ export class WSU extends BaseUniversity {
         "Life Sciences": 5,
       },
       additionalRequirements: ["Extended curriculum with lower APS (23)"],
-      careerOpportunities: ["Biologist", "Ecologist", "Researcher", "Conservation officer"],
+      careerOpportunities: [
+        "Biologist",
+        "Ecologist",
+        "Researcher",
+        "Conservation officer",
+      ],
     },
     {
       id: "wsu-basc-chemistry",
@@ -1322,7 +1780,12 @@ export class WSU extends BaseUniversity {
         "Physical Sciences": 5,
       },
       additionalRequirements: ["Extended curriculum with lower APS (23)"],
-      careerOpportunities: ["Chemist", "Research scientist", "Quality manager", "Environmental specialist"],
+      careerOpportunities: [
+        "Chemist",
+        "Research scientist",
+        "Quality manager",
+        "Environmental specialist",
+      ],
     },
     {
       id: "wsu-basc-computer-science",
@@ -1338,7 +1801,12 @@ export class WSU extends BaseUniversity {
         "Physical Sciences": 4,
       },
       additionalRequirements: ["Extended curriculum with lower APS (23)"],
-      careerOpportunities: ["Software engineer", "System administrator", "IT specialist", "Developer"],
+      careerOpportunities: [
+        "Software engineer",
+        "System administrator",
+        "IT specialist",
+        "Developer",
+      ],
     },
     {
       id: "wsu-basc-environmental-studies",
@@ -1352,7 +1820,12 @@ export class WSU extends BaseUniversity {
         English: 4,
         Mathematics: 4,
         "Physical Sciences": 4,
-        "Life Sciences or Agriculture or Tourism": 4,
+        Alternatives: {
+          alternatives: [
+            { subject: "Life Sciences or Agriculture", level: 4 },
+            { subject: "Tourism", level: 4 },
+          ],
+        },
       },
       additionalRequirements: ["Extended curriculum with lower APS (23)"],
       careerOpportunities: [
@@ -1376,7 +1849,12 @@ export class WSU extends BaseUniversity {
         "Physical Sciences": 4,
       },
       additionalRequirements: ["Extended curriculum with lower APS (23)"],
-      careerOpportunities: ["Mathematician", "Teacher", "Researcher", "Analyst"],
+      careerOpportunities: [
+        "Mathematician",
+        "Teacher",
+        "Researcher",
+        "Analyst",
+      ],
     },
     {
       id: "wsu-basc-pest-management",
@@ -1414,46 +1892,60 @@ export class WSU extends BaseUniversity {
         "Physical Sciences": 5,
       },
       additionalRequirements: ["Extended curriculum with lower APS (23)"],
-      careerOpportunities: ["Physicist", "Research scientist", "Technical specialist", "Engineer"],
+      careerOpportunities: [
+        "Physicist",
+        "Research scientist",
+        "Technical specialist",
+        "Engineer",
+      ],
     },
-  ]
+  ];
 
   /**
    * WSU uses a standard APS calculation method
    * Based on NSC achievement levels 1-7
    */
   calculateAPS(subjects: Record<string, number>): number {
-    const validSubjects = Object.entries(subjects).filter(([name, level]) => name !== "Life Orientation" && level > 0)
+    const validSubjects = Object.entries(subjects).filter(
+      ([name, level]) => name !== "Life Orientation" && level > 0,
+    );
 
     if (validSubjects.length < 6) {
-      throw new Error("At least 6 subjects required (excluding Life Orientation)")
+      throw new Error(
+        "At least 6 subjects required (excluding Life Orientation)",
+      );
     }
 
     // Take best 6 subjects
     const best6 = validSubjects
       .sort(([, a], [, b]) => b - a)
       .slice(0, 6)
-      .map(([, level]) => level)
+      .map(([, level]) => level);
 
-    return best6.reduce((sum, level) => sum + level, 0)
+    return best6.reduce((sum, level) => sum + level, 0);
   }
 
   /**
    * Get courses that match the calculated APS and subject requirements
    */
-  getMatchingCourses(apsScore: number, subjects: Record<string, number>): Course[] {
+  getMatchingCourses(
+    apsScore: number,
+    subjects: Record<string, number>,
+  ): Course[] {
     return this._courses.filter((course) => {
       // Check APS requirement
-      if (apsScore < course.apsMin) return false
+      if (apsScore < (course.apsMin ?? 0)) return false;
 
       // Check subject requirements
-      for (const [subject, minLevel] of Object.entries(course.subjectRequirements)) {
-        const studentLevel = subjects[subject] || 0
-        if (studentLevel < minLevel) return false
+      for (const [subject, minLevel] of Object.entries(
+        course.subjectRequirements ?? {},
+      )) {
+        const studentLevel = subjects[subject] || 0;
+        if (typeof minLevel === "number" && studentLevel < minLevel) return false;
       }
 
-      return true
-    })
+      return true;
+    });
   }
 
   /**
@@ -1463,28 +1955,28 @@ export class WSU extends BaseUniversity {
    * - Standard 7-point NSC scale
    */
   calculateApsScore(subjects: Record<string, number>): number {
-    const subjectScores: number[] = []
-    
+    const subjectScores: number[] = [];
+
     for (const [subjectName, percentage] of Object.entries(subjects)) {
-      if (subjectName.toLowerCase().includes('life orientation')) {
-        continue
+      if (subjectName.toLowerCase().includes("life orientation")) {
+        continue;
       }
-      
-      let points = 0
-      if (percentage >= 80) points = 7
-      else if (percentage >= 70) points = 6
-      else if (percentage >= 60) points = 5
-      else if (percentage >= 50) points = 4
-      else if (percentage >= 40) points = 3
-      else if (percentage >= 30) points = 2
-      else if (percentage >= 0) points = 1
-      
-      subjectScores.push(points)
+
+      let points = 0;
+      if (percentage >= 80) points = 7;
+      else if (percentage >= 70) points = 6;
+      else if (percentage >= 60) points = 5;
+      else if (percentage >= 50) points = 4;
+      else if (percentage >= 40) points = 3;
+      else if (percentage >= 30) points = 2;
+      else if (percentage >= 0) points = 1;
+
+      subjectScores.push(points);
     }
-    
-    subjectScores.sort((a, b) => b - a)
-    const top6 = subjectScores.slice(0, 6)
-    
-    return top6.reduce((sum, score) => sum + score, 0)
+
+    subjectScores.sort((a, b) => b - a);
+    const top6 = subjectScores.slice(0, 6);
+
+    return top6.reduce((sum, score) => sum + score, 0);
   }
 }

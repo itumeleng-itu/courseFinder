@@ -1,9 +1,8 @@
 import { useState, useCallback } from "react"
-import { Subject, CourseMatch, ExtendedCourse } from "@/app/find-course/types"
-import { checkSubjectRequirements, percentageToNSCLevel } from "@/app/find-course/utils"
-import { getAllUniversities, getAllUniversityInstances } from "@/data/universities"
+import { Subject, CourseMatch, Course } from "@/app/find-course/types"
+import { checkSubjectRequirements } from "@/app/find-course/utils"
+import { getAllUniversityInstances } from "@/data/universities"
 import { getAllColleges, collegeToUniversityFormat } from "@/data/colleges"
-import { BaseUniversity, Course, University } from "@/data/universities/base-university"
 
 export function useCourseMatcher(subjects: Subject[], calculatedDefaultAPS: number) {
     const [qualifyingCourses, setQualifyingCourses] = useState<CourseMatch[]>([])
@@ -18,120 +17,106 @@ export function useCourseMatcher(subjects: Subject[], calculatedDefaultAPS: numb
         return include.some((t) => n.includes(t)) || !exclude.some((t) => n.includes(t))
     }
 
-    const meetsAdditionalAcademicRequirements = (reqs: string[] | string | undefined, studentSubjects: Subject[]): boolean => {
-        if (!reqs) return true
-        const reqList = Array.isArray(reqs) ? reqs : [reqs]
-        const findSubject = (needle: string) => studentSubjects.find((s) => s.name.toLowerCase().includes(needle.toLowerCase()))
-        for (const r of reqList) {
-            const text = r.toLowerCase()
-            if (/(portfolio|interview|assessment|admission test|entrance test)/.test(text)) continue
-            const percMatch = text.match(/(mathematics|mathematical literacy|english|afrikaans|physical sciences|life sciences)[^\d]*(\d{2})%/)
-            if (percMatch) {
-                const subj = percMatch[1]
-                const minPerc = Number(percMatch[2])
-                const student = findSubject(subj)
-                if (!student || student.percentage < minPerc) return false
-                continue
-            }
-            const levelMatch = text.match(/(mathematics|mathematical literacy|english|afrikaans|physical sciences|life sciences)[^\d]*level\s*(\d+)/)
-            if (levelMatch) {
-                const subj = levelMatch[1]
-                const minLevel = Number(levelMatch[2])
-                const student = findSubject(subj)
-                const studentLevel = student ? percentageToNSCLevel(student.percentage) : 0
-                if (studentLevel < minLevel) return false
-                continue
-            }
-        }
-        return true
-    }
-
     const findCourses = useCallback(() => {
         if (!calculatedDefaultAPS || calculatedDefaultAPS <= 0) return
 
-        const studentLevels: Record<string, number> = Object.fromEntries(
-            subjects.map((s) => [s.name, percentageToNSCLevel(s.percentage)])
+        const studentPercentages: Record<string, number> = Object.fromEntries(
+            subjects.map((s) => [s.name, s.percentage])
         )
 
-        const universities = getAllUniversities()
+        const universityInstances = getAllUniversityInstances()
         const uniMatches: CourseMatch[] = []
 
-        universities.forEach((university) => {
-            university.courses.forEach((course) => {
-                const extendedCourse = course as ExtendedCourse
-                const calculatedAPS = (university as unknown as BaseUniversity).calculateApsScore
-                    ? (university as unknown as BaseUniversity).calculateApsScore(studentLevels, extendedCourse as Course)
-                    : calculatedDefaultAPS
+        universityInstances.forEach((universityInstance) => {
+            const calculatedAPS = universityInstance.calculateApsScore(studentPercentages)
+            if (calculatedAPS <= 0) return
 
-                const apsRequired = extendedCourse.apsMin ?? extendedCourse.apsRequired ?? 0
-                const requirementCheck = checkSubjectRequirements(subjects, extendedCourse.subjectRequirements)
-                const additionalReqs = extendedCourse.requirements ?? extendedCourse.additionalRequirements
+            const universityForDisplay = {
+                id: universityInstance.id,
+                name: universityInstance.name,
+                shortName: universityInstance.shortName,
+                location: universityInstance.getLocationString(),
+                website: universityInstance.website || "",
+                courses: [],
+            }
 
-                if (apsRequired <= 0 || calculatedAPS <= 0) return
-                const apsMet = calculatedAPS >= apsRequired
-                const meetsAll = apsMet && requirementCheck.meets && meetsAdditionalAcademicRequirements(additionalReqs, subjects)
+            universityInstance.courses.forEach((course) => {
+                const apsRequired = (course as Course).apsMin ?? (course as Course).apsRequired ?? 0
+                if (apsRequired <= 0) return
 
-                if (isUndergraduateCourse(extendedCourse.name)) {
+                const requirementCheck = checkSubjectRequirements(subjects, course.subjectRequirements)
+                if (calculatedAPS >= apsRequired && requirementCheck.meets && isUndergraduateCourse(course.name)) {
                     uniMatches.push({
-                        course: extendedCourse,
-                        university: { ...university, website: university.website || "" },
-                        meetsRequirements: meetsAll,
-                        missingRequirements: requirementCheck.missing,
+                        course: course as Course,
+                        university: universityForDisplay,
+                        meetsRequirements: true,
+                        missingRequirements: [],
                         metRequirements: requirementCheck.met,
                     })
                 }
             })
         })
 
-        // College processing
-        const collegeMatches: CourseMatch[] = []
-        const fullyQualifiedUniCount = uniMatches.filter((m) => m.meetsRequirements).length
-        if (fullyQualifiedUniCount < 30) {
-            const colleges = getAllColleges()
-            colleges.forEach((college) => {
-                const universityFormatCollege = collegeToUniversityFormat(college)
-                universityFormatCollege.courses.forEach((course) => {
-                    const extendedCourse = course as ExtendedCourse
-                    const calculatedAPS = (universityFormatCollege as unknown as BaseUniversity).calculateApsScore
-                        ? (universityFormatCollege as unknown as BaseUniversity).calculateApsScore(studentLevels, extendedCourse as Course)
-                        : calculatedDefaultAPS
-                    const apsRequired = extendedCourse.apsMin ?? extendedCourse.apsRequired ?? 0
-                    const requirementCheck = checkSubjectRequirements(subjects, extendedCourse.subjectRequirements)
-                    const additionalReqs = extendedCourse.requirements ?? extendedCourse.additionalRequirements
-                    if (isUndergraduateCourse(extendedCourse.name) && apsRequired > 0 && calculatedAPS > 0 && calculatedAPS >= apsRequired && requirementCheck.meets && meetsAdditionalAcademicRequirements(additionalReqs, subjects)) {
-                        collegeMatches.push({ course: extendedCourse, university: { ...universityFormatCollege, website: universityFormatCollege.website || "" }, meetsRequirements: true, missingRequirements: [], metRequirements: requirementCheck.met })
-                    }
-                })
-            })
-        }
-
-        // Extended programs
+        // Extended curriculum programs (foundation year alternatives)
         const extendedMatches: CourseMatch[] = []
-        const universityInstances = getAllUniversityInstances()
         universityInstances.forEach((universityInstance) => {
-            const extendedCourses = universityInstance.getExtendedCurriculumPrograms()
-            extendedCourses.forEach((course) => {
-                const extendedCourse = course as ExtendedCourse
-                const apsMin = extendedCourse.apsMin ?? extendedCourse.apsRequired ?? 0
-                if (apsMin > 0 && calculatedDefaultAPS >= apsMin) {
-                    const requirementCheck = checkSubjectRequirements(subjects, extendedCourse.subjectRequirements)
-                    const additionalReqs = extendedCourse.requirements ?? extendedCourse.additionalRequirements
-                    if (requirementCheck.meets && meetsAdditionalAcademicRequirements(additionalReqs, subjects)) {
-                        const universityForDisplay = { id: universityInstance.id, name: universityInstance.name, shortName: universityInstance.shortName, location: universityInstance.getLocationString(), website: universityInstance.website || "", courses: [] }
-                        extendedMatches.push({ course: extendedCourse, university: universityForDisplay, meetsRequirements: true, missingRequirements: [], metRequirements: requirementCheck.met })
-                    }
+            const calculatedAPS = universityInstance.calculateApsScore(studentPercentages)
+            if (calculatedAPS <= 0) return
+
+            const universityForDisplay = {
+                id: universityInstance.id,
+                name: universityInstance.name,
+                shortName: universityInstance.shortName,
+                location: universityInstance.getLocationString(),
+                website: universityInstance.website || "",
+                courses: [],
+            }
+
+            universityInstance.getExtendedCurriculumPrograms().forEach((course) => {
+                const apsRequired = (course as Course).apsMin ?? (course as Course).apsRequired ?? 0
+                if (apsRequired <= 0) return
+
+                const requirementCheck = checkSubjectRequirements(subjects, course.subjectRequirements)
+                if (calculatedAPS >= apsRequired && requirementCheck.meets) {
+                    extendedMatches.push({
+                        course: course as Course,
+                        university: universityForDisplay,
+                        meetsRequirements: true,
+                        missingRequirements: [],
+                        metRequirements: requirementCheck.met,
+                    })
                 }
             })
         })
 
-        uniMatches.sort((a, b) => {
-            if (a.meetsRequirements && !b.meetsRequirements) return -1
-            if (!a.meetsRequirements && b.meetsRequirements) return 1
-            return (b.course.apsMin ?? b.course.apsRequired ?? 0) - (a.course.apsMin ?? a.course.apsRequired ?? 0)
+        // TVET colleges — only shown when degree matches are limited
+        const collegeMatches: CourseMatch[] = []
+        const colleges = getAllColleges()
+        colleges.forEach((college) => {
+            const universityFormatCollege = collegeToUniversityFormat(college)
+            universityFormatCollege.courses.forEach((course) => {
+                const apsRequired = (course as Course).apsMin ?? (course as Course).apsRequired ?? 0
+                if (apsRequired <= 0 || calculatedDefaultAPS <= 0) return
+
+                const requirementCheck = checkSubjectRequirements(subjects, course.subjectRequirements)
+                if (calculatedDefaultAPS >= apsRequired && requirementCheck.meets && isUndergraduateCourse(course.name)) {
+                    collegeMatches.push({
+                        course: course as Course,
+                        university: { ...universityFormatCollege, website: universityFormatCollege.website || "" },
+                        meetsRequirements: true,
+                        missingRequirements: [],
+                        metRequirements: requirementCheck.met,
+                    })
+                }
+            })
         })
 
-        setQualifyingCourses(uniMatches.filter(m => !!m.course.name && (m.course.apsMin ?? m.course.apsRequired ?? 0) > 0))
-        setRecommendedColleges(collegeMatches.filter(m => !!m.course.name && (m.course.apsMin ?? m.course.apsRequired ?? 0) > 0))
+        uniMatches.sort((a, b) =>
+            ((b.course.apsMin ?? b.course.apsRequired ?? 0) - (a.course.apsMin ?? a.course.apsRequired ?? 0))
+        )
+
+        setQualifyingCourses(uniMatches)
+        setRecommendedColleges(collegeMatches)
         setExtendedPrograms(extendedMatches)
     }, [subjects, calculatedDefaultAPS])
 
@@ -142,6 +127,6 @@ export function useCourseMatcher(subjects: Subject[], calculatedDefaultAPS: numb
         findCourses,
         setQualifyingCourses,
         setRecommendedColleges,
-        setExtendedPrograms
+        setExtendedPrograms,
     }
 }

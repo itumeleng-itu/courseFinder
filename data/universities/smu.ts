@@ -1,5 +1,5 @@
-import { BaseUniversity } from "./base-university"
-import type { Course } from "@/lib/types"
+import { BaseUniversity } from "./base-university";
+import type { Course } from "@/lib/types";
 
 /**
  * Sefako Makgatho Health Sciences University (SMU) class
@@ -9,11 +9,11 @@ import type { Course } from "@/lib/types"
  * Pharmacy, Nursing, and other allied health professions.
  */
 export class SMU extends BaseUniversity {
-  readonly id = "smu"
-  readonly name = "Sefako Makgatho Health Sciences University"
-  readonly shortName = "SMU"
-  readonly website = "https://www.smu.ac.za"
-  readonly logo = "/logos/smu.png"
+  readonly id = "smu";
+  readonly name = "Sefako Makgatho Health Sciences University";
+  readonly shortName = "SMU";
+  readonly website = "https://www.smu.ac.za";
+  readonly logo = "/logos/smu.png";
   readonly location = {
     city: "Pretoria",
     province: "Gauteng",
@@ -21,7 +21,7 @@ export class SMU extends BaseUniversity {
       latitude: -25.627,
       longitude: 28.0199,
     },
-  }
+  };
 
   /**
    * SMU APS Calculation Method:
@@ -644,7 +644,7 @@ export class SMU extends BaseUniversity {
         "Biology and Environmental Sciences: Nature conservation, education, government departments, laboratories, private sector",
       ],
     },
-  ]
+  ];
 
   /**
    * SMU has specific selection processes for many programs, especially in Medicine and Dentistry.
@@ -666,7 +666,7 @@ export class SMU extends BaseUniversity {
    * @returns Array of courses in the specified faculty
    */
   getCoursesByFaculty(faculty: string): Course[] {
-    return this._courses.filter((course) => course.faculty === faculty)
+    return this._courses.filter((course) => course.faculty === faculty);
   }
 
   /**
@@ -674,7 +674,9 @@ export class SMU extends BaseUniversity {
    * @returns Array of faculty names
    */
   get faculties(): string[] {
-    return Array.from(new Set(this._courses.map((course) => course.faculty).filter(Boolean)))
+    return Array.from(
+      new Set(this._courses.map((course) => course.faculty).filter((f): f is string => Boolean(f))),
+    );
   }
 
   /**
@@ -684,28 +686,28 @@ export class SMU extends BaseUniversity {
    * - Standard 7-point NSC scale
    */
   calculateApsScore(subjects: Record<string, number>): number {
-    const subjectScores: number[] = []
-    
+    const subjectScores: number[] = [];
+
     for (const [subjectName, percentage] of Object.entries(subjects)) {
-      if (subjectName.toLowerCase().includes('life orientation')) {
-        continue
+      if (subjectName.toLowerCase().includes("life orientation")) {
+        continue;
       }
-      
-      let points = 0
-      if (percentage >= 80) points = 7
-      else if (percentage >= 70) points = 6
-      else if (percentage >= 60) points = 5
-      else if (percentage >= 50) points = 4
-      else if (percentage >= 40) points = 3
-      else if (percentage >= 30) points = 2
-      else if (percentage >= 0) points = 1
-      
-      subjectScores.push(points)
+
+      let points = 0;
+      if (percentage >= 80) points = 7;
+      else if (percentage >= 70) points = 6;
+      else if (percentage >= 60) points = 5;
+      else if (percentage >= 50) points = 4;
+      else if (percentage >= 40) points = 3;
+      else if (percentage >= 30) points = 2;
+      else if (percentage >= 0) points = 1;
+
+      subjectScores.push(points);
     }
-    
-    subjectScores.sort((a, b) => b - a)
-    const top6 = subjectScores.slice(0, 6)
-    
-    return top6.reduce((sum, score) => sum + score, 0)
+
+    subjectScores.sort((a, b) => b - a);
+    const top6 = subjectScores.slice(0, 6);
+
+    return top6.reduce((sum, score) => sum + score, 0);
   }
 }

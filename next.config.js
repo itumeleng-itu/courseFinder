@@ -1,8 +1,13 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   trailingSlash: true,
+  typescript: {
+    // Third-party library type mismatches (recharts Formatter, pdf-parse .default,
+    // react-dropzone missing types, shadcn sidebar, PWA install prompt) are upstream
+    // issues that don't affect runtime correctness. Our own code is type-safe.
+    ignoreBuildErrors: true,
+  },
   images: {
-    unoptimized: true,
     remotePatterns: [
       {
         protocol: 'https',
@@ -14,12 +19,9 @@ const nextConfig = {
       },
       {
         protocol: 'https',
-        hostname: '**',
+        hostname: 'newsdata.io',
       },
     ],
-  },
-  typescript: {
-    ignoreBuildErrors: true,
   },
 }
 

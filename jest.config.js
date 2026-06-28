@@ -6,6 +6,9 @@ module.exports = {
   moduleNameMapper: {
     '^@/(.*)$': '<rootDir>/$1',
   },
+  testPathIgnorePatterns: ['/node_modules/', '/node_modules_old/', '/scratch/'],
+  watchPathIgnorePatterns: ['node_modules_old'],
+  modulePathIgnorePatterns: ['<rootDir>/node_modules_old/'],
   transform: {
     '^.+\\.(ts|tsx)$': [
       'ts-jest',

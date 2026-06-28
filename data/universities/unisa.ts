@@ -1,15 +1,15 @@
-import { BaseUniversity } from "./base-university"
-import type { Course } from "@/lib/types"
+import { BaseUniversity } from "./base-university";
+import type { Course } from "@/lib/types";
 
 /**
  * University of South Africa (UNISA) class
  */
 export class UNISA extends BaseUniversity {
-  readonly id = "unisa"
-  readonly name = "University of South Africa"
-  readonly shortName = "UNISA"
-  readonly website = "https://www.unisa.ac.za"
-  readonly logo = "/logos/unisa.png"
+  readonly id = "unisa";
+  readonly name = "University of South Africa";
+  readonly shortName = "UNISA";
+  readonly website = "https://www.unisa.ac.za";
+  readonly logo = "/logos/unisa.png";
   readonly location = {
     city: "Pretoria",
     province: "Gauteng",
@@ -17,7 +17,7 @@ export class UNISA extends BaseUniversity {
       latitude: -25.7679,
       longitude: 28.2015,
     },
-  }
+  };
 
   /**
    * UNISA APS calculation method
@@ -25,18 +25,18 @@ export class UNISA extends BaseUniversity {
    * Life Orientation is excluded from the APS calculation
    */
   calculateAPS(subjects: Record<string, number>): number {
-    let totalPoints = 0
-    let subjectCount = 0
+    let totalPoints = 0;
+    let subjectCount = 0;
 
     for (const [subject, score] of Object.entries(subjects)) {
       // Skip Life Orientation
-      if (subject.toLowerCase() === "life orientation") continue
+      if (subject.toLowerCase() === "life orientation") continue;
 
-      totalPoints += score
-      subjectCount++
+      totalPoints += score;
+      subjectCount++;
     }
 
-    return totalPoints
+    return totalPoints;
   }
 
   protected readonly _courses: Course[] = [
@@ -53,8 +53,15 @@ export class UNISA extends BaseUniversity {
         Mathematics: 4,
         English: 4,
       },
-      careerOpportunities: ["Accountant", "Financial Manager", "Auditor", "Tax Consultant", "Financial Analyst"],
-      additionalRequirements: "Access to a computer and internet is essential for this programme.",
+      careerOpportunities: [
+        "Accountant",
+        "Financial Manager",
+        "Auditor",
+        "Tax Consultant",
+        "Financial Analyst",
+      ],
+      additionalRequirements:
+        "Access to a computer and internet is essential for this programme.",
     },
     {
       id: "unisa-bcom-financial-accounting",
@@ -68,8 +75,14 @@ export class UNISA extends BaseUniversity {
         Mathematics: 4,
         English: 4,
       },
-      careerOpportunities: ["Financial Accountant", "Management Accountant", "Financial Manager", "Budget Analyst"],
-      additionalRequirements: "Access to a computer and internet is essential for this programme.",
+      careerOpportunities: [
+        "Financial Accountant",
+        "Management Accountant",
+        "Financial Manager",
+        "Budget Analyst",
+      ],
+      additionalRequirements:
+        "Access to a computer and internet is essential for this programme.",
     },
     {
       id: "unisa-bcom-accounting-sciences",
@@ -113,7 +126,8 @@ export class UNISA extends BaseUniversity {
         "Agricultural Consultant",
         "Agricultural Researcher",
       ],
-      additionalRequirements: "Practical components may require attendance at specific venues.",
+      additionalRequirements:
+        "Practical components may require attendance at specific venues.",
     },
     {
       id: "unisa-bsc-environmental-management",
@@ -134,7 +148,8 @@ export class UNISA extends BaseUniversity {
         "Conservation Officer",
         "Sustainability Specialist",
       ],
-      additionalRequirements: "Field trips may be required for practical components.",
+      additionalRequirements:
+        "Field trips may be required for practical components.",
     },
 
     // College of Economic and Management Sciences
@@ -157,7 +172,8 @@ export class UNISA extends BaseUniversity {
         "Market Researcher",
         "Financial Analyst",
       ],
-      additionalRequirements: "Access to a computer and internet is essential for this programme.",
+      additionalRequirements:
+        "Access to a computer and internet is essential for this programme.",
     },
     {
       id: "unisa-bcom-business-management",
@@ -168,8 +184,12 @@ export class UNISA extends BaseUniversity {
       duration: "3 years",
       studyMode: "Distance Learning",
       subjectRequirements: {
-        Mathematics: 3,
-        "Mathematical Literacy": 6,
+        Math: {
+          alternatives: [
+            { subject: "Mathematics", level: 3 },
+            { subject: "Mathematical Literacy", level: 6 },
+          ],
+        },
         English: 4,
       },
       careerOpportunities: [
@@ -179,7 +199,8 @@ export class UNISA extends BaseUniversity {
         "Project Manager",
         "Operations Manager",
       ],
-      additionalRequirements: "Access to a computer and internet is essential for this programme.",
+      additionalRequirements:
+        "Access to a computer and internet is essential for this programme.",
     },
     {
       id: "unisa-bcom-marketing",
@@ -190,8 +211,12 @@ export class UNISA extends BaseUniversity {
       duration: "3 years",
       studyMode: "Distance Learning",
       subjectRequirements: {
-        Mathematics: 3,
-        "Mathematical Literacy": 6,
+        Math: {
+          alternatives: [
+            { subject: "Mathematics", level: 3 },
+            { subject: "Mathematical Literacy", level: 6 },
+          ],
+        },
         English: 4,
       },
       careerOpportunities: [
@@ -201,7 +226,8 @@ export class UNISA extends BaseUniversity {
         "Digital Marketing Specialist",
         "Product Manager",
       ],
-      additionalRequirements: "Access to a computer and internet is essential for this programme.",
+      additionalRequirements:
+        "Access to a computer and internet is essential for this programme.",
     },
     {
       id: "unisa-bcom-human-resource",
@@ -212,8 +238,12 @@ export class UNISA extends BaseUniversity {
       duration: "3 years",
       studyMode: "Distance Learning",
       subjectRequirements: {
-        Mathematics: 3,
-        "Mathematical Literacy": 6,
+        Math: {
+          alternatives: [
+            { subject: "Mathematics", level: 3 },
+            { subject: "Mathematical Literacy", level: 6 },
+          ],
+        },
         English: 4,
       },
       careerOpportunities: [
@@ -223,7 +253,8 @@ export class UNISA extends BaseUniversity {
         "Employee Relations Manager",
         "Compensation and Benefits Analyst",
       ],
-      additionalRequirements: "Access to a computer and internet is essential for this programme.",
+      additionalRequirements:
+        "Access to a computer and internet is essential for this programme.",
     },
     {
       id: "unisa-dip-logistics",
@@ -234,8 +265,12 @@ export class UNISA extends BaseUniversity {
       duration: "3 years",
       studyMode: "Distance Learning",
       subjectRequirements: {
-        Mathematics: 3,
-        "Mathematical Literacy": 4,
+        Math: {
+          alternatives: [
+            { subject: "Mathematics", level: 3 },
+            { subject: "Mathematical Literacy", level: 4 },
+          ],
+        },
         English: 3,
       },
       careerOpportunities: [
@@ -245,7 +280,8 @@ export class UNISA extends BaseUniversity {
         "Distribution Manager",
         "Procurement Specialist",
       ],
-      additionalRequirements: "Access to a computer and internet is essential for this programme.",
+      additionalRequirements:
+        "Access to a computer and internet is essential for this programme.",
     },
 
     // College of Human Sciences
@@ -267,7 +303,8 @@ export class UNISA extends BaseUniversity {
         "Corporate Communications Manager",
         "Media Analyst",
       ],
-      additionalRequirements: "Access to a computer and internet is essential for this programme.",
+      additionalRequirements:
+        "Access to a computer and internet is essential for this programme.",
     },
     {
       id: "unisa-ba-psychology",
@@ -301,8 +338,15 @@ export class UNISA extends BaseUniversity {
       subjectRequirements: {
         English: 4,
       },
-      careerOpportunities: ["Translator", "Interpreter", "Language Teacher", "Editor", "Content Writer"],
-      additionalRequirements: "Students can choose from a variety of African and European languages.",
+      careerOpportunities: [
+        "Translator",
+        "Interpreter",
+        "Language Teacher",
+        "Editor",
+        "Content Writer",
+      ],
+      additionalRequirements:
+        "Students can choose from a variety of African and European languages.",
     },
 
     // College of Law
@@ -316,10 +360,20 @@ export class UNISA extends BaseUniversity {
       studyMode: "Distance Learning",
       subjectRequirements: {
         English: 4,
-        Mathematics: 3,
-        "Mathematical Literacy": 4,
+        Math: {
+          alternatives: [
+            { subject: "Mathematics", level: 3 },
+            { subject: "Mathematical Literacy", level: 4 },
+          ],
+        },
       },
-      careerOpportunities: ["Attorney", "Advocate", "Legal Advisor", "Magistrate", "Prosecutor"],
+      careerOpportunities: [
+        "Attorney",
+        "Advocate",
+        "Legal Advisor",
+        "Magistrate",
+        "Prosecutor",
+      ],
       additionalRequirements:
         "After completing the LLB, graduates must complete articles of clerkship or pupillage to be admitted as attorneys or advocates.",
     },
@@ -341,7 +395,8 @@ export class UNISA extends BaseUniversity {
         "Legal Researcher",
         "Public Administrator",
       ],
-      additionalRequirements: "This degree can be followed by an LLB to qualify as a legal practitioner.",
+      additionalRequirements:
+        "This degree can be followed by an LLB to qualify as a legal practitioner.",
     },
 
     // College of Science, Engineering and Technology
@@ -379,8 +434,15 @@ export class UNISA extends BaseUniversity {
         Mathematics: 5,
         "Physical Sciences": 4,
       },
-      careerOpportunities: ["Mathematician", "Statistician", "Data Analyst", "Researcher", "Financial Analyst"],
-      additionalRequirements: "Access to a computer and internet is essential for this programme.",
+      careerOpportunities: [
+        "Mathematician",
+        "Statistician",
+        "Data Analyst",
+        "Researcher",
+        "Financial Analyst",
+      ],
+      additionalRequirements:
+        "Access to a computer and internet is essential for this programme.",
     },
     {
       id: "unisa-bsc-physics",
@@ -401,7 +463,8 @@ export class UNISA extends BaseUniversity {
         "Science Teacher",
         "Technical Writer",
       ],
-      additionalRequirements: "Practical components may require attendance at specific venues.",
+      additionalRequirements:
+        "Practical components may require attendance at specific venues.",
     },
     {
       id: "unisa-national-diploma-engineering",
@@ -462,7 +525,8 @@ export class UNISA extends BaseUniversity {
         "Team Leader",
         "Operations Manager",
       ],
-      additionalRequirements: "Senior Certificate or an equivalent NQF level 4 qualification required.",
+      additionalRequirements:
+        "Senior Certificate or an equivalent NQF level 4 qualification required.",
     },
     {
       id: "unisa-slp-disaster-management",
@@ -480,7 +544,8 @@ export class UNISA extends BaseUniversity {
         "Humanitarian Aid Worker",
         "Public Safety Officer",
       ],
-      additionalRequirements: "Senior Certificate or an equivalent NQF level 4 qualification required.",
+      additionalRequirements:
+        "Senior Certificate or an equivalent NQF level 4 qualification required.",
     },
     {
       id: "unisa-slp-children-rights",
@@ -517,9 +582,10 @@ export class UNISA extends BaseUniversity {
         "Quality Control Manager",
         "Facilities Planner",
       ],
-      additionalRequirements: "A National Diploma in Engineering or other equivalent NQF-6 Engineering qualification.",
+      additionalRequirements:
+        "A National Diploma in Engineering or other equivalent NQF-6 Engineering qualification.",
     },
-  ]
+  ];
 
   /**
    * UNISA-specific APS calculation
@@ -528,28 +594,28 @@ export class UNISA extends BaseUniversity {
    * - Standard 7-point NSC scale
    */
   calculateApsScore(subjects: Record<string, number>): number {
-    const subjectScores: number[] = []
-    
+    const subjectScores: number[] = [];
+
     for (const [subjectName, percentage] of Object.entries(subjects)) {
-      if (subjectName.toLowerCase().includes('life orientation')) {
-        continue
+      if (subjectName.toLowerCase().includes("life orientation")) {
+        continue;
       }
-      
-      let points = 0
-      if (percentage >= 80) points = 7
-      else if (percentage >= 70) points = 6
-      else if (percentage >= 60) points = 5
-      else if (percentage >= 50) points = 4
-      else if (percentage >= 40) points = 3
-      else if (percentage >= 30) points = 2
-      else if (percentage >= 0) points = 1
-      
-      subjectScores.push(points)
+
+      let points = 0;
+      if (percentage >= 80) points = 7;
+      else if (percentage >= 70) points = 6;
+      else if (percentage >= 60) points = 5;
+      else if (percentage >= 50) points = 4;
+      else if (percentage >= 40) points = 3;
+      else if (percentage >= 30) points = 2;
+      else if (percentage >= 0) points = 1;
+
+      subjectScores.push(points);
     }
-    
-    subjectScores.sort((a, b) => b - a)
-    const top6 = subjectScores.slice(0, 6)
-    
-    return top6.reduce((sum, score) => sum + score, 0)
+
+    subjectScores.sort((a, b) => b - a);
+    const top6 = subjectScores.slice(0, 6);
+
+    return top6.reduce((sum, score) => sum + score, 0);
   }
 }

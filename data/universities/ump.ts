@@ -1,23 +1,25 @@
-import { BaseUniversity } from "./base-university"
-import type { Course } from "@/lib/types"
+import { BaseUniversity } from "./base-university";
+import type { Course } from "@/lib/types";
+
+import { percentageToLevel } from "@/lib/aps/utils";
 
 /**
  * University of Mpumalanga (UMP) class
  */
 export class UMP extends BaseUniversity {
-  readonly id = "ump"
-  readonly name = "University of Mpumalanga"
-  readonly shortName = "UMP"
-  readonly website = "https://www.ump.ac.za"
-  readonly logo = "/logos/ump.png"
+  readonly id = "ump";
+  readonly name = "University of Mpumalanga";
+  readonly shortName = "UMP";
+  readonly website = "https://www.ump.ac.za";
+  readonly logo = "/logos/ump.png";
   readonly location = {
     city: "Mbombela",
     province: "Mpumalanga",
     coordinates: {
-      latitude: -25.4478,
-      longitude: 30.9699,
+      latitude: -25.439,
+      longitude: 30.9818,
     },
-  }
+  };
 
   protected readonly _courses: Course[] = [
     // Faculty of Agriculture, Science and Technology
@@ -29,12 +31,19 @@ export class UMP extends BaseUniversity {
       duration: "4 years",
       credits: 480,
       subjectRequirements: {
-        "English (Home or First Additional)": 4,
+        "Language": { alternatives: [{ subject: "English Home Language", level: 4 }, { subject: "English First Additional Language", level: 4 }] },
         Mathematics: 4,
-        "Life Sciences/Biology/Agriculture": 4,
+        Alternatives: {
+          alternatives: [
+            { subject: "Life Sciences", level: 4 },
+            { subject: "Biology", level: 4 },
+            { subject: "Agriculture", level: 4 },
+          ],
+        },
         "Physical Sciences": 4,
       },
-      additionalRequirements: "Mathematical Literacy (Level 6) can be accepted instead of Mathematics (Level 4).",
+      additionalRequirements:
+        "Mathematical Literacy (Level 6) can be accepted instead of Mathematics (Level 4).",
       careerOpportunities:
         "Agricultural scientist, agricultural researcher, agricultural extension officer, farm manager, agricultural consultant.",
     },
@@ -46,7 +55,7 @@ export class UMP extends BaseUniversity {
       duration: "4 years",
       credits: 498,
       subjectRequirements: {
-        "English (Home or First Additional)": 4,
+        "Language": { alternatives: [{ subject: "English Home Language", level: 4 }, { subject: "English First Additional Language", level: 4 }] },
         Mathematics: 4,
         "Physical Sciences": 4,
       },
@@ -63,7 +72,7 @@ export class UMP extends BaseUniversity {
       duration: "3 years",
       credits: 360,
       subjectRequirements: {
-        "English (Home or First Additional)": 4,
+        "Language": { alternatives: [{ subject: "English Home Language", level: 4 }, { subject: "English First Additional Language", level: 4 }] },
         Mathematics: 4,
       },
       additionalRequirements:
@@ -79,13 +88,20 @@ export class UMP extends BaseUniversity {
       duration: "3 years",
       credits: 360,
       subjectRequirements: {
-        "English (Home or First Additional)": 4,
+        "Language": { alternatives: [{ subject: "English Home Language", level: 4 }, { subject: "English First Additional Language", level: 4 }] },
         Mathematics: 4,
-        "Life Science/Physical Science/Geography": 4,
+        Alternatives: {
+          alternatives: [
+            { subject: "Life Science", level: 4 },
+            { subject: "Physical Science", level: 4 },
+            { subject: "Geography", level: 4 },
+          ],
+        },
       },
       additionalRequirements:
         "Mathematical Literacy (Level 6) can be accepted instead of Mathematics (Level 4). Students with a 360 credit Diploma in an appropriate field such as conservation will be considered for this degree.",
-      careerOpportunities: "Scientist, researcher, laboratory technician, environmental consultant, data analyst.",
+      careerOpportunities:
+        "Scientist, researcher, laboratory technician, environmental consultant, data analyst.",
     },
     {
       id: "ump-b-agriculture",
@@ -95,9 +111,14 @@ export class UMP extends BaseUniversity {
       duration: "3 years",
       credits: 360,
       subjectRequirements: {
-        "English (Home or First Additional)": 4,
+        "Language": { alternatives: [{ subject: "English Home Language", level: 4 }, { subject: "English First Additional Language", level: 4 }] },
         Mathematics: 4,
-        "Agriculture/Life Science": 4,
+        Alternatives: {
+          alternatives: [
+            { subject: "Agriculture", level: 4 },
+            { subject: "Life Science", level: 4 },
+          ],
+        },
         "Physical Science": 4,
       },
       additionalRequirements:
@@ -113,7 +134,7 @@ export class UMP extends BaseUniversity {
       duration: "3 years",
       credits: 360,
       subjectRequirements: {
-        "English (Home or First Additional)": 4,
+        "Language": { alternatives: [{ subject: "English Home Language", level: 4 }, { subject: "English First Additional Language", level: 4 }] },
         Mathematics: 2,
       },
       additionalRequirements:
@@ -129,7 +150,7 @@ export class UMP extends BaseUniversity {
       duration: "3 years",
       credits: 360,
       subjectRequirements: {
-        "English (Home or First Additional)": 4,
+        "Language": { alternatives: [{ subject: "English Home Language", level: 4 }, { subject: "English First Additional Language", level: 4 }] },
         Mathematics: 3,
       },
       additionalRequirements: "Minimum APS: 24 with Mathematical Literacy.",
@@ -144,10 +165,15 @@ export class UMP extends BaseUniversity {
       duration: "3 years",
       credits: 360,
       subjectRequirements: {
-        "English (Home or First Additional)": 4,
+        "Language": { alternatives: [{ subject: "English Home Language", level: 4 }, { subject: "English First Additional Language", level: 4 }] },
         Mathematics: 3,
         "Physical Science": 3,
-        "Life Sciences/Agriculture": 4,
+        Alternatives: {
+          alternatives: [
+            { subject: "Life Sciences", level: 4 },
+            { subject: "Agriculture", level: 4 },
+          ],
+        },
       },
       additionalRequirements:
         "Mathematical Literacy (Level 6) can be accepted instead of Mathematics (Level 3). Minimum APS: 27 with Mathematical Literacy. NCV level 4 in Primary Agriculture with at least 50% for English, 40% for Mathematics or 70% for Mathematical Literacy.",
@@ -164,11 +190,20 @@ export class UMP extends BaseUniversity {
       duration: "3 years",
       credits: 360,
       subjectRequirements: {
-        "English (Home or First Additional)": 4,
+        "Language": { alternatives: [{ subject: "English Home Language", level: 4 }, { subject: "English First Additional Language", level: 4 }] },
         Mathematics: 2,
-        "History/Geography and One Other Social or Commercial Subject": 4,
+        Alternatives: {
+          alternatives: [
+            { subject: "History", level: 4 },
+            {
+              subject: "Geography and One Other Social or Commercial Subject",
+              level: 4,
+            },
+          ],
+        },
       },
-      additionalRequirements: "Mathematical Literacy (Level 3) can be accepted instead of Mathematics (Level 2).",
+      additionalRequirements:
+        "Mathematical Literacy (Level 3) can be accepted instead of Mathematics (Level 2).",
       careerOpportunities:
         "Development practitioner, policy analyst, project manager, community development worker, NGO coordinator.",
     },
@@ -180,11 +215,12 @@ export class UMP extends BaseUniversity {
       duration: "3 years",
       credits: 360,
       subjectRequirements: {
-        "English (Home or First Additional)": 4,
+        "Language": { alternatives: [{ subject: "English Home Language", level: 4 }, { subject: "English First Additional Language", level: 4 }] },
         Mathematics: 4,
       },
       additionalRequirements: "Mathematical Literacy is not accepted.",
-      careerOpportunities: "Accountant, financial manager, business analyst, marketing specialist, entrepreneur.",
+      careerOpportunities:
+        "Accountant, financial manager, business analyst, marketing specialist, entrepreneur.",
     },
     {
       id: "ump-b-administration",
@@ -194,7 +230,7 @@ export class UMP extends BaseUniversity {
       duration: "3 years",
       credits: 360,
       subjectRequirements: {
-        "English (Home or First Additional)": 4,
+        "Language": { alternatives: [{ subject: "English Home Language", level: 4 }, { subject: "English First Additional Language", level: 4 }] },
         "Second Language": 4,
         Mathematics: 2,
       },
@@ -211,7 +247,7 @@ export class UMP extends BaseUniversity {
       duration: "3 years",
       credits: 360,
       subjectRequirements: {
-        "English (Home or First Additional)": 4,
+        "Language": { alternatives: [{ subject: "English Home Language", level: 4 }, { subject: "English First Additional Language", level: 4 }] },
         Mathematics: 3,
       },
       additionalRequirements:
@@ -227,7 +263,7 @@ export class UMP extends BaseUniversity {
       duration: "1 year",
       credits: 120,
       subjectRequirements: {
-        "English (Home or First Additional)": 4,
+        "Language": { alternatives: [{ subject: "English Home Language", level: 4 }, { subject: "English First Additional Language", level: 4 }] },
         Mathematics: 2,
       },
       additionalRequirements:
@@ -245,11 +281,13 @@ export class UMP extends BaseUniversity {
       duration: "4 years",
       credits: 480,
       subjectRequirements: {
-        "English (Home or First Additional)": 4,
+        "Language": { alternatives: [{ subject: "English Home Language", level: 4 }, { subject: "English First Additional Language", level: 4 }] },
         Mathematics: 2,
       },
-      additionalRequirements: "Mathematical Literacy (Level 3) can be accepted instead of Mathematics (Level 2).",
-      careerOpportunities: "Social worker, community development worker, counselor, case manager, policy analyst.",
+      additionalRequirements:
+        "Mathematical Literacy (Level 3) can be accepted instead of Mathematics (Level 2).",
+      careerOpportunities:
+        "Social worker, community development worker, counselor, case manager, policy analyst.",
     },
     {
       id: "ump-ba-general",
@@ -259,10 +297,11 @@ export class UMP extends BaseUniversity {
       duration: "3 years",
       credits: 360,
       subjectRequirements: {
-        "English (Home or First Additional)": 4,
+        "Language": { alternatives: [{ subject: "English Home Language", level: 4 }, { subject: "English First Additional Language", level: 4 }] },
         Mathematics: 2,
       },
-      additionalRequirements: "Mathematical Literacy (Level 3) can be accepted instead of Mathematics (Level 2).",
+      additionalRequirements:
+        "Mathematical Literacy (Level 3) can be accepted instead of Mathematics (Level 2).",
       careerOpportunities:
         "Journalist, public relations officer, communications specialist, researcher, cultural officer.",
     },
@@ -274,13 +313,14 @@ export class UMP extends BaseUniversity {
       duration: "4 years",
       credits: 480,
       subjectRequirements: {
-        "English (Home or First Additional)": 4,
+        "Language": { alternatives: [{ subject: "English Home Language", level: 4 }, { subject: "English First Additional Language", level: 4 }] },
         "Additional Language": 4,
         Mathematics: 3,
       },
       additionalRequirements:
         "Mathematical Literacy (Level 4) can be accepted instead of Mathematics (Level 3). Bachelor Endorsement required. Selection will occur monthly. Applicants who exceed the minimum admission requirements and completed their NSC or equivalent will be made conditional offers. Those who meet the requirements will be placed on hold. Each month the new applicants will be considered along with those placed on hold. At least 50% of places will be reserved for applicants completing the NSC or equivalent.",
-      careerOpportunities: "Attorney, advocate, legal advisor, magistrate, prosecutor.",
+      careerOpportunities:
+        "Attorney, advocate, legal advisor, magistrate, prosecutor.",
     },
 
     // Faculty of Education
@@ -292,7 +332,7 @@ export class UMP extends BaseUniversity {
       duration: "4 years",
       credits: 480,
       subjectRequirements: {
-        "English (Home or First Additional)": 4,
+        "Language": { alternatives: [{ subject: "English Home Language", level: 4 }, { subject: "English First Additional Language", level: 4 }] },
       },
       additionalRequirements:
         "Minimum APS: 27 with Mathematical Literacy. Preliminary admission is based on the final Grade 11 examination results. Final admission is based on the final Grade 12 results. The seven prescribed subjects are the subjects to be used in calculating the APS. The APS achievement rating of Life Orientation is divided by two in the calculation of the APS. If an applicant included more than the minimum of three electives in the applicant's NSC, the four compulsories and the three best of the electives will be used.",
@@ -309,7 +349,7 @@ export class UMP extends BaseUniversity {
       duration: "3 years",
       credits: 360,
       subjectRequirements: {
-        "English (Home or First Additional)": 4,
+        "Language": { alternatives: [{ subject: "English Home Language", level: 4 }, { subject: "English First Additional Language", level: 4 }] },
         Mathematics: 4,
       },
       additionalRequirements:
@@ -325,11 +365,13 @@ export class UMP extends BaseUniversity {
       duration: "3 years",
       credits: 360,
       subjectRequirements: {
-        "English (Home or First Additional)": 4,
+        "Language": { alternatives: [{ subject: "English Home Language", level: 4 }, { subject: "English First Additional Language", level: 4 }] },
         Mathematics: 4,
       },
-      additionalRequirements: "Diploma Endorsement required. One Additional Language. Any Four other Modules.",
-      careerOpportunities: "Applications developer, software tester, web developer, mobile app developer, programmer.",
+      additionalRequirements:
+        "Diploma Endorsement required. One Additional Language. Any Four other Modules.",
+      careerOpportunities:
+        "Applications developer, software tester, web developer, mobile app developer, programmer.",
     },
     {
       id: "ump-hcert-ict-support",
@@ -339,7 +381,7 @@ export class UMP extends BaseUniversity {
       duration: "1 year",
       credits: 120,
       subjectRequirements: {
-        "English (Home or First Additional)": 4,
+        "Language": { alternatives: [{ subject: "English Home Language", level: 4 }, { subject: "English First Additional Language", level: 4 }] },
         Mathematics: 2,
       },
       additionalRequirements:
@@ -347,7 +389,7 @@ export class UMP extends BaseUniversity {
       careerOpportunities:
         "IT support technician, help desk analyst, technical support specialist, computer technician, IT customer service representative.",
     },
-  ]
+  ];
 
   /**
    * UMP-specific APS calculation
@@ -356,28 +398,28 @@ export class UMP extends BaseUniversity {
    * - Standard 7-point NSC scale
    */
   calculateApsScore(subjects: Record<string, number>): number {
-    const subjectScores: number[] = []
-    
+    const subjectScores: number[] = [];
+
     for (const [subjectName, percentage] of Object.entries(subjects)) {
-      if (subjectName.toLowerCase().includes('life orientation')) {
-        continue
+      if (subjectName.toLowerCase().includes("life orientation")) {
+        continue;
       }
-      
-      let points = 0
-      if (percentage >= 80) points = 7
-      else if (percentage >= 70) points = 6
-      else if (percentage >= 60) points = 5
-      else if (percentage >= 50) points = 4
-      else if (percentage >= 40) points = 3
-      else if (percentage >= 30) points = 2
-      else if (percentage >= 0) points = 1
-      
-      subjectScores.push(points)
+
+      let points = 0;
+      if (percentage >= 80) points = 7;
+      else if (percentage >= 70) points = 6;
+      else if (percentage >= 60) points = 5;
+      else if (percentage >= 50) points = 4;
+      else if (percentage >= 40) points = 3;
+      else if (percentage >= 30) points = 2;
+      else if (percentage >= 0) points = 1;
+
+      subjectScores.push(points);
     }
-    
-    subjectScores.sort((a, b) => b - a)
-    const top6 = subjectScores.slice(0, 6)
-    
-    return top6.reduce((sum, score) => sum + score, 0)
+
+    subjectScores.sort((a, b) => b - a);
+    const top6 = subjectScores.slice(0, 6);
+
+    return top6.reduce((sum, score) => sum + score, 0);
   }
 }

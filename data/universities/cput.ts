@@ -1,15 +1,15 @@
-import { BaseUniversity } from "./base-university"
-import type { Course } from "@/lib/types"
+import { BaseUniversity } from "./base-university";
+import type { Course } from "@/lib/types";
 
 /**
  * Cape Peninsula University of Technology (CPUT) class
  */
 export class CPUT extends BaseUniversity {
-  readonly id = "cput"
-  readonly name = "Cape Peninsula University of Technology"
-  readonly shortName = "CPUT"
-  readonly website = "https://www.cput.ac.za"
-  readonly logo = "/logos/cput.png"
+  readonly id = "cput";
+  readonly name = "Cape Peninsula University of Technology";
+  readonly shortName = "CPUT";
+  readonly website = "https://www.cput.ac.za";
+  readonly logo = "/logos/cput.png";
   readonly location = {
     city: "Cape Town",
     province: "Western Cape",
@@ -17,7 +17,7 @@ export class CPUT extends BaseUniversity {
       latitude: -33.9308,
       longitude: 18.6428,
     },
-  }
+  };
 
   /**
    * Calculate APS score according to CPUT's method
@@ -34,10 +34,13 @@ export class CPUT extends BaseUniversity {
     const validSubjects = Object.entries(subjects)
       .filter(([name]) => name.toLowerCase() !== "life orientation")
       .sort((a, b) => b[1] - a[1])
-      .slice(0, 6)
+      .slice(0, 6);
 
-    const totalScore = validSubjects.reduce((sum, [_, level]) => sum + level * 10, 0)
-    return totalScore / 10
+    const totalScore = validSubjects.reduce(
+      (sum, [_, level]) => sum + level * 10,
+      0,
+    );
+    return totalScore / 10;
   }
 
   protected readonly _courses: Course[] = [
@@ -100,7 +103,8 @@ export class CPUT extends BaseUniversity {
         Mathematics: 4,
         "Physical Sciences": 4,
       },
-      additionalRequirements: "45% or above in Maths or Physical Sciences if the other one is 50% or above",
+      additionalRequirements:
+        "45% or above in Maths or Physical Sciences if the other one is 50% or above",
       careerOpportunities: [
         "Mining",
         "Pharmaceutical",
@@ -127,7 +131,11 @@ export class CPUT extends BaseUniversity {
       },
       additionalRequirements:
         "45% or above in Maths or Physical Sciences or Life Sciences if the other three are 50% or above",
-      careerOpportunities: ["Pharmaceutical companies", "Chemical manufacturers", "Food industry"],
+      careerOpportunities: [
+        "Pharmaceutical companies",
+        "Chemical manufacturers",
+        "Food industry",
+      ],
     },
     {
       id: "cput-dip-consumer-science-food-nutrition",
@@ -141,8 +149,13 @@ export class CPUT extends BaseUniversity {
         Mathematics: 3,
         "Physical Sciences": 4,
       },
-      additionalRequirements: "45% or above in Maths or Physical Sciences if the other three are 50% and above",
-      careerOpportunities: ["Convenience food manufacturing industry", "Retail industry", "Food service industry"],
+      additionalRequirements:
+        "45% or above in Maths or Physical Sciences if the other three are 50% and above",
+      careerOpportunities: [
+        "Convenience food manufacturing industry",
+        "Retail industry",
+        "Food service industry",
+      ],
     },
     {
       id: "cput-dip-environmental-management",
@@ -177,8 +190,14 @@ export class CPUT extends BaseUniversity {
         "Physical Sciences": 4,
         "Life Sciences": 4,
       },
-      additionalRequirements: "Plus any other two subjects (4) except Life Orientation",
-      careerOpportunities: ["Local authorities", "Industry", "Consultants", "Government departments"],
+      additionalRequirements:
+        "Plus any other two subjects (4) except Life Orientation",
+      careerOpportunities: [
+        "Local authorities",
+        "Industry",
+        "Consultants",
+        "Government departments",
+      ],
     },
     {
       id: "cput-bachelor-food-science-technology",
@@ -213,7 +232,8 @@ export class CPUT extends BaseUniversity {
         Mathematics: 4,
         "Physical Sciences": 4,
       },
-      additionalRequirements: "45% or above in Maths or Physical Sciences if the other one is 50% or above",
+      additionalRequirements:
+        "45% or above in Maths or Physical Sciences if the other one is 50% or above",
       careerOpportunities: [
         "Government departments",
         "Nonprofit organisations",
@@ -301,7 +321,10 @@ export class CPUT extends BaseUniversity {
         Mathematics: 3,
         "Life Sciences": 4,
       },
-      careerOpportunities: ["Architectural firms", "Landscape project developments"],
+      careerOpportunities: [
+        "Architectural firms",
+        "Landscape project developments",
+      ],
     },
 
     // Faculty of Business & Management Sciences
@@ -316,7 +339,8 @@ export class CPUT extends BaseUniversity {
         English: 4,
         Mathematics: 3,
       },
-      additionalRequirements: "English (4) and one of the following: Maths(3), Maths Lit(5) or Acc(4)",
+      additionalRequirements:
+        "English (4) and one of the following: Maths(3), Maths Lit(5) or Acc(4)",
       careerOpportunities: [
         "Most businesses and organisations",
         "Private and governmental",
@@ -402,8 +426,12 @@ export class CPUT extends BaseUniversity {
         English: 4,
         Mathematics: 2,
       },
-      additionalRequirements: "Including one of the following: ECO, BUS, ACC (no rating required)",
-      careerOpportunities: ["Small and large private organisations", "Public sector"],
+      additionalRequirements:
+        "Including one of the following: ECO, BUS, ACC (no rating required)",
+      careerOpportunities: [
+        "Small and large private organisations",
+        "Public sector",
+      ],
     },
     {
       id: "cput-dip-management",
@@ -416,8 +444,14 @@ export class CPUT extends BaseUniversity {
         English: 4,
         Mathematics: 2,
       },
-      additionalRequirements: "Including one of the following: ECO, BUS, ACC (no rating required)",
-      careerOpportunities: ["Small and large businesses", "Public sector", "Consulting companies", "Government"],
+      additionalRequirements:
+        "Including one of the following: ECO, BUS, ACC (no rating required)",
+      careerOpportunities: [
+        "Small and large businesses",
+        "Public sector",
+        "Consulting companies",
+        "Government",
+      ],
     },
     {
       id: "cput-dip-marketing",
@@ -451,8 +485,14 @@ export class CPUT extends BaseUniversity {
         English: 4,
         Mathematics: 2,
       },
-      additionalRequirements: "Including one of the following: BUS, ECO, ACC, CAT, IT",
-      careerOpportunities: ["Business sector", "Government sector", "Corporate sector", "Private sector"],
+      additionalRequirements:
+        "Including one of the following: BUS, ECO, ACC, CAT, IT",
+      careerOpportunities: [
+        "Business sector",
+        "Government sector",
+        "Corporate sector",
+        "Private sector",
+      ],
     },
     {
       id: "cput-dip-operations-management",
@@ -478,7 +518,8 @@ export class CPUT extends BaseUniversity {
         English: 4,
         Mathematics: 2,
       },
-      additionalRequirements: "Including one of the following: ECO 3 (40%), BUS 3 (40%), ACC 3 (40%)",
+      additionalRequirements:
+        "Including one of the following: ECO 3 (40%), BUS 3 (40%), ACC 3 (40%)",
       careerOpportunities: [
         "Administrative and management environments of all three levels of the public sector: local, provincial, and national",
         "Semi-state (parastatal) and non-profit organisations (NPOs)",
@@ -497,7 +538,8 @@ export class CPUT extends BaseUniversity {
         English: 4,
         Mathematics: 2,
       },
-      additionalRequirements: "An NSC with at least three years relevant retail experience will also be considered",
+      additionalRequirements:
+        "An NSC with at least three years relevant retail experience will also be considered",
       careerOpportunities: [
         "Department stores",
         "Hypermarkets",
@@ -544,8 +586,14 @@ export class CPUT extends BaseUniversity {
         English: 4,
         Mathematics: 2,
       },
-      additionalRequirements: "Including one of the following: TOUR, ECO, HS, BUS, ACC, CAT, IT (no rating required)",
-      careerOpportunities: ["Event companies", "Marketing companies", "Corporate environments", "Hospitality industry"],
+      additionalRequirements:
+        "Including one of the following: TOUR, ECO, HS, BUS, ACC, CAT, IT (no rating required)",
+      careerOpportunities: [
+        "Event companies",
+        "Marketing companies",
+        "Corporate environments",
+        "Hospitality industry",
+      ],
     },
     {
       id: "cput-dip-sport-leisure-management",
@@ -575,8 +623,14 @@ export class CPUT extends BaseUniversity {
         English: 4,
         Mathematics: 2,
       },
-      additionalRequirements: "Including one of the following: ACC, CS, BUS, HS, LS, TOUR (no rating required)",
-      careerOpportunities: ["Hotels", "Guesthouses", "Bed and breakfast establishments", "Game lodges"],
+      additionalRequirements:
+        "Including one of the following: ACC, CS, BUS, HS, LS, TOUR (no rating required)",
+      careerOpportunities: [
+        "Hotels",
+        "Guesthouses",
+        "Bed and breakfast establishments",
+        "Game lodges",
+      ],
     },
     {
       id: "cput-dip-hospitality-food-beverage-management",
@@ -589,7 +643,8 @@ export class CPUT extends BaseUniversity {
         English: 4,
         Mathematics: 2,
       },
-      additionalRequirements: "Including one of the following: ACC, CS, BUS, HS, LS, TOUR (no rating required)",
+      additionalRequirements:
+        "Including one of the following: ACC, CS, BUS, HS, LS, TOUR (no rating required)",
       careerOpportunities: [
         "Restaurants",
         "Entertainment and conference venues",
@@ -610,7 +665,8 @@ export class CPUT extends BaseUniversity {
         English: 4,
         Mathematics: 2,
       },
-      additionalRequirements: "Including one of the following: ACC, CS, BUS, HS, LS, TOUR (no rating required)",
+      additionalRequirements:
+        "Including one of the following: ACC, CS, BUS, HS, LS, TOUR (no rating required)",
       careerOpportunities: [
         "Restaurants",
         "Coffee shops",
@@ -633,8 +689,13 @@ export class CPUT extends BaseUniversity {
         English: 4,
         Mathematics: 2,
       },
-      additionalRequirements: "Including one of the following for full-time studies: ECO, BUS, ACC 4",
-      careerOpportunities: ["Real estate agencies", "Private sector", "Financial sector"],
+      additionalRequirements:
+        "Including one of the following for full-time studies: ECO, BUS, ACC 4",
+      careerOpportunities: [
+        "Real estate agencies",
+        "Private sector",
+        "Financial sector",
+      ],
     },
     {
       id: "cput-bachelor-paralegal-studies",
@@ -647,7 +708,8 @@ export class CPUT extends BaseUniversity {
         English: 4,
         Mathematics: 3,
       },
-      additionalRequirements: "Including one official language at level 4 (Excluding English)",
+      additionalRequirements:
+        "Including one official language at level 4 (Excluding English)",
       careerOpportunities: [
         "Private sector",
         "Public sector",
@@ -702,7 +764,9 @@ export class CPUT extends BaseUniversity {
       },
       additionalRequirements:
         "Home Language (4): Afrikaans, English or isiXhosa; First Additional Language (3): Afrikaans, English or isiXhosa (One of the languages must be the language of instruction)",
-      careerOpportunities: ["Teaching in Senior Phase (Grade 7-9) and Further Education & Training (Grade 10-12)"],
+      careerOpportunities: [
+        "Teaching in Senior Phase (Grade 7-9) and Further Education & Training (Grade 10-12)",
+      ],
     },
     {
       id: "cput-diploma-grade-r-teaching",
@@ -746,7 +810,10 @@ export class CPUT extends BaseUniversity {
         Mathematics: 2,
         "Life Sciences": 3,
       },
-      careerOpportunities: ["Dental clinics in the state and provincial structures", "Private practices"],
+      careerOpportunities: [
+        "Dental clinics in the state and provincial structures",
+        "Private practices",
+      ],
     },
     {
       id: "cput-bachelor-health-sciences-dental-technology",
@@ -761,7 +828,10 @@ export class CPUT extends BaseUniversity {
         "Physical Sciences": 4,
         "Life Sciences": 4,
       },
-      careerOpportunities: ["Dental laboratories in state and provincial structures", "Private laboratories"],
+      careerOpportunities: [
+        "Dental laboratories in state and provincial structures",
+        "Private laboratories",
+      ],
     },
     {
       id: "cput-bachelor-health-sciences-medical-laboratory-science",
@@ -869,7 +939,11 @@ export class CPUT extends BaseUniversity {
       },
       additionalRequirements:
         "All students accepted for the Somatology course will be required to have received Hepatitis inoculation",
-      careerOpportunities: ["Health and skincare clinics", "Cruise liners", "Spas"],
+      careerOpportunities: [
+        "Health and skincare clinics",
+        "Cruise liners",
+        "Spas",
+      ],
     },
     {
       id: "cput-bachelor-nursing",
@@ -884,7 +958,8 @@ export class CPUT extends BaseUniversity {
         "Life Sciences": 4,
         "Physical Sciences": 4,
       },
-      additionalRequirements: "In addition to the application form you will be invited to a selection interview",
+      additionalRequirements:
+        "In addition to the application form you will be invited to a selection interview",
       careerOpportunities: [
         "Hospitals",
         "Private emergency services",
@@ -1016,7 +1091,11 @@ export class CPUT extends BaseUniversity {
         English: 4,
         Mathematics: 4,
       },
-      careerOpportunities: ["Architectural firms", "Property developers", "Government departments"],
+      careerOpportunities: [
+        "Architectural firms",
+        "Property developers",
+        "Government departments",
+      ],
     },
     {
       id: "cput-diploma-interior-design",
@@ -1029,7 +1108,12 @@ export class CPUT extends BaseUniversity {
         English: 4,
         Mathematics: 4,
       },
-      careerOpportunities: ["Property developers", "Interior design firms", "Architecture firms", "Self-employment"],
+      careerOpportunities: [
+        "Property developers",
+        "Interior design firms",
+        "Architecture firms",
+        "Self-employment",
+      ],
     },
     {
       id: "cput-diploma-fashion",
@@ -1042,7 +1126,11 @@ export class CPUT extends BaseUniversity {
         English: 4,
         Mathematics: 3,
       },
-      careerOpportunities: ["Clothing retail stores", "Clothing manufacturers", "Self employment"],
+      careerOpportunities: [
+        "Clothing retail stores",
+        "Clothing manufacturers",
+        "Self employment",
+      ],
     },
     {
       id: "cput-diploma-visual-communication-design",
@@ -1098,7 +1186,11 @@ export class CPUT extends BaseUniversity {
         English: 4,
         Mathematics: 3,
       },
-      careerOpportunities: ["Jewellery retail stores", "Boutiques", "Jewellery design studios"],
+      careerOpportunities: [
+        "Jewellery retail stores",
+        "Boutiques",
+        "Jewellery design studios",
+      ],
     },
     {
       id: "cput-diploma-film-production",
@@ -1208,7 +1300,11 @@ export class CPUT extends BaseUniversity {
         English: 4,
         Mathematics: 3,
       },
-      careerOpportunities: ["Information technology companies", "Network design", "Network administration"],
+      careerOpportunities: [
+        "Information technology companies",
+        "Network design",
+        "Network administration",
+      ],
     },
     {
       id: "cput-diploma-multimedia-applications",
@@ -1252,7 +1348,8 @@ export class CPUT extends BaseUniversity {
         English: 4,
         Mathematics: 4,
       },
-      additionalRequirements: "Compulsory: Geography (4) or Economics (4) or Business Studies (4) or Tourism (4)",
+      additionalRequirements:
+        "Compulsory: Geography (4) or Economics (4) or Business Studies (4) or Tourism (4)",
       careerOpportunities: [
         "Private planning firms",
         "Property developers",
@@ -1275,7 +1372,11 @@ export class CPUT extends BaseUniversity {
         Mathematics: 4,
         "Physical Sciences": 4,
       },
-      careerOpportunities: ["Consultants", "Contractors", "Government agencies"],
+      careerOpportunities: [
+        "Consultants",
+        "Contractors",
+        "Government agencies",
+      ],
     },
     {
       id: "cput-bachelor-engineering-technology-civil",
@@ -1289,7 +1390,11 @@ export class CPUT extends BaseUniversity {
         Mathematics: 4,
         "Physical Sciences": 4,
       },
-      careerOpportunities: ["Consultants", "Contractors", "Government agencies"],
+      careerOpportunities: [
+        "Consultants",
+        "Contractors",
+        "Government agencies",
+      ],
     },
     {
       id: "cput-diploma-clothing-textile-technology",
@@ -1302,7 +1407,11 @@ export class CPUT extends BaseUniversity {
         English: 4,
         Mathematics: 3,
       },
-      careerOpportunities: ["Clothing industry", "Textile industry", "Retail sector"],
+      careerOpportunities: [
+        "Clothing industry",
+        "Textile industry",
+        "Retail sector",
+      ],
     },
     {
       id: "cput-diploma-engineering-technology-electrical",
@@ -1360,5 +1469,5 @@ export class CPUT extends BaseUniversity {
       },
       careerOpportunities: ["Electrical and computer engineering industry"],
     },
-  ]
+  ];
 }

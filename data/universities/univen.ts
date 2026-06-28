@@ -1,15 +1,15 @@
-import { BaseUniversity } from "./base-university"
-import type { Course } from "@/lib/types"
+import { BaseUniversity } from "./base-university";
+import type { Course } from "@/lib/types";
 
 /**
  * University of Venda (UNIVEN) class
  */
 export class UNIVEN extends BaseUniversity {
-  readonly id = "univen"
-  readonly name = "University of Venda"
-  readonly shortName = "UNIVEN"
-  readonly website = "https://www.univen.ac.za"
-  readonly logo = "/logos/univen.png"
+  readonly id = "univen";
+  readonly name = "University of Venda";
+  readonly shortName = "UNIVEN";
+  readonly website = "https://www.univen.ac.za";
+  readonly logo = "/logos/univen.png";
   readonly location = {
     city: "Thohoyandou",
     province: "Limpopo",
@@ -17,7 +17,7 @@ export class UNIVEN extends BaseUniversity {
       latitude: -22.9761,
       longitude: 30.4465,
     },
-  }
+  };
 
   protected readonly _courses: Course[] = [
     // Faculty of Humanities, Social Sciences and Education
@@ -291,8 +291,12 @@ export class UNIVEN extends BaseUniversity {
       duration: "3 years",
       subjectRequirements: {
         English: 4,
-        Mathematics: 3,
-        "Mathematical Literacy": 4,
+        Math: {
+          alternatives: [
+            { subject: "Mathematics", level: 3 },
+            { subject: "Mathematical Literacy", level: 4 },
+          ],
+        },
         Accounting: 4,
         "Business Studies": 4,
         Economics: 4,
@@ -997,7 +1001,7 @@ export class UNIVEN extends BaseUniversity {
         "Physical Sciences": 3,
       },
     },
-  ]
+  ];
 
   /**
    * UNIVEN-specific APS calculation
@@ -1006,28 +1010,28 @@ export class UNIVEN extends BaseUniversity {
    * - Standard 7-point NSC scale
    */
   calculateApsScore(subjects: Record<string, number>): number {
-    const subjectScores: number[] = []
-    
+    const subjectScores: number[] = [];
+
     for (const [subjectName, percentage] of Object.entries(subjects)) {
-      if (subjectName.toLowerCase().includes('life orientation')) {
-        continue
+      if (subjectName.toLowerCase().includes("life orientation")) {
+        continue;
       }
-      
-      let points = 0
-      if (percentage >= 80) points = 7
-      else if (percentage >= 70) points = 6
-      else if (percentage >= 60) points = 5
-      else if (percentage >= 50) points = 4
-      else if (percentage >= 40) points = 3
-      else if (percentage >= 30) points = 2
-      else if (percentage >= 0) points = 1
-      
-      subjectScores.push(points)
+
+      let points = 0;
+      if (percentage >= 80) points = 7;
+      else if (percentage >= 70) points = 6;
+      else if (percentage >= 60) points = 5;
+      else if (percentage >= 50) points = 4;
+      else if (percentage >= 40) points = 3;
+      else if (percentage >= 30) points = 2;
+      else if (percentage >= 0) points = 1;
+
+      subjectScores.push(points);
     }
-    
-    subjectScores.sort((a, b) => b - a)
-    const top6 = subjectScores.slice(0, 6)
-    
-    return top6.reduce((sum, score) => sum + score, 0)
+
+    subjectScores.sort((a, b) => b - a);
+    const top6 = subjectScores.slice(0, 6);
+
+    return top6.reduce((sum, score) => sum + score, 0);
   }
 }

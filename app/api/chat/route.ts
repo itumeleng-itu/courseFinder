@@ -86,19 +86,19 @@ interface RateLimitEntry {
 const rateLimitMap = new Map<string, RateLimitEntry>()
 const RATE_LIMIT_MAX = 20
 const RATE_LIMIT_WINDOW_MS = 60 * 1000 // 1 minute
-
-// Clean stale entries every 5 minutes
-setInterval(() => {
-    const now = Date.now()
-    for (const [ip, entry] of rateLimitMap.entries()) {
-        if (now > entry.resetTime) rateLimitMap.delete(ip)
-    }
-}, 5 * 60 * 1000)
+let _requestCount = 0
 
 function checkRateLimit(request: Request): { allowed: boolean; remaining: number } {
     const forwarded = request.headers.get("x-forwarded-for")
     const ip = forwarded?.split(",")[0]?.trim() || request.headers.get("x-real-ip") || "unknown"
     const now = Date.now()
+
+    // Lazy cleanup every 100 requests — avoids unbounded Map growth on warm instances
+    if (++_requestCount % 100 === 0) {
+        for (const [k, v] of rateLimitMap.entries()) {
+            if (now > v.resetTime) rateLimitMap.delete(k)
+        }
+    }
 
     let entry = rateLimitMap.get(ip)
     if (!entry || now > entry.resetTime) {
@@ -190,8 +190,8 @@ export async function POST(request: Request) {
 
         const messages: Array<{ role: "system" | "user" | "assistant"; content: string }> = []
         
-        // Create an optimal data payload to give the LLM all contextual knowledge of the app
-        // We map universities down to a compact format to save strictly on token constraints.
+        // Compact context — full course lists are too large for free model token budgets.
+        // Students needing course details are directed to the /find-course page.
         const allEvents = getAllEventsWithStatus()
         const appContextData = {
           studyMethods,
@@ -201,11 +201,16 @@ export async function POST(request: Request) {
              shortName: u.shortName,
              name: u.name,
              location: u.location,
-             courses: u.courses.map((c: any) => ({
-               name: c.name,
-               aps: c.apsRequired || c.apsMin || 'Varies',
-               duration: c.duration,
-             }))
+             totalCourses: u.courses?.length ?? 0,
+             apsRange: (() => {
+               const apsList: number[] = (u.courses ?? [])
+                 .map((c: any) => c.apsMin ?? c.apsRequired ?? 0)
+                 .filter((n: number) => n > 0)
+               if (!apsList.length) return 'Varies'
+               const lo = apsList.reduce((a, b) => a < b ? a : b)
+               const hi = apsList.reduce((a, b) => a > b ? a : b)
+               return `${lo}-${hi}`
+             })(),
           }))
         }
         

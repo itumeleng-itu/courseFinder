@@ -1,16 +1,16 @@
-import { BaseUniversity } from "./base-university"
-import type { Course } from "@/lib/types"
+import { BaseUniversity } from "./base-university";
+import type { Course } from "@/lib/types";
 
 /**
  * University of Cape Town (UCT) class
  * Based on 2026 Undergraduate Prospectus
  */
 export class UCT extends BaseUniversity {
-  readonly id = "uct"
-  readonly name = "University of Cape Town"
-  readonly shortName = "UCT"
-  readonly website = "https://www.uct.ac.za"
-  readonly logo = "/logos/uct.png"
+  readonly id = "uct";
+  readonly name = "University of Cape Town";
+  readonly shortName = "UCT";
+  readonly website = "https://www.uct.ac.za";
+  readonly logo = "/logos/uct.png";
   readonly location = {
     city: "Cape Town",
     province: "Western Cape",
@@ -18,7 +18,7 @@ export class UCT extends BaseUniversity {
       latitude: -33.9579,
       longitude: 18.4611,
     },
-  }
+  };
 
   protected readonly _courses: Course[] = [
     // FACULTY OF COMMERCE
@@ -716,7 +716,7 @@ export class UCT extends BaseUniversity {
         "Research Scientist",
       ],
     },
-  ]
+  ];
 
   /**
    * UCT-specific APS calculation
@@ -729,32 +729,32 @@ export class UCT extends BaseUniversity {
       .filter(([subject]) => subject !== "Life Orientation")
       .map(([, mark]) => mark)
       .sort((a, b) => b - a)
-      .slice(0, 6)
+      .slice(0, 6);
 
-    return validSubjects.reduce((sum, mark) => sum + mark, 0)
+    return validSubjects.reduce((sum, mark) => sum + mark, 0);
   }
 
   /**
    * Calculate Faculty Points Score for different faculties
    */
   calculateFPS(subjects: Record<string, number>, faculty: string): number {
-    const aps = this.calculateApsScore(subjects)
+    const aps = this.calculateApsScore(subjects);
 
     switch (faculty) {
       case "Science":
         // Science FPS = APS + doubled Math and Physical Science (out of 800)
-        const mathScore = subjects["Mathematics"] || 0
-        const physicsScore = subjects["Physical Sciences"] || 0
-        return aps + mathScore + physicsScore
+        const mathScore = subjects["Mathematics"] || 0;
+        const physicsScore = subjects["Physical Sciences"] || 0;
+        return aps + mathScore + physicsScore;
 
       case "Health Sciences":
         // Health Sciences FPS = APS + NBT scores (out of 900)
         // Note: NBT scores would need to be added separately
-        return aps
+        return aps;
 
       default:
         // Commerce, Engineering, Humanities, Law use APS as FPS
-        return aps
+        return aps;
     }
   }
 
@@ -762,34 +762,49 @@ export class UCT extends BaseUniversity {
    * Get qualifying courses based on subjects and APS
    */
   getQualifyingCourses(subjects: Record<string, number>): Course[] {
-    const aps = this.calculateApsScore(subjects)
+    const aps = this.calculateApsScore(subjects);
 
     return this._courses.filter((course) => {
       // Check minimum APS
-      if (aps < course.apsMin) return false
+      if (aps < (course.apsMin ?? 0)) return false;
 
       // Check subject requirements
-      for (const [subject, minMark] of Object.entries(course.subjectRequirements)) {
-        const studentMark = subjects[subject] || 0
-        if (studentMark < minMark) return false
+      for (const [subject, req] of Object.entries(
+        course.subjectRequirements ?? {},
+      )) {
+        if (typeof req === "number") {
+          const studentMark = subjects[subject] || 0;
+          if (studentMark < req) return false;
+        } else if (req && typeof req === "object" && "alternatives" in req) {
+          const meetsAlt = req.alternatives.some(
+            (alt) => (subjects[alt.subject] || 0) >= alt.level * 10
+          );
+          if (!meetsAlt) return false;
+        }
       }
 
-      return true
-    })
+      return true;
+    });
   }
 
   /**
    * Get courses by faculty
    */
   getCoursesByFaculty(faculty: string): Course[] {
-    return this._courses.filter((course) => course.faculty === faculty)
+    return this._courses.filter((course) => course.faculty === faculty);
   }
 
   /**
    * Get all available faculties
    */
   getFaculties(): string[] {
-    return [...new Set(this._courses.map((course) => course.faculty).filter((f): f is string => !!f))]
+    return [
+      ...new Set(
+        this._courses
+          .map((course) => course.faculty)
+          .filter((f): f is string => !!f),
+      ),
+    ];
   }
 
   /**
@@ -804,7 +819,7 @@ export class UCT extends BaseUniversity {
       "Early conditional offers available for strong candidates",
       "Selection based on Faculty Points Score (FPS) and redress categories",
       "Some programs require portfolios, auditions, or interviews",
-    ]
+    ];
   }
 
   /**
@@ -819,7 +834,7 @@ export class UCT extends BaseUniversity {
       "GAP funding for families earning R350,000-R600,000",
       "Various external bursaries and scholarships available",
       "Work-study opportunities on campus",
-    ]
+    ];
   }
 
   /**
@@ -835,6 +850,6 @@ export class UCT extends BaseUniversity {
       "Free shuttle service between campuses and residences",
       "Over 40 sports clubs and 100+ student societies",
       "Comprehensive student support services",
-    ]
+    ];
   }
 }

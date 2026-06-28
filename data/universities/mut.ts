@@ -1,15 +1,15 @@
-import { BaseUniversity } from "./base-university"
-import type { Course } from "@/lib/types"
+import { BaseUniversity } from "./base-university";
+import type { Course } from "@/lib/types";
 
 /**
  * Mangosuthu University of Technology (MUT) class
  */
 export class MUT extends BaseUniversity {
-  readonly id = "mut"
-  readonly name = "Mangosuthu University of Technology"
-  readonly shortName = "MUT"
-  readonly website = "https://www.mut.ac.za"
-  readonly logo = "/logos/mut.png"
+  readonly id = "mut";
+  readonly name = "Mangosuthu University of Technology";
+  readonly shortName = "MUT";
+  readonly website = "https://www.mut.ac.za";
+  readonly logo = "/logos/mut.png";
   readonly location = {
     city: "Durban",
     province: "KwaZulu-Natal",
@@ -17,7 +17,7 @@ export class MUT extends BaseUniversity {
       latitude: -29.9689,
       longitude: 30.9149,
     },
-  }
+  };
 
   protected readonly _courses: Course[] = [
     // Faculty of Engineering
@@ -374,7 +374,7 @@ export class MUT extends BaseUniversity {
         },
       },
     },
-  ]
+  ];
 
   /**
    * MUT-specific APS calculation
@@ -383,28 +383,28 @@ export class MUT extends BaseUniversity {
    * - Standard 7-point NSC scale
    */
   calculateApsScore(subjects: Record<string, number>): number {
-    const subjectScores: number[] = []
-    
+    const subjectScores: number[] = [];
+
     for (const [subjectName, percentage] of Object.entries(subjects)) {
-      if (subjectName.toLowerCase().includes('life orientation')) {
-        continue
+      if (subjectName.toLowerCase().includes("life orientation")) {
+        continue;
       }
-      
-      let points = 0
-      if (percentage >= 80) points = 7
-      else if (percentage >= 70) points = 6
-      else if (percentage >= 60) points = 5
-      else if (percentage >= 50) points = 4
-      else if (percentage >= 40) points = 3
-      else if (percentage >= 30) points = 2
-      else if (percentage >= 0) points = 1
-      
-      subjectScores.push(points)
+
+      let points = 0;
+      if (percentage >= 80) points = 7;
+      else if (percentage >= 70) points = 6;
+      else if (percentage >= 60) points = 5;
+      else if (percentage >= 50) points = 4;
+      else if (percentage >= 40) points = 3;
+      else if (percentage >= 30) points = 2;
+      else if (percentage >= 0) points = 1;
+
+      subjectScores.push(points);
     }
-    
-    subjectScores.sort((a, b) => b - a)
-    const top6 = subjectScores.slice(0, 6)
-    
-    return top6.reduce((sum, score) => sum + score, 0)
+
+    subjectScores.sort((a, b) => b - a);
+    const top6 = subjectScores.slice(0, 6);
+
+    return top6.reduce((sum, score) => sum + score, 0);
   }
 }

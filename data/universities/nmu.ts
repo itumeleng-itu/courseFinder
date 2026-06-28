@@ -1,15 +1,15 @@
-import { BaseUniversity } from "./base-university"
-import type { Course } from "@/lib/types"
+import { BaseUniversity } from "./base-university";
+import type { Course } from "@/lib/types";
 
 /**
  * Nelson Mandela University (NMU) class
  */
 export class NMU extends BaseUniversity {
-  readonly id = "nmu"
-  readonly name = "Nelson Mandela University"
-  readonly shortName = "NMU"
-  readonly website = "https://www.mandela.ac.za"
-  readonly logo = "/logos/nmu.png"
+  readonly id = "nmu";
+  readonly name = "Nelson Mandela University";
+  readonly shortName = "NMU";
+  readonly website = "https://www.mandela.ac.za";
+  readonly logo = "/logos/nmu.png";
   readonly location = {
     city: "Port Elizabeth",
     province: "Eastern Cape",
@@ -17,7 +17,7 @@ export class NMU extends BaseUniversity {
       latitude: -34.0007,
       longitude: 25.6735,
     },
-  }
+  };
 
   readonly campuses = [
     {
@@ -40,34 +40,37 @@ export class NMU extends BaseUniversity {
       location: "Port Elizabeth",
       programs: ["Community engagement programs"],
     },
-  ]
+  ];
 
   readonly admissionInfo = {
     apsCalculation:
       "Calculated using six subjects excluding Life Orientation. For quintile 1-3 schools with 50%+ in Life Orientation, 7 points are added.",
     minimumRequirements: {
       higherCertificate: "NSC with 30% in language of instruction",
-      diploma: "NSC with 30% in language of instruction + 40-49% in four 20-credit subjects",
-      degree: "NSC with 30% in language of instruction + 50-59% in four 20-credit subjects",
+      diploma:
+        "NSC with 30% in language of instruction + 40-49% in four 20-credit subjects",
+      degree:
+        "NSC with 30% in language of instruction + 50-59% in four 20-credit subjects",
     },
     applicationDeadlines: {
       early: "August",
       late: "September",
       medical: "30 June (MBChB, BPharm, Radiography)",
     },
-  }
+  };
 
   readonly financialAid = {
     nsfas: "Available for qualifying students",
     bursaries: "Merit awards and corporate donor funds available",
     contact: "financialaid@mandela.ac.za",
-  }
+  };
 
   readonly accommodation = {
-    onCampus: "Residences available on Summerstrand, Second Avenue and George campuses",
+    onCampus:
+      "Residences available on Summerstrand, Second Avenue and George campuses",
     offCampus: "Student Housing office assists with off-campus accommodation",
     contact: "resadmissions@mandela.ac.za",
-  }
+  };
 
   protected readonly _courses: Course[] = [
     // Faculty of Business & Economic Sciences
@@ -81,7 +84,11 @@ export class NMU extends BaseUniversity {
         Mathematics: 6,
       },
       additionalRequirements: "Also offered on George Campus",
-      careerOpportunities: ["Chartered Accountant", "Financial Manager", "Auditor"],
+      careerOpportunities: [
+        "Chartered Accountant",
+        "Financial Manager",
+        "Auditor",
+      ],
     },
     {
       id: "nmu-bcom-chartered-accounting",
@@ -94,7 +101,11 @@ export class NMU extends BaseUniversity {
       },
       additionalRequirements:
         "Mathematics 60% if took Grade 12 Accounting OR 65% if did not take Grade 12 Accounting. Also offered on George Campus",
-      careerOpportunities: ["Chartered Accountant", "CA(SA)", "Financial Director"],
+      careerOpportunities: [
+        "Chartered Accountant",
+        "CA(SA)",
+        "Financial Director",
+      ],
     },
     {
       id: "nmu-bcom-accounting-science-economics",
@@ -105,7 +116,11 @@ export class NMU extends BaseUniversity {
       subjectRequirements: {
         Mathematics: 7,
       },
-      careerOpportunities: ["Chartered Accountant", "Business Analyst", "Financial Consultant"],
+      careerOpportunities: [
+        "Chartered Accountant",
+        "Business Analyst",
+        "Financial Consultant",
+      ],
     },
     {
       id: "nmu-bcom-accounting-science-law",
@@ -117,8 +132,13 @@ export class NMU extends BaseUniversity {
         Mathematics: 7,
         "English Home": 7,
       },
-      additionalRequirements: "English (Home Lang) 65% or English (1st Add Lang) 70%",
-      careerOpportunities: ["Chartered Accountant", "Legal Advisor", "Corporate Lawyer"],
+      additionalRequirements:
+        "English (Home Lang) 65% or English (1st Add Lang) 70%",
+      careerOpportunities: [
+        "Chartered Accountant",
+        "Legal Advisor",
+        "Corporate Lawyer",
+      ],
     },
     {
       id: "nmu-bcom-accounting-science-cs",
@@ -129,7 +149,11 @@ export class NMU extends BaseUniversity {
       subjectRequirements: {
         Mathematics: 7,
       },
-      careerOpportunities: ["Chartered Accountant", "IT Auditor", "Systems Analyst"],
+      careerOpportunities: [
+        "Chartered Accountant",
+        "IT Auditor",
+        "Systems Analyst",
+      ],
     },
     {
       id: "nmu-bcom-marketing-business",
@@ -140,7 +164,11 @@ export class NMU extends BaseUniversity {
       subjectRequirements: {
         Mathematics: 5,
       },
-      careerOpportunities: ["Marketing Manager", "Business Development Manager", "Brand Manager"],
+      careerOpportunities: [
+        "Marketing Manager",
+        "Business Development Manager",
+        "Brand Manager",
+      ],
     },
     {
       id: "nmu-bcom-logistics-transport",
@@ -151,7 +179,11 @@ export class NMU extends BaseUniversity {
       subjectRequirements: {
         Mathematics: 5,
       },
-      careerOpportunities: ["Logistics Manager", "Supply Chain Analyst", "Transport Economist"],
+      careerOpportunities: [
+        "Logistics Manager",
+        "Supply Chain Analyst",
+        "Transport Economist",
+      ],
     },
     {
       id: "nmu-bcom-economics-statistics",
@@ -173,7 +205,11 @@ export class NMU extends BaseUniversity {
       subjectRequirements: {
         Mathematics: 5,
       },
-      careerOpportunities: ["Financial Planner", "Investment Advisor", "Wealth Manager"],
+      careerOpportunities: [
+        "Financial Planner",
+        "Investment Advisor",
+        "Wealth Manager",
+      ],
     },
     {
       id: "nmu-bcom-hospitality",
@@ -184,7 +220,11 @@ export class NMU extends BaseUniversity {
       subjectRequirements: {
         Mathematics: 5,
       },
-      careerOpportunities: ["Hotel Manager", "Event Manager", "Tourism Consultant"],
+      careerOpportunities: [
+        "Hotel Manager",
+        "Event Manager",
+        "Tourism Consultant",
+      ],
     },
     {
       id: "nmu-bcom-food-service",
@@ -195,7 +235,11 @@ export class NMU extends BaseUniversity {
       subjectRequirements: {
         Mathematics: 5,
       },
-      careerOpportunities: ["Restaurant Manager", "Food Service Director", "Catering Manager"],
+      careerOpportunities: [
+        "Restaurant Manager",
+        "Food Service Director",
+        "Catering Manager",
+      ],
     },
 
     // Faculty of Engineering, the Built Environment & Technology
@@ -211,7 +255,11 @@ export class NMU extends BaseUniversity {
       },
       additionalRequirements:
         "Mathematics 60% or Technical Maths 60%, and Physical Science 50% or Technical Science 50%",
-      careerOpportunities: ["Civil Engineer", "Structural Engineer", "Project Manager"],
+      careerOpportunities: [
+        "Civil Engineer",
+        "Structural Engineer",
+        "Project Manager",
+      ],
     },
     {
       id: "nmu-beng-electrical",
@@ -225,7 +273,11 @@ export class NMU extends BaseUniversity {
       },
       additionalRequirements:
         "Mathematics 60% or Technical Maths 60%, and Physical Science 50% or Technical Science 50%",
-      careerOpportunities: ["Electrical Engineer", "Power Systems Engineer", "Control Systems Engineer"],
+      careerOpportunities: [
+        "Electrical Engineer",
+        "Power Systems Engineer",
+        "Control Systems Engineer",
+      ],
     },
     {
       id: "nmu-beng-mechanical",
@@ -239,7 +291,11 @@ export class NMU extends BaseUniversity {
       },
       additionalRequirements:
         "Mathematics 60% or Technical Maths 60%, and Physical Science 50% or Technical Science 50%",
-      careerOpportunities: ["Mechanical Engineer", "Design Engineer", "Manufacturing Engineer"],
+      careerOpportunities: [
+        "Mechanical Engineer",
+        "Design Engineer",
+        "Manufacturing Engineer",
+      ],
     },
     {
       id: "nmu-beng-industrial",
@@ -253,7 +309,11 @@ export class NMU extends BaseUniversity {
       },
       additionalRequirements:
         "Mathematics 60% or Technical Maths 60%, and Physical Science 50% or Technical Science 50%",
-      careerOpportunities: ["Industrial Engineer", "Operations Manager", "Quality Engineer"],
+      careerOpportunities: [
+        "Industrial Engineer",
+        "Operations Manager",
+        "Quality Engineer",
+      ],
     },
     {
       id: "nmu-beng-marine",
@@ -267,7 +327,11 @@ export class NMU extends BaseUniversity {
       },
       additionalRequirements:
         "Mathematics 60% or Technical Maths 60%, and Physical Science 50% or Technical Science 50%",
-      careerOpportunities: ["Marine Engineer", "Naval Architect", "Port Engineer"],
+      careerOpportunities: [
+        "Marine Engineer",
+        "Naval Architect",
+        "Port Engineer",
+      ],
     },
     {
       id: "nmu-beng-mechatronics",
@@ -280,7 +344,11 @@ export class NMU extends BaseUniversity {
         "Physical Sciences": 7,
       },
       additionalRequirements: "Mathematics 60% and Physical Sciences 65%",
-      careerOpportunities: ["Mechatronics Engineer", "Robotics Engineer", "Automation Engineer"],
+      careerOpportunities: [
+        "Mechatronics Engineer",
+        "Robotics Engineer",
+        "Automation Engineer",
+      ],
     },
     {
       id: "nmu-bas-architecture",
@@ -291,8 +359,13 @@ export class NMU extends BaseUniversity {
       subjectRequirements: {
         Mathematics: 6,
       },
-      additionalRequirements: "Mathematics 55%. Admission is subject to departmental selection",
-      careerOpportunities: ["Architect", "Urban Planner", "Architectural Technologist"],
+      additionalRequirements:
+        "Mathematics 55%. Admission is subject to departmental selection",
+      careerOpportunities: [
+        "Architect",
+        "Urban Planner",
+        "Architectural Technologist",
+      ],
     },
     {
       id: "nmu-bsc-construction-economics",
@@ -304,7 +377,11 @@ export class NMU extends BaseUniversity {
         Mathematics: 6,
       },
       additionalRequirements: "Mathematics 55%",
-      careerOpportunities: ["Quantity Surveyor", "Construction Economist", "Project Manager"],
+      careerOpportunities: [
+        "Quantity Surveyor",
+        "Construction Economist",
+        "Project Manager",
+      ],
     },
     {
       id: "nmu-bsc-construction-studies",
@@ -316,7 +393,11 @@ export class NMU extends BaseUniversity {
         Mathematics: 6,
       },
       additionalRequirements: "Mathematics 55%",
-      careerOpportunities: ["Construction Manager", "Site Manager", "Building Inspector"],
+      careerOpportunities: [
+        "Construction Manager",
+        "Site Manager",
+        "Building Inspector",
+      ],
     },
     {
       id: "nmu-bit",
@@ -328,7 +409,11 @@ export class NMU extends BaseUniversity {
         Mathematics: 5,
       },
       additionalRequirements: "Mathematics 50% or Technical Maths 50%",
-      careerOpportunities: ["Software Developer", "Systems Analyst", "IT Consultant"],
+      careerOpportunities: [
+        "Software Developer",
+        "Systems Analyst",
+        "IT Consultant",
+      ],
     },
 
     // Faculty of Science
@@ -342,7 +427,11 @@ export class NMU extends BaseUniversity {
         Mathematics: 6,
       },
       additionalRequirements: "Mathematics 60%",
-      careerOpportunities: ["Biologist", "Research Scientist", "Environmental Consultant"],
+      careerOpportunities: [
+        "Biologist",
+        "Research Scientist",
+        "Environmental Consultant",
+      ],
     },
     {
       id: "nmu-bsc-biochemistry-chemistry",
@@ -354,7 +443,11 @@ export class NMU extends BaseUniversity {
         Mathematics: 6,
       },
       additionalRequirements: "Mathematics 60%",
-      careerOpportunities: ["Biochemist", "Laboratory Scientist", "Research Analyst"],
+      careerOpportunities: [
+        "Biochemist",
+        "Laboratory Scientist",
+        "Research Analyst",
+      ],
     },
     {
       id: "nmu-bsc-geosciences",
@@ -366,7 +459,11 @@ export class NMU extends BaseUniversity {
         Mathematics: 6,
       },
       additionalRequirements: "Mathematics 60%",
-      careerOpportunities: ["Geologist", "Environmental Scientist", "Mining Geologist"],
+      careerOpportunities: [
+        "Geologist",
+        "Environmental Scientist",
+        "Mining Geologist",
+      ],
     },
     {
       id: "nmu-bsc-applied-maths",
@@ -406,8 +503,13 @@ export class NMU extends BaseUniversity {
         "Life Sciences": 6,
         "English Home": 6,
       },
-      additionalRequirements: "Online applications close 30 June. Admission is subject to departmental selection",
-      careerOpportunities: ["Medical Doctor", "Specialist Physician", "Surgeon"],
+      additionalRequirements:
+        "Online applications close 30 June. Admission is subject to departmental selection",
+      careerOpportunities: [
+        "Medical Doctor",
+        "Specialist Physician",
+        "Surgeon",
+      ],
     },
     {
       id: "nmu-bpharm",
@@ -419,8 +521,13 @@ export class NMU extends BaseUniversity {
         Mathematics: 6,
         "Physical Sciences": 6,
       },
-      additionalRequirements: "Online applications close 30 June. Admission is subject to departmental selection",
-      careerOpportunities: ["Pharmacist", "Clinical Pharmacist", "Pharmaceutical Researcher"],
+      additionalRequirements:
+        "Online applications close 30 June. Admission is subject to departmental selection",
+      careerOpportunities: [
+        "Pharmacist",
+        "Clinical Pharmacist",
+        "Pharmaceutical Researcher",
+      ],
     },
     {
       id: "nmu-brad",
@@ -433,8 +540,13 @@ export class NMU extends BaseUniversity {
         "Physical Sciences": 5,
         "Life Sciences": 5,
       },
-      additionalRequirements: "Online applications close 30 June. Admission is subject to departmental selection",
-      careerOpportunities: ["Radiographer", "Medical Imaging Specialist", "Diagnostic Technologist"],
+      additionalRequirements:
+        "Online applications close 30 June. Admission is subject to departmental selection",
+      careerOpportunities: [
+        "Radiographer",
+        "Medical Imaging Specialist",
+        "Diagnostic Technologist",
+      ],
     },
     {
       id: "nmu-nursing",
@@ -447,8 +559,13 @@ export class NMU extends BaseUniversity {
         "Physical Sciences": 5,
         "Life Sciences": 6,
       },
-      additionalRequirements: "Mathematics 50% or Maths Lit 65%, Physical Sciences 50% and Life Sciences 60%",
-      careerOpportunities: ["Registered Nurse", "Clinical Nurse", "Nurse Manager"],
+      additionalRequirements:
+        "Mathematics 50% or Maths Lit 65%, Physical Sciences 50% and Life Sciences 60%",
+      careerOpportunities: [
+        "Registered Nurse",
+        "Clinical Nurse",
+        "Nurse Manager",
+      ],
     },
     {
       id: "nmu-bsw",
@@ -460,7 +577,11 @@ export class NMU extends BaseUniversity {
         Mathematics: 4,
       },
       additionalRequirements: "Mathematics 40% or Maths Literacy 65%",
-      careerOpportunities: ["Social Worker", "Community Development Worker", "Child Protection Officer"],
+      careerOpportunities: [
+        "Social Worker",
+        "Community Development Worker",
+        "Child Protection Officer",
+      ],
     },
     {
       id: "nmu-bhsc-biokinetics",
@@ -472,8 +593,13 @@ export class NMU extends BaseUniversity {
         Mathematics: 5,
         "Life Sciences": 5,
       },
-      additionalRequirements: "Mathematics 50% or Maths Literacy 65%, Life Sciences 50% and Medical Report",
-      careerOpportunities: ["Biokineticist", "Exercise Physiologist", "Sports Scientist"],
+      additionalRequirements:
+        "Mathematics 50% or Maths Literacy 65%, Life Sciences 50% and Medical Report",
+      careerOpportunities: [
+        "Biokineticist",
+        "Exercise Physiologist",
+        "Sports Scientist",
+      ],
     },
     {
       id: "nmu-bhms",
@@ -485,7 +611,11 @@ export class NMU extends BaseUniversity {
         Mathematics: 5,
       },
       additionalRequirements: "Mathematics 45% or Maths Literacy 65%",
-      careerOpportunities: ["Sports Scientist", "Exercise Specialist", "Movement Analyst"],
+      careerOpportunities: [
+        "Sports Scientist",
+        "Exercise Specialist",
+        "Movement Analyst",
+      ],
     },
     {
       id: "nmu-bemc",
@@ -498,8 +628,13 @@ export class NMU extends BaseUniversity {
         "Physical Sciences": 5,
         "Life Sciences": 6,
       },
-      additionalRequirements: "Admission subject to selection including interview and medical fitness report",
-      careerOpportunities: ["Paramedic", "Emergency Medical Technician", "Critical Care Paramedic"],
+      additionalRequirements:
+        "Admission subject to selection including interview and medical fitness report",
+      careerOpportunities: [
+        "Paramedic",
+        "Emergency Medical Technician",
+        "Critical Care Paramedic",
+      ],
     },
     {
       id: "nmu-bhsc-medical-lab",
@@ -513,7 +648,11 @@ export class NMU extends BaseUniversity {
         "Life Sciences": 5,
       },
       additionalRequirements: "Admission is subject to departmental selection",
-      careerOpportunities: ["Medical Laboratory Scientist", "Clinical Laboratory Technologist", "Research Technician"],
+      careerOpportunities: [
+        "Medical Laboratory Scientist",
+        "Clinical Laboratory Technologist",
+        "Research Technician",
+      ],
     },
     {
       id: "nmu-bsc-dietetics",
@@ -526,7 +665,11 @@ export class NMU extends BaseUniversity {
         "Physical Sciences": 6,
       },
       additionalRequirements: "Mathematics 60% and Physical Sciences 60%",
-      careerOpportunities: ["Dietitian", "Clinical Nutritionist", "Sports Nutritionist"],
+      careerOpportunities: [
+        "Dietitian",
+        "Clinical Nutritionist",
+        "Sports Nutritionist",
+      ],
     },
     {
       id: "nmu-environmental-health",
@@ -540,7 +683,11 @@ export class NMU extends BaseUniversity {
         "Life Sciences": 5,
       },
       additionalRequirements: "Admission is subject to departmental selection",
-      careerOpportunities: ["Environmental Health Officer", "Public Health Inspector", "Environmental Consultant"],
+      careerOpportunities: [
+        "Environmental Health Officer",
+        "Public Health Inspector",
+        "Environmental Consultant",
+      ],
     },
 
     // Faculty of Education
@@ -556,7 +703,11 @@ export class NMU extends BaseUniversity {
       },
       additionalRequirements:
         "English (Home Lang or 1st Add Lang) 50% and Afrikaans or isiXhosa 50%. Mathematics 45% or Maths Literacy 60%",
-      careerOpportunities: ["Foundation Phase Teacher", "Early Childhood Educator", "Primary School Teacher"],
+      careerOpportunities: [
+        "Foundation Phase Teacher",
+        "Early Childhood Educator",
+        "Primary School Teacher",
+      ],
     },
     {
       id: "nmu-bed-intermediate",
@@ -570,7 +721,11 @@ export class NMU extends BaseUniversity {
       },
       additionalRequirements:
         "English (Home Lang or 1st Add Lang) 50% and Afrikaans or isiXhosa 50%. Mathematics 45% or Maths Literacy 60%",
-      careerOpportunities: ["Intermediate Phase Teacher", "Primary School Teacher", "Subject Specialist"],
+      careerOpportunities: [
+        "Intermediate Phase Teacher",
+        "Primary School Teacher",
+        "Subject Specialist",
+      ],
     },
     {
       id: "nmu-bed-senior-commerce",
@@ -583,8 +738,13 @@ export class NMU extends BaseUniversity {
         Mathematics: 6,
         Accounting: 6,
       },
-      additionalRequirements: "English and Afrikaans/isiXhosa 50%. Mathematics 60%, Accounting 60%",
-      careerOpportunities: ["High School Teacher", "Business Studies Teacher", "Economics Teacher"],
+      additionalRequirements:
+        "English and Afrikaans/isiXhosa 50%. Mathematics 60%, Accounting 60%",
+      careerOpportunities: [
+        "High School Teacher",
+        "Business Studies Teacher",
+        "Economics Teacher",
+      ],
     },
     {
       id: "nmu-bed-senior-science",
@@ -600,7 +760,11 @@ export class NMU extends BaseUniversity {
       },
       additionalRequirements:
         "English and Afrikaans/isiXhosa 50%. Mathematics 60%, Physical Science 60%, Life Science 60%",
-      careerOpportunities: ["High School Teacher", "Science Teacher", "Mathematics Teacher"],
+      careerOpportunities: [
+        "High School Teacher",
+        "Science Teacher",
+        "Mathematics Teacher",
+      ],
     },
     {
       id: "nmu-bed-senior-humanities",
@@ -612,8 +776,13 @@ export class NMU extends BaseUniversity {
         "English Home": 5,
         Mathematics: 5,
       },
-      additionalRequirements: "English and Afrikaans/isiXhosa 50%. Mathematics 45% (60% if Geography selected)",
-      careerOpportunities: ["High School Teacher", "Language Teacher", "History Teacher"],
+      additionalRequirements:
+        "English and Afrikaans/isiXhosa 50%. Mathematics 45% (60% if Geography selected)",
+      careerOpportunities: [
+        "High School Teacher",
+        "Language Teacher",
+        "History Teacher",
+      ],
     },
     {
       id: "nmu-bmus-school",
@@ -624,7 +793,11 @@ export class NMU extends BaseUniversity {
       subjectRequirements: {},
       additionalRequirements:
         "Practical standard equivalent to Grade 6 and music theoretical standard equivalent to Grade 5. Admission subject to audition and theory test",
-      careerOpportunities: ["Music Teacher", "Music Educator", "School Music Director"],
+      careerOpportunities: [
+        "Music Teacher",
+        "Music Educator",
+        "School Music Director",
+      ],
     },
 
     // Faculty of Humanities
@@ -638,8 +811,13 @@ export class NMU extends BaseUniversity {
         "English Home": 6,
         Mathematics: 4,
       },
-      additionalRequirements: "Any one NSC (Home or 1st Add Lang) 60%, Mathematics 35% or Maths Literacy 55%",
-      careerOpportunities: ["Journalist", "Social Worker", "Public Relations Officer"],
+      additionalRequirements:
+        "Any one NSC (Home or 1st Add Lang) 60%, Mathematics 35% or Maths Literacy 55%",
+      careerOpportunities: [
+        "Journalist",
+        "Social Worker",
+        "Public Relations Officer",
+      ],
     },
     {
       id: "nmu-ba-media-communication",
@@ -651,8 +829,13 @@ export class NMU extends BaseUniversity {
         "English Home": 6,
         Mathematics: 4,
       },
-      additionalRequirements: "Any one NSC (Home or 1st Add Lang) 60%, Mathematics 35% or Maths Literacy 55%",
-      careerOpportunities: ["Journalist", "Media Producer", "Communications Specialist"],
+      additionalRequirements:
+        "Any one NSC (Home or 1st Add Lang) 60%, Mathematics 35% or Maths Literacy 55%",
+      careerOpportunities: [
+        "Journalist",
+        "Media Producer",
+        "Communications Specialist",
+      ],
     },
     {
       id: "nmu-ba-psychology",
@@ -664,7 +847,11 @@ export class NMU extends BaseUniversity {
         Mathematics: 5,
       },
       additionalRequirements: "Mathematics 45% or Maths Literacy 65%",
-      careerOpportunities: ["Psychologist", "Counselor", "Human Resources Specialist"],
+      careerOpportunities: [
+        "Psychologist",
+        "Counselor",
+        "Human Resources Specialist",
+      ],
     },
     {
       id: "nmu-ba-development-studies",
@@ -676,7 +863,11 @@ export class NMU extends BaseUniversity {
         Mathematics: 4,
       },
       additionalRequirements: "Mathematics 40% or Maths Literacy 70%",
-      careerOpportunities: ["Development Worker", "Project Manager", "Policy Analyst"],
+      careerOpportunities: [
+        "Development Worker",
+        "Project Manager",
+        "Policy Analyst",
+      ],
     },
     {
       id: "nmu-ba-politics-economics",
@@ -690,7 +881,11 @@ export class NMU extends BaseUniversity {
       },
       additionalRequirements:
         "Any one NSC (Home or 1st Add Lang) 60%, Mathematics 40% or Technical Mathematics/Mathematical Literacy 70%",
-      careerOpportunities: ["Political Analyst", "Economist", "Policy Researcher"],
+      careerOpportunities: [
+        "Political Analyst",
+        "Economist",
+        "Policy Researcher",
+      ],
     },
     {
       id: "nmu-ba-hrm",
@@ -702,7 +897,11 @@ export class NMU extends BaseUniversity {
         Mathematics: 4,
       },
       additionalRequirements: "Mathematics 40% or Maths Literacy 70%",
-      careerOpportunities: ["HR Manager", "Recruitment Specialist", "Training Coordinator"],
+      careerOpportunities: [
+        "HR Manager",
+        "Recruitment Specialist",
+        "Training Coordinator",
+      ],
     },
     {
       id: "nmu-badmin-public",
@@ -714,7 +913,11 @@ export class NMU extends BaseUniversity {
         Mathematics: 4,
       },
       additionalRequirements: "Mathematics 35% or Maths Literacy 55%",
-      careerOpportunities: ["Public Administrator", "Government Official", "Policy Analyst"],
+      careerOpportunities: [
+        "Public Administrator",
+        "Government Official",
+        "Policy Analyst",
+      ],
     },
     {
       id: "nmu-bva",
@@ -747,7 +950,11 @@ export class NMU extends BaseUniversity {
       subjectRequirements: {},
       additionalRequirements:
         "Practical standard equivalent to Grade 6 and music theoretical standard equivalent to Grade 5. Admission subject to audition and theory test",
-      careerOpportunities: ["Performer", "Music Director", "Arts Administrator"],
+      careerOpportunities: [
+        "Performer",
+        "Music Director",
+        "Arts Administrator",
+      ],
     },
     {
       id: "nmu-bmus-technology",
@@ -758,7 +965,11 @@ export class NMU extends BaseUniversity {
       subjectRequirements: {},
       additionalRequirements:
         "Practical standard equivalent to Grade 6 and music theoretical standard equivalent to Grade 5. Admission subject to audition and theory test",
-      careerOpportunities: ["Sound Engineer", "Music Producer", "Audio Technician"],
+      careerOpportunities: [
+        "Sound Engineer",
+        "Music Producer",
+        "Audio Technician",
+      ],
     },
     {
       id: "nmu-bhsd",
@@ -771,7 +982,11 @@ export class NMU extends BaseUniversity {
       },
       additionalRequirements:
         "Mathematics 50% or Maths Literacy 70%. Admission subject to selection. Must be employed in related field",
-      careerOpportunities: ["Urban Planner", "Housing Development Officer", "Community Development Specialist"],
+      careerOpportunities: [
+        "Urban Planner",
+        "Housing Development Officer",
+        "Community Development Specialist",
+      ],
     },
 
     // Faculty of Law
@@ -785,7 +1000,8 @@ export class NMU extends BaseUniversity {
         "English Home": 7,
         Mathematics: 5,
       },
-      additionalRequirements: "English (Home Lang) 65% or English (1st Add Lang) 70% and Mathematics 50%",
+      additionalRequirements:
+        "English (Home Lang) 65% or English (1st Add Lang) 70% and Mathematics 50%",
       careerOpportunities: ["Lawyer", "Advocate", "Legal Advisor"],
     },
     {
@@ -812,8 +1028,13 @@ export class NMU extends BaseUniversity {
         "English Home": 7,
         Mathematics: 6,
       },
-      additionalRequirements: "English (Home Lang) 65% or English (1st Add Lang) 70% and Mathematics 60%",
-      careerOpportunities: ["Commercial Lawyer", "Corporate Legal Advisor", "Business Attorney"],
+      additionalRequirements:
+        "English (Home Lang) 65% or English (1st Add Lang) 70% and Mathematics 60%",
+      careerOpportunities: [
+        "Commercial Lawyer",
+        "Corporate Legal Advisor",
+        "Business Attorney",
+      ],
     },
     {
       id: "nmu-ba-law",
@@ -827,19 +1048,27 @@ export class NMU extends BaseUniversity {
       },
       additionalRequirements:
         "English (Home Lang) 65% or English (1st Add Lang) 70% and Mathematics 50% or Maths Literacy 75%",
-      careerOpportunities: ["Lawyer", "Human Rights Lawyer", "Legal Researcher"],
+      careerOpportunities: [
+        "Lawyer",
+        "Human Rights Lawyer",
+        "Legal Researcher",
+      ],
     },
-  ]
+  ];
 
   // Additional methods for NMU-specific functionality
   getExtendedCurriculumPrograms(): Course[] {
     return this._courses.filter(
-      (course) => course.name.includes("Extended Curriculum") || course.additionalRequirements?.includes("Extended"),
-    )
+      (course) =>
+        course.name.includes("Extended Curriculum") ||
+        course.additionalRequirements?.includes("Extended"),
+    );
   }
 
   getGeorgeCampusPrograms(): Course[] {
-    return this._courses.filter((course) => course.additionalRequirements?.includes("George Campus"))
+    return this._courses.filter((course) =>
+      course.additionalRequirements?.includes("George Campus"),
+    );
   }
 
   getMedicalPrograms(): Course[] {
@@ -849,7 +1078,7 @@ export class NMU extends BaseUniversity {
         course.name.includes("Medicine") ||
         course.name.includes("Pharmacy") ||
         course.name.includes("Radiography"),
-    )
+    );
   }
 
   getSelectionBasedPrograms(): Course[] {
@@ -857,7 +1086,7 @@ export class NMU extends BaseUniversity {
       (course) =>
         course.additionalRequirements?.includes("departmental selection") ||
         course.additionalRequirements?.includes("subject to selection"),
-    )
+    );
   }
 
   /**
@@ -867,28 +1096,28 @@ export class NMU extends BaseUniversity {
    * - Standard 7-point NSC scale
    */
   calculateApsScore(subjects: Record<string, number>): number {
-    const subjectScores: number[] = []
-    
+    const subjectScores: number[] = [];
+
     for (const [subjectName, percentage] of Object.entries(subjects)) {
-      if (subjectName.toLowerCase().includes('life orientation')) {
-        continue
+      if (subjectName.toLowerCase().includes("life orientation")) {
+        continue;
       }
-      
-      let points = 0
-      if (percentage >= 80) points = 7
-      else if (percentage >= 70) points = 6
-      else if (percentage >= 60) points = 5
-      else if (percentage >= 50) points = 4
-      else if (percentage >= 40) points = 3
-      else if (percentage >= 30) points = 2
-      else if (percentage >= 0) points = 1
-      
-      subjectScores.push(points)
+
+      let points = 0;
+      if (percentage >= 80) points = 7;
+      else if (percentage >= 70) points = 6;
+      else if (percentage >= 60) points = 5;
+      else if (percentage >= 50) points = 4;
+      else if (percentage >= 40) points = 3;
+      else if (percentage >= 30) points = 2;
+      else if (percentage >= 0) points = 1;
+
+      subjectScores.push(points);
     }
-    
-    subjectScores.sort((a, b) => b - a)
-    const top6 = subjectScores.slice(0, 6)
-    
-    return top6.reduce((sum, score) => sum + score, 0)
+
+    subjectScores.sort((a, b) => b - a);
+    const top6 = subjectScores.slice(0, 6);
+
+    return top6.reduce((sum, score) => sum + score, 0);
   }
 }

@@ -1,23 +1,24 @@
-import { BaseUniversity } from "./base-university"
-import type { Course } from "@/lib/types"
+import { BaseUniversity } from "./base-university";
+import type { Course } from "@/lib/types";
+import { percentageToLevel } from "@/lib/aps/utils";
 
 /**
  * Sol Plaatje University (SPU) class
  */
 export class SPU extends BaseUniversity {
-  readonly id = "spu"
-  readonly name = "Sol Plaatje University"
-  readonly shortName = "SPU"
-  readonly website = "https://www.spu.ac.za"
-  readonly logo = "/logos/spu.png"
+  readonly id = "spu";
+  readonly name = "Sol Plaatje University";
+  readonly shortName = "SPU";
+  readonly website = "https://www.spu.ac.za";
+  readonly logo = "/logos/spu.png";
   readonly location = {
     city: "Kimberley",
     province: "Northern Cape",
     coordinates: {
-      latitude: -28.7282,
-      longitude: 24.7499,
+      latitude: -28.7454,
+      longitude: 24.764,
     },
-  }
+  };
 
   /**
    * Calculate APS score according to SPU's method
@@ -25,71 +26,72 @@ export class SPU extends BaseUniversity {
    * @returns The calculated APS score
    */
   calculateApsScore(subjects: Record<string, number>): number {
-    let totalScore = 0
-    let lifeOrientationScore = 0
+    let totalScore = 0;
+    let lifeOrientationScore = 0;
 
     // Process each subject
-    for (const [subject, level] of Object.entries(subjects)) {
-      let subjectScore = 0
+    for (const [subject, rawVal] of Object.entries(subjects)) {
+      const level = rawVal > 7 ? percentageToLevel(rawVal) : rawVal;
+      let subjectScore = 0;
 
       // Convert NSC level to SPU points
       switch (level) {
         case 7:
-          subjectScore = 8
-          break
+          subjectScore = 8;
+          break;
         case 6:
-          subjectScore = 6
-          break
+          subjectScore = 6;
+          break;
         case 5:
-          subjectScore = 5
-          break
+          subjectScore = 5;
+          break;
         case 4:
-          subjectScore = 4
-          break
+          subjectScore = 4;
+          break;
         case 3:
-          subjectScore = 3
-          break
+          subjectScore = 3;
+          break;
         case 2:
-          subjectScore = 2
-          break
+          subjectScore = 2;
+          break;
         case 1:
-          subjectScore = 1
-          break
+          subjectScore = 1;
+          break;
         default:
-          subjectScore = 0
+          subjectScore = 0;
       }
 
       // Add additional points for Mathematics and Home Language
       if (subject === "Mathematics" && level >= 4) {
-        subjectScore += level >= 5 ? 2 : 1
+        subjectScore += level >= 5 ? 2 : 1;
       } else if (subject.includes("Home Language") && level >= 4) {
-        subjectScore += level >= 5 ? 2 : 1
+        subjectScore += level >= 5 ? 2 : 1;
       }
 
       // Handle Life Orientation separately
       if (subject === "Life Orientation") {
         switch (level) {
           case 7:
-            lifeOrientationScore = 4
-            break
+            lifeOrientationScore = 4;
+            break;
           case 6:
-            lifeOrientationScore = 3
-            break
+            lifeOrientationScore = 3;
+            break;
           case 5:
-            lifeOrientationScore = 2
-            break
+            lifeOrientationScore = 2;
+            break;
           case 4:
-            lifeOrientationScore = 1
-            break
+            lifeOrientationScore = 1;
+            break;
           default:
-            lifeOrientationScore = 0
+            lifeOrientationScore = 0;
         }
       } else {
-        totalScore += subjectScore
+        totalScore += subjectScore;
       }
     }
 
-    return totalScore + lifeOrientationScore
+    return totalScore + lifeOrientationScore;
   }
 
   protected readonly _courses: Course[] = [
@@ -102,10 +104,15 @@ export class SPU extends BaseUniversity {
       apsMin: 30,
       duration: "4 years",
       courseCode: "EDU720",
-      description: "This programme targets potential students who want to teach learners in Grade R-3.",
+      description:
+        "This programme targets potential students who want to teach learners in Grade R-3.",
       subjectRequirements: {
-        "English Home Language": 4,
-        "English First Additional Language": 5,
+        Language: {
+          alternatives: [
+            { subject: "English Home Language", level: 4 },
+            { subject: "English First Additional Language", level: 5 },
+          ],
+        },
       },
       additionalRequirements:
         "In addition to the English requirement, one of the following languages is required: Afrikaans HL/FAL (Level 4), Setswana HL/FAL (Level 4), or isiXhosa HL/FAL (Level 4). Also requires Mathematics (Level 3) OR Mathematical Literacy (Level 4).",
@@ -126,8 +133,12 @@ export class SPU extends BaseUniversity {
       description:
         "This programme targets potential students who want to teach Languages, Mathematics, Natural Sciences to Grade 4-6 learners.",
       subjectRequirements: {
-        "English Home Language": 4,
-        "English First Additional Language": 5,
+        Language: {
+          alternatives: [
+            { subject: "English Home Language", level: 4 },
+            { subject: "English First Additional Language", level: 5 },
+          ],
+        },
         Mathematics: 4,
         "Physical Sciences": 4,
         "Life Sciences": 4,
@@ -151,8 +162,12 @@ export class SPU extends BaseUniversity {
       description:
         "This programme targets potential students who want to teach Languages, Life Skills and Social Sciences to Grade 4-6 learners.",
       subjectRequirements: {
-        "English Home Language": 4,
-        "English First Additional Language": 5,
+        Language: {
+          alternatives: [
+            { subject: "English Home Language", level: 4 },
+            { subject: "English First Additional Language", level: 5 },
+          ],
+        },
       },
       additionalRequirements:
         "In addition to the English requirement, one of the following languages is required: Afrikaans HL/FAL (Level 4), Setswana HL/FAL (Level 4), or isiXhosa HL/FAL (Level 4). Also requires either Geography (Level 4) OR History (Level 4).",
@@ -173,8 +188,12 @@ export class SPU extends BaseUniversity {
       description:
         "This programme targets potential students who want to teach Mathematics, Natural Sciences, and Life Sciences at Senior Phase and FET level.",
       subjectRequirements: {
-        "English Home Language": 4,
-        "English First Additional Language": 5,
+        Language: {
+          alternatives: [
+            { subject: "English Home Language", level: 4 },
+            { subject: "English First Additional Language", level: 5 },
+          ],
+        },
         Mathematics: 4,
         "Life Sciences": 4,
       },
@@ -195,8 +214,12 @@ export class SPU extends BaseUniversity {
       description:
         "This programme targets potential students who want to teach Languages or Language and History at Senior Phase and FET level.",
       subjectRequirements: {
-        "English Home Language": 4,
-        "English First Additional Language": 5,
+        Language: {
+          alternatives: [
+            { subject: "English Home Language", level: 4 },
+            { subject: "English First Additional Language", level: 5 },
+          ],
+        },
       },
       additionalRequirements:
         "In addition to the English requirement, one of the following languages is required: Afrikaans HL/FAL (Level 4) OR Setswana HL/FAL (Level 4). If History will be selected as an elective, History (Level 4) is required.",
@@ -217,8 +240,12 @@ export class SPU extends BaseUniversity {
       description:
         "This programme targets potential students who want to teach History, Social Sciences and Language at Senior Phase and FET level.",
       subjectRequirements: {
-        "English Home Language": 4,
-        "English First Additional Language": 5,
+        Language: {
+          alternatives: [
+            { subject: "English Home Language", level: 4 },
+            { subject: "English First Additional Language", level: 5 },
+          ],
+        },
         Geography: 4,
         History: 4,
       },
@@ -241,8 +268,12 @@ export class SPU extends BaseUniversity {
       description:
         "This programme targets potential students who want to teach Accounting, Economics, Business Studies and Economic and Management Sciences at Senior Phase and FET level.",
       subjectRequirements: {
-        "English Home Language": 4,
-        "English First Additional Language": 5,
+        Language: {
+          alternatives: [
+            { subject: "English Home Language", level: 4 },
+            { subject: "English First Additional Language", level: 5 },
+          ],
+        },
       },
       additionalRequirements:
         "Any two of the following: Accounting (Level 4) OR Business Studies (Level 4) OR Economics (Level 4).",
@@ -281,11 +312,16 @@ export class SPU extends BaseUniversity {
       description:
         "The Bachelor of Commerce in Accounting provides a well-rounded, technically focused education that develops analytic and practical skills critical for accounting, tax, auditing, financial management and management control systems.",
       subjectRequirements: {
-        "English Home Language": 4,
-        "English First Additional Language": 5,
+        Language: {
+          alternatives: [
+            { subject: "English Home Language", level: 4 },
+            { subject: "English First Additional Language", level: 5 },
+          ],
+        },
         Mathematics: 5,
       },
-      additionalRequirements: "Mathematics (Level 5) OR Mathematics (Level 4) AND Accounting (Level 3).",
+      additionalRequirements:
+        "Mathematics (Level 5) OR Mathematics (Level 4) AND Accounting (Level 3).",
       careerOpportunities: [
         "Financial Accountant",
         "Management Accountant",
@@ -312,8 +348,12 @@ export class SPU extends BaseUniversity {
       description:
         "The purpose of this qualification is to provide graduates with deep economics knowledge. The programme provides students with strong economic and quantitative competences through learning approaches that emphasise the use of technology.",
       subjectRequirements: {
-        "English Home Language": 4,
-        "English First Additional Language": 5,
+        Language: {
+          alternatives: [
+            { subject: "English Home Language", level: 4 },
+            { subject: "English First Additional Language", level: 5 },
+          ],
+        },
         Mathematics: 5,
       },
       additionalRequirements:
@@ -342,10 +382,18 @@ export class SPU extends BaseUniversity {
       description:
         "This Diploma provides students with the knowledge, insight and skills needed to follow a successful management career in the retail or wholesale fields.",
       subjectRequirements: {
-        "English Home Language": 4,
-        "English First Additional Language": 5,
-        Mathematics: 3,
-        "Mathematical Literacy": 5,
+        Language: {
+          alternatives: [
+            { subject: "English Home Language", level: 4 },
+            { subject: "English First Additional Language", level: 5 },
+          ],
+        },
+        Math: {
+          alternatives: [
+            { subject: "Mathematics", level: 3 },
+            { subject: "Mathematical Literacy", level: 5 },
+          ],
+        },
       },
       additionalRequirements:
         "At least one of the following at NSC Level 4: Accounting, Business Studies or Economics.",
@@ -389,10 +437,18 @@ export class SPU extends BaseUniversity {
       description:
         "The purpose of the Higher Certificate in Entrepreneurship is to provide the fundamentals of entrepreneurship and small business management, thereby making them more entrepreneurial and employable.",
       subjectRequirements: {
-        "English Home Language": 4,
-        "English First Additional Language": 5,
-        Mathematics: 3,
-        "Mathematical Literacy": 4,
+        Language: {
+          alternatives: [
+            { subject: "English Home Language", level: 4 },
+            { subject: "English First Additional Language", level: 5 },
+          ],
+        },
+        Math: {
+          alternatives: [
+            { subject: "Mathematics", level: 3 },
+            { subject: "Mathematical Literacy", level: 4 },
+          ],
+        },
       },
       additionalRequirements:
         "At least one of the following at NSC level 3: Accounting, Business Studies or Economics.",
@@ -418,10 +474,18 @@ export class SPU extends BaseUniversity {
       description:
         "The B.A. intends to develop skilled graduates who are able to engage critically with the world and apply disciplinary content to the resolution of problems. There is a strong focus on languages (Afrikaans, English and Setswana), History, Heritage Studies, Geography, Mathematics and Sociology.",
       subjectRequirements: {
-        "English Home Language": 4,
-        "English First Additional Language": 5,
-        Mathematics: 2,
-        "Mathematical Literacy": 3,
+        Language: {
+          alternatives: [
+            { subject: "English Home Language", level: 4 },
+            { subject: "English First Additional Language", level: 5 },
+          ],
+        },
+        Math: {
+          alternatives: [
+            { subject: "Mathematics", level: 2 },
+            { subject: "Mathematical Literacy", level: 3 },
+          ],
+        },
       },
       additionalRequirements:
         "Students wishing to enroll for a major in Geography, NSC achievement Level 4 is required.",
@@ -446,10 +510,18 @@ export class SPU extends BaseUniversity {
       description:
         "This programme provides students with a theoretical and practical grounding of knowledge and skills about the heritage sector.",
       subjectRequirements: {
-        "English Home Language": 4,
-        "English First Additional Language": 5,
-        Mathematics: 2,
-        "Mathematical Literacy": 3,
+        Language: {
+          alternatives: [
+            { subject: "English Home Language", level: 4 },
+            { subject: "English First Additional Language", level: 5 },
+          ],
+        },
+        Math: {
+          alternatives: [
+            { subject: "Mathematics", level: 2 },
+            { subject: "Mathematical Literacy", level: 3 },
+          ],
+        },
       },
       careerOpportunities: [
         "Heritage Management Assistant",
@@ -468,8 +540,12 @@ export class SPU extends BaseUniversity {
       description:
         "The purpose of the Higher Certificate in Court Interpreting is to provide an opportunity for court interpreters who are already in the profession as well as newcomers to the field of court interpreting to obtain a recognised formal and professional qualification.",
       subjectRequirements: {
-        "English Home Language": 4,
-        "English First Additional Language": 5,
+        Language: {
+          alternatives: [
+            { subject: "English Home Language", level: 4 },
+            { subject: "English First Additional Language", level: 5 },
+          ],
+        },
       },
       additionalRequirements:
         "Students should have at least one other African language taken as a home language (NSC level 4) OR 1st Additional Language (NSC level 5).",
@@ -494,8 +570,12 @@ export class SPU extends BaseUniversity {
       description:
         "The Bachelor of Science degree has been carefully designed to address a critical skills shortage in the country and will provide access to students to an advanced area of study in an essential contemporary discipline.",
       subjectRequirements: {
-        "English Home Language": 4,
-        "English First Additional Language": 5,
+        Language: {
+          alternatives: [
+            { subject: "English Home Language", level: 4 },
+            { subject: "English First Additional Language", level: 5 },
+          ],
+        },
         Mathematics: 4,
         "Physical Sciences": 4,
         "Life Sciences": 4,
@@ -532,8 +612,12 @@ export class SPU extends BaseUniversity {
       description:
         "The Bachelor of Science in Data Science degree has a strong mathematics core and focuses on data science and applications thereof. The degree is designed to develop highly skilled graduates in areas in which there are considerable shortages across the country.",
       subjectRequirements: {
-        "English Home Language": 4,
-        "English First Additional Language": 5,
+        Language: {
+          alternatives: [
+            { subject: "English Home Language", level: 4 },
+            { subject: "English First Additional Language", level: 5 },
+          ],
+        },
         Mathematics: 5,
       },
       additionalRequirements: "Mathematical Literacy is not acceptable.",
@@ -557,8 +641,12 @@ export class SPU extends BaseUniversity {
       description:
         "A Bachelor of Environmental Science degree is a four-year undergraduate programme that is intended to equip students with a groundwork in the fundamental principles of environmental sustainability, planning, and management.",
       subjectRequirements: {
-        "English Home Language": 4,
-        "English First Additional Language": 5,
+        Language: {
+          alternatives: [
+            { subject: "English Home Language", level: 4 },
+            { subject: "English First Additional Language", level: 5 },
+          ],
+        },
         Mathematics: 4,
         "Physical Sciences": 4,
         "Life Sciences": 4,
@@ -586,10 +674,18 @@ export class SPU extends BaseUniversity {
       description:
         "The purpose of the Diploma is to provide a career-focused, professional qualification featuring industry-referenced knowledge and skills transfer, technological competencies, critical cross-field skills as well as attitudinal development.",
       subjectRequirements: {
-        "English Home Language": 4,
-        "English First Additional Language": 5,
-        Mathematics: 3,
-        "Mathematical Literacy": 5,
+        Language: {
+          alternatives: [
+            { subject: "English Home Language", level: 4 },
+            { subject: "English First Additional Language", level: 5 },
+          ],
+        },
+        Math: {
+          alternatives: [
+            { subject: "Mathematics", level: 3 },
+            { subject: "Mathematical Literacy", level: 5 },
+          ],
+        },
       },
       additionalRequirements:
         "It is highly recommended that applicants should also have Computer Applications Technology (CAT) or Information Technology (IT) as subjects in their Matric curriculum.",
@@ -617,13 +713,22 @@ export class SPU extends BaseUniversity {
       description:
         "The purpose of this Diploma is to produce students with a solid grounding in principles and practices of producing crops and livestock for commercial purposes, primarily, under water-stressed regions.",
       subjectRequirements: {
-        "English Home Language": 4,
-        "English First Additional Language": 5,
-        Mathematics: 3,
-        "Mathematical Literacy": 5,
+        Language: {
+          alternatives: [
+            { subject: "English Home Language", level: 4 },
+            { subject: "English First Additional Language", level: 5 },
+          ],
+        },
+        Math: {
+          alternatives: [
+            { subject: "Mathematics", level: 3 },
+            { subject: "Mathematical Literacy", level: 5 },
+          ],
+        },
         "Physical Sciences": 3,
       },
-      additionalRequirements: "Life Sciences (Level 3) OR Agricultural Sciences (Level 3).",
+      additionalRequirements:
+        "Life Sciences (Level 3) OR Agricultural Sciences (Level 3).",
       careerOpportunities: [
         "Agricultural Entrepreneur",
         "Agricultural Technician",
@@ -651,5 +756,5 @@ export class SPU extends BaseUniversity {
         "Software Engineer",
       ],
     },
-  ]
+  ];
 }

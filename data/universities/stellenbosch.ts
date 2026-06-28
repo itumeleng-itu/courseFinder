@@ -1,15 +1,15 @@
-import { BaseUniversity } from "./base-university"
-import type { Course } from "@/lib/types"
+import { BaseUniversity } from "./base-university";
+import type { Course } from "@/lib/types";
 
 /**
  * Stellenbosch University (SU) class
  */
 export class Stellenbosch extends BaseUniversity {
-  readonly id = "su"
-  readonly name = "Stellenbosch University"
-  readonly shortName = "SU"
-  readonly website = "https://www.sun.ac.za"
-  readonly logo = "/logos/stellenbosch.png"
+  readonly id = "su";
+  readonly name = "Stellenbosch University";
+  readonly shortName = "SU";
+  readonly website = "https://www.sun.ac.za";
+  readonly logo = "/logos/stellenbosch.png";
   readonly location = {
     city: "Stellenbosch",
     province: "Western Cape",
@@ -17,7 +17,7 @@ export class Stellenbosch extends BaseUniversity {
       latitude: -33.9328,
       longitude: 18.8644,
     },
-  }
+  };
 
   protected readonly _courses: Course[] = [
     // Faculty of AgriSciences
@@ -30,14 +30,7 @@ export class Stellenbosch extends BaseUniversity {
       subjectRequirements: {
         Mathematics: 4,
         "Physical Sciences": 3,
-        alternatives: [
-          {
-            English: 3,
-          },
-          {
-            Afrikaans: 3,
-          },
-        ],
+        "Language": { alternatives: [{ subject: "English", level: 3 }, { subject: "Afrikaans", level: 3 }] },
       },
     },
     {
@@ -49,14 +42,7 @@ export class Stellenbosch extends BaseUniversity {
       subjectRequirements: {
         Mathematics: 4,
         "Physical Sciences": 3,
-        alternatives: [
-          {
-            English: 3,
-          },
-          {
-            Afrikaans: 3,
-          },
-        ],
+        "Language": { alternatives: [{ subject: "English", level: 3 }, { subject: "Afrikaans", level: 3 }] },
       },
     },
     {
@@ -68,14 +54,7 @@ export class Stellenbosch extends BaseUniversity {
       subjectRequirements: {
         Mathematics: 4,
         "Physical Sciences": 3,
-        alternatives: [
-          {
-            English: 3,
-          },
-          {
-            Afrikaans: 3,
-          },
-        ],
+        "Language": { alternatives: [{ subject: "English", level: 3 }, { subject: "Afrikaans", level: 3 }] },
       },
     },
     {
@@ -87,14 +66,7 @@ export class Stellenbosch extends BaseUniversity {
       subjectRequirements: {
         Mathematics: 4,
         "Physical Sciences": 3,
-        alternatives: [
-          {
-            English: 3,
-          },
-          {
-            Afrikaans: 3,
-          },
-        ],
+        "Language": { alternatives: [{ subject: "English", level: 3 }, { subject: "Afrikaans", level: 3 }] },
       },
     },
     {
@@ -106,14 +78,7 @@ export class Stellenbosch extends BaseUniversity {
       subjectRequirements: {
         Mathematics: 4,
         "Physical Sciences": 3,
-        alternatives: [
-          {
-            English: 3,
-          },
-          {
-            Afrikaans: 3,
-          },
-        ],
+        "Language": { alternatives: [{ subject: "English", level: 3 }, { subject: "Afrikaans", level: 3 }] },
       },
     },
     {
@@ -125,14 +90,7 @@ export class Stellenbosch extends BaseUniversity {
       subjectRequirements: {
         Mathematics: 4,
         "Physical Sciences": 3,
-        alternatives: [
-          {
-            English: 3,
-          },
-          {
-            Afrikaans: 3,
-          },
-        ],
+        "Language": { alternatives: [{ subject: "English", level: 3 }, { subject: "Afrikaans", level: 3 }] },
       },
     },
     {
@@ -144,14 +102,7 @@ export class Stellenbosch extends BaseUniversity {
       subjectRequirements: {
         Mathematics: 4,
         "Physical Sciences": 3,
-        alternatives: [
-          {
-            English: 3,
-          },
-          {
-            Afrikaans: 3,
-          },
-        ],
+        "Language": { alternatives: [{ subject: "English", level: 3 }, { subject: "Afrikaans", level: 3 }] },
       },
     },
     {
@@ -163,14 +114,7 @@ export class Stellenbosch extends BaseUniversity {
       subjectRequirements: {
         Mathematics: 4,
         "Physical Sciences": 3,
-        alternatives: [
-          {
-            English: 3,
-          },
-          {
-            Afrikaans: 3,
-          },
-        ],
+        "Language": { alternatives: [{ subject: "English", level: 3 }, { subject: "Afrikaans", level: 3 }] },
       },
     },
 
@@ -182,14 +126,7 @@ export class Stellenbosch extends BaseUniversity {
       apsMin: 32,
       duration: "3 years",
       subjectRequirements: {
-        alternatives: [
-          {
-            English: 3,
-          },
-          {
-            Afrikaans: 3,
-          },
-        ],
+        "Language": { alternatives: [{ subject: "English", level: 3 }, { subject: "Afrikaans", level: 3 }] },
       },
     },
     {
@@ -199,14 +136,7 @@ export class Stellenbosch extends BaseUniversity {
       apsMin: 32,
       duration: "3 years",
       subjectRequirements: {
-        alternatives: [
-          {
-            English: 3,
-          },
-          {
-            Afrikaans: 3,
-          },
-        ],
+        "Language": { alternatives: [{ subject: "English", level: 3 }, { subject: "Afrikaans", level: 3 }] },
       },
     },
     {
@@ -216,14 +146,7 @@ export class Stellenbosch extends BaseUniversity {
       apsMin: 32,
       duration: "3 years",
       subjectRequirements: {
-        alternatives: [
-          {
-            English: 3,
-          },
-          {
-            Afrikaans: 3,
-          },
-        ],
+        "Language": { alternatives: [{ subject: "English", level: 3 }, { subject: "Afrikaans", level: 3 }] },
       },
     },
     {
@@ -233,14 +156,7 @@ export class Stellenbosch extends BaseUniversity {
       apsMin: 30,
       duration: "3 years",
       subjectRequirements: {
-        alternatives: [
-          {
-            English: 3,
-          },
-          {
-            Afrikaans: 3,
-          },
-        ],
+        "Language": { alternatives: [{ subject: "English", level: 3 }, { subject: "Afrikaans", level: 3 }] },
       },
     },
     {
@@ -250,14 +166,7 @@ export class Stellenbosch extends BaseUniversity {
       apsMin: 33,
       duration: "3 years",
       subjectRequirements: {
-        alternatives: [
-          {
-            English: 4,
-          },
-          {
-            Afrikaans: 4,
-          },
-        ],
+        "Language": { alternatives: [{ subject: "English", level: 4 }, { subject: "Afrikaans", level: 4 }] },
       },
     },
     {
@@ -267,24 +176,8 @@ export class Stellenbosch extends BaseUniversity {
       apsMin: 32,
       duration: "3 years",
       subjectRequirements: {
-        alternatives: [
-          {
-            Mathematics: 3,
-            English: 3,
-          },
-          {
-            "Mathematical Literacy": 5,
-            English: 3,
-          },
-          {
-            Mathematics: 3,
-            Afrikaans: 3,
-          },
-          {
-            "Mathematical Literacy": 5,
-            Afrikaans: 3,
-          },
-        ],
+        "Math": { alternatives: [{ subject: "Mathematics", level: 3 }, { subject: "Mathematical Literacy", level: 5 }] },
+        "Language": { alternatives: [{ subject: "English", level: 3 }, { subject: "Afrikaans", level: 3 }] },
       },
     },
     {
@@ -294,14 +187,7 @@ export class Stellenbosch extends BaseUniversity {
       apsMin: 32,
       duration: "3 years",
       subjectRequirements: {
-        alternatives: [
-          {
-            English: 3,
-          },
-          {
-            Afrikaans: 3,
-          },
-        ],
+        "Language": { alternatives: [{ subject: "English", level: 3 }, { subject: "Afrikaans", level: 3 }] },
       },
     },
     {
@@ -311,14 +197,7 @@ export class Stellenbosch extends BaseUniversity {
       apsMin: 30,
       duration: "4 years",
       subjectRequirements: {
-        alternatives: [
-          {
-            English: 3,
-          },
-          {
-            Afrikaans: 3,
-          },
-        ],
+        "Language": { alternatives: [{ subject: "English", level: 3 }, { subject: "Afrikaans", level: 3 }] },
       },
     },
     {
@@ -329,14 +208,7 @@ export class Stellenbosch extends BaseUniversity {
       duration: "3 years",
       subjectRequirements: {
         Mathematics: 4,
-        alternatives: [
-          {
-            English: 3,
-          },
-          {
-            Afrikaans: 3,
-          },
-        ],
+        "Language": { alternatives: [{ subject: "English", level: 3 }, { subject: "Afrikaans", level: 3 }] },
       },
     },
     {
@@ -346,14 +218,7 @@ export class Stellenbosch extends BaseUniversity {
       apsMin: 32,
       duration: "4 years",
       subjectRequirements: {
-        alternatives: [
-          {
-            English: 3,
-          },
-          {
-            Afrikaans: 3,
-          },
-        ],
+        "Language": { alternatives: [{ subject: "English", level: 3 }, { subject: "Afrikaans", level: 3 }] },
       },
     },
     {
@@ -363,14 +228,7 @@ export class Stellenbosch extends BaseUniversity {
       apsMin: 30,
       duration: "4 years",
       subjectRequirements: {
-        alternatives: [
-          {
-            English: 3,
-          },
-          {
-            Afrikaans: 3,
-          },
-        ],
+        "Language": { alternatives: [{ subject: "English", level: 3 }, { subject: "Afrikaans", level: 3 }] },
       },
     },
 
@@ -383,14 +241,7 @@ export class Stellenbosch extends BaseUniversity {
       duration: "3 years",
       subjectRequirements: {
         Mathematics: 4,
-        alternatives: [
-          {
-            English: 3,
-          },
-          {
-            Afrikaans: 3,
-          },
-        ],
+        "Language": { alternatives: [{ subject: "English", level: 3 }, { subject: "Afrikaans", level: 3 }] },
       },
     },
     {
@@ -401,14 +252,7 @@ export class Stellenbosch extends BaseUniversity {
       duration: "3 years",
       subjectRequirements: {
         Mathematics: 4,
-        alternatives: [
-          {
-            English: 3,
-          },
-          {
-            Afrikaans: 3,
-          },
-        ],
+        "Language": { alternatives: [{ subject: "English", level: 3 }, { subject: "Afrikaans", level: 3 }] },
       },
     },
     {
@@ -419,14 +263,7 @@ export class Stellenbosch extends BaseUniversity {
       duration: "3 years",
       subjectRequirements: {
         Mathematics: 5,
-        alternatives: [
-          {
-            English: 3,
-          },
-          {
-            Afrikaans: 3,
-          },
-        ],
+        "Language": { alternatives: [{ subject: "English", level: 3 }, { subject: "Afrikaans", level: 3 }] },
       },
     },
     {
@@ -448,14 +285,7 @@ export class Stellenbosch extends BaseUniversity {
       duration: "3 years",
       subjectRequirements: {
         Mathematics: 6,
-        alternatives: [
-          {
-            English: 4,
-          },
-          {
-            Afrikaans: 4,
-          },
-        ],
+        "Language": { alternatives: [{ subject: "English", level: 4 }, { subject: "Afrikaans", level: 4 }] },
       },
     },
     {
@@ -466,14 +296,7 @@ export class Stellenbosch extends BaseUniversity {
       duration: "3 years",
       subjectRequirements: {
         Mathematics: 4,
-        alternatives: [
-          {
-            English: 3,
-          },
-          {
-            Afrikaans: 3,
-          },
-        ],
+        "Language": { alternatives: [{ subject: "English", level: 3 }, { subject: "Afrikaans", level: 3 }] },
       },
     },
     {
@@ -483,15 +306,7 @@ export class Stellenbosch extends BaseUniversity {
       apsMin: 35,
       duration: "3 years",
       subjectRequirements: {
-        alternatives: [
-          {
-            Mathematics: 5,
-          },
-          {
-            Mathematics: 4,
-            Accounting: 5,
-          },
-        ],
+        "Math": { alternatives: [{ subject: "Mathematics", level: 5 }, { subject: "Accounting", level: 5 }] },
       },
     },
     {
@@ -502,14 +317,7 @@ export class Stellenbosch extends BaseUniversity {
       duration: "3 years",
       subjectRequirements: {
         Mathematics: 4,
-        alternatives: [
-          {
-            English: 3,
-          },
-          {
-            Afrikaans: 3,
-          },
-        ],
+        "Language": { alternatives: [{ subject: "English", level: 3 }, { subject: "Afrikaans", level: 3 }] },
       },
     },
     {
@@ -520,14 +328,7 @@ export class Stellenbosch extends BaseUniversity {
       duration: "3 years",
       subjectRequirements: {
         Mathematics: 4,
-        alternatives: [
-          {
-            English: 3,
-          },
-          {
-            Afrikaans: 3,
-          },
-        ],
+        "Language": { alternatives: [{ subject: "English", level: 3 }, { subject: "Afrikaans", level: 3 }] },
       },
     },
 
@@ -539,24 +340,8 @@ export class Stellenbosch extends BaseUniversity {
       apsMin: 30,
       duration: "4 years",
       subjectRequirements: {
-        alternatives: [
-          {
-            Mathematics: 3,
-            English: 4,
-          },
-          {
-            "Mathematical Literacy": 4,
-            English: 4,
-          },
-          {
-            Mathematics: 3,
-            Afrikaans: 4,
-          },
-          {
-            "Mathematical Literacy": 4,
-            Afrikaans: 4,
-          },
-        ],
+        "Math": { alternatives: [{ subject: "Mathematics", level: 3 }, { subject: "Mathematical Literacy", level: 4 }] },
+        "Language": { alternatives: [{ subject: "English", level: 4 }, { subject: "Afrikaans", level: 4 }] },
       },
     },
     {
@@ -566,24 +351,8 @@ export class Stellenbosch extends BaseUniversity {
       apsMin: 30,
       duration: "4 years",
       subjectRequirements: {
-        alternatives: [
-          {
-            Mathematics: 3,
-            English: 4,
-          },
-          {
-            "Mathematical Literacy": 4,
-            English: 4,
-          },
-          {
-            Mathematics: 3,
-            Afrikaans: 4,
-          },
-          {
-            "Mathematical Literacy": 4,
-            Afrikaans: 4,
-          },
-        ],
+        "Math": { alternatives: [{ subject: "Mathematics", level: 3 }, { subject: "Mathematical Literacy", level: 4 }] },
+        "Language": { alternatives: [{ subject: "English", level: 4 }, { subject: "Afrikaans", level: 4 }] },
       },
     },
 
@@ -597,14 +366,7 @@ export class Stellenbosch extends BaseUniversity {
       subjectRequirements: {
         Mathematics: 5,
         "Physical Sciences": 4,
-        alternatives: [
-          {
-            English: 3,
-          },
-          {
-            Afrikaans: 3,
-          },
-        ],
+        "Language": { alternatives: [{ subject: "English", level: 3 }, { subject: "Afrikaans", level: 3 }] },
       },
     },
     {
@@ -616,14 +378,7 @@ export class Stellenbosch extends BaseUniversity {
       subjectRequirements: {
         Mathematics: 5,
         "Physical Sciences": 4,
-        alternatives: [
-          {
-            English: 3,
-          },
-          {
-            Afrikaans: 3,
-          },
-        ],
+        "Language": { alternatives: [{ subject: "English", level: 3 }, { subject: "Afrikaans", level: 3 }] },
       },
     },
     {
@@ -635,14 +390,7 @@ export class Stellenbosch extends BaseUniversity {
       subjectRequirements: {
         Mathematics: 5,
         "Physical Sciences": 4,
-        alternatives: [
-          {
-            English: 3,
-          },
-          {
-            Afrikaans: 3,
-          },
-        ],
+        "Language": { alternatives: [{ subject: "English", level: 3 }, { subject: "Afrikaans", level: 3 }] },
       },
     },
     {
@@ -654,14 +402,7 @@ export class Stellenbosch extends BaseUniversity {
       subjectRequirements: {
         Mathematics: 5,
         "Physical Sciences": 4,
-        alternatives: [
-          {
-            English: 3,
-          },
-          {
-            Afrikaans: 3,
-          },
-        ],
+        "Language": { alternatives: [{ subject: "English", level: 3 }, { subject: "Afrikaans", level: 3 }] },
       },
     },
     {
@@ -673,14 +414,7 @@ export class Stellenbosch extends BaseUniversity {
       subjectRequirements: {
         Mathematics: 5,
         "Physical Sciences": 4,
-        alternatives: [
-          {
-            English: 3,
-          },
-          {
-            Afrikaans: 3,
-          },
-        ],
+        "Language": { alternatives: [{ subject: "English", level: 3 }, { subject: "Afrikaans", level: 3 }] },
       },
     },
     {
@@ -692,14 +426,7 @@ export class Stellenbosch extends BaseUniversity {
       subjectRequirements: {
         Mathematics: 5,
         "Physical Sciences": 4,
-        alternatives: [
-          {
-            English: 3,
-          },
-          {
-            Afrikaans: 3,
-          },
-        ],
+        "Language": { alternatives: [{ subject: "English", level: 3 }, { subject: "Afrikaans", level: 3 }] },
       },
     },
 
@@ -711,14 +438,7 @@ export class Stellenbosch extends BaseUniversity {
       apsMin: 35,
       duration: "4 years",
       subjectRequirements: {
-        alternatives: [
-          {
-            English: 4,
-          },
-          {
-            Afrikaans: 4,
-          },
-        ],
+        "Language": { alternatives: [{ subject: "English", level: 4 }, { subject: "Afrikaans", level: 4 }] },
       },
     },
     {
@@ -728,14 +448,7 @@ export class Stellenbosch extends BaseUniversity {
       apsMin: 35,
       duration: "3 years",
       subjectRequirements: {
-        alternatives: [
-          {
-            English: 4,
-          },
-          {
-            Afrikaans: 4,
-          },
-        ],
+        "Language": { alternatives: [{ subject: "English", level: 4 }, { subject: "Afrikaans", level: 4 }] },
       },
     },
     {
@@ -746,14 +459,7 @@ export class Stellenbosch extends BaseUniversity {
       duration: "3 years",
       subjectRequirements: {
         Mathematics: 4,
-        alternatives: [
-          {
-            English: 4,
-          },
-          {
-            Afrikaans: 4,
-          },
-        ],
+        "Language": { alternatives: [{ subject: "English", level: 4 }, { subject: "Afrikaans", level: 4 }] },
       },
     },
     {
@@ -763,15 +469,7 @@ export class Stellenbosch extends BaseUniversity {
       apsMin: 40,
       duration: "5 years",
       subjectRequirements: {
-        alternatives: [
-          {
-            Mathematics: 5,
-          },
-          {
-            Mathematics: 4,
-            Accounting: 5,
-          },
-        ],
+        "Math": { alternatives: [{ subject: "Mathematics", level: 5 }, { subject: "Accounting", level: 5 }] },
       },
     },
 
@@ -796,14 +494,7 @@ export class Stellenbosch extends BaseUniversity {
       duration: "4 years",
       subjectRequirements: {
         "Life Sciences": 3,
-        alternatives: [
-          {
-            Mathematics: 3,
-          },
-          {
-            "Mathematical Literacy": 5,
-          },
-        ],
+        "Math": { alternatives: [{ subject: "Mathematics", level: 3 }, { subject: "Mathematical Literacy", level: 5 }] },
       },
     },
     {
@@ -847,14 +538,7 @@ export class Stellenbosch extends BaseUniversity {
       apsMin: 30,
       duration: "4 years",
       subjectRequirements: {
-        alternatives: [
-          {
-            "Physical Sciences": 3,
-          },
-          {
-            "Life Sciences": 3,
-          },
-        ],
+        "Science": { alternatives: [{ subject: "Physical Sciences", level: 3 }, { subject: "Life Sciences", level: 3 }] },
       },
     },
 
@@ -868,14 +552,7 @@ export class Stellenbosch extends BaseUniversity {
       subjectRequirements: {
         Mathematics: 4,
         "Physical Sciences": 3,
-        alternatives: [
-          {
-            English: 3,
-          },
-          {
-            Afrikaans: 3,
-          },
-        ],
+        "Language": { alternatives: [{ subject: "English", level: 3 }, { subject: "Afrikaans", level: 3 }] },
       },
     },
     {
@@ -887,14 +564,7 @@ export class Stellenbosch extends BaseUniversity {
       subjectRequirements: {
         Mathematics: 4,
         "Physical Sciences": 3,
-        alternatives: [
-          {
-            English: 3,
-          },
-          {
-            Afrikaans: 3,
-          },
-        ],
+        "Language": { alternatives: [{ subject: "English", level: 3 }, { subject: "Afrikaans", level: 3 }] },
       },
     },
     {
@@ -906,14 +576,7 @@ export class Stellenbosch extends BaseUniversity {
       subjectRequirements: {
         Mathematics: 4,
         "Physical Sciences": 3,
-        alternatives: [
-          {
-            English: 3,
-          },
-          {
-            Afrikaans: 3,
-          },
-        ],
+        "Language": { alternatives: [{ subject: "English", level: 3 }, { subject: "Afrikaans", level: 3 }] },
       },
     },
     {
@@ -925,14 +588,7 @@ export class Stellenbosch extends BaseUniversity {
       subjectRequirements: {
         Mathematics: 4,
         "Physical Sciences": 3,
-        alternatives: [
-          {
-            English: 3,
-          },
-          {
-            Afrikaans: 3,
-          },
-        ],
+        "Language": { alternatives: [{ subject: "English", level: 3 }, { subject: "Afrikaans", level: 3 }] },
       },
     },
     {
@@ -944,14 +600,7 @@ export class Stellenbosch extends BaseUniversity {
       subjectRequirements: {
         Mathematics: 5,
         "Physical Sciences": 3,
-        alternatives: [
-          {
-            English: 3,
-          },
-          {
-            Afrikaans: 3,
-          },
-        ],
+        "Language": { alternatives: [{ subject: "English", level: 3 }, { subject: "Afrikaans", level: 3 }] },
       },
     },
     {
@@ -963,14 +612,7 @@ export class Stellenbosch extends BaseUniversity {
       subjectRequirements: {
         Mathematics: 4,
         "Physical Sciences": 3,
-        alternatives: [
-          {
-            English: 3,
-          },
-          {
-            Afrikaans: 3,
-          },
-        ],
+        "Language": { alternatives: [{ subject: "English", level: 3 }, { subject: "Afrikaans", level: 3 }] },
       },
     },
     {
@@ -982,14 +624,7 @@ export class Stellenbosch extends BaseUniversity {
       subjectRequirements: {
         Mathematics: 4,
         "Physical Sciences": 3,
-        alternatives: [
-          {
-            English: 3,
-          },
-          {
-            Afrikaans: 3,
-          },
-        ],
+        "Language": { alternatives: [{ subject: "English", level: 3 }, { subject: "Afrikaans", level: 3 }] },
       },
     },
     {
@@ -1001,14 +636,7 @@ export class Stellenbosch extends BaseUniversity {
       subjectRequirements: {
         Mathematics: 5,
         "Physical Sciences": 3,
-        alternatives: [
-          {
-            English: 3,
-          },
-          {
-            Afrikaans: 3,
-          },
-        ],
+        "Language": { alternatives: [{ subject: "English", level: 3 }, { subject: "Afrikaans", level: 3 }] },
       },
     },
     {
@@ -1019,14 +647,7 @@ export class Stellenbosch extends BaseUniversity {
       duration: "3 years",
       subjectRequirements: {
         Mathematics: 5,
-        alternatives: [
-          {
-            English: 3,
-          },
-          {
-            Afrikaans: 3,
-          },
-        ],
+        "Language": { alternatives: [{ subject: "English", level: 3 }, { subject: "Afrikaans", level: 3 }] },
       },
     },
     {
@@ -1037,14 +658,7 @@ export class Stellenbosch extends BaseUniversity {
       duration: "3 years",
       subjectRequirements: {
         Mathematics: 5,
-        alternatives: [
-          {
-            English: 3,
-          },
-          {
-            Afrikaans: 3,
-          },
-        ],
+        "Language": { alternatives: [{ subject: "English", level: 3 }, { subject: "Afrikaans", level: 3 }] },
       },
     },
     {
@@ -1055,14 +669,7 @@ export class Stellenbosch extends BaseUniversity {
       duration: "4 years",
       subjectRequirements: {
         Mathematics: 6,
-        alternatives: [
-          {
-            English: 4,
-          },
-          {
-            Afrikaans: 4,
-          },
-        ],
+        "Language": { alternatives: [{ subject: "English", level: 4 }, { subject: "Afrikaans", level: 4 }] },
       },
     },
 
@@ -1083,7 +690,7 @@ export class Stellenbosch extends BaseUniversity {
       duration: "4 years",
       subjectRequirements: {},
     },
-  ]
+  ];
 
   /**
    * Stellenbosch-specific APS calculation
@@ -1092,28 +699,28 @@ export class Stellenbosch extends BaseUniversity {
    * - Standard 7-point NSC scale
    */
   calculateApsScore(subjects: Record<string, number>): number {
-    const subjectScores: number[] = []
+    const subjectScores: number[] = [];
 
     for (const [subjectName, percentage] of Object.entries(subjects)) {
-      if (subjectName.toLowerCase().includes('life orientation')) {
-        continue
+      if (subjectName.toLowerCase().includes("life orientation")) {
+        continue;
       }
 
-      let points = 0
-      if (percentage >= 80) points = 7
-      else if (percentage >= 70) points = 6
-      else if (percentage >= 60) points = 5
-      else if (percentage >= 50) points = 4
-      else if (percentage >= 40) points = 3
-      else if (percentage >= 30) points = 2
-      else if (percentage >= 0) points = 1
+      let points = 0;
+      if (percentage >= 80) points = 7;
+      else if (percentage >= 70) points = 6;
+      else if (percentage >= 60) points = 5;
+      else if (percentage >= 50) points = 4;
+      else if (percentage >= 40) points = 3;
+      else if (percentage >= 30) points = 2;
+      else if (percentage >= 0) points = 1;
 
-      subjectScores.push(points)
+      subjectScores.push(points);
     }
 
-    subjectScores.sort((a, b) => b - a)
-    const top6 = subjectScores.slice(0, 6)
+    subjectScores.sort((a, b) => b - a);
+    const top6 = subjectScores.slice(0, 6);
 
-    return top6.reduce((sum, score) => sum + score, 0)
+    return top6.reduce((sum, score) => sum + score, 0);
   }
 }

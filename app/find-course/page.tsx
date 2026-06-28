@@ -6,7 +6,7 @@ import { SubjectValidator } from "@/lib/utils/subject-validator"
 import { SidebarInset } from "@/components/ui/sidebar"
 import { ScrollArea } from "@/components/ui/scroll-area"
 import { Separator } from "@/components/ui/separator"
-import { Calculator, GraduationCap, Search, PlusCircle } from "lucide-react"
+import { Calculator, GraduationCap, Search, PlusCircle, BookOpen, School } from "lucide-react"
 import { useToast } from "@/components/ui/use-toast"
 import { calculateAPS as calculateAPSFromLib } from "@/lib/aps-calculator"
 import { evaluateNSC } from "@/lib/nsc"
@@ -20,6 +20,7 @@ import { SubjectItem } from "@/components/find-course/subject-item"
 import { SubjectInputForm } from "@/components/find-course/subject-input-form"
 import { CourseFilters } from "@/components/find-course/course-filters"
 import { CourseMatchCard } from "@/components/find-course/course-match-card"
+import { UpgradeRecommendation } from "@/components/find-course/upgrade-recommendation"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
 
@@ -31,9 +32,9 @@ export default function FindCoursePage() {
   const [searchQuery, setSearchQuery] = useState("")
   const [hasCalculated, setHasCalculated] = useState(false)
   const [nscResult, setNscResult] = useState(null)
-  const [showOnlyQualified, setShowOnlyQualified] = useState(false)
   const [editingSubjectId, setEditingSubjectId] = useState<string | null>(null)
   const [editingPercentage, setEditingPercentage] = useState("")
+  const [visibleCount, setVisibleCount] = useState(48)
   const { toast } = useToast()
 
   const validator = useMemo(() => new SubjectValidator(subjects), [subjects])
@@ -46,8 +47,12 @@ export default function FindCoursePage() {
 
   const {
     qualifyingCourses,
+    recommendedColleges,
+    extendedPrograms,
     findCourses: runMatcher,
     setQualifyingCourses,
+    setRecommendedColleges,
+    setExtendedPrograms,
   } = useCourseMatcher(subjects, calculatedDefaultAPS)
 
   const addSubject = () => {
@@ -69,6 +74,7 @@ export default function FindCoursePage() {
     }
     setApsScore(calculatedDefaultAPS)
     setNscResult(evaluateNSC(subjects) as any)
+    setVisibleCount(48)
     runMatcher()
     setHasCalculated(true)
   }
@@ -77,9 +83,9 @@ export default function FindCoursePage() {
     const q = searchQuery.toLowerCase()
     return qualifyingCourses.filter((m) => {
       const matchSearch = m.course.name.toLowerCase().includes(q) || m.university.name.toLowerCase().includes(q)
-      return (showOnlyQualified ? m.meetsRequirements : true) && matchSearch
+      return matchSearch
     })
-  }, [qualifyingCourses, searchQuery, showOnlyQualified])
+  }, [qualifyingCourses, searchQuery])
 
   const qualifiedCount = qualifyingCourses.filter((c) => c.meetsRequirements).length
 
@@ -135,7 +141,7 @@ export default function FindCoursePage() {
                         <Calculator className="h-5 w-5 mr-2" />
                         Calculate APS
                       </Button>
-                      <Button onClick={() => { setSubjects([]); setHasCalculated(false); setQualifyingCourses([]) }} variant="ghost" className="w-full text-muted-foreground hover:text-destructive">
+                      <Button onClick={() => { setSubjects([]); setHasCalculated(false); setQualifyingCourses([]); setRecommendedColleges([]); setExtendedPrograms([]); setVisibleCount(48) }} variant="ghost" className="w-full text-muted-foreground hover:text-destructive">
                         Reset All Subjects
                       </Button>
                     </div>
@@ -181,15 +187,56 @@ export default function FindCoursePage() {
           <div className="flex-1 flex flex-col lg:overflow-hidden h-auto">
             {hasCalculated && (
               <>
-                <CourseFilters searchQuery={searchQuery} setSearchQuery={setSearchQuery} showOnlyQualified={showOnlyQualified} setShowOnlyQualified={setShowOnlyQualified} qualifiedCount={qualifiedCount} partialCount={qualifyingCourses.length - qualifiedCount} />
+                <CourseFilters searchQuery={searchQuery} setSearchQuery={setSearchQuery} qualifiedCount={qualifiedCount} />
                 <ScrollArea className="lg:flex-1 h-auto">
                   <div className="p-4 md:p-6">
-                    {filteredCourses.length === 0 ? (
-                      <Card><CardContent className="pt-6 text-center py-8 text-muted-foreground">No courses match your search or APS score.</CardContent></Card>
+                    <UpgradeRecommendation nscResult={nscResult} qualifiedCount={qualifiedCount} />
+                    
+                    {filteredCourses.length === 0 && extendedPrograms.length === 0 && recommendedColleges.length === 0 ? (
+                      <Card><CardContent className="pt-6 text-center py-8 text-muted-foreground">No qualifying courses found for your APS score. Consider checking extended curriculum programmes below.</CardContent></Card>
                     ) : (
-                      <div className="grid gap-4 grid-cols-1 sm:grid-cols-2">
-                        {filteredCourses.map((m, i) => <CourseMatchCard key={i} match={m} index={i} />)}
-                      </div>
+                      <>
+                        {filteredCourses.length > 0 && (
+                          <div>
+                            <div className="grid gap-4 grid-cols-1 sm:grid-cols-2">
+                              {filteredCourses.slice(0, visibleCount).map((m, i) => <CourseMatchCard key={i} match={m} index={i} />)}
+                            </div>
+                            {visibleCount < filteredCourses.length && (
+                              <div className="mt-6 text-center">
+                                <Button variant="outline" onClick={() => setVisibleCount(v => v + 48)}>
+                                  Load more ({filteredCourses.length - visibleCount} remaining)
+                                </Button>
+                              </div>
+                            )}
+                          </div>
+                        )}
+
+                        {extendedPrograms.length > 0 && (
+                          <div className="mt-8 space-y-4">
+                            <div className="flex items-center gap-2">
+                              <BookOpen className="h-5 w-5 text-amber-500" />
+                              <h3 className="text-base font-semibold">Extended Curriculum Programmes</h3>
+                              <span className="text-xs text-muted-foreground">({extendedPrograms.length} options — includes foundation year)</span>
+                            </div>
+                            <div className="grid gap-4 grid-cols-1 sm:grid-cols-2">
+                              {extendedPrograms.map((m, i) => <CourseMatchCard key={`ext-${i}`} match={m} index={i} />)}
+                            </div>
+                          </div>
+                        )}
+
+                        {recommendedColleges.length > 0 && (
+                          <div className="mt-8 space-y-4">
+                            <div className="flex items-center gap-2">
+                              <School className="h-5 w-5 text-blue-500" />
+                              <h3 className="text-base font-semibold">TVET College Programmes</h3>
+                              <span className="text-xs text-muted-foreground">({recommendedColleges.length} options)</span>
+                            </div>
+                            <div className="grid gap-4 grid-cols-1 sm:grid-cols-2">
+                              {recommendedColleges.map((m, i) => <CourseMatchCard key={`col-${i}`} match={m} index={i} />)}
+                            </div>
+                          </div>
+                        )}
+                      </>
                     )}
                   </div>
                 </ScrollArea>

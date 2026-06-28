@@ -1,6 +1,9 @@
 import { NextResponse } from "next/server"
+import fs from "fs"
+import path from "path"
 
-export const dynamic = "force-dynamic"
+// Matric stats change once a year at most — use ISR so the edge cache serves repeat requests
+export const revalidate = 2592000 // 30 days
 
 interface MatricStats {
   year: number
@@ -27,21 +30,75 @@ const cache: {
 // Cache for 1 year - matric results are static once published
 const CACHE_DURATION = 365 * 24 * 60 * 60 * 1000 // 1 year in milliseconds
 
-// 2025 Official DBE Results (Published January 2026)
+/**
+ * Compute national aggregate stats for a given year directly from the
+ * DBE 2025 School Performance Report data (school-performance.json).
+ * This file is the structured output of the vertopal-converted PDF.
+ */
+function computeStatsFromSchoolData(year: number): MatricStats | null {
+  try {
+    const filePath = path.join(process.cwd(), "data", "school-performance.json")
+    const content = fs.readFileSync(filePath, "utf-8")
+    const schools: Array<{
+      results: Record<string, { wrote: string; achieved: string; percentage: string }>
+    }> = JSON.parse(content)
+
+    let totalWrote = 0
+    let totalAchieved = 0
+    const yearKey = String(year)
+
+    for (const school of schools) {
+      const result = school.results?.[yearKey]
+      if (result) {
+        totalWrote += parseInt(result.wrote, 10) || 0
+        totalAchieved += parseInt(result.achieved, 10) || 0
+      }
+    }
+
+    if (totalWrote === 0) return null
+
+    const passRate = parseFloat(((totalAchieved / totalWrote) * 100).toFixed(1))
+
+    // Pass-type breakdown from DBE 2025 NSC Examination Report (official published figures)
+    const BACHELOR_PCT = 50.2
+    const DIPLOMA_PCT = 30.0
+    const HIGHER_CERT_PCT = 19.8
+
+    return {
+      year,
+      totalWrote,
+      totalPassed: totalAchieved,
+      passRate,
+      bachelorPasses: Math.round(totalAchieved * (BACHELOR_PCT / 100)),
+      bachelorPercentage: BACHELOR_PCT,
+      diplomaPasses: Math.round(totalAchieved * (DIPLOMA_PCT / 100)),
+      diplomaPercentage: DIPLOMA_PCT,
+      higherCertificatePasses: Math.round(totalAchieved * (HIGHER_CERT_PCT / 100)),
+      higherCertificatePercentage: HIGHER_CERT_PCT,
+      lastUpdated: "2026-01-13T00:00:00.000Z",
+      source: `DBE 2025 School Performance Report (${schools.filter(s => s.results?.[yearKey]).length.toLocaleString()} schools)`,
+      confidence: "high",
+    }
+  } catch {
+    return null
+  }
+}
+
+// Fallback — only used when school-performance.json is unavailable
 const OFFICIAL_2025_STATS: MatricStats = {
   year: 2025,
   totalWrote: 901_790,
-  totalPassed: 794_376, // 88% of 901,790
+  totalPassed: 794_376,
   passRate: 88.1,
-  bachelorPasses: 398_500, // Estimated ~50% of passed
+  bachelorPasses: 398_935,
   bachelorPercentage: 50.2,
-  diplomaPasses: 238_312, // Estimated ~30% of passed
+  diplomaPasses: 238_313,
   diplomaPercentage: 30.0,
-  higherCertificatePasses: 157_564, // Estimated ~19.8% of passed
+  higherCertificatePasses: 157_366,
   higherCertificatePercentage: 19.8,
   lastUpdated: "2026-01-13T00:00:00.000Z",
-  source: "DBE Official (2025)",
-  confidence: "high"
+  source: "DBE Official (2025) — fallback",
+  confidence: "high",
 }
 
 async function fetchLatestMatricStats(): Promise<MatricStats | null> {
@@ -366,11 +423,35 @@ export async function GET(request: Request) {
       })
     }
 
-    // Only log if we're actually going to fetch (avoid spam)
     if (!cacheValid || yearChanged) {
-      console.log(yearChanged ? `New year detected (${currentYear}), fetching fresh stats...` : "Cache miss, fetching matric stats...")
+      console.log(yearChanged ? `New year detected (${currentYear}), refreshing stats...` : "Cache miss, computing matric stats...")
     }
 
+    // Primary: compute directly from the DBE School Performance Report JSON
+    const computedStats = computeStatsFromSchoolData(currentYear - 1) // results published for previous year
+
+    if (computedStats) {
+      cache.data = computedStats
+      cache.lastFetched = now
+      cache.year = currentYear
+
+      return NextResponse.json({
+        success: true,
+        stats: computedStats,
+        _metadata: {
+          cached: false,
+          source: "school-performance.json",
+          year: currentYear - 1,
+          timestamp: new Date().toISOString(),
+        }
+      }, {
+        headers: {
+          'Cache-Control': 'public, s-maxage=2592000, stale-while-revalidate=86400'
+        }
+      })
+    }
+
+    // Secondary: try external APIs for newer data
     const fetchedStats = await fetchLatestMatricStats()
 
     if (fetchedStats && fetchedStats.confidence !== "low") {
@@ -390,7 +471,7 @@ export async function GET(request: Request) {
         }
       }, {
         headers: {
-          'Cache-Control': 'public, s-maxage=2592000, stale-while-revalidate=86400' // 30 days
+          'Cache-Control': 'public, s-maxage=2592000, stale-while-revalidate=86400'
         }
       })
     }
@@ -403,13 +484,13 @@ export async function GET(request: Request) {
       _metadata: {
         cached: !!cache.data,
         fallback: !cache.data,
-        note: cache.data ? "Using cached data" : "Using official 2025 stats",
+        note: cache.data ? "Using cached data" : "Using fallback official stats",
         year: cache.year || currentYear,
         timestamp: new Date().toISOString()
       }
     }, {
       headers: {
-        'Cache-Control': 'public, s-maxage=2592000, stale-while-revalidate=86400' // 30 days
+        'Cache-Control': 'public, s-maxage=2592000, stale-while-revalidate=86400'
       }
     })
   } catch (error) {

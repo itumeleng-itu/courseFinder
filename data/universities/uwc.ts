@@ -1,16 +1,16 @@
-import { BaseUniversity } from "./base-university"
-import type { Course } from "@/lib/types"
+import { BaseUniversity } from "./base-university";
+import type { Course } from "@/lib/types";
 
 /**
  * University of the Western Cape (UWC) class
  * Uses a custom UWC points system instead of standard APS
  */
 export class UWC extends BaseUniversity {
-  readonly id = "uwc"
-  readonly name = "University of the Western Cape"
-  readonly shortName = "UWC"
-  readonly website = "https://www.uwc.ac.za"
-  readonly logo = "/logos/uwc.png"
+  readonly id = "uwc";
+  readonly name = "University of the Western Cape";
+  readonly shortName = "UWC";
+  readonly website = "https://www.uwc.ac.za";
+  readonly logo = "/logos/uwc.png";
   readonly location = {
     city: "Cape Town",
     province: "Western Cape",
@@ -18,48 +18,54 @@ export class UWC extends BaseUniversity {
       latitude: -33.9333,
       longitude: 18.6333,
     },
-  }
+  };
 
   /**
    * UWC uses a custom points system instead of standard APS
    * This method calculates UWC points based on their specific weighting
    */
   calculateAPS(subjects: Record<string, number>): number {
-    let totalPoints = 0
-    let subjectCount = 0
+    let totalPoints = 0;
+    let subjectCount = 0;
 
     // UWC Points allocation table
-    const getUWCPoints = (level: number, subjectType: "english" | "math" | "lifeOrientation" | "other"): number => {
+    const getUWCPoints = (
+      level: number,
+      subjectType: "english" | "math" | "lifeOrientation" | "other",
+    ): number => {
       const pointsTable = {
         english: [0, 1, 3, 5, 7, 9, 11, 13, 15],
         math: [0, 1, 2, 3, 4, 5, 6, 7, 8],
         lifeOrientation: [0, 1, 1, 1, 2, 2, 2, 3, 3],
         other: [0, 1, 3, 5, 7, 9, 11, 13, 15],
-      }
-      return pointsTable[subjectType][level] || 0
-    }
+      };
+      return pointsTable[subjectType][level] || 0;
+    };
 
     for (const [subject, level] of Object.entries(subjects)) {
-      if (level === 0) continue
+      if (level === 0) continue;
 
-      let points = 0
-      const normalizedSubject = subject.toLowerCase()
+      let points = 0;
+      const normalizedSubject = subject.toLowerCase();
 
       if (normalizedSubject.includes("english")) {
-        points = getUWCPoints(level, "english")
-      } else if (normalizedSubject.includes("mathematics") || normalizedSubject.includes("math")) {
-        points = getUWCPoints(level, "math")
+        points = getUWCPoints(level, "english");
+      } else if (
+        normalizedSubject.includes("mathematics") ||
+        normalizedSubject.includes("math")
+      ) {
+        points = getUWCPoints(level, "math");
       } else if (normalizedSubject.includes("life orientation")) {
-        points = getUWCPoints(level, "lifeOrientation")
+        points = getUWCPoints(level, "lifeOrientation");
       } else {
-        points = getUWCPoints(level, "other")
+        points = getUWCPoints(level, "other");
       }
 
-      totalPoints += points
-      subjectCount++
+      totalPoints += points;
+      subjectCount++;
     }
 
-    return totalPoints
+    return totalPoints;
   }
 
   protected readonly _courses: Course[] = [
@@ -78,10 +84,18 @@ export class UWC extends BaseUniversity {
         year: 2026,
       },
       subjectRequirements: {
-        "English Home": 4,
-        "English First Additional": 5,
-        Mathematics: 3,
-        "Mathematics Literacy": 4,
+        Language: {
+          alternatives: [
+            { subject: "English Home Language", level: 4 },
+            { subject: "English First Additional Language", level: 5 },
+          ],
+        },
+        Math: {
+          alternatives: [
+            { subject: "Mathematics", level: 3 },
+            { subject: "Mathematical Literacy", level: 4 },
+          ],
+        },
       },
       additionalRequirements: [
         "English Code 4 (home or first additional language)",
@@ -109,12 +123,22 @@ export class UWC extends BaseUniversity {
         year: 2026,
       },
       subjectRequirements: {
-        "English Home": 4,
-        "English First Additional": 4,
-        Mathematics: 3,
-        "Mathematics Literacy": 4,
+        Language: {
+          alternatives: [
+            { subject: "English Home Language", level: 4 },
+            { subject: "English First Additional Language", level: 4 },
+          ],
+        },
+        Math: {
+          alternatives: [
+            { subject: "Mathematics", level: 3 },
+            { subject: "Mathematical Literacy", level: 4 },
+          ],
+        },
       },
-      additionalRequirements: ["Another language Code 3 (home or first additional language)"],
+      additionalRequirements: [
+        "Another language Code 3 (home or first additional language)",
+      ],
       careerOpportunities: [
         "Community Development Practitioner",
         "Project Coordinator",
@@ -137,12 +161,22 @@ export class UWC extends BaseUniversity {
         year: 2026,
       },
       subjectRequirements: {
-        "English Home": 4,
-        "English First Additional": 4,
-        Mathematics: 3,
-        "Mathematics Literacy": 4,
+        Language: {
+          alternatives: [
+            { subject: "English Home Language", level: 4 },
+            { subject: "English First Additional Language", level: 4 },
+          ],
+        },
+        Math: {
+          alternatives: [
+            { subject: "Mathematics", level: 3 },
+            { subject: "Mathematical Literacy", level: 4 },
+          ],
+        },
       },
-      additionalRequirements: ["Another language Code 3 (home or first additional language)"],
+      additionalRequirements: [
+        "Another language Code 3 (home or first additional language)",
+      ],
       careerOpportunities: [
         "Sports Scientist",
         "Exercise Physiologist",
@@ -165,13 +199,23 @@ export class UWC extends BaseUniversity {
         year: 2026,
       },
       subjectRequirements: {
-        "English Home": 4,
-        "English First Additional": 4,
-        Mathematics: 4,
-        "Mathematics Literacy": 6,
+        Language: {
+          alternatives: [
+            { subject: "English Home Language", level: 4 },
+            { subject: "English First Additional Language", level: 4 },
+          ],
+        },
+        Math: {
+          alternatives: [
+            { subject: "Mathematics", level: 4 },
+            { subject: "Mathematical Literacy", level: 6 },
+          ],
+        },
         "Life Sciences": 4,
       },
-      additionalRequirements: ["Another language Code 3 (home or first additional language)"],
+      additionalRequirements: [
+        "Another language Code 3 (home or first additional language)",
+      ],
       careerOpportunities: [
         "Dietitian",
         "Nutritionist",
@@ -194,13 +238,23 @@ export class UWC extends BaseUniversity {
         year: 2026,
       },
       subjectRequirements: {
-        "English Home": 4,
-        "English First Additional": 4,
-        Mathematics: 4,
-        "Mathematics Literacy": 6,
+        Language: {
+          alternatives: [
+            { subject: "English Home Language", level: 4 },
+            { subject: "English First Additional Language", level: 4 },
+          ],
+        },
+        Math: {
+          alternatives: [
+            { subject: "Mathematics", level: 4 },
+            { subject: "Mathematical Literacy", level: 6 },
+          ],
+        },
         "Life Sciences": 4,
       },
-      additionalRequirements: ["Another language Code 3 (home or first additional language)"],
+      additionalRequirements: [
+        "Another language Code 3 (home or first additional language)",
+      ],
       careerOpportunities: [
         "Exercise Scientist",
         "Sports Performance Analyst",
@@ -223,13 +277,23 @@ export class UWC extends BaseUniversity {
         year: 2026,
       },
       subjectRequirements: {
-        "English Home": 4,
-        "English First Additional": 4,
-        Mathematics: 3,
-        "Mathematics Literacy": 5,
+        Language: {
+          alternatives: [
+            { subject: "English Home Language", level: 4 },
+            { subject: "English First Additional Language", level: 4 },
+          ],
+        },
+        Math: {
+          alternatives: [
+            { subject: "Mathematics", level: 3 },
+            { subject: "Mathematical Literacy", level: 5 },
+          ],
+        },
         "Life Sciences": 4,
       },
-      additionalRequirements: ["Another language Code 3 (home or first additional language)"],
+      additionalRequirements: [
+        "Another language Code 3 (home or first additional language)",
+      ],
       careerOpportunities: [
         "Occupational Therapist",
         "Rehabilitation Specialist",
@@ -252,14 +316,24 @@ export class UWC extends BaseUniversity {
         year: 2026,
       },
       subjectRequirements: {
-        "English Home": 4,
-        "English First Additional": 4,
-        Mathematics: 4,
-        "Mathematics Literacy": 6,
+        Language: {
+          alternatives: [
+            { subject: "English Home Language", level: 4 },
+            { subject: "English First Additional Language", level: 4 },
+          ],
+        },
+        Math: {
+          alternatives: [
+            { subject: "Mathematics", level: 4 },
+            { subject: "Mathematical Literacy", level: 6 },
+          ],
+        },
         "Life Sciences": 4,
         "Physical Sciences": 4,
       },
-      additionalRequirements: ["Another language Code 3 (home or first additional language)"],
+      additionalRequirements: [
+        "Another language Code 3 (home or first additional language)",
+      ],
       careerOpportunities: [
         "Physiotherapist",
         "Sports Physiotherapist",
@@ -282,14 +356,30 @@ export class UWC extends BaseUniversity {
         year: 2026,
       },
       subjectRequirements: {
-        "English Home": 4,
-        "English First Additional": 4,
-        Mathematics: 4,
-        "Mathematics Literacy": 6,
+        Language: {
+          alternatives: [
+            { subject: "English Home Language", level: 4 },
+            { subject: "English First Additional Language", level: 4 },
+          ],
+        },
+        Math: {
+          alternatives: [
+            { subject: "Mathematics", level: 4 },
+            { subject: "Mathematical Literacy", level: 6 },
+          ],
+        },
         "Life Sciences": 4,
       },
-      additionalRequirements: ["Another language Code 3 (home or first additional language)"],
-      careerOpportunities: ["Registered Nurse", "Midwife", "Community Health Nurse", "Hospital Nurse", "Nurse Manager"],
+      additionalRequirements: [
+        "Another language Code 3 (home or first additional language)",
+      ],
+      careerOpportunities: [
+        "Registered Nurse",
+        "Midwife",
+        "Community Health Nurse",
+        "Hospital Nurse",
+        "Nurse Manager",
+      ],
     },
 
     // Faculty of Economic and Management Sciences
@@ -307,12 +397,22 @@ export class UWC extends BaseUniversity {
         year: 2026,
       },
       subjectRequirements: {
-        "English Home": 4,
-        "English First Additional": 4,
-        Mathematics: 3,
-        "Mathematics Literacy": 5,
+        Language: {
+          alternatives: [
+            { subject: "English Home Language", level: 4 },
+            { subject: "English First Additional Language", level: 4 },
+          ],
+        },
+        Math: {
+          alternatives: [
+            { subject: "Mathematics", level: 3 },
+            { subject: "Mathematical Literacy", level: 5 },
+          ],
+        },
       },
-      additionalRequirements: ["Another language Code 3 (home or first additional language)"],
+      additionalRequirements: [
+        "Another language Code 3 (home or first additional language)",
+      ],
       careerOpportunities: [
         "Public Administrator",
         "Government Official",
@@ -335,11 +435,17 @@ export class UWC extends BaseUniversity {
         year: 2026,
       },
       subjectRequirements: {
-        "English Home": 4,
-        "English First Additional": 4,
+        Language: {
+          alternatives: [
+            { subject: "English Home Language", level: 4 },
+            { subject: "English First Additional Language", level: 4 },
+          ],
+        },
         Mathematics: 4,
       },
-      additionalRequirements: ["Another language Code 3 (home or first additional language)"],
+      additionalRequirements: [
+        "Another language Code 3 (home or first additional language)",
+      ],
       careerOpportunities: [
         "Business Analyst",
         "Financial Consultant",
@@ -362,12 +468,22 @@ export class UWC extends BaseUniversity {
         year: 2026,
       },
       subjectRequirements: {
-        "English Home": 4,
-        "English First Additional": 4,
-        Mathematics: 3,
-        "Mathematics Literacy": 4,
+        Language: {
+          alternatives: [
+            { subject: "English Home Language", level: 4 },
+            { subject: "English First Additional Language", level: 4 },
+          ],
+        },
+        Math: {
+          alternatives: [
+            { subject: "Mathematics", level: 3 },
+            { subject: "Mathematical Literacy", level: 4 },
+          ],
+        },
       },
-      additionalRequirements: ["Another language Code 3 (home or first additional language)"],
+      additionalRequirements: [
+        "Another language Code 3 (home or first additional language)",
+      ],
       careerOpportunities: [
         "Business Analyst",
         "Financial Consultant",
@@ -390,11 +506,17 @@ export class UWC extends BaseUniversity {
         year: 2026,
       },
       subjectRequirements: {
-        "English Home": 4,
-        "English First Additional": 4,
+        Language: {
+          alternatives: [
+            { subject: "English Home Language", level: 4 },
+            { subject: "English First Additional Language", level: 4 },
+          ],
+        },
         Mathematics: 4,
       },
-      additionalRequirements: ["Another language Code 3 (home or first additional language)"],
+      additionalRequirements: [
+        "Another language Code 3 (home or first additional language)",
+      ],
       careerOpportunities: [
         "Financial Accountant",
         "Auditor",
@@ -417,11 +539,17 @@ export class UWC extends BaseUniversity {
         year: 2026,
       },
       subjectRequirements: {
-        "English Home": 4,
-        "English First Additional": 4,
+        Language: {
+          alternatives: [
+            { subject: "English Home Language", level: 4 },
+            { subject: "English First Additional Language", level: 4 },
+          ],
+        },
         Mathematics: 4,
       },
-      additionalRequirements: ["Another language Code 3 (home or first additional language)"],
+      additionalRequirements: [
+        "Another language Code 3 (home or first additional language)",
+      ],
       careerOpportunities: [
         "Systems Analyst",
         "IT Consultant",
@@ -444,8 +572,12 @@ export class UWC extends BaseUniversity {
         year: 2026,
       },
       subjectRequirements: {
-        "English Home": 4,
-        "English First Additional": 4,
+        Language: {
+          alternatives: [
+            { subject: "English Home Language", level: 4 },
+            { subject: "English First Additional Language", level: 4 },
+          ],
+        },
         Mathematics: 4,
         Accounting: 5,
       },
@@ -475,8 +607,12 @@ export class UWC extends BaseUniversity {
         year: 2026,
       },
       subjectRequirements: {
-        "English Home": 4,
-        "English First Additional": 4,
+        Language: {
+          alternatives: [
+            { subject: "English Home Language", level: 4 },
+            { subject: "English First Additional Language", level: 4 },
+          ],
+        },
         Mathematics: 4,
         Accounting: 5,
       },
@@ -508,8 +644,12 @@ export class UWC extends BaseUniversity {
         year: 2026,
       },
       subjectRequirements: {
-        "English Home": 4,
-        "English First Additional": 4,
+        Language: {
+          alternatives: [
+            { subject: "English Home Language", level: 4 },
+            { subject: "English First Additional Language", level: 4 },
+          ],
+        },
         Mathematics: 4,
         "Physical Sciences": 4,
         "Life Sciences": 4,
@@ -540,8 +680,12 @@ export class UWC extends BaseUniversity {
         year: 2026,
       },
       subjectRequirements: {
-        "English Home": 4,
-        "English First Additional": 4,
+        Language: {
+          alternatives: [
+            { subject: "English Home Language", level: 4 },
+            { subject: "English First Additional Language", level: 4 },
+          ],
+        },
         Mathematics: 4,
         "Physical Sciences": 4,
         "Life Sciences": 4,
@@ -572,8 +716,12 @@ export class UWC extends BaseUniversity {
         year: 2026,
       },
       subjectRequirements: {
-        "English Home": 4,
-        "English First Additional": 4,
+        Language: {
+          alternatives: [
+            { subject: "English Home Language", level: 4 },
+            { subject: "English First Additional Language", level: 4 },
+          ],
+        },
         Mathematics: 4,
         "Physical Sciences": 4,
         "Life Sciences": 4,
@@ -604,12 +752,18 @@ export class UWC extends BaseUniversity {
         year: 2026,
       },
       subjectRequirements: {
-        "English Home": 4,
-        "English First Additional": 4,
+        Language: {
+          alternatives: [
+            { subject: "English Home Language", level: 4 },
+            { subject: "English First Additional Language", level: 4 },
+          ],
+        },
         Mathematics: 4,
         "Life Sciences": 4,
       },
-      additionalRequirements: ["Another language Code 3 (home or first additional language)"],
+      additionalRequirements: [
+        "Another language Code 3 (home or first additional language)",
+      ],
       careerOpportunities: [
         "Medical Technologist",
         "Laboratory Scientist",
@@ -632,12 +786,18 @@ export class UWC extends BaseUniversity {
         year: 2026,
       },
       subjectRequirements: {
-        "English Home": 4,
-        "English First Additional": 4,
+        Language: {
+          alternatives: [
+            { subject: "English Home Language", level: 4 },
+            { subject: "English First Additional Language", level: 4 },
+          ],
+        },
         Mathematics: 4,
         "Physical Sciences": 4,
       },
-      additionalRequirements: ["Another language Code 3 (home or first additional language)"],
+      additionalRequirements: [
+        "Another language Code 3 (home or first additional language)",
+      ],
       careerOpportunities: [
         "Chemist",
         "Chemical Analyst",
@@ -660,12 +820,18 @@ export class UWC extends BaseUniversity {
         year: 2026,
       },
       subjectRequirements: {
-        "English Home": 4,
-        "English First Additional": 4,
+        Language: {
+          alternatives: [
+            { subject: "English Home Language", level: 4 },
+            { subject: "English First Additional Language", level: 4 },
+          ],
+        },
         Mathematics: 4,
         "Physical Sciences": 4,
       },
-      additionalRequirements: ["Another language Code 3 (home or first additional language)"],
+      additionalRequirements: [
+        "Another language Code 3 (home or first additional language)",
+      ],
       careerOpportunities: [
         "Geologist",
         "Mining Geologist",
@@ -688,12 +854,18 @@ export class UWC extends BaseUniversity {
         year: 2026,
       },
       subjectRequirements: {
-        "English Home": 4,
-        "English First Additional": 4,
+        Language: {
+          alternatives: [
+            { subject: "English Home Language", level: 4 },
+            { subject: "English First Additional Language", level: 4 },
+          ],
+        },
         Mathematics: 5,
         "Physical Sciences": 4,
       },
-      additionalRequirements: ["Another language Code 3 (home or first additional language)"],
+      additionalRequirements: [
+        "Another language Code 3 (home or first additional language)",
+      ],
       careerOpportunities: [
         "Physicist",
         "Research Scientist",
@@ -716,12 +888,24 @@ export class UWC extends BaseUniversity {
         year: 2026,
       },
       subjectRequirements: {
-        "English Home": 4,
-        "English First Additional": 4,
+        Language: {
+          alternatives: [
+            { subject: "English Home Language", level: 4 },
+            { subject: "English First Additional Language", level: 4 },
+          ],
+        },
         Mathematics: 4,
       },
-      additionalRequirements: ["Another language Code 3 (home or first additional language)"],
-      careerOpportunities: ["Statistician", "Data Scientist", "Actuary", "Research Analyst", "Mathematical Modeler"],
+      additionalRequirements: [
+        "Another language Code 3 (home or first additional language)",
+      ],
+      careerOpportunities: [
+        "Statistician",
+        "Data Scientist",
+        "Actuary",
+        "Research Analyst",
+        "Mathematical Modeler",
+      ],
     },
     {
       id: "uwc-bsc-computer-science",
@@ -737,8 +921,12 @@ export class UWC extends BaseUniversity {
         year: 2026,
       },
       subjectRequirements: {
-        "English Home": 4,
-        "English First Additional": 4,
+        Language: {
+          alternatives: [
+            { subject: "English Home Language", level: 4 },
+            { subject: "English First Additional Language", level: 4 },
+          ],
+        },
         Mathematics: 5,
         "Physical Sciences": 4,
         "Life Sciences": 4,
@@ -770,13 +958,19 @@ export class UWC extends BaseUniversity {
         year: 2026,
       },
       subjectRequirements: {
-        "English Home": 4,
-        "English First Additional": 4,
+        Language: {
+          alternatives: [
+            { subject: "English Home Language", level: 4 },
+            { subject: "English First Additional Language", level: 4 },
+          ],
+        },
         Mathematics: 4,
         "Physical Sciences": 4,
         "Life Sciences": 4,
       },
-      additionalRequirements: ["Another language Code 3 (home or first additional language)"],
+      additionalRequirements: [
+        "Another language Code 3 (home or first additional language)",
+      ],
       careerOpportunities: [
         "Pharmacist",
         "Clinical Pharmacist",
@@ -801,8 +995,12 @@ export class UWC extends BaseUniversity {
         year: 2026,
       },
       subjectRequirements: {
-        "English Home": 4,
-        "English First Additional": 4,
+        Language: {
+          alternatives: [
+            { subject: "English Home Language", level: 4 },
+            { subject: "English First Additional Language", level: 4 },
+          ],
+        },
         Mathematics: 4,
         "Physical Sciences": 4,
         "Life Sciences": 4,
@@ -811,7 +1009,13 @@ export class UWC extends BaseUniversity {
         "Another language Code 3 (home or first additional language)",
         "Application closing date: 31 August 2025",
       ],
-      careerOpportunities: ["Dentist", "Oral Surgeon", "Orthodontist", "Periodontist", "Dental Specialist"],
+      careerOpportunities: [
+        "Dentist",
+        "Oral Surgeon",
+        "Orthodontist",
+        "Periodontist",
+        "Dental Specialist",
+      ],
     },
     {
       id: "uwc-boh",
@@ -827,10 +1031,18 @@ export class UWC extends BaseUniversity {
         year: 2026,
       },
       subjectRequirements: {
-        "English Home": 4,
-        "English First Additional": 4,
-        Mathematics: 3,
-        "Mathematics Literacy": 4,
+        Language: {
+          alternatives: [
+            { subject: "English Home Language", level: 4 },
+            { subject: "English First Additional Language", level: 4 },
+          ],
+        },
+        Math: {
+          alternatives: [
+            { subject: "Mathematics", level: 3 },
+            { subject: "Mathematical Literacy", level: 4 },
+          ],
+        },
         "Life Sciences": 4,
       },
       additionalRequirements: [
@@ -861,13 +1073,29 @@ export class UWC extends BaseUniversity {
         year: 2026,
       },
       subjectRequirements: {
-        "English Home": 4,
-        "English First Additional": 4,
-        Mathematics: 3,
-        "Mathematics Literacy": 5,
+        Language: {
+          alternatives: [
+            { subject: "English Home Language", level: 4 },
+            { subject: "English First Additional Language", level: 4 },
+          ],
+        },
+        Math: {
+          alternatives: [
+            { subject: "Mathematics", level: 3 },
+            { subject: "Mathematical Literacy", level: 5 },
+          ],
+        },
       },
-      additionalRequirements: ["Another language Code 3 (home or first additional language)"],
-      careerOpportunities: ["Attorney", "Advocate", "Legal Advisor", "Magistrate", "Corporate Lawyer"],
+      additionalRequirements: [
+        "Another language Code 3 (home or first additional language)",
+      ],
+      careerOpportunities: [
+        "Attorney",
+        "Advocate",
+        "Legal Advisor",
+        "Magistrate",
+        "Corporate Lawyer",
+      ],
     },
     {
       id: "uwc-bcom-law",
@@ -883,11 +1111,17 @@ export class UWC extends BaseUniversity {
         year: 2026,
       },
       subjectRequirements: {
-        "English Home": 4,
-        "English First Additional": 4,
+        Language: {
+          alternatives: [
+            { subject: "English Home Language", level: 4 },
+            { subject: "English First Additional Language", level: 4 },
+          ],
+        },
         Mathematics: 4,
       },
-      additionalRequirements: ["Another language Code 3 (home or first additional language)"],
+      additionalRequirements: [
+        "Another language Code 3 (home or first additional language)",
+      ],
       careerOpportunities: [
         "Legal Advisor",
         "Compliance Officer",
@@ -910,13 +1144,29 @@ export class UWC extends BaseUniversity {
         year: 2026,
       },
       subjectRequirements: {
-        "English Home": 4,
-        "English First Additional": 4,
-        Mathematics: 3,
-        "Mathematics Literacy": 5,
+        Language: {
+          alternatives: [
+            { subject: "English Home Language", level: 4 },
+            { subject: "English First Additional Language", level: 4 },
+          ],
+        },
+        Math: {
+          alternatives: [
+            { subject: "Mathematics", level: 3 },
+            { subject: "Mathematical Literacy", level: 5 },
+          ],
+        },
       },
-      additionalRequirements: ["Another language Code 3 (home or first additional language)"],
-      careerOpportunities: ["Legal Researcher", "Paralegal", "Court Administrator", "Legal Advisor", "Policy Analyst"],
+      additionalRequirements: [
+        "Another language Code 3 (home or first additional language)",
+      ],
+      careerOpportunities: [
+        "Legal Researcher",
+        "Paralegal",
+        "Court Administrator",
+        "Legal Advisor",
+        "Policy Analyst",
+      ],
     },
 
     // Faculty of Education
@@ -934,10 +1184,18 @@ export class UWC extends BaseUniversity {
         year: 2026,
       },
       subjectRequirements: {
-        "English Home": 4,
-        "English First Additional": 4,
-        Mathematics: 4,
-        "Mathematics Literacy": 6,
+        Language: {
+          alternatives: [
+            { subject: "English Home Language", level: 4 },
+            { subject: "English First Additional Language", level: 4 },
+          ],
+        },
+        Math: {
+          alternatives: [
+            { subject: "Mathematics", level: 4 },
+            { subject: "Mathematical Literacy", level: 6 },
+          ],
+        },
         Accounting: 4,
         "Business Studies": 4,
         Economics: 4,
@@ -968,10 +1226,18 @@ export class UWC extends BaseUniversity {
         year: 2026,
       },
       subjectRequirements: {
-        "English Home": 4,
-        "English First Additional": 4,
-        Mathematics: 4,
-        "Mathematics Literacy": 6,
+        Language: {
+          alternatives: [
+            { subject: "English Home Language", level: 4 },
+            { subject: "English First Additional Language", level: 4 },
+          ],
+        },
+        Math: {
+          alternatives: [
+            { subject: "Mathematics", level: 4 },
+            { subject: "Mathematical Literacy", level: 6 },
+          ],
+        },
         "Life Sciences": 4,
         "Physical Sciences": 4,
       },
@@ -1001,13 +1267,23 @@ export class UWC extends BaseUniversity {
         year: 2026,
       },
       subjectRequirements: {
-        "English Home": 4,
-        "English First Additional": 5,
-        Mathematics: 3,
-        "Mathematics Literacy": 5,
+        Language: {
+          alternatives: [
+            { subject: "English Home Language", level: 4 },
+            { subject: "English First Additional Language", level: 5 },
+          ],
+        },
+        Math: {
+          alternatives: [
+            { subject: "Mathematics", level: 3 },
+            { subject: "Mathematical Literacy", level: 5 },
+          ],
+        },
         "Life Orientation": 4,
       },
-      additionalRequirements: ["Another language (home or first additional language) Code 4"],
+      additionalRequirements: [
+        "Another language (home or first additional language) Code 4",
+      ],
       careerOpportunities: [
         "Language Teacher",
         "Life Orientation Teacher",
@@ -1030,12 +1306,22 @@ export class UWC extends BaseUniversity {
         year: 2026,
       },
       subjectRequirements: {
-        "English Home": 4,
-        "English First Additional": 5,
-        Mathematics: 4,
-        "Mathematics Literacy": 6,
+        Language: {
+          alternatives: [
+            { subject: "English Home Language", level: 4 },
+            { subject: "English First Additional Language", level: 5 },
+          ],
+        },
+        Math: {
+          alternatives: [
+            { subject: "Mathematics", level: 4 },
+            { subject: "Mathematical Literacy", level: 6 },
+          ],
+        },
       },
-      additionalRequirements: ["Another language (home or first additional language) Code 4"],
+      additionalRequirements: [
+        "Another language (home or first additional language) Code 4",
+      ],
       careerOpportunities: [
         "Language Teacher",
         "Mathematics Teacher",
@@ -1058,10 +1344,18 @@ export class UWC extends BaseUniversity {
         year: 2026,
       },
       subjectRequirements: {
-        "English Home": 4,
-        "English First Additional": 5,
-        Mathematics: 3,
-        "Mathematics Literacy": 5,
+        Language: {
+          alternatives: [
+            { subject: "English Home Language", level: 4 },
+            { subject: "English First Additional Language", level: 5 },
+          ],
+        },
+        Math: {
+          alternatives: [
+            { subject: "Mathematics", level: 3 },
+            { subject: "Mathematical Literacy", level: 5 },
+          ],
+        },
         History: 4,
         Geography: 4,
       },
@@ -1091,12 +1385,22 @@ export class UWC extends BaseUniversity {
         year: 2026,
       },
       subjectRequirements: {
-        "English Home": 4,
-        "English First Additional": 4,
-        Mathematics: 3,
-        "Mathematics Literacy": 5,
+        Language: {
+          alternatives: [
+            { subject: "English Home Language", level: 4 },
+            { subject: "English First Additional Language", level: 4 },
+          ],
+        },
+        Math: {
+          alternatives: [
+            { subject: "Mathematics", level: 3 },
+            { subject: "Mathematical Literacy", level: 5 },
+          ],
+        },
       },
-      additionalRequirements: ["Another language Code 4 (home OR first additional language)"],
+      additionalRequirements: [
+        "Another language Code 4 (home OR first additional language)",
+      ],
       careerOpportunities: [
         "Foundation Phase Teacher",
         "Early Childhood Development Specialist",
@@ -1121,10 +1425,18 @@ export class UWC extends BaseUniversity {
         year: 2026,
       },
       subjectRequirements: {
-        "English Home": 4,
-        "English First Additional": 4,
-        Mathematics: 3,
-        "Mathematics Literacy": 4,
+        Language: {
+          alternatives: [
+            { subject: "English Home Language", level: 4 },
+            { subject: "English First Additional Language", level: 4 },
+          ],
+        },
+        Math: {
+          alternatives: [
+            { subject: "Mathematics", level: 3 },
+            { subject: "Mathematical Literacy", level: 4 },
+          ],
+        },
       },
       additionalRequirements: [
         "Code 4 in another subject from the NSC subject list",
@@ -1155,13 +1467,29 @@ export class UWC extends BaseUniversity {
         year: 2026,
       },
       subjectRequirements: {
-        "English Home": 4,
-        "English First Additional": 4,
-        Mathematics: 3,
-        "Mathematics Literacy": 4,
+        Language: {
+          alternatives: [
+            { subject: "English Home Language", level: 4 },
+            { subject: "English First Additional Language", level: 4 },
+          ],
+        },
+        Math: {
+          alternatives: [
+            { subject: "Mathematics", level: 3 },
+            { subject: "Mathematical Literacy", level: 4 },
+          ],
+        },
       },
-      additionalRequirements: ["Code 4 in another subject from the NSC subject list"],
-      careerOpportunities: ["Minister", "Chaplain", "Religious Educator", "Community Leader", "Counselor"],
+      additionalRequirements: [
+        "Code 4 in another subject from the NSC subject list",
+      ],
+      careerOpportunities: [
+        "Minister",
+        "Chaplain",
+        "Religious Educator",
+        "Community Leader",
+        "Counselor",
+      ],
     },
     {
       id: "uwc-blis",
@@ -1177,10 +1505,18 @@ export class UWC extends BaseUniversity {
         year: 2026,
       },
       subjectRequirements: {
-        "English Home": 4,
-        "English First Additional": 4,
-        Mathematics: 3,
-        "Mathematics Literacy": 4,
+        Language: {
+          alternatives: [
+            { subject: "English Home Language", level: 4 },
+            { subject: "English First Additional Language", level: 4 },
+          ],
+        },
+        Math: {
+          alternatives: [
+            { subject: "Mathematics", level: 3 },
+            { subject: "Mathematical Literacy", level: 4 },
+          ],
+        },
       },
       additionalRequirements: [
         "Code 4 in another subject from the NSC subject list",
@@ -1194,7 +1530,7 @@ export class UWC extends BaseUniversity {
         "Information Consultant",
       ],
     },
-  ]
+  ];
 
   /**
    * UWC-specific APS calculation
@@ -1203,28 +1539,28 @@ export class UWC extends BaseUniversity {
    * - Standard 7-point NSC scale
    */
   calculateApsScore(subjects: Record<string, number>): number {
-    const subjectScores: number[] = []
-    
+    const subjectScores: number[] = [];
+
     for (const [subjectName, percentage] of Object.entries(subjects)) {
-      if (subjectName.toLowerCase().includes('life orientation')) {
-        continue
+      if (subjectName.toLowerCase().includes("life orientation")) {
+        continue;
       }
-      
-      let points = 0
-      if (percentage >= 80) points = 7
-      else if (percentage >= 70) points = 6
-      else if (percentage >= 60) points = 5
-      else if (percentage >= 50) points = 4
-      else if (percentage >= 40) points = 3
-      else if (percentage >= 30) points = 2
-      else if (percentage >= 0) points = 1
-      
-      subjectScores.push(points)
+
+      let points = 0;
+      if (percentage >= 80) points = 7;
+      else if (percentage >= 70) points = 6;
+      else if (percentage >= 60) points = 5;
+      else if (percentage >= 50) points = 4;
+      else if (percentage >= 40) points = 3;
+      else if (percentage >= 30) points = 2;
+      else if (percentage >= 0) points = 1;
+
+      subjectScores.push(points);
     }
-    
-    subjectScores.sort((a, b) => b - a)
-    const top6 = subjectScores.slice(0, 6)
-    
-    return top6.reduce((sum, score) => sum + score, 0)
+
+    subjectScores.sort((a, b) => b - a);
+    const top6 = subjectScores.slice(0, 6);
+
+    return top6.reduce((sum, score) => sum + score, 0);
   }
 }

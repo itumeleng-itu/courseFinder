@@ -1,15 +1,15 @@
-import { BaseUniversity } from "./base-university"
-import type { Course } from "@/lib/types"
+import { BaseUniversity } from "./base-university";
+import type { Course } from "@/lib/types";
 
 /**
  * University of KwaZulu-Natal (UKZN) class
  */
 export class UKZN extends BaseUniversity {
-  readonly id = "ukzn"
-  readonly name = "University of KwaZulu-Natal"
-  readonly shortName = "UKZN"
-  readonly website = "https://www.ukzn.ac.za"
-  readonly logo = "/logos/ukzn.png"
+  readonly id = "ukzn";
+  readonly name = "University of KwaZulu-Natal";
+  readonly shortName = "UKZN";
+  readonly website = "https://www.ukzn.ac.za";
+  readonly logo = "/logos/ukzn.png";
   readonly location = {
     city: "Durban",
     province: "KwaZulu-Natal",
@@ -17,7 +17,7 @@ export class UKZN extends BaseUniversity {
       latitude: -29.8674,
       longitude: 30.9802,
     },
-  }
+  };
 
   /**
    * UKZN APS Calculation Method
@@ -166,7 +166,8 @@ export class UKZN extends BaseUniversity {
         "Life Sciences": 4,
       },
       campus: "Pietermaritzburg/Westville",
-      additionalRequirements: "Agricultural Sciences or Physical Sciences at level 4 can replace Life Sciences",
+      additionalRequirements:
+        "Agricultural Sciences or Physical Sciences at level 4 can replace Life Sciences",
     },
     {
       id: "ukzn-bsc-stream-mathematics",
@@ -180,7 +181,8 @@ export class UKZN extends BaseUniversity {
         "Life Sciences": 4,
       },
       campus: "Pietermaritzburg/Westville",
-      additionalRequirements: "Agricultural Sciences or Physical Sciences at level 4 can replace Life Sciences",
+      additionalRequirements:
+        "Agricultural Sciences or Physical Sciences at level 4 can replace Life Sciences",
     },
 
     // College of Health Sciences
@@ -196,7 +198,8 @@ export class UKZN extends BaseUniversity {
         "Life Sciences": 3,
       },
       campus: "Westville",
-      additionalRequirements: "Physical Sciences at level 3 can replace Life Sciences",
+      additionalRequirements:
+        "Physical Sciences at level 3 can replace Life Sciences",
     },
     {
       id: "ukzn-bachelor-speech-language-therapy",
@@ -210,7 +213,8 @@ export class UKZN extends BaseUniversity {
         "Life Sciences": 3,
       },
       campus: "Westville",
-      additionalRequirements: "Physical Sciences at level 3 can replace Life Sciences",
+      additionalRequirements:
+        "Physical Sciences at level 3 can replace Life Sciences",
     },
     {
       id: "ukzn-bachelor-dental-therapy",
@@ -265,7 +269,8 @@ export class UKZN extends BaseUniversity {
         "Life Sciences": 3,
       },
       campus: "Westville",
-      additionalRequirements: "Physical Sciences at level 3 can replace Life Sciences",
+      additionalRequirements:
+        "Physical Sciences at level 3 can replace Life Sciences",
     },
     {
       id: "ukzn-bachelor-optometry",
@@ -279,7 +284,8 @@ export class UKZN extends BaseUniversity {
         "Life Sciences": 4,
       },
       campus: "Westville",
-      additionalRequirements: "Physical Sciences at level 4 can replace Life Sciences",
+      additionalRequirements:
+        "Physical Sciences at level 4 can replace Life Sciences",
     },
     {
       id: "ukzn-bachelor-oral-hygiene",
@@ -333,7 +339,8 @@ export class UKZN extends BaseUniversity {
         "Mathematics Literacy": 3,
       },
       campus: "Westville",
-      additionalRequirements: "Mathematics at level 3 can replace Mathematics Literacy",
+      additionalRequirements:
+        "Mathematics at level 3 can replace Mathematics Literacy",
     },
     {
       id: "ukzn-bachelor-nursing",
@@ -347,7 +354,8 @@ export class UKZN extends BaseUniversity {
         "Life Sciences": 4,
       },
       campus: "Howard College",
-      additionalRequirements: "Mathematics at level 3 can replace Mathematics Literacy",
+      additionalRequirements:
+        "Mathematics at level 3 can replace Mathematics Literacy",
     },
     {
       id: "ukzn-mbchb",
@@ -378,7 +386,8 @@ export class UKZN extends BaseUniversity {
         isiZulu: 4,
       },
       campus: "Edgewood",
-      additionalRequirements: "Mathematics at level 3 can replace Mathematical Literacy",
+      additionalRequirements:
+        "Mathematics at level 3 can replace Mathematical Literacy",
     },
     {
       id: "ukzn-bed-intermediate-phase",
@@ -403,7 +412,8 @@ export class UKZN extends BaseUniversity {
         English: 4,
       },
       campus: "Edgewood",
-      additionalRequirements: "Level 5 in any two NSC subjects pertaining to the package selected",
+      additionalRequirements:
+        "Level 5 in any two NSC subjects pertaining to the package selected",
     },
     {
       id: "ukzn-ba-general",
@@ -597,7 +607,7 @@ export class UKZN extends BaseUniversity {
       },
       campus: "Westville",
     },
-  ]
+  ];
 
   /**
    * UKZN-specific APS calculation
@@ -606,28 +616,28 @@ export class UKZN extends BaseUniversity {
    * - Standard 7-point NSC scale
    */
   calculateApsScore(subjects: Record<string, number>): number {
-    const subjectScores: number[] = []
+    const subjectScores: number[] = [];
 
     for (const [subjectName, percentage] of Object.entries(subjects)) {
-      if (subjectName.toLowerCase().includes('life orientation')) {
-        continue
+      if (subjectName.toLowerCase().includes("life orientation")) {
+        continue;
       }
 
-      let points = 0
-      if (percentage >= 80) points = 7
-      else if (percentage >= 70) points = 6
-      else if (percentage >= 60) points = 5
-      else if (percentage >= 50) points = 4
-      else if (percentage >= 40) points = 3
-      else if (percentage >= 30) points = 2
-      else if (percentage >= 0) points = 1
+      let points = 0;
+      if (percentage >= 80) points = 7;
+      else if (percentage >= 70) points = 6;
+      else if (percentage >= 60) points = 5;
+      else if (percentage >= 50) points = 4;
+      else if (percentage >= 40) points = 3;
+      else if (percentage >= 30) points = 2;
+      else if (percentage >= 0) points = 1;
 
-      subjectScores.push(points)
+      subjectScores.push(points);
     }
 
-    subjectScores.sort((a, b) => b - a)
-    const top6 = subjectScores.slice(0, 6)
+    subjectScores.sort((a, b) => b - a);
+    const top6 = subjectScores.slice(0, 6);
 
-    return top6.reduce((sum, score) => sum + score, 0)
+    return top6.reduce((sum, score) => sum + score, 0);
   }
 }

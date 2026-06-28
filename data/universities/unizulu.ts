@@ -1,15 +1,15 @@
-import { BaseUniversity } from "./base-university"
-import type { Course } from "@/lib/types"
+import { BaseUniversity } from "./base-university";
+import type { Course } from "@/lib/types";
 
 /**
  * University of Zululand (UniZulu) class
  */
 export class UniZulu extends BaseUniversity {
-  readonly id = "unizulu"
-  readonly name = "University of Zululand"
-  readonly shortName = "UniZulu"
-  readonly website = "https://www.unizulu.ac.za"
-  readonly logo = "/logos/unizulu.png"
+  readonly id = "unizulu";
+  readonly name = "University of Zululand";
+  readonly shortName = "UniZulu";
+  readonly website = "https://www.unizulu.ac.za";
+  readonly logo = "/logos/unizulu.png";
   readonly location = {
     city: "KwaDlangezwa",
     province: "KwaZulu-Natal",
@@ -17,7 +17,7 @@ export class UniZulu extends BaseUniversity {
       latitude: -28.8558,
       longitude: 31.8476,
     },
-  }
+  };
 
   protected readonly _courses: Course[] = [
     // Faculty of Humanities and Social Sciences
@@ -32,7 +32,8 @@ export class UniZulu extends BaseUniversity {
         English: 4,
         Geography: 4,
       },
-      additionalRequirements: "NSC Degree endorsement with four 20 credit subjects",
+      additionalRequirements:
+        "NSC Degree endorsement with four 20 credit subjects",
       careerOpportunities:
         "Environmental planner, Urban planner, Development consultant, Environmental impact assessor",
     },
@@ -46,8 +47,10 @@ export class UniZulu extends BaseUniversity {
       subjectRequirements: {
         English: 4,
       },
-      additionalRequirements: "NSC Degree endorsement with five 20 credit subjects",
-      careerOpportunities: "Communication specialist, Intercultural mediator, Language practitioner, Translator",
+      additionalRequirements:
+        "NSC Degree endorsement with five 20 credit subjects",
+      careerOpportunities:
+        "Communication specialist, Intercultural mediator, Language practitioner, Translator",
     },
     {
       id: "unizulu-dip-media-studies",
@@ -59,8 +62,10 @@ export class UniZulu extends BaseUniversity {
       subjectRequirements: {
         English: 4,
       },
-      additionalRequirements: "NSC Diploma endorsement with five 20 credit subjects",
-      careerOpportunities: "Journalist, Media practitioner, Content creator, Social media manager",
+      additionalRequirements:
+        "NSC Diploma endorsement with five 20 credit subjects",
+      careerOpportunities:
+        "Journalist, Media practitioner, Content creator, Social media manager",
     },
     {
       id: "unizulu-ba-correctional-studies",
@@ -72,8 +77,10 @@ export class UniZulu extends BaseUniversity {
       subjectRequirements: {
         English: 5,
       },
-      additionalRequirements: "NSC Degree endorsement with five 20 credit subjects",
-      careerOpportunities: "Correctional services officer, Probation officer, Rehabilitation specialist",
+      additionalRequirements:
+        "NSC Degree endorsement with five 20 credit subjects",
+      careerOpportunities:
+        "Correctional services officer, Probation officer, Rehabilitation specialist",
     },
     {
       id: "unizulu-ba-industrial-sociology",
@@ -85,8 +92,10 @@ export class UniZulu extends BaseUniversity {
       subjectRequirements: {
         English: 4,
       },
-      additionalRequirements: "NSC Degree endorsement with five 20 credit subjects",
-      careerOpportunities: "Labor relations specialist, Human resources officer, Industrial relations consultant",
+      additionalRequirements:
+        "NSC Degree endorsement with five 20 credit subjects",
+      careerOpportunities:
+        "Labor relations specialist, Human resources officer, Industrial relations consultant",
     },
     {
       id: "unizulu-ba-anthropology-history",
@@ -98,8 +107,10 @@ export class UniZulu extends BaseUniversity {
       subjectRequirements: {
         English: 4,
       },
-      additionalRequirements: "NSC Degree endorsement with five 20 credit subjects",
-      careerOpportunities: "Researcher, Museum curator, Cultural heritage specialist",
+      additionalRequirements:
+        "NSC Degree endorsement with five 20 credit subjects",
+      careerOpportunities:
+        "Researcher, Museum curator, Cultural heritage specialist",
     },
     {
       id: "unizulu-ba-geography-history",
@@ -111,8 +122,10 @@ export class UniZulu extends BaseUniversity {
       subjectRequirements: {
         English: 4,
       },
-      additionalRequirements: "NSC Degree endorsement with five 20 credit subjects",
-      careerOpportunities: "Geographer, Historian, Environmental consultant, Heritage specialist",
+      additionalRequirements:
+        "NSC Degree endorsement with five 20 credit subjects",
+      careerOpportunities:
+        "Geographer, Historian, Environmental consultant, Heritage specialist",
     },
     {
       id: "unizulu-ba-geography-tourism",
@@ -124,8 +137,10 @@ export class UniZulu extends BaseUniversity {
       subjectRequirements: {
         English: 4,
       },
-      additionalRequirements: "NSC Degree endorsement with five 20 credit subjects",
-      careerOpportunities: "Tourism officer, Tour guide, Destination manager, Geographic information specialist",
+      additionalRequirements:
+        "NSC Degree endorsement with five 20 credit subjects",
+      careerOpportunities:
+        "Tourism officer, Tour guide, Destination manager, Geographic information specialist",
     },
     {
       id: "unizulu-ba-history-isizulu",
@@ -137,8 +152,10 @@ export class UniZulu extends BaseUniversity {
       subjectRequirements: {
         English: 4,
       },
-      additionalRequirements: "NSC Degree endorsement with five 20 credit subjects",
-      careerOpportunities: "Translator, Language practitioner, Historian, Cultural officer",
+      additionalRequirements:
+        "NSC Degree endorsement with five 20 credit subjects",
+      careerOpportunities:
+        "Translator, Language practitioner, Historian, Cultural officer",
     },
     {
       id: "unizulu-ba-linguistics-english",
@@ -150,8 +167,10 @@ export class UniZulu extends BaseUniversity {
       subjectRequirements: {
         English: 4,
       },
-      additionalRequirements: "NSC Degree endorsement with five 20 credit subjects",
-      careerOpportunities: "Language specialist, Editor, Translator, Communication officer",
+      additionalRequirements:
+        "NSC Degree endorsement with five 20 credit subjects",
+      careerOpportunities:
+        "Language specialist, Editor, Translator, Communication officer",
     },
     {
       id: "unizulu-ba-philosophy-psychology",
@@ -163,7 +182,8 @@ export class UniZulu extends BaseUniversity {
       subjectRequirements: {
         English: 4,
       },
-      additionalRequirements: "NSC Degree endorsement with five 20 credit subjects",
+      additionalRequirements:
+        "NSC Degree endorsement with five 20 credit subjects",
       careerOpportunities: "Counselor, Research assistant, Ethics consultant",
     },
     {
@@ -177,8 +197,10 @@ export class UniZulu extends BaseUniversity {
         English: 4,
         "Social Science (Geography/History)": 4,
       },
-      additionalRequirements: "NSC Degree endorsement with four 20 credit subjects",
-      careerOpportunities: "Counselor, Research assistant, Human resources officer",
+      additionalRequirements:
+        "NSC Degree endorsement with four 20 credit subjects",
+      careerOpportunities:
+        "Counselor, Research assistant, Human resources officer",
     },
     {
       id: "unizulu-ba-drama",
@@ -189,9 +211,15 @@ export class UniZulu extends BaseUniversity {
       duration: "3 years",
       subjectRequirements: {
         English: 4,
-        "Dramatic Art or Visual Art": 4,
+        Alternatives: {
+          alternatives: [
+            { subject: "Dramatic Art", level: 4 },
+            { subject: "Visual Art", level: 4 },
+          ],
+        },
       },
-      additionalRequirements: "NSC Degree endorsement with four 20 credit subjects",
+      additionalRequirements:
+        "NSC Degree endorsement with four 20 credit subjects",
       careerOpportunities: "Actor, Director, Drama teacher, Arts administrator",
     },
     {
@@ -204,8 +232,10 @@ export class UniZulu extends BaseUniversity {
       subjectRequirements: {
         English: 4,
       },
-      additionalRequirements: "NSC Diploma endorsement with five 20 credit subjects",
-      careerOpportunities: "Public relations officer, Media liaison, Communications coordinator",
+      additionalRequirements:
+        "NSC Diploma endorsement with five 20 credit subjects",
+      careerOpportunities:
+        "Public relations officer, Media liaison, Communications coordinator",
     },
     {
       id: "unizulu-ba-development-studies",
@@ -217,8 +247,10 @@ export class UniZulu extends BaseUniversity {
       subjectRequirements: {
         English: 4,
       },
-      additionalRequirements: "NSC Degree endorsement with five 20 credit subjects",
-      careerOpportunities: "Development practitioner, Project coordinator, NGO worker",
+      additionalRequirements:
+        "NSC Degree endorsement with five 20 credit subjects",
+      careerOpportunities:
+        "Development practitioner, Project coordinator, NGO worker",
     },
     {
       id: "unizulu-ba-information-science",
@@ -230,8 +262,10 @@ export class UniZulu extends BaseUniversity {
       subjectRequirements: {
         English: 4,
       },
-      additionalRequirements: "NSC Degree endorsement with five 20 credit subjects",
-      careerOpportunities: "Information specialist, Records manager, Knowledge manager",
+      additionalRequirements:
+        "NSC Degree endorsement with five 20 credit subjects",
+      careerOpportunities:
+        "Information specialist, Records manager, Knowledge manager",
     },
     {
       id: "unizulu-blis",
@@ -243,8 +277,10 @@ export class UniZulu extends BaseUniversity {
       subjectRequirements: {
         English: 4,
       },
-      additionalRequirements: "NSC Degree endorsement with five 20 credit subjects",
-      careerOpportunities: "Librarian, Information specialist, Archivist, Records manager",
+      additionalRequirements:
+        "NSC Degree endorsement with five 20 credit subjects",
+      careerOpportunities:
+        "Librarian, Information specialist, Archivist, Records manager",
     },
     {
       id: "unizulu-bsw",
@@ -254,11 +290,17 @@ export class UniZulu extends BaseUniversity {
       apsMin: 28,
       duration: "4 years",
       subjectRequirements: {
-        "English Home Language": 4,
-        "English First Additional Language": 5,
+        Language: {
+          alternatives: [
+            { subject: "English Home Language", level: 4 },
+            { subject: "English First Additional Language", level: 5 },
+          ],
+        },
       },
-      additionalRequirements: "NSC Degree endorsement with five 20 credit subjects",
-      careerOpportunities: "Social worker, Community development worker, Counselor",
+      additionalRequirements:
+        "NSC Degree endorsement with five 20 credit subjects",
+      careerOpportunities:
+        "Social worker, Community development worker, Counselor",
     },
     {
       id: "unizulu-ba-sociology",
@@ -270,8 +312,10 @@ export class UniZulu extends BaseUniversity {
       subjectRequirements: {
         English: 4,
       },
-      additionalRequirements: "NSC Degree endorsement with five 20 credit subjects",
-      careerOpportunities: "Researcher, Policy analyst, Community development worker",
+      additionalRequirements:
+        "NSC Degree endorsement with five 20 credit subjects",
+      careerOpportunities:
+        "Researcher, Policy analyst, Community development worker",
     },
     {
       id: "unizulu-bss-political",
@@ -284,10 +328,17 @@ export class UniZulu extends BaseUniversity {
         English: 4,
         Geography: 4,
         History: 4,
-        "Economics/Mathematical Literacy": 4,
+        Alternatives: {
+          alternatives: [
+            { subject: "Economics", level: 4 },
+            { subject: "Mathematical Literacy", level: 4 },
+          ],
+        },
       },
-      additionalRequirements: "NSC Degree endorsement with two 20 credit subjects",
-      careerOpportunities: "Political analyst, Diplomat, Public servant, Policy researcher",
+      additionalRequirements:
+        "NSC Degree endorsement with two 20 credit subjects",
+      careerOpportunities:
+        "Political analyst, Diplomat, Public servant, Policy researcher",
     },
     {
       id: "unizulu-b-tourism",
@@ -298,10 +349,17 @@ export class UniZulu extends BaseUniversity {
       duration: "3 years",
       subjectRequirements: {
         English: 4,
-        "Tourism or Geography": 4,
+        Alternatives: {
+          alternatives: [
+            { subject: "Tourism", level: 4 },
+            { subject: "Geography", level: 4 },
+          ],
+        },
       },
-      additionalRequirements: "NSC Degree endorsement with four 20 credit subjects",
-      careerOpportunities: "Tourism manager, Tour operator, Destination marketer",
+      additionalRequirements:
+        "NSC Degree endorsement with four 20 credit subjects",
+      careerOpportunities:
+        "Tourism manager, Tour operator, Destination marketer",
     },
     {
       id: "unizulu-dip-tourism",
@@ -329,8 +387,12 @@ export class UniZulu extends BaseUniversity {
       subjectRequirements: {
         "IsiZulu Home Language": 4,
         "English First Additional Language": 4,
-        Mathematics: 3,
-        "Mathematical Literacy": 4,
+        Math: {
+          alternatives: [
+            { subject: "Mathematics", level: 3 },
+            { subject: "Mathematical Literacy", level: 4 },
+          ],
+        },
       },
       additionalRequirements: "NSC Degree endorsement",
       careerOpportunities: "Foundation phase teacher (Grades R-3)",
@@ -349,7 +411,8 @@ export class UniZulu extends BaseUniversity {
         History: 4,
       },
       additionalRequirements: "NSC Degree endorsement",
-      careerOpportunities: "Intermediate phase teacher (Grades 4-6) specializing in languages and humanities",
+      careerOpportunities:
+        "Intermediate phase teacher (Grades 4-6) specializing in languages and humanities",
     },
     {
       id: "unizulu-bed-intermediate-maths",
@@ -359,8 +422,18 @@ export class UniZulu extends BaseUniversity {
       apsMin: 26,
       duration: "4 years",
       subjectRequirements: {
-        "IsiZulu First Additional Language/Home Language": 4,
-        "English Home Language/First Additional Language": 4,
+        "Language Alternatives": {
+          alternatives: [
+            { subject: "IsiZulu First Additional Language", level: 4 },
+            { subject: "Home Language", level: 4 },
+          ],
+        },
+        "English Alternatives": {
+          alternatives: [
+            { subject: "English Home Language", level: 4 },
+            { subject: "First Additional Language", level: 4 },
+          ],
+        },
         Mathematics: 4,
         "Physical Sciences": 3,
       },
@@ -369,7 +442,8 @@ export class UniZulu extends BaseUniversity {
         "Physical Sciences": 4,
       },
       additionalRequirements: "NSC Degree endorsement",
-      careerOpportunities: "Intermediate phase teacher (Grades 4-6) specializing in mathematics and sciences",
+      careerOpportunities:
+        "Intermediate phase teacher (Grades 4-6) specializing in mathematics and sciences",
     },
 
     // Faculty of Commerce, Administration and Law
@@ -382,11 +456,16 @@ export class UniZulu extends BaseUniversity {
       duration: "3 years",
       subjectRequirements: {
         English: 4,
-        Mathematics: 3,
-        "Mathematical Literacy": 4,
+        Math: {
+          alternatives: [
+            { subject: "Mathematics", level: 3 },
+            { subject: "Mathematical Literacy", level: 4 },
+          ],
+        },
       },
       additionalRequirements: "NSC Degree endorsement",
-      careerOpportunities: "Public administrator, Government official, Business administrator",
+      careerOpportunities:
+        "Public administrator, Government official, Business administrator",
     },
     {
       id: "unizulu-badmin-public-economics",
@@ -397,11 +476,16 @@ export class UniZulu extends BaseUniversity {
       duration: "3 years",
       subjectRequirements: {
         English: 4,
-        Mathematics: 3,
-        "Mathematical Literacy": 4,
+        Math: {
+          alternatives: [
+            { subject: "Mathematics", level: 3 },
+            { subject: "Mathematical Literacy", level: 4 },
+          ],
+        },
       },
       additionalRequirements: "NSC Degree endorsement",
-      careerOpportunities: "Economic policy analyst, Public sector economist, Government official",
+      careerOpportunities:
+        "Economic policy analyst, Public sector economist, Government official",
     },
     {
       id: "unizulu-badmin-public-hr",
@@ -412,11 +496,16 @@ export class UniZulu extends BaseUniversity {
       duration: "3 years",
       subjectRequirements: {
         English: 4,
-        Mathematics: 3,
-        "Mathematical Literacy": 4,
+        Math: {
+          alternatives: [
+            { subject: "Mathematics", level: 3 },
+            { subject: "Mathematical Literacy", level: 4 },
+          ],
+        },
       },
       additionalRequirements: "NSC Degree endorsement",
-      careerOpportunities: "HR manager in public sector, Public administrator, Government HR specialist",
+      careerOpportunities:
+        "HR manager in public sector, Public administrator, Government HR specialist",
     },
     {
       id: "unizulu-badmin-public-political",
@@ -427,11 +516,16 @@ export class UniZulu extends BaseUniversity {
       duration: "3 years",
       subjectRequirements: {
         English: 4,
-        Mathematics: 3,
-        "Mathematical Literacy": 4,
+        Math: {
+          alternatives: [
+            { subject: "Mathematics", level: 3 },
+            { subject: "Mathematical Literacy", level: 4 },
+          ],
+        },
       },
       additionalRequirements: "NSC Degree endorsement",
-      careerOpportunities: "Policy analyst, Political advisor, Public administrator",
+      careerOpportunities:
+        "Policy analyst, Political advisor, Public administrator",
     },
     {
       id: "unizulu-bcom-accounting-economics",
@@ -442,8 +536,12 @@ export class UniZulu extends BaseUniversity {
       duration: "3 years",
       subjectRequirements: {
         English: 4,
-        Mathematics: 3,
-        "Mathematical Literacy": 6,
+        Math: {
+          alternatives: [
+            { subject: "Mathematics", level: 3 },
+            { subject: "Mathematical Literacy", level: 6 },
+          ],
+        },
       },
       additionalRequirements: "NSC Degree endorsement",
       careerOpportunities: "Accountant, Financial analyst, Economic researcher",
@@ -457,8 +555,12 @@ export class UniZulu extends BaseUniversity {
       duration: "4 years",
       subjectRequirements: {
         English: 3,
-        Mathematics: 3,
-        "Mathematical Literacy": 4,
+        Math: {
+          alternatives: [
+            { subject: "Mathematics", level: 3 },
+            { subject: "Mathematical Literacy", level: 4 },
+          ],
+        },
       },
       additionalRequirements: "NSC Degree endorsement",
       careerOpportunities: "Accountant, Financial analyst, Economic researcher",
@@ -472,8 +574,12 @@ export class UniZulu extends BaseUniversity {
       duration: "4 years",
       subjectRequirements: {
         English: 3,
-        Mathematics: 3,
-        "Mathematical Literacy": 4,
+        Math: {
+          alternatives: [
+            { subject: "Mathematics", level: 3 },
+            { subject: "Mathematical Literacy", level: 4 },
+          ],
+        },
       },
       additionalRequirements: "NSC Degree endorsement",
       careerOpportunities: "Accountant, Auditor, Financial manager",
@@ -487,11 +593,16 @@ export class UniZulu extends BaseUniversity {
       duration: "3 years",
       subjectRequirements: {
         English: 4,
-        Mathematics: 3,
-        "Mathematical Literacy": 6,
+        Math: {
+          alternatives: [
+            { subject: "Mathematics", level: 3 },
+            { subject: "Mathematical Literacy", level: 6 },
+          ],
+        },
       },
       additionalRequirements: "NSC Degree endorsement",
-      careerOpportunities: "Bank manager, Business analyst, Financial consultant",
+      careerOpportunities:
+        "Bank manager, Business analyst, Financial consultant",
     },
     {
       id: "unizulu-bcom-banking-business-4yr",
@@ -502,11 +613,16 @@ export class UniZulu extends BaseUniversity {
       duration: "4 years",
       subjectRequirements: {
         English: 3,
-        Mathematics: 3,
-        "Mathematical Literacy": 4,
+        Math: {
+          alternatives: [
+            { subject: "Mathematics", level: 3 },
+            { subject: "Mathematical Literacy", level: 4 },
+          ],
+        },
       },
       additionalRequirements: "NSC Degree endorsement",
-      careerOpportunities: "Bank manager, Business analyst, Financial consultant",
+      careerOpportunities:
+        "Bank manager, Business analyst, Financial consultant",
     },
     {
       id: "unizulu-bcom-business-accounting",
@@ -517,8 +633,12 @@ export class UniZulu extends BaseUniversity {
       duration: "3 years",
       subjectRequirements: {
         English: 4,
-        Mathematics: 3,
-        "Mathematical Literacy": 6,
+        Math: {
+          alternatives: [
+            { subject: "Mathematics", level: 3 },
+            { subject: "Mathematical Literacy", level: 6 },
+          ],
+        },
       },
       additionalRequirements: "NSC Degree endorsement",
       careerOpportunities: "Business manager, Accountant, Financial analyst",
@@ -532,8 +652,12 @@ export class UniZulu extends BaseUniversity {
       duration: "4 years",
       subjectRequirements: {
         English: 3,
-        Mathematics: 3,
-        "Mathematical Literacy": 4,
+        Math: {
+          alternatives: [
+            { subject: "Mathematics", level: 3 },
+            { subject: "Mathematical Literacy", level: 4 },
+          ],
+        },
       },
       additionalRequirements: "NSC Degree endorsement",
       careerOpportunities: "Business manager, Accountant, Financial analyst",
@@ -547,11 +671,16 @@ export class UniZulu extends BaseUniversity {
       duration: "3 years",
       subjectRequirements: {
         English: 4,
-        Mathematics: 3,
-        "Mathematical Literacy": 6,
+        Math: {
+          alternatives: [
+            { subject: "Mathematics", level: 3 },
+            { subject: "Mathematical Literacy", level: 6 },
+          ],
+        },
       },
       additionalRequirements: "NSC Degree endorsement",
-      careerOpportunities: "Business analyst, Economic researcher, Market analyst",
+      careerOpportunities:
+        "Business analyst, Economic researcher, Market analyst",
     },
     {
       id: "unizulu-bcom-business-economics-4yr",
@@ -562,11 +691,16 @@ export class UniZulu extends BaseUniversity {
       duration: "4 years",
       subjectRequirements: {
         English: 3,
-        Mathematics: 3,
-        "Mathematical Literacy": 4,
+        Math: {
+          alternatives: [
+            { subject: "Mathematics", level: 3 },
+            { subject: "Mathematical Literacy", level: 4 },
+          ],
+        },
       },
       additionalRequirements: "NSC Degree endorsement",
-      careerOpportunities: "Business analyst, Economic researcher, Market analyst",
+      careerOpportunities:
+        "Business analyst, Economic researcher, Market analyst",
     },
     {
       id: "unizulu-bcom-business-hr-4yr",
@@ -577,11 +711,16 @@ export class UniZulu extends BaseUniversity {
       duration: "4 years",
       subjectRequirements: {
         English: 3,
-        Mathematics: 3,
-        "Mathematical Literacy": 4,
+        Math: {
+          alternatives: [
+            { subject: "Mathematics", level: 3 },
+            { subject: "Mathematical Literacy", level: 4 },
+          ],
+        },
       },
       additionalRequirements: "NSC Degree endorsement",
-      careerOpportunities: "HR manager, Business administrator, Training specialist",
+      careerOpportunities:
+        "HR manager, Business administrator, Training specialist",
     },
     {
       id: "unizulu-bcom-economics-banking",
@@ -592,8 +731,12 @@ export class UniZulu extends BaseUniversity {
       duration: "3 years",
       subjectRequirements: {
         English: 4,
-        Mathematics: 3,
-        "Mathematical Literacy": 6,
+        Math: {
+          alternatives: [
+            { subject: "Mathematics", level: 3 },
+            { subject: "Mathematical Literacy", level: 6 },
+          ],
+        },
       },
       additionalRequirements: "NSC Degree endorsement",
       careerOpportunities: "Economist, Banking specialist, Financial analyst",
@@ -607,8 +750,12 @@ export class UniZulu extends BaseUniversity {
       duration: "4 years",
       subjectRequirements: {
         English: 3,
-        Mathematics: 3,
-        "Mathematical Literacy": 4,
+        Math: {
+          alternatives: [
+            { subject: "Mathematics", level: 3 },
+            { subject: "Mathematical Literacy", level: 4 },
+          ],
+        },
       },
       additionalRequirements: "NSC Degree endorsement",
       careerOpportunities: "Economist, Banking specialist, Financial analyst",
@@ -622,8 +769,12 @@ export class UniZulu extends BaseUniversity {
       duration: "3 years",
       subjectRequirements: {
         English: 4,
-        Mathematics: 3,
-        "Mathematical Literacy": 6,
+        Math: {
+          alternatives: [
+            { subject: "Mathematics", level: 3 },
+            { subject: "Mathematical Literacy", level: 6 },
+          ],
+        },
       },
       additionalRequirements: "NSC Degree endorsement",
       careerOpportunities: "HR economist, Labor market analyst, HR manager",
@@ -637,8 +788,12 @@ export class UniZulu extends BaseUniversity {
       duration: "4 years",
       subjectRequirements: {
         English: 3,
-        Mathematics: 3,
-        "Mathematical Literacy": 4,
+        Math: {
+          alternatives: [
+            { subject: "Mathematics", level: 3 },
+            { subject: "Mathematical Literacy", level: 4 },
+          ],
+        },
       },
       additionalRequirements: "NSC Degree endorsement",
       careerOpportunities: "HR economist, Labor market analyst, HR manager",
@@ -652,11 +807,16 @@ export class UniZulu extends BaseUniversity {
       duration: "3 years",
       subjectRequirements: {
         English: 4,
-        Mathematics: 3,
-        "Mathematical Literacy": 6,
+        Math: {
+          alternatives: [
+            { subject: "Mathematics", level: 3 },
+            { subject: "Mathematical Literacy", level: 6 },
+          ],
+        },
       },
       additionalRequirements: "NSC Degree endorsement",
-      careerOpportunities: "HR manager, Business administrator, Training specialist",
+      careerOpportunities:
+        "HR manager, Business administrator, Training specialist",
     },
     {
       id: "unizulu-bcom-mis",
@@ -670,7 +830,8 @@ export class UniZulu extends BaseUniversity {
         Mathematics: 4,
       },
       additionalRequirements: "NSC Degree endorsement",
-      careerOpportunities: "Business systems analyst, IT manager, Information systems specialist",
+      careerOpportunities:
+        "Business systems analyst, IT manager, Information systems specialist",
     },
     {
       id: "unizulu-bcom-mis-4yr",
@@ -681,11 +842,16 @@ export class UniZulu extends BaseUniversity {
       duration: "4 years",
       subjectRequirements: {
         English: 3,
-        Mathematics: 3,
-        "Mathematical Literacy": 4,
+        Math: {
+          alternatives: [
+            { subject: "Mathematics", level: 3 },
+            { subject: "Mathematical Literacy", level: 4 },
+          ],
+        },
       },
       additionalRequirements: "NSC Degree endorsement",
-      careerOpportunities: "Business systems analyst, IT manager, Information systems specialist",
+      careerOpportunities:
+        "Business systems analyst, IT manager, Information systems specialist",
     },
     {
       id: "unizulu-bcom-accounting-science",
@@ -724,8 +890,12 @@ export class UniZulu extends BaseUniversity {
       duration: "4 years",
       subjectRequirements: {
         English: 4,
-        Mathematics: 3,
-        "Mathematical Literacy": 4,
+        Math: {
+          alternatives: [
+            { subject: "Mathematics", level: 3 },
+            { subject: "Mathematical Literacy", level: 4 },
+          ],
+        },
       },
       additionalRequirements: "NSC Degree endorsement",
       careerOpportunities: "Attorney, Advocate, Legal advisor, Prosecutor",
@@ -739,11 +909,16 @@ export class UniZulu extends BaseUniversity {
       duration: "3 years",
       subjectRequirements: {
         English: 3,
-        Mathematics: 3,
-        "Mathematical Literacy": 4,
+        Math: {
+          alternatives: [
+            { subject: "Mathematics", level: 3 },
+            { subject: "Mathematical Literacy", level: 4 },
+          ],
+        },
       },
       additionalRequirements: "NSC Diploma endorsement",
-      careerOpportunities: "Co-operative manager, Community development officer",
+      careerOpportunities:
+        "Co-operative manager, Community development officer",
     },
     {
       id: "unizulu-dip-logistics",
@@ -754,11 +929,16 @@ export class UniZulu extends BaseUniversity {
       duration: "3 years",
       subjectRequirements: {
         English: 3,
-        Mathematics: 3,
-        "Mathematical Literacy": 4,
+        Math: {
+          alternatives: [
+            { subject: "Mathematics", level: 3 },
+            { subject: "Mathematical Literacy", level: 4 },
+          ],
+        },
       },
       additionalRequirements: "NSC Diploma endorsement",
-      careerOpportunities: "Logistics coordinator, Supply chain analyst, Distribution manager",
+      careerOpportunities:
+        "Logistics coordinator, Supply chain analyst, Distribution manager",
     },
     {
       id: "unizulu-dip-transport",
@@ -769,11 +949,16 @@ export class UniZulu extends BaseUniversity {
       duration: "3 years",
       subjectRequirements: {
         English: 3,
-        Mathematics: 3,
-        "Mathematical Literacy": 4,
+        Math: {
+          alternatives: [
+            { subject: "Mathematics", level: 3 },
+            { subject: "Mathematical Literacy", level: 4 },
+          ],
+        },
       },
       additionalRequirements: "NSC Diploma endorsement",
-      careerOpportunities: "Transport coordinator, Fleet manager, Logistics officer",
+      careerOpportunities:
+        "Transport coordinator, Fleet manager, Logistics officer",
     },
     {
       id: "unizulu-hcert-accountancy",
@@ -784,8 +969,12 @@ export class UniZulu extends BaseUniversity {
       duration: "1 year",
       subjectRequirements: {
         English: 3,
-        Mathematics: 3,
-        "Mathematical Literacy": 4,
+        Math: {
+          alternatives: [
+            { subject: "Mathematics", level: 3 },
+            { subject: "Mathematical Literacy", level: 4 },
+          ],
+        },
       },
       additionalRequirements: "NSC Certificate endorsement",
       careerOpportunities: "Bookkeeper, Accounting clerk, Junior accountant",
@@ -806,7 +995,8 @@ export class UniZulu extends BaseUniversity {
         "Agricultural Sciences": 4,
       },
       additionalRequirements: "NSC Degree endorsement",
-      careerOpportunities: "Rural development officer, Extension officer, Community development specialist",
+      careerOpportunities:
+        "Rural development officer, Extension officer, Community development specialist",
     },
     {
       id: "unizulu-bsc-consumer-hospitality",
@@ -820,7 +1010,8 @@ export class UniZulu extends BaseUniversity {
         "Life Orientation": 4,
       },
       additionalRequirements: "NSC Degree endorsement",
-      careerOpportunities: "Hospitality manager, Tourism specialist, Food service manager",
+      careerOpportunities:
+        "Hospitality manager, Tourism specialist, Food service manager",
     },
     {
       id: "unizulu-beng-electrical",
@@ -835,7 +1026,8 @@ export class UniZulu extends BaseUniversity {
         "Physical Sciences": 5,
       },
       additionalRequirements: "NSC Degree endorsement",
-      careerOpportunities: "Electrical engineer, Power systems engineer, Control systems engineer",
+      careerOpportunities:
+        "Electrical engineer, Power systems engineer, Control systems engineer",
     },
     {
       id: "unizulu-beng-electrical-computer",
@@ -850,7 +1042,8 @@ export class UniZulu extends BaseUniversity {
         "Physical Sciences": 5,
       },
       additionalRequirements: "NSC Degree endorsement",
-      careerOpportunities: "Computer engineer, Electrical engineer, Systems engineer",
+      careerOpportunities:
+        "Computer engineer, Electrical engineer, Systems engineer",
     },
     {
       id: "unizulu-beng-mechanical",
@@ -865,7 +1058,8 @@ export class UniZulu extends BaseUniversity {
         "Physical Sciences": 5,
       },
       additionalRequirements: "NSC Degree endorsement",
-      careerOpportunities: "Mechanical engineer, Design engineer, Project engineer",
+      careerOpportunities:
+        "Mechanical engineer, Design engineer, Project engineer",
     },
     {
       id: "unizulu-beng-mechatronic",
@@ -880,7 +1074,8 @@ export class UniZulu extends BaseUniversity {
         "Physical Sciences": 5,
       },
       additionalRequirements: "NSC Degree endorsement",
-      careerOpportunities: "Mechatronic engineer, Automation engineer, Robotics engineer",
+      careerOpportunities:
+        "Mechatronic engineer, Automation engineer, Robotics engineer",
     },
     {
       id: "unizulu-bnursing",
@@ -892,11 +1087,16 @@ export class UniZulu extends BaseUniversity {
       subjectRequirements: {
         English: 4,
         "Life Sciences": 4,
-        Mathematics: 3,
-        "Mathematical Literacy": 4,
+        Math: {
+          alternatives: [
+            { subject: "Mathematics", level: 3 },
+            { subject: "Mathematical Literacy", level: 4 },
+          ],
+        },
       },
       additionalRequirements: "NSC Degree endorsement",
-      careerOpportunities: "Professional nurse, Clinical specialist, Nursing manager",
+      careerOpportunities:
+        "Professional nurse, Clinical specialist, Nursing manager",
     },
     {
       id: "unizulu-bsc-agric-agronomy",
@@ -913,7 +1113,8 @@ export class UniZulu extends BaseUniversity {
         "Agricultural Sciences": 4,
       },
       additionalRequirements: "NSC Degree endorsement",
-      careerOpportunities: "Agronomist, Crop scientist, Agricultural researcher",
+      careerOpportunities:
+        "Agronomist, Crop scientist, Agricultural researcher",
     },
     {
       id: "unizulu-bsc-agric-animal",
@@ -930,7 +1131,8 @@ export class UniZulu extends BaseUniversity {
         "Agricultural Sciences": 4,
       },
       additionalRequirements: "NSC Degree endorsement",
-      careerOpportunities: "Animal scientist, Livestock specialist, Agricultural researcher",
+      careerOpportunities:
+        "Animal scientist, Livestock specialist, Agricultural researcher",
     },
     {
       id: "unizulu-bsc-agric-economics",
@@ -947,7 +1149,8 @@ export class UniZulu extends BaseUniversity {
         "Agricultural Sciences": 4,
       },
       additionalRequirements: "NSC Degree endorsement",
-      careerOpportunities: "Agricultural economist, Agribusiness manager, Farm manager",
+      careerOpportunities:
+        "Agricultural economist, Agribusiness manager, Farm manager",
     },
     {
       id: "unizulu-bsc-applied-math-cs",
@@ -962,7 +1165,8 @@ export class UniZulu extends BaseUniversity {
         "Physical Sciences": 4,
       },
       additionalRequirements: "NSC Degree endorsement",
-      careerOpportunities: "Data scientist, Software developer, Mathematical modeler",
+      careerOpportunities:
+        "Data scientist, Software developer, Mathematical modeler",
     },
     {
       id: "unizulu-bsc-applied-math-hydrology",
@@ -977,7 +1181,8 @@ export class UniZulu extends BaseUniversity {
         "Physical Sciences": 4,
       },
       additionalRequirements: "NSC Degree endorsement",
-      careerOpportunities: "Hydrologist, Water resource analyst, Environmental scientist",
+      careerOpportunities:
+        "Hydrologist, Water resource analyst, Environmental scientist",
     },
     {
       id: "unizulu-bsc-applied-math-math",
@@ -1007,7 +1212,8 @@ export class UniZulu extends BaseUniversity {
         "Physical Sciences": 4,
       },
       additionalRequirements: "NSC Degree endorsement",
-      careerOpportunities: "Physicist, Mathematical physicist, Research scientist",
+      careerOpportunities:
+        "Physicist, Mathematical physicist, Research scientist",
     },
     {
       id: "unizulu-bsc-applied-math-stats",
@@ -1022,7 +1228,8 @@ export class UniZulu extends BaseUniversity {
         "Physical Sciences": 4,
       },
       additionalRequirements: "NSC Degree endorsement",
-      careerOpportunities: "Statistician, Data analyst, Quantitative researcher",
+      careerOpportunities:
+        "Statistician, Data analyst, Quantitative researcher",
     },
     {
       id: "unizulu-bsc-augmented-life",
@@ -1039,7 +1246,8 @@ export class UniZulu extends BaseUniversity {
         "Agricultural Sciences": 3,
       },
       additionalRequirements: "NSC Degree endorsement",
-      careerOpportunities: "Biologist, Laboratory technician, Environmental scientist",
+      careerOpportunities:
+        "Biologist, Laboratory technician, Environmental scientist",
     },
     {
       id: "unizulu-bsc-augmented-physical",
@@ -1071,7 +1279,8 @@ export class UniZulu extends BaseUniversity {
         "Life Sciences": 3,
       },
       additionalRequirements: "NSC Degree endorsement",
-      careerOpportunities: "Various science careers depending on specialization",
+      careerOpportunities:
+        "Various science careers depending on specialization",
     },
     {
       id: "unizulu-dip-hospitality",
@@ -1083,8 +1292,10 @@ export class UniZulu extends BaseUniversity {
       subjectRequirements: {
         English: 4,
       },
-      additionalRequirements: "NSC Diploma endorsement with four 20 credit subjects (excluding languages) at level 3",
-      careerOpportunities: "Hotel manager, Restaurant manager, Events coordinator",
+      additionalRequirements:
+        "NSC Diploma endorsement with four 20 credit subjects (excluding languages) at level 3",
+      careerOpportunities:
+        "Hotel manager, Restaurant manager, Events coordinator",
     },
     {
       id: "unizulu-dip-sport",
@@ -1094,13 +1305,19 @@ export class UniZulu extends BaseUniversity {
       apsMin: 26,
       duration: "3 years",
       subjectRequirements: {
-        "English Home Language": 4,
-        "English First Additional Language": 3,
+        Language: {
+          alternatives: [
+            { subject: "English Home Language", level: 4 },
+            { subject: "English First Additional Language", level: 3 },
+          ],
+        },
       },
-      additionalRequirements: "NSC Diploma endorsement with three subjects from the designated list at level 3",
-      careerOpportunities: "Sports coach, Fitness instructor, Exercise technologist",
+      additionalRequirements:
+        "NSC Diploma endorsement with three subjects from the designated list at level 3",
+      careerOpportunities:
+        "Sports coach, Fitness instructor, Exercise technologist",
     },
-  ]
+  ];
 
   /**
    * Calculate APS score based on UniZulu's calculation method
@@ -1110,16 +1327,16 @@ export class UniZulu extends BaseUniversity {
   calculateApsScore(subjects: Record<string, number>): number {
     // UniZulu uses the standard NSC levels as points
     // Life Orientation is excluded from the calculation
-    let totalPoints = 0
-    let count = 0
+    let totalPoints = 0;
+    let count = 0;
 
     for (const [subject, level] of Object.entries(subjects)) {
       if (subject.toLowerCase() !== "life orientation" && count < 6) {
-        totalPoints += level
-        count++
+        totalPoints += level;
+        count++;
       }
     }
 
-    return totalPoints
+    return totalPoints;
   }
 }
