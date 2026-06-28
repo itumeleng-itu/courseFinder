@@ -9,18 +9,9 @@ const nextConfig = {
   },
   images: {
     remotePatterns: [
-      {
-        protocol: 'https',
-        hostname: 'picsum.photos',
-      },
-      {
-        protocol: 'https',
-        hostname: '*.newsdata.io',
-      },
-      {
-        protocol: 'https',
-        hostname: 'newsdata.io',
-      },
+      { protocol: 'https', hostname: 'picsum.photos' },
+      { protocol: 'https', hostname: '*.newsdata.io' },
+      { protocol: 'https', hostname: 'newsdata.io' },
     ],
   },
 }

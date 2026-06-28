@@ -146,6 +146,7 @@ export function NewsGrid() {
                     src={article.image_url || "/placeholder.svg"}
                     alt={article.title}
                     fill
+                    unoptimized
                     className="object-cover transition-transform group-hover:scale-105"
                     sizes={isLarge ? "(max-width: 768px) 85vw, 50vw" : "(max-width: 768px) 85vw, 25vw"}
                   />

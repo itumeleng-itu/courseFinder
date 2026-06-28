@@ -29,8 +29,8 @@ export function PassRateCharts({ isMobile, province, data }: PassRateChartsProps
 
   if (isMobile) {
     return (
-      <div className="w-full h-64">
-        <ResponsiveContainer width="100%" height="100%">
+      <div className="w-full h-64 min-w-0">
+        <ResponsiveContainer width="100%" height="100%" minWidth={0}>
           <BarChart data={chartData} margin={{ top: 10, right: 24, left: 0, bottom: 0 }}>
             <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#e5e7eb" />
             <XAxis dataKey="year" tick={{ fontSize: 12 }} axisLine={false} tickLine={false} />
@@ -46,8 +46,8 @@ export function PassRateCharts({ isMobile, province, data }: PassRateChartsProps
   }
 
   return (
-    <div className="w-full h-64">
-      <ResponsiveContainer width="100%" height="100%">
+    <div className="w-full h-64 min-w-0">
+      <ResponsiveContainer width="100%" height="100%" minWidth={0}>
         <LineChart data={chartData} margin={{ top: 20, right: 30, left: 0, bottom: 10 }}>
           <CartesianGrid strokeDasharray="0" vertical={false} className="stroke-muted" />
           <XAxis dataKey="year" tick={{ fontSize: 12 }} axisLine={false} tickLine={false} dy={10} className="text-muted-foreground" />

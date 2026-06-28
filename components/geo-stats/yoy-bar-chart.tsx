@@ -25,8 +25,8 @@ export function YoYBarChart({ data, yoy }: YoYBarChartProps) {
         )}
       </div>
 
-      <div className="w-full h-32 mt-4">
-        <ResponsiveContainer width="100%" height="100%">
+      <div className="w-full h-32 mt-4 min-w-0">
+        <ResponsiveContainer width="100%" height="100%" minWidth={0}>
           <BarChart
             data={data.provinceSeries.map((point: SeriesPoint, index: number) => ({
               year: point.year.toString(),
