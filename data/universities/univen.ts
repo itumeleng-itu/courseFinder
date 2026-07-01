@@ -24,57 +24,340 @@ export class UNIVEN extends BaseUniversity {
     {
       id: "univen-ba-media-studies",
       name: "Bachelor of Arts (Media Studies)",
-      faculty: "Humanities, Social Sciences and Education",
+      faculty: "Faculty of Humanities, Social Sciences and Education",
       apsMin: 30,
       duration: "3 years",
       subjectRequirements: {
-        English: 4,
+        "English": 4,
         "African Languages": 4,
-      },
-    },
-    {
-      id: "univen-ba-development-studies",
-      name: "Bachelor of Arts (Development Studies)",
-      faculty: "Humanities, Social Sciences and Education",
-      apsMin: 30,
-      duration: "3 years",
-      subjectRequirements: {
-        English: 4,
-        History: 4,
-        Economics: 4,
       },
     },
     {
       id: "univen-ba",
       name: "Bachelor of Arts",
-      faculty: "Humanities, Social Sciences and Education",
+      faculty: "Faculty of Humanities, Social Sciences and Education",
       apsMin: 30,
       duration: "3 years",
       subjectRequirements: {
-        English: 4,
+        "English": 4,
+      },
+    },
+    {
+      id: "univen-ba-development-studies",
+      name: "Bachelor of Arts (Development Studies)",
+      faculty: "Faculty of Humanities, Social Sciences and Education",
+      apsMin: 30,
+      duration: "3 years",
+      subjectRequirements: {
+        "English": 4,
+        "History": 4,
+        "Economics": 4,
       },
     },
     {
       id: "univen-biks",
       name: "Bachelor of Indigenous Knowledge Systems",
-      faculty: "Humanities, Social Sciences and Education",
+      faculty: "Faculty of Humanities, Social Sciences and Education",
       apsMin: 30,
       duration: "4 years",
       subjectRequirements: {
-        English: 4,
+        "English": 4,
       },
     },
     {
       id: "univen-ba-language-practice",
       name: "Bachelor of Arts in Language Practice",
-      faculty: "Humanities, Social Sciences and Education",
+      faculty: "Faculty of Humanities, Social Sciences and Education",
       apsMin: 30,
       duration: "4 years",
       subjectRequirements: {
         "African Languages": 4,
-        English: 4,
+        "English": 4,
       },
     },
+    {
+      id: "univen-ba-english-lit",
+      name: "Bachelor of Arts (English Language and Literature)",
+      faculty: "Faculty of Humanities, Social Sciences and Education",
+      apsMin: 30,
+      duration: "3 years",
+      subjectRequirements: {
+        "english": 4,
+      },
+    },
+    {
+      id: "univen-ba-ir",
+      name: "Bachelor of Arts in International Relations",
+      faculty: "Faculty of Humanities, Social Sciences and Education",
+      apsMin: 30,
+      duration: "3 years",
+      subjectRequirements: {
+        "History": 4,
+        "Economics": 4,
+        "English": 4,
+      },
+    },
+    {
+      id: "univen-ba-youth-dev",
+      name: "Bachelor of Arts in Youth Development",
+      faculty: "Faculty of Humanities, Social Sciences and Education",
+      apsMin: 30,
+      duration: "4 years",
+      subjectRequirements: {
+        "english": 4,
+      },
+    },
+    {
+      id: "univen-ba-history",
+      name: "Bachelor of Arts (History)",
+      faculty: "Faculty of Humanities, Social Sciences and Education",
+      apsMin: 30,
+      duration: "3 years",
+      subjectRequirements: {
+        "History": 4,
+        "English": 4,
+      },
+    },
+    {
+      id: "univen-bth",
+      name: "Bachelor of Theology",
+      faculty: "Faculty of Humanities, Social Sciences and Education",
+      apsMin: 30,
+      duration: "3 years",
+      subjectRequirements: {
+        "English": 4,
+      },
+      additionalRequirements: ["RPL according to University Policy"],
+    },
+    {
+      id: "univen-hcm",
+      name: "Higher Certificate in Music",
+      faculty: "Faculty of Humanities, Social Sciences and Education",
+      apsMin: 0,
+      duration: "1 year",
+      subjectRequirements: {
+        "English": 4,
+      },
+    },
+    {
+      id: "univen-bsw",
+      name: "Bachelor of Social Work",
+      faculty: "Faculty of Humanities, Social Sciences and Education",
+      apsMin: 35,
+      duration: "4 years",
+      subjectRequirements: {
+        "English": 4,
+      },
+    },
+    {
+      id: "univen-bed-senior-fet",
+      name: "Bachelor of Education in Senior Phase and Further Education and Training",
+      faculty: "Faculty of Humanities, Social Sciences and Education",
+      apsMin: 36,
+      duration: "4 years",
+      subjectRequirements: {
+        "english": 4,
+      },
+    },
+    {
+      id: "univen-bed-foundation-phase",
+      name: "Bachelor of Education in Foundation Phase Teaching",
+      faculty: "Faculty of Humanities, Social Sciences and Education",
+      apsMin: 36,
+      duration: "4 years",
+      subjectRequirements: {
+        "English": 4,
+        "Mathematics Literacy": 4,
+        "Mathematics": 3,
+      },
+    },
+
+    // Faculty of Science, Engineering and Agriculture
+    {
+      id: "univen-bsc-computer-science-mathematics",
+      name: "BSc (Computer Science and Mathematics)",
+      faculty: "Faculty of Science, Engineering and Agriculture",
+      apsMin: 26,
+      duration: "3 years",
+      subjectRequirements: {
+        "english home language": 4,
+        "mathematics": 4,
+        "physical sciences": 4,
+        "life sciences": 4,
+      },
+    },
+    {
+      id: "univen-bes",
+      name: "Bachelor of Environmental Sciences",
+      faculty: "Faculty of Science, Engineering and Agriculture",
+      apsMin: 32,
+      duration: "3 years",
+      subjectRequirements: {
+        "English": 4,
+        "Mathematics": 4,
+        "Physical Sciences": 4,
+        "Life Sciences": 4,
+      },
+    },
+    {
+      id: "univen-bes-mining-geology",
+      name: "Bachelor of Earth Sciences in Mining and Environmental Geology",
+      faculty: "Faculty of Science, Engineering and Agriculture",
+      apsMin: 35,
+      duration: "4 years",
+      subjectRequirements: {
+        "English": 4,
+        "Mathematics": 5,
+        "Physical Sciences": 5,
+      },
+    },
+    {
+      id: "univen-bes-hydrology",
+      name: "Bachelor of Earth Sciences in Hydrology and Water Resources",
+      faculty: "Faculty of Science, Engineering and Agriculture",
+      apsMin: 35,
+      duration: "4 years",
+      subjectRequirements: {
+        "English": 5,
+        "Mathematics": 5,
+        "Physical Sciences": 5,
+      },
+    },
+    {
+      id: "univen-burp",
+      name: "Bachelor of Urban and Regional Planning",
+      faculty: "Faculty of Science, Engineering and Agriculture",
+      apsMin: 35,
+      duration: "4 years",
+      subjectRequirements: {
+        "English": 5,
+        "Mathematics": 5,
+        "Physical Sciences": 5,
+        "Technical Drawing": 5,
+        "Geography": 5,
+      },
+    },
+    {
+      id: "univen-bes-drr",
+      name: "Bachelor of Environmental Sciences in Disaster Risk Reduction",
+      faculty: "Faculty of Science, Engineering and Agriculture",
+      apsMin: 35,
+      duration: "4 years",
+      subjectRequirements: {
+        "Geography": 5,
+        "Mathematics": 5,
+        "Life Sciences": 5,
+        "English": 4,
+        "Physical Sciences": 4,
+        "Economics": 4,
+      },
+    },
+    {
+      id: "univen-bsa-ae",
+      name: "Bachelor of Science in Agriculture (Agricultural Economics)",
+      faculty: "Faculty of Science, Engineering and Agriculture",
+      apsMin: 26,
+      duration: "4 years",
+      subjectRequirements: {
+        "English": 4,
+        "Mathematics": 4,
+        "Physical Sciences": 4,
+      },
+    },
+    {
+      id: "univen-bsa-abm",
+      name: "Bachelor of Science in Agriculture (Agribusiness Management)",
+      faculty: "Faculty of Science, Engineering and Agriculture",
+      apsMin: 26,
+      duration: "4 years",
+      subjectRequirements: {
+        "English": 4,
+        "Mathematics": 4,
+        "Physical Sciences": 4,
+        "Life Sciences": 4,
+      },
+    },
+    {
+      id: "univen-bsa-as",
+      name: "Bachelor of Science in Agriculture (Animal Science)",
+      faculty: "Faculty of Science, Engineering and Agriculture",
+      apsMin: 26,
+      duration: "4 years",
+      subjectRequirements: {
+        "English": 4,
+        "Mathematics": 4,
+        "Physical Sciences": 4,
+        "Life Sciences": 4,
+      },
+    },
+    {
+      id: "univen-bsa-hs",
+      name: "Bachelor of Science in Agriculture (Horticultural Sciences)",
+      faculty: "Faculty of Science, Engineering and Agriculture",
+      apsMin: 26,
+      duration: "4 years",
+      subjectRequirements: {
+        "English": 4,
+        "Mathematics": 4,
+        "Physical Sciences": 4,
+        "Life Sciences": 4,
+      },
+    },
+    {
+      id: "univen-bsa-pp",
+      name: "Bachelor of Science in Agriculture (Plant Production)",
+      faculty: "Faculty of Science, Engineering and Agriculture",
+      apsMin: 26,
+      duration: "4 years",
+      subjectRequirements: {
+        "English": 4,
+        "Mathematics": 4,
+        "Physical Sciences": 4,
+        "Life Sciences": 4,
+      },
+    },
+    {
+      id: "univen-bsa-ss",
+      name: "Bachelor of Science in Soil Science",
+      faculty: "Faculty of Science, Engineering and Agriculture",
+      apsMin: 26,
+      duration: "4 years",
+      subjectRequirements: {
+        "English": 4,
+        "Mathematics": 4,
+        "Physical Sciences": 4,
+        "Life Sciences": 4,
+      },
+    },
+    {
+      id: "univen-bsa-forestry",
+      name: "Bachelor of Science in Forestry",
+      faculty: "Faculty of Science, Engineering and Agriculture",
+      apsMin: 26,
+      duration: "4 years",
+      subjectRequirements: {
+        "English": 4,
+        "Mathematics": 4,
+        "Physical Sciences": 4,
+        "Life Sciences": 4,
+      },
+    },
+    {
+      id: "univen-bsc-food-science-technology",
+      name: "Bachelor of Science in Food Science and Technology",
+      faculty: "Faculty of Science, Engineering and Agriculture",
+      apsMin: 26,
+      duration: "4 years",
+      subjectRequirements: {
+        "english home language": 4,
+        "mathematics": 4,
+        "physical sciences": 4,
+        "life sciences": 4,
+        "agricultural sciences": 4,
+      },
+    },
+
+    // Humanities, Social Sciences and Education
     {
       id: "univen-ba-english-literature",
       name: "Bachelor of Arts (English and Literature)",
@@ -82,99 +365,23 @@ export class UNIVEN extends BaseUniversity {
       apsMin: 30,
       duration: "3 years",
       subjectRequirements: {
-        English: 4,
+        "English": 4,
       },
-    },
-    {
-      id: "univen-ba-ir",
-      name: "Bachelor of Arts in International Relations",
-      faculty: "Humanities, Social Sciences and Education",
-      apsMin: 30,
-      duration: "3 years",
-      subjectRequirements: {
-        History: 4,
-        Economics: 4,
-        English: 4,
-      },
-    },
-    {
-      id: "univen-ba-youth-dev",
-      name: "Bachelor of Arts, Youth in Development",
-      faculty: "Humanities, Social Sciences and Education",
-      apsMin: 30,
-      duration: "4 years",
-      subjectRequirements: {
-        English: 4,
-      },
-    },
-    {
-      id: "univen-ba-history",
-      name: "Bachelor of Arts (History)",
-      faculty: "Humanities, Social Sciences and Education",
-      apsMin: 30,
-      duration: "3 years",
-      subjectRequirements: {
-        History: 4,
-        English: 4,
-      },
-    },
-    {
-      id: "univen-bth",
-      name: "Bachelor of Theology",
-      faculty: "Humanities, Social Sciences and Education",
-      apsMin: 30,
-      duration: "3 years",
-      subjectRequirements: {
-        English: 4,
-      },
-    },
-    {
-      id: "univen-hcm",
-      name: "Higher Certificate in Music",
-      faculty: "Humanities, Social Sciences and Education",
-      apsMin: 30,
-      duration: "1 year",
-      subjectRequirements: {
-        English: 4,
-      },
-    },
-    {
-      id: "univen-bsw",
-      name: "Bachelor of Social Work",
-      faculty: "Humanities, Social Sciences and Education",
-      apsMin: 35,
-      duration: "4 years",
-      subjectRequirements: {
-        English: 4,
-      },
-    },
-    {
+    },    {
       id: "univen-bed-senior-phase",
       name: "Bachelor of Education in Senior Phase and Further Education and Training Teaching",
       faculty: "Humanities, Social Sciences and Education",
       apsMin: 36,
       duration: "4 years",
       subjectRequirements: {
-        English: 4,
-        Mathematics: 4,
+        "English": 4,
+        "Mathematics": 4,
         "Physical Sciences": 4,
         "Life Sciences": 4,
       },
     },
-    {
-      id: "univen-bed-foundation-phase",
-      name: "Bachelor of Education in Foundation Phase Teaching",
-      faculty: "Humanities, Social Sciences and Education",
-      apsMin: 36,
-      duration: "4 years",
-      subjectRequirements: {
-        English: 4,
-        "Mathematics Literacy": 4,
-        Mathematics: 3,
-      },
-    },
 
-    // Faculty of Health Sciences
+    // Health Sciences
     {
       id: "univen-bn",
       name: "Bachelor of Nursing",
@@ -182,8 +389,8 @@ export class UNIVEN extends BaseUniversity {
       apsMin: 36,
       duration: "4 years",
       subjectRequirements: {
-        English: 4,
-        Mathematics: 4,
+        "English": 4,
+        "Mathematics": 4,
         "Life Sciences": 4,
         "Physical Sciences": 4,
       },
@@ -195,10 +402,10 @@ export class UNIVEN extends BaseUniversity {
       apsMin: 28,
       duration: "3 years",
       subjectRequirements: {
-        English: 4,
+        "English": 4,
         "Life Sciences": 4,
         "Physical Sciences": 4,
-        Mathematics: 3,
+        "Mathematics": 3,
       },
     },
     {
@@ -208,8 +415,8 @@ export class UNIVEN extends BaseUniversity {
       apsMin: 34,
       duration: "4 years",
       subjectRequirements: {
-        English: 4,
-        Mathematics: 4,
+        "English": 4,
+        "Mathematics": 4,
         "Life Sciences": 4,
         "Physical Sciences": 4,
       },
@@ -221,7 +428,7 @@ export class UNIVEN extends BaseUniversity {
       apsMin: 34,
       duration: "4 years",
       subjectRequirements: {
-        English: 4,
+        "English": 4,
         "Life Sciences": 4,
         "Physical Sciences": 4,
       },
@@ -233,7 +440,7 @@ export class UNIVEN extends BaseUniversity {
       apsMin: 34,
       duration: "4 years",
       subjectRequirements: {
-        English: 4,
+        "English": 4,
       },
     },
     {
@@ -243,12 +450,12 @@ export class UNIVEN extends BaseUniversity {
       apsMin: 36,
       duration: "4 years",
       subjectRequirements: {
-        English: 4,
+        "English": 4,
         "Life Sciences": 4,
       },
     },
 
-    // Faculty of Management, Commerce and Law
+    // Management, Commerce and Law
     {
       id: "univen-badmin",
       name: "Bachelor of Administration",
@@ -256,7 +463,7 @@ export class UNIVEN extends BaseUniversity {
       apsMin: 32,
       duration: "3 years",
       subjectRequirements: {
-        English: 4,
+        "English": 4,
       },
     },
     {
@@ -266,9 +473,9 @@ export class UNIVEN extends BaseUniversity {
       apsMin: 35,
       duration: "4 years",
       subjectRequirements: {
-        English: 4,
-        Mathematics: 5,
-        Accounting: 5,
+        "English": 4,
+        "Mathematics": 5,
+        "Accounting": 5,
       },
     },
     {
@@ -278,9 +485,9 @@ export class UNIVEN extends BaseUniversity {
       apsMin: 32,
       duration: "3 years",
       subjectRequirements: {
-        English: 4,
-        Mathematics: 4,
-        Accounting: 4,
+        "English": 4,
+        "Mathematics": 4,
+        "Accounting": 4,
       },
     },
     {
@@ -290,16 +497,16 @@ export class UNIVEN extends BaseUniversity {
       apsMin: 32,
       duration: "3 years",
       subjectRequirements: {
-        English: 4,
-        Math: {
+        "English": 4,
+        "Math": {
           alternatives: [
             { subject: "Mathematics", level: 3 },
             { subject: "Mathematical Literacy", level: 4 },
           ],
         },
-        Accounting: 4,
+        "Accounting": 4,
         "Business Studies": 4,
-        Economics: 4,
+        "Economics": 4,
         "Information Technology": 4,
       },
     },
@@ -310,12 +517,12 @@ export class UNIVEN extends BaseUniversity {
       apsMin: 32,
       duration: "3 years",
       subjectRequirements: {
-        English: 4,
+        "English": 4,
         "Business Studies": 4,
-        Accounting: 3,
-        Economics: 3,
+        "Accounting": 3,
+        "Economics": 3,
         "Information Technology": 3,
-        Mathematics: 3,
+        "Mathematics": 3,
       },
     },
     {
@@ -325,9 +532,9 @@ export class UNIVEN extends BaseUniversity {
       apsMin: 32,
       duration: "3 years",
       subjectRequirements: {
-        English: 4,
-        Mathematics: 4,
-        Accounting: 4,
+        "English": 4,
+        "Mathematics": 4,
+        "Accounting": 4,
       },
     },
     {
@@ -337,10 +544,10 @@ export class UNIVEN extends BaseUniversity {
       apsMin: 32,
       duration: "3 years",
       subjectRequirements: {
-        English: 4,
-        Economics: 4,
-        Mathematics: 4,
-        Accounting: 3,
+        "English": 4,
+        "Economics": 4,
+        "Mathematics": 4,
+        "Accounting": 3,
         "Business Studies": 3,
         "Information Technology": 3,
       },
@@ -352,12 +559,12 @@ export class UNIVEN extends BaseUniversity {
       apsMin: 32,
       duration: "3 years",
       subjectRequirements: {
-        English: 4,
-        Accounting: 3,
+        "English": 4,
+        "Accounting": 3,
         "Business Studies": 3,
-        Economics: 3,
+        "Economics": 3,
         "Information Technology": 3,
-        Mathematics: 3,
+        "Mathematics": 3,
       },
     },
     {
@@ -367,12 +574,12 @@ export class UNIVEN extends BaseUniversity {
       apsMin: 32,
       duration: "3 years",
       subjectRequirements: {
-        English: 4,
-        Accounting: 3,
+        "English": 4,
+        "Accounting": 3,
         "Business Studies": 3,
-        Economics: 3,
+        "Economics": 3,
         "Information Technology": 3,
-        Mathematics: 3,
+        "Mathematics": 3,
       },
     },
     {
@@ -382,15 +589,15 @@ export class UNIVEN extends BaseUniversity {
       apsMin: 32,
       duration: "3 years",
       subjectRequirements: {
-        English: 4,
+        "English": 4,
         "Mathematical Literacy": 4,
-        Mathematics: 3,
-        Accounting: 3,
+        "Mathematics": 3,
+        "Accounting": 3,
         "Business Studies": 3,
-        Economics: 3,
+        "Economics": 3,
         "Information Technology": 3,
-        Geography: 3,
-        Tourism: 3,
+        "Geography": 3,
+        "Tourism": 3,
       },
     },
     {
@@ -400,7 +607,7 @@ export class UNIVEN extends BaseUniversity {
       apsMin: 38,
       duration: "4 years",
       subjectRequirements: {
-        English: 5,
+        "English": 5,
       },
     },
     {
@@ -410,10 +617,9 @@ export class UNIVEN extends BaseUniversity {
       apsMin: 34,
       duration: "3 years",
       subjectRequirements: {
-        English: 4,
+        "English": 4,
       },
     },
-
     {
       id: "univen-ext-badmin",
       name: "Extended Bachelor of Administration",
@@ -421,7 +627,7 @@ export class UNIVEN extends BaseUniversity {
       apsMin: 28,
       duration: "4 years",
       subjectRequirements: {
-        English: 3,
+        "English": 3,
       },
     },
     {
@@ -431,9 +637,9 @@ export class UNIVEN extends BaseUniversity {
       apsMin: 28,
       duration: "4 years",
       subjectRequirements: {
-        English: 3,
-        Mathematics: 3,
-        Accounting: 3,
+        "English": 3,
+        "Mathematics": 3,
+        "Accounting": 3,
       },
     },
     {
@@ -443,8 +649,8 @@ export class UNIVEN extends BaseUniversity {
       apsMin: 28,
       duration: "4 years",
       subjectRequirements: {
-        English: 3,
-        Mathematics: 3,
+        "English": 3,
+        "Mathematics": 3,
         "Information Technology": 3,
       },
     },
@@ -455,7 +661,7 @@ export class UNIVEN extends BaseUniversity {
       apsMin: 28,
       duration: "4 years",
       subjectRequirements: {
-        English: 3,
+        "English": 3,
         "Business Studies": 3,
       },
     },
@@ -466,8 +672,8 @@ export class UNIVEN extends BaseUniversity {
       apsMin: 28,
       duration: "4 years",
       subjectRequirements: {
-        English: 3,
-        Accounting: 3,
+        "English": 3,
+        "Accounting": 3,
       },
     },
     {
@@ -477,8 +683,8 @@ export class UNIVEN extends BaseUniversity {
       apsMin: 28,
       duration: "4 years",
       subjectRequirements: {
-        English: 3,
-        Economics: 3,
+        "English": 3,
+        "Economics": 3,
       },
     },
     {
@@ -488,11 +694,11 @@ export class UNIVEN extends BaseUniversity {
       apsMin: 28,
       duration: "4 years",
       subjectRequirements: {
-        English: 3,
+        "English": 3,
       },
     },
 
-    // Faculty of Science, Engineering and Agriculture
+    // Science, Engineering and Agriculture
     {
       id: "univen-bsc-biochemistry-microbiology",
       name: "BSc in Biochemistry and Microbiology",
@@ -500,8 +706,8 @@ export class UNIVEN extends BaseUniversity {
       apsMin: 26,
       duration: "3 years",
       subjectRequirements: {
-        English: 4,
-        Mathematics: 4,
+        "English": 4,
+        "Mathematics": 4,
         "Physical Sciences": 4,
         "Life Sciences": 4,
       },
@@ -513,8 +719,8 @@ export class UNIVEN extends BaseUniversity {
       apsMin: 26,
       duration: "3 years",
       subjectRequirements: {
-        English: 4,
-        Mathematics: 4,
+        "English": 4,
+        "Mathematics": 4,
         "Physical Sciences": 4,
         "Life Sciences": 4,
       },
@@ -526,8 +732,8 @@ export class UNIVEN extends BaseUniversity {
       apsMin: 26,
       duration: "3 years",
       subjectRequirements: {
-        English: 4,
-        Mathematics: 4,
+        "English": 4,
+        "Mathematics": 4,
         "Physical Sciences": 4,
         "Life Sciences": 4,
       },
@@ -539,8 +745,8 @@ export class UNIVEN extends BaseUniversity {
       apsMin: 26,
       duration: "3 years",
       subjectRequirements: {
-        English: 4,
-        Mathematics: 4,
+        "English": 4,
+        "Mathematics": 4,
         "Physical Sciences": 4,
         "Life Sciences": 4,
       },
@@ -552,8 +758,8 @@ export class UNIVEN extends BaseUniversity {
       apsMin: 26,
       duration: "3 years",
       subjectRequirements: {
-        English: 4,
-        Mathematics: 4,
+        "English": 4,
+        "Mathematics": 4,
         "Physical Sciences": 4,
         "Life Sciences": 4,
       },
@@ -565,8 +771,8 @@ export class UNIVEN extends BaseUniversity {
       apsMin: 26,
       duration: "3 years",
       subjectRequirements: {
-        English: 4,
-        Mathematics: 4,
+        "English": 4,
+        "Mathematics": 4,
         "Physical Sciences": 4,
         "Life Sciences": 4,
       },
@@ -578,8 +784,8 @@ export class UNIVEN extends BaseUniversity {
       apsMin: 26,
       duration: "3 years",
       subjectRequirements: {
-        English: 4,
-        Mathematics: 4,
+        "English": 4,
+        "Mathematics": 4,
         "Physical Sciences": 4,
         "Life Sciences": 4,
       },
@@ -591,8 +797,8 @@ export class UNIVEN extends BaseUniversity {
       apsMin: 26,
       duration: "3 years",
       subjectRequirements: {
-        English: 4,
-        Mathematics: 4,
+        "English": 4,
+        "Mathematics": 4,
         "Physical Sciences": 4,
         "Life Sciences": 4,
       },
@@ -604,8 +810,8 @@ export class UNIVEN extends BaseUniversity {
       apsMin: 26,
       duration: "3 years",
       subjectRequirements: {
-        English: 4,
-        Mathematics: 4,
+        "English": 4,
+        "Mathematics": 4,
         "Physical Sciences": 4,
         "Life Sciences": 4,
       },
@@ -617,8 +823,8 @@ export class UNIVEN extends BaseUniversity {
       apsMin: 26,
       duration: "3 years",
       subjectRequirements: {
-        English: 4,
-        Mathematics: 4,
+        "English": 4,
+        "Mathematics": 4,
         "Physical Sciences": 4,
         "Life Sciences": 4,
       },
@@ -630,8 +836,8 @@ export class UNIVEN extends BaseUniversity {
       apsMin: 26,
       duration: "3 years",
       subjectRequirements: {
-        English: 4,
-        Mathematics: 4,
+        "English": 4,
+        "Mathematics": 4,
         "Physical Sciences": 4,
         "Life Sciences": 4,
       },
@@ -643,8 +849,8 @@ export class UNIVEN extends BaseUniversity {
       apsMin: 26,
       duration: "3 years",
       subjectRequirements: {
-        English: 4,
-        Mathematics: 4,
+        "English": 4,
+        "Mathematics": 4,
         "Physical Sciences": 4,
         "Life Sciences": 4,
       },
@@ -656,13 +862,12 @@ export class UNIVEN extends BaseUniversity {
       apsMin: 26,
       duration: "3 years",
       subjectRequirements: {
-        English: 4,
-        Mathematics: 4,
+        "English": 4,
+        "Mathematics": 4,
         "Physical Sciences": 4,
         "Life Sciences": 4,
       },
     },
-
     {
       id: "univen-dpt-freshwater",
       name: "Diploma in Freshwater Technology",
@@ -670,171 +875,11 @@ export class UNIVEN extends BaseUniversity {
       apsMin: 24,
       duration: "3 years",
       subjectRequirements: {
-        English: 3,
+        "English": 3,
         "Life Sciences": 4,
         "Agricultural Sciences": 4,
         "Physical Sciences": 4,
-        Geography: 4,
-      },
-    },
-
-    // Environmental Sciences
-    {
-      id: "univen-bes",
-      name: "Bachelor of Environmental Sciences",
-      faculty: "Science, Engineering and Agriculture",
-      apsMin: 32,
-      duration: "3 years",
-      subjectRequirements: {
-        English: 4,
-        Mathematics: 4,
-        "Physical Sciences": 4,
-        "Life Sciences": 4,
-      },
-    },
-    {
-      id: "univen-bes-mining-geology",
-      name: "Bachelor of Earth Sciences in Mining and Environmental Geology",
-      faculty: "Science, Engineering and Agriculture",
-      apsMin: 35,
-      duration: "4 years",
-      subjectRequirements: {
-        English: 4,
-        Mathematics: 5,
-        "Physical Sciences": 5,
-      },
-    },
-    {
-      id: "univen-bes-hydrology",
-      name: "Bachelor of Earth Sciences in Hydrology and Water Resources",
-      faculty: "Science, Engineering and Agriculture",
-      apsMin: 35,
-      duration: "4 years",
-      subjectRequirements: {
-        English: 5,
-        Mathematics: 5,
-        "Physical Sciences": 5,
-      },
-    },
-    {
-      id: "univen-burp",
-      name: "Bachelor of Urban and Regional Planning",
-      faculty: "Science, Engineering and Agriculture",
-      apsMin: 35,
-      duration: "4 years",
-      subjectRequirements: {
-        English: 5,
-        Mathematics: 5,
-        "Physical Sciences": 5,
-        "Technical Drawing": 5,
-        Geography: 5,
-      },
-    },
-    {
-      id: "univen-bes-drr",
-      name: "Bachelor of Environmental Sciences in Disaster Risk Reduction",
-      faculty: "Science, Engineering and Agriculture",
-      apsMin: 35,
-      duration: "4 years",
-      subjectRequirements: {
-        Geography: 5,
-        Mathematics: 5,
-        "Life Sciences": 5,
-        English: 4,
-        "Physical Sciences": 4,
-        Economics: 4,
-      },
-    },
-
-    // Agriculture Stream
-    {
-      id: "univen-bsa-ae",
-      name: "Bachelor of Science in Agriculture (Agricultural Economics)",
-      faculty: "Science, Engineering and Agriculture",
-      apsMin: 26,
-      duration: "4 years",
-      subjectRequirements: {
-        English: 4,
-        Mathematics: 4,
-        "Physical Sciences": 4,
-      },
-    },
-    {
-      id: "univen-bsa-abm",
-      name: "Bachelor of Science in Agriculture (Agribusiness Management)",
-      faculty: "Science, Engineering and Agriculture",
-      apsMin: 26,
-      duration: "4 years",
-      subjectRequirements: {
-        English: 4,
-        Mathematics: 4,
-        "Physical Sciences": 4,
-        "Life Sciences": 4,
-      },
-    },
-    {
-      id: "univen-bsa-as",
-      name: "Bachelor of Science in Agriculture (Animal Science)",
-      faculty: "Science, Engineering and Agriculture",
-      apsMin: 26,
-      duration: "4 years",
-      subjectRequirements: {
-        English: 4,
-        Mathematics: 4,
-        "Physical Sciences": 4,
-        "Life Sciences": 4,
-      },
-    },
-    {
-      id: "univen-bsa-hs",
-      name: "Bachelor of Science in Agriculture (Horticultural Sciences)",
-      faculty: "Science, Engineering and Agriculture",
-      apsMin: 26,
-      duration: "4 years",
-      subjectRequirements: {
-        English: 4,
-        Mathematics: 4,
-        "Physical Sciences": 4,
-        "Life Sciences": 4,
-      },
-    },
-    {
-      id: "univen-bsa-pp",
-      name: "Bachelor of Science in Agriculture (Plant Production)",
-      faculty: "Science, Engineering and Agriculture",
-      apsMin: 26,
-      duration: "4 years",
-      subjectRequirements: {
-        English: 4,
-        Mathematics: 4,
-        "Physical Sciences": 4,
-        "Life Sciences": 4,
-      },
-    },
-    {
-      id: "univen-bsa-ss",
-      name: "Bachelor of Science in Soil Science",
-      faculty: "Science, Engineering and Agriculture",
-      apsMin: 26,
-      duration: "4 years",
-      subjectRequirements: {
-        English: 4,
-        Mathematics: 4,
-        "Physical Sciences": 4,
-        "Life Sciences": 4,
-      },
-    },
-    {
-      id: "univen-bsa-forestry",
-      name: "Bachelor of Science in Forestry",
-      faculty: "Science, Engineering and Agriculture",
-      apsMin: 26,
-      duration: "4 years",
-      subjectRequirements: {
-        English: 4,
-        Mathematics: 4,
-        "Physical Sciences": 4,
-        "Life Sciences": 4,
+        "Geography": 4,
       },
     },
     {
@@ -844,12 +889,11 @@ export class UNIVEN extends BaseUniversity {
       apsMin: 32,
       duration: "4 years",
       subjectRequirements: {
-        English: 4,
-        Mathematics: 5,
+        "English": 4,
+        "Mathematics": 5,
         "Physical Sciences": 5,
       },
     },
-
     {
       id: "univen-ext-bsc-biochem-micro",
       name: "Extended BSc in Biochemistry and Microbiology",
@@ -857,8 +901,8 @@ export class UNIVEN extends BaseUniversity {
       apsMin: 26,
       duration: "4 years",
       subjectRequirements: {
-        English: 3,
-        Mathematics: 3,
+        "English": 3,
+        "Mathematics": 3,
         "Physical Sciences": 3,
       },
     },
@@ -869,8 +913,8 @@ export class UNIVEN extends BaseUniversity {
       apsMin: 26,
       duration: "4 years",
       subjectRequirements: {
-        English: 3,
-        Mathematics: 3,
+        "English": 3,
+        "Mathematics": 3,
         "Physical Sciences": 3,
       },
     },
@@ -881,8 +925,8 @@ export class UNIVEN extends BaseUniversity {
       apsMin: 26,
       duration: "4 years",
       subjectRequirements: {
-        English: 3,
-        Mathematics: 3,
+        "English": 3,
+        "Mathematics": 3,
         "Physical Sciences": 3,
       },
     },
@@ -893,8 +937,8 @@ export class UNIVEN extends BaseUniversity {
       apsMin: 26,
       duration: "4 years",
       subjectRequirements: {
-        English: 3,
-        Mathematics: 3,
+        "English": 3,
+        "Mathematics": 3,
         "Physical Sciences": 3,
       },
     },
@@ -905,8 +949,8 @@ export class UNIVEN extends BaseUniversity {
       apsMin: 24,
       duration: "4 years",
       subjectRequirements: {
-        English: 3,
-        Mathematics: 3,
+        "English": 3,
+        "Mathematics": 3,
       },
     },
     {
@@ -916,8 +960,8 @@ export class UNIVEN extends BaseUniversity {
       apsMin: 24,
       duration: "4 years",
       subjectRequirements: {
-        English: 3,
-        Mathematics: 3,
+        "English": 3,
+        "Mathematics": 3,
       },
     },
     {
@@ -927,8 +971,8 @@ export class UNIVEN extends BaseUniversity {
       apsMin: 24,
       duration: "4 years",
       subjectRequirements: {
-        English: 3,
-        Mathematics: 3,
+        "English": 3,
+        "Mathematics": 3,
       },
     },
     {
@@ -938,8 +982,8 @@ export class UNIVEN extends BaseUniversity {
       apsMin: 24,
       duration: "4 years",
       subjectRequirements: {
-        English: 3,
-        Mathematics: 3,
+        "English": 3,
+        "Mathematics": 3,
       },
     },
     {
@@ -949,8 +993,8 @@ export class UNIVEN extends BaseUniversity {
       apsMin: 24,
       duration: "4 years",
       subjectRequirements: {
-        English: 3,
-        Mathematics: 3,
+        "English": 3,
+        "Mathematics": 3,
       },
     },
     {
@@ -960,8 +1004,8 @@ export class UNIVEN extends BaseUniversity {
       apsMin: 26,
       duration: "4 years",
       subjectRequirements: {
-        English: 3,
-        Mathematics: 3,
+        "English": 3,
+        "Mathematics": 3,
         "Physical Sciences": 3,
       },
     },
@@ -972,8 +1016,8 @@ export class UNIVEN extends BaseUniversity {
       apsMin: 26,
       duration: "4 years",
       subjectRequirements: {
-        English: 3,
-        Mathematics: 3,
+        "English": 3,
+        "Mathematics": 3,
         "Physical Sciences": 3,
       },
     },
@@ -984,8 +1028,8 @@ export class UNIVEN extends BaseUniversity {
       apsMin: 26,
       duration: "4 years",
       subjectRequirements: {
-        English: 3,
-        Mathematics: 3,
+        "English": 3,
+        "Mathematics": 3,
         "Physical Sciences": 3,
       },
     },
@@ -996,8 +1040,8 @@ export class UNIVEN extends BaseUniversity {
       apsMin: 26,
       duration: "4 years",
       subjectRequirements: {
-        English: 3,
-        Mathematics: 3,
+        "English": 3,
+        "Mathematics": 3,
         "Physical Sciences": 3,
       },
     },

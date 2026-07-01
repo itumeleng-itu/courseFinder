@@ -20,7 +20,335 @@ export class UL extends BaseUniversity {
   };
 
   protected readonly _courses: Course[] = [
-    // Faculty of Humanities - Education
+    // Faculty of Humanities
+    {
+      id: "ul-bed-sp-fet-languages-lo",
+      name: "Bachelor of Education in Senior Phase & FET Teaching (majoring in Languages and Life Orientation)",
+      faculty: "Faculty of Humanities",
+      apsMin: 24,
+      duration: "4 years",
+      subjectRequirements: {
+        "english home language": 4,
+        "life orientation": 4,
+      },
+      additionalRequirements: ["Selection test required"],
+      careerOpportunities: ["Life Orientation Teacher", "Language Teacher", "Research Assistant", "Laboratory Assistant"],
+    },
+    {
+      id: "ul-bed-sp-fet-languages-ss",
+      name: "Bachelor of Education in Senior Phase & FET Teaching (majoring in Languages and Social Sciences)",
+      faculty: "Faculty of Humanities",
+      apsMin: 24,
+      duration: "4 years",
+      subjectRequirements: {
+        "english home language": 4,
+        "life orientation": 4,
+      },
+      additionalRequirements: ["Selection test required"],
+      careerOpportunities: ["Social Science Teacher", "Language Teacher", "Research Assistant", "Laboratory Assistant"],
+    },
+    {
+      id: "ul-bed-sp-fet-econ-mgmt",
+      name: "Bachelor of Education in Senior Phase & FET Teaching (majoring in Economics and Management Studies)",
+      faculty: "Faculty of Humanities",
+      apsMin: 24,
+      duration: "4 years",
+      subjectRequirements: {
+        "english home language": 4,
+        "life orientation": 4,
+      },
+      additionalRequirements: ["Selection test required"],
+      careerOpportunities: ["Accounting Teacher", "Business Economics Teacher", "Economics Teacher", "Research Assistant", "Laboratory Assistant"],
+    },
+    {
+      id: "ul-bed-sp-fet-math-sci",
+      name: "Bachelor of Education in Senior Phase & FET Teaching (majoring in Mathematics, Science & Technology)",
+      faculty: "Faculty of Humanities",
+      apsMin: 24,
+      duration: "4 years",
+      subjectRequirements: {
+        "english home language": 4,
+        "life orientation": 4,
+        "mathematics": 4,
+      },
+      additionalRequirements: ["Selection test required"],
+      careerOpportunities: ["Mathematics Teacher", "Life Sciences Teacher", "Technology Teacher", "Physical Sciences Teacher", "Research Assistant", "Laboratory Assistant"],
+    },
+
+    // Faculty of Management & Law
+    {
+      id: "ul-bacc",
+      name: "Bachelor of Accountancy",
+      faculty: "Faculty of Management & Law",
+      apsMin: 30,
+      duration: "3 years",
+      subjectRequirements: {
+        "english home language": 4,
+        "mathematics": 4,
+      },
+      careerOpportunities: ["Management Accountants", "Internal Auditors", "Tax Consultants", "Business Entrepreneurs", "Accountants"],
+    },
+    {
+      id: "ul-bcom-acc",
+      name: "Bachelor of Commerce in Accountancy",
+      faculty: "Faculty of Management & Law",
+      apsMin: 28,
+      duration: "3 years",
+      subjectRequirements: {
+        "english home language": 4,
+        "mathematics": 4,
+      },
+      careerOpportunities: ["Internal Auditors", "Consultants", "Business Entrepreneurs", "Accountants"],
+    },
+    {
+      id: "ul-llb",
+      name: "Bachelor of Laws",
+      faculty: "Faculty of Management & Law",
+      apsMin: 30,
+      duration: "4 years",
+      subjectRequirements: {
+        "english home language": 5,
+      },
+      careerOpportunities: ["Judge", "Magistrate", "Advocate", "Attorney", "Director of Public Prosecution", "Registrar", "Master of High Court", "Legal Advisor", "Legal Administrative Officer", "Labour Consultant", "Commissioner"],
+    },
+
+    // Faculty of Science & Agriculture
+    {
+      id: "ul-bagricman",
+      name: "Bachelor of Agricultural Management",
+      faculty: "Faculty of Science & Agriculture",
+      apsMin: 24,
+      duration: "3 years",
+      subjectRequirements: {
+        "english home language": 4,
+        "mathematics": 3,
+        "physical sciences": 4,
+        "life sciences": 4,
+      },
+      careerOpportunities: ["Agricultural Extension Offers", "Agricultural Officers", "Farm Manager", "Agriculture Technician", "Research Assistant"],
+    },
+    {
+      id: "ul-bsc-agriculture-plant-production",
+      name: "BSc (Agriculture) (Plant Production)",
+      faculty: "Faculty of Science & Agriculture",
+      apsMin: 24,
+      duration: "3 years",
+      subjectRequirements: {
+        "English": 4,
+        "Mathematics": 4,
+        "Physical Sciences": 4,
+        "Life Sciences": 4,
+      },
+      careerOpportunities: ["Agronomists", "Plant Breeders", "Farm Managers", "Consultants"],
+    },
+    {
+      id: "ul-bsc-agriculture-animal-production",
+      name: "BSc (Agriculture) (Animal Production)",
+      faculty: "Faculty of Science & Agriculture",
+      apsMin: 24,
+      duration: "3 years",
+      subjectRequirements: {
+        "English": 4,
+        "Mathematics": 4,
+        "Physical Sciences": 4,
+        "Life Sciences": 4,
+      },
+      careerOpportunities: ["Marketing Officers", "Livestock Scientists", "Animal Breeders & Nutritionists", "Farm Managers", "Consultants"],
+    },
+    {
+      id: "ul-bsc-agriculture-soil-science",
+      name: "BSc (Agriculture) (Soil Science)",
+      faculty: "Faculty of Science & Agriculture",
+      apsMin: 25,
+      duration: "3 years",
+      subjectRequirements: {
+        "English": 4,
+        "Mathematics": 4,
+        "Physical Sciences": 5,
+        "Life Sciences": 4,
+      },
+      careerOpportunities: ["Soil Scientists", "Laboratory Managers", "Soil Analysts"],
+    },
+    {
+      id: "ul-bsc-environmental-resource-studies",
+      name: "BSc (Environmental & Resource Studies)",
+      faculty: "Faculty of Science & Agriculture",
+      apsMin: 24,
+      duration: "3 years",
+      subjectRequirements: {
+        "English": 4,
+        "Mathematics": 4,
+        "Physical Sciences": 4,
+        "Geography": 4,
+      },
+      careerOpportunities: ["Environmental Officers", "Development Planners", "Cartographers"],
+    },
+    {
+      id: "ul-bsc-water-sanitation-sciences",
+      name: "BSc (Water & Sanitation Sciences)",
+      faculty: "Faculty of Science & Agriculture",
+      apsMin: 24,
+      duration: "3 years",
+      subjectRequirements: {
+        "English": 4,
+        "Mathematics": 5,
+        "Physical Sciences": 5,
+        "Life Sciences": 4,
+      },
+      careerOpportunities: ["Water Supply & Sanitation Scientist", "Community Water Supply Project Planner", "Community Sanitation Project Manager", "Water Catchment Manager", "Water Resources Planner", "Water Treatment Plant Manager", "Waste Water Treatment Manager"],
+    },
+    {
+      id: "ul-bsc-mathematical-sciences-extended",
+      name: "BSc (Mathematical Sciences stream) (Extended Curriculum Programme)",
+      faculty: "Faculty of Science & Agriculture",
+      apsMin: 22,
+      duration: "4 years",
+      subjectRequirements: {
+        "english home language": 4,
+        "mathematics": 4,
+      },
+      careerOpportunities: ["Systems Analysts", "Computer Consultants", "Computer Programmers", "Computer Modelling Consultants", "Aerospace Engineers", "Network Specialists", "Statisticians"],
+    },
+    {
+      id: "ul-bsc-life-sciences-extended",
+      name: "BSc (Life Sciences Stream) (Extended Curriculum Programme)",
+      faculty: "Faculty of Science & Agriculture",
+      apsMin: 22,
+      duration: "4 years",
+      subjectRequirements: {
+        "english home language": 4,
+        "mathematics": 4,
+        "physical sciences": 4,
+        "life sciences": 3,
+      },
+      careerOpportunities: ["Biotechnology and bio-informatics related occupations", "Consultancy", "Environmental Health and Occupational Hygiene", "Environmental Management", "Industrial Biochemistry and Microbiology", "Entomology"],
+    },
+
+    // Faculty of Health Sciences
+    {
+      id: "ul-mbchb",
+      name: "MBChB - Bachelor of Medicine & Bachelor of Surgery",
+      faculty: "Faculty of Health Sciences",
+      apsMin: 27,
+      duration: "6 years",
+      subjectRequirements: {
+        "English": 4,
+        "Mathematics": 5,
+        "Physical Sciences": 5,
+        "Life Sciences": 5,
+      },
+      careerOpportunities: ["General Medical Practitioner", "Medical Research Institutes"],
+    },
+    {
+      id: "ul-bsc-dietetics",
+      name: "BSc (Dietetics)",
+      faculty: "Faculty of Health Sciences",
+      apsMin: 26,
+      duration: "4 years",
+      subjectRequirements: {
+        "English": 4,
+        "Mathematics": 4,
+        "Physical Sciences": 5,
+        "Life Sciences": 5,
+      },
+      careerOpportunities: ["Dietician in Hospital", "Community Dietician", "Food Service Manager", "Consultants for Food Production Companies", "Medical Representatives of Nutritional Companies", "Private Practice and Research Centres"],
+    },
+    {
+      id: "ul-boptom",
+      name: "BOptom - Bachelor of Optometry",
+      faculty: "Faculty of Health Sciences",
+      apsMin: 27,
+      duration: "4 years",
+      subjectRequirements: {
+        "English": 4,
+        "Mathematics": 5,
+        "Physical Sciences": 5,
+        "Life Sciences": 5,
+      },
+      careerOpportunities: ["Optometrist in Private and Public Sector"],
+    },
+    {
+      id: "ul-bsc-medical-sciences",
+      name: "BSc (Medical Sciences)",
+      faculty: "Faculty of Health Sciences",
+      apsMin: 26,
+      duration: "4 years",
+      subjectRequirements: {
+        "English": 4,
+        "Mathematics": 4,
+        "Physical Sciences": 5,
+        "Life Sciences": 5,
+      },
+      careerOpportunities: ["Medical Scientist", "Laboratory Researchers"],
+    },
+    {
+      id: "ul-bnurs",
+      name: "BNurs - Bachelor of Nursing",
+      faculty: "Faculty of Health Sciences",
+      apsMin: 26,
+      duration: "4 years",
+      subjectRequirements: {
+        "English": 4,
+        "Mathematics": 4,
+        "Physical Sciences": 5,
+        "Life Sciences": 5,
+      },
+      careerOpportunities: ["General, Psychiatric, Community Nurse and Mid-Wife", "Occupational Health Nurse", "Old Age Homes / Home-Based Care", "Private Practice / Hospitals", "Pharmaceutical Companies", "Insurance & Medical Aid Companies"],
+    },
+    {
+      id: "ul-bpharm",
+      name: "BPharm - Bachelor of Pharmacy",
+      faculty: "Faculty of Health Sciences",
+      apsMin: 27,
+      duration: "4 years",
+      subjectRequirements: {
+        "English": 4,
+        "Mathematics": 5,
+        "Physical Sciences": 5,
+        "Life Sciences": 5,
+      },
+      careerOpportunities: ["Retail Medicine", "Medicine Control Centre", "Departments of Health", "Industrial Environment", "Private Practice"],
+    },
+
+    // Faculty of Management and Law
+    {
+      id: "ul-bcom-human-resource-extended",
+      name: "BCom (Human Resource Management) (Extended Curriculum Programme)",
+      faculty: "Faculty of Management and Law",
+      apsMin: 22,
+      duration: "4 years",
+      subjectRequirements: {
+        "english home language": 4,
+        "mathematics": 3,
+      },
+      careerOpportunities: ["Marketing Officers", "Human Resource Practitioner", "Purchasing Officers", "Business Entrepreneurs"],
+    },
+    {
+      id: "ul-bcom-business-management",
+      name: "BCom (Business Management)",
+      faculty: "Faculty of Management and Law",
+      apsMin: 26,
+      duration: "3 years",
+      subjectRequirements: {
+        "English": 4,
+        "Mathematics": 3,
+      },
+      careerOpportunities: ["Marketing Officers", "Human Resource Practitioner", "Purchasing Officers", "Business Entrepreneurs"],
+    },
+    {
+      id: "ul-bcom-business-management-extended",
+      name: "BCom (Business Management) (Extended Curriculum Programme)",
+      faculty: "Faculty of Management and Law",
+      apsMin: 22,
+      duration: "4 years",
+      subjectRequirements: {
+        "english home language": 4,
+        "mathematics": 3,
+      },
+      careerOpportunities: ["Financial Officers", "Marketing Officers", "Human Resource Practitioner", "Purchasing Officers", "Business Entrepreneurs"],
+    },
+
+    // Humanities - Education
     {
       id: "ul-bed-sp-fet-languages",
       name: "BEd (SP & FET Teaching) - Languages and Life Orientation",
@@ -29,7 +357,7 @@ export class UL extends BaseUniversity {
       duration: "4 years",
       subjectRequirements: {
         "Life Orientation": 3,
-        English: 4,
+        "English": 4,
         "First Language": 5,
       },
     },
@@ -41,7 +369,7 @@ export class UL extends BaseUniversity {
       duration: "4 years",
       subjectRequirements: {
         "Life Orientation": 3,
-        English: {
+        "English": {
           alternatives: [
             { subject: "English", level: 3 },
             { subject: "English Home", level: 4 },
@@ -58,8 +386,8 @@ export class UL extends BaseUniversity {
       duration: "4 years",
       subjectRequirements: {
         "Life Orientation": 3,
-        English: 3,
-        Alternatives: {
+        "English": 3,
+        "Alternatives": {
           alternatives: [
             { subject: "Economics", level: 4 },
             { subject: "Business Studies", level: 4 },
@@ -75,8 +403,8 @@ export class UL extends BaseUniversity {
       duration: "4 years",
       subjectRequirements: {
         "Life Orientation": 3,
-        English: 3,
-        Mathematics: 4,
+        "English": 3,
+        "Mathematics": 4,
         "Physical Sciences": 4,
       },
     },
@@ -88,8 +416,8 @@ export class UL extends BaseUniversity {
       duration: "4 years",
       subjectRequirements: {
         "Life Orientation": 3,
-        English: 4,
-        Mathematics: {
+        "English": 4,
+        "Mathematics": {
           alternatives: [
             { subject: "Mathematics", level: 3 },
             { subject: "Mathematical Literacy", level: 4 },
@@ -98,7 +426,7 @@ export class UL extends BaseUniversity {
       },
     },
 
-    // Faculty of Humanities - Social Sciences
+    // Humanities - Social Sciences
     {
       id: "ul-ba-criminology-psychology",
       name: "BA (Criminology and Psychology)",
@@ -106,9 +434,9 @@ export class UL extends BaseUniversity {
       apsMin: 23,
       duration: "3 years",
       subjectRequirements: {
-        English: 4,
+        "English": 4,
         "Additional Language": 4,
-        Mathematics: {
+        "Mathematics": {
           alternatives: [
             { subject: "Mathematics", level: 3 },
             { subject: "Mathematical Literacy", level: 5 },
@@ -123,9 +451,9 @@ export class UL extends BaseUniversity {
       apsMin: 23,
       duration: "3 years",
       subjectRequirements: {
-        English: 4,
+        "English": 4,
         "Additional Language": 4,
-        Mathematics: {
+        "Mathematics": {
           alternatives: [
             { subject: "Mathematics", level: 3 },
             { subject: "Mathematical Literacy", level: 5 },
@@ -140,9 +468,9 @@ export class UL extends BaseUniversity {
       apsMin: 23,
       duration: "3 years",
       subjectRequirements: {
-        English: 4,
+        "English": 4,
         "Additional Language": 4,
-        Mathematics: {
+        "Mathematics": {
           alternatives: [
             { subject: "Mathematics", level: 3 },
             { subject: "Mathematical Literacy", level: 5 },
@@ -157,7 +485,7 @@ export class UL extends BaseUniversity {
       apsMin: 25,
       duration: "3 years",
       subjectRequirements: {
-        English: 4,
+        "English": 4,
       },
     },
     {
@@ -167,9 +495,9 @@ export class UL extends BaseUniversity {
       apsMin: 23,
       duration: "4 years",
       subjectRequirements: {
-        English: 4,
+        "English": 4,
         "Additional Language": 4,
-        Mathematics: {
+        "Mathematics": {
           alternatives: [
             { subject: "Mathematics", level: 3 },
             { subject: "Mathematical Literacy", level: 5 },
@@ -184,9 +512,9 @@ export class UL extends BaseUniversity {
       apsMin: 23,
       duration: "4 years",
       subjectRequirements: {
-        English: 4,
+        "English": 4,
         "Additional Language": 4,
-        Mathematics: {
+        "Mathematics": {
           alternatives: [
             { subject: "Mathematics", level: 3 },
             { subject: "Mathematical Literacy", level: 5 },
@@ -195,7 +523,7 @@ export class UL extends BaseUniversity {
       },
     },
 
-    // Faculty of Humanities - Language and Communication Studies
+    // Humanities - Language and Communication Studies
     {
       id: "ul-ba-languages",
       name: "BA (Languages stream)",
@@ -203,7 +531,7 @@ export class UL extends BaseUniversity {
       apsMin: 25,
       duration: "3 years",
       subjectRequirements: {
-        English: 4,
+        "English": 4,
         "Another Language": 5,
       },
     },
@@ -214,7 +542,7 @@ export class UL extends BaseUniversity {
       apsMin: 25,
       duration: "3 years",
       subjectRequirements: {
-        English: 4,
+        "English": 4,
         "Another Language": 5,
       },
     },
@@ -225,7 +553,7 @@ export class UL extends BaseUniversity {
       apsMin: 25,
       duration: "3 years",
       subjectRequirements: {
-        English: 4,
+        "English": 4,
         "Another Language": 5,
       },
     },
@@ -236,7 +564,7 @@ export class UL extends BaseUniversity {
       apsMin: 25,
       duration: "4 years",
       subjectRequirements: {
-        English: 4,
+        "English": 4,
         "Another Language": 5,
       },
     },
@@ -247,7 +575,7 @@ export class UL extends BaseUniversity {
       apsMin: 25,
       duration: "3 years",
       subjectRequirements: {
-        English: 4,
+        "English": 4,
         "Another Language": 5,
       },
     },
@@ -258,7 +586,7 @@ export class UL extends BaseUniversity {
       apsMin: 25,
       duration: "3 years",
       subjectRequirements: {
-        English: 4,
+        "English": 4,
         "Another Language": 5,
       },
     },
@@ -269,12 +597,12 @@ export class UL extends BaseUniversity {
       apsMin: 25,
       duration: "3 years",
       subjectRequirements: {
-        English: 4,
+        "English": 4,
         "Another Language": 5,
       },
     },
 
-    // Faculty of Science & Agriculture - Physical & Mineral Sciences
+    // Science & Agriculture - Physical & Mineral Sciences
     {
       id: "ul-bsc-physical-sciences",
       name: "BSc (Physical Sciences stream)",
@@ -282,8 +610,8 @@ export class UL extends BaseUniversity {
       apsMin: 26,
       duration: "3 years",
       subjectRequirements: {
-        English: 4,
-        Mathematics: 5,
+        "English": 4,
+        "Mathematics": 5,
         "Physical Sciences": 5,
       },
     },
@@ -294,13 +622,13 @@ export class UL extends BaseUniversity {
       apsMin: 26,
       duration: "3 years",
       subjectRequirements: {
-        English: 4,
-        Mathematics: 5,
+        "English": 4,
+        "Mathematics": 5,
         "Physical Sciences": 5,
       },
     },
 
-    // Faculty of Science & Agriculture - Mathematical and Computer Sciences
+    // Science & Agriculture - Mathematical and Computer Sciences
     {
       id: "ul-bsc-mathematical-sciences",
       name: "BSc (Mathematical Sciences stream)",
@@ -308,12 +636,12 @@ export class UL extends BaseUniversity {
       apsMin: 24,
       duration: "3 years",
       subjectRequirements: {
-        English: 4,
-        Mathematics: 5,
+        "English": 4,
+        "Mathematics": 5,
       },
     },
 
-    // Faculty of Science & Agriculture - Molecular & Life Sciences
+    // Science & Agriculture - Molecular & Life Sciences
     {
       id: "ul-bsc-life-sciences",
       name: "BSc (Life Sciences Stream)",
@@ -321,27 +649,14 @@ export class UL extends BaseUniversity {
       apsMin: 26,
       duration: "3 years",
       subjectRequirements: {
-        English: 4,
-        Mathematics: 5,
+        "English": 4,
+        "Mathematics": 5,
         "Physical Sciences": 5,
         "Life Sciences": 4,
       },
     },
 
-    // Faculty of Science & Agriculture - Agriculture and Environmental Sciences
-    {
-      id: "ul-bagricman",
-      name: "BAgricMan (Bachelor of Agricultural Management)",
-      faculty: "Science & Agriculture - Agriculture and Environmental Sciences",
-      apsMin: 24,
-      duration: "3 years",
-      subjectRequirements: {
-        English: 4,
-        Mathematics: 3,
-        "Life Sciences": 4,
-        "Agricultural Science": 4,
-      },
-    },
+    // Science & Agriculture - Agriculture and Environmental Sciences
     {
       id: "ul-bsc-agriculture-economics",
       name: "BSc (Agriculture) (Agricultural Economics)",
@@ -349,89 +664,13 @@ export class UL extends BaseUniversity {
       apsMin: 24,
       duration: "4 years",
       subjectRequirements: {
-        English: 4,
-        Mathematics: 4,
+        "English": 4,
+        "Mathematics": 4,
         "Physical Sciences": 4,
-      },
-    },
-    {
-      id: "ul-bsc-agriculture-plant-production",
-      name: "BSc (Agriculture) (Plant Production)",
-      faculty: "Science & Agriculture - Agriculture and Environmental Sciences",
-      apsMin: 24,
-      duration: "4 years",
-      subjectRequirements: {
-        English: 4,
-        Mathematics: 4,
-        "Physical Sciences": 4,
-        "Life Sciences": 4,
-      },
-    },
-    {
-      id: "ul-bsc-agriculture-animal-production",
-      name: "BSc (Agriculture) (Animal Production)",
-      faculty: "Science & Agriculture - Agriculture and Environmental Sciences",
-      apsMin: 24,
-      duration: "4 years",
-      subjectRequirements: {
-        English: 4,
-        Mathematics: 4,
-        "Physical Sciences": 4,
-        "Life Sciences": 4,
-      },
-    },
-    {
-      id: "ul-bsc-agriculture-soil-science",
-      name: "BSc (Agriculture) (Soil Science)",
-      faculty: "Science & Agriculture - Agriculture and Environmental Sciences",
-      apsMin: 25,
-      duration: "4 years",
-      subjectRequirements: {
-        English: 4,
-        Mathematics: 4,
-        "Physical Sciences": 5,
-        "Life Sciences": 4,
-      },
-    },
-    {
-      id: "ul-bsc-environmental-resource-studies",
-      name: "BSc (Environmental & Resource Studies)",
-      faculty: "Science & Agriculture - Agriculture and Environmental Sciences",
-      apsMin: 24,
-      duration: "4 years",
-      subjectRequirements: {
-        English: 4,
-        Mathematics: 4,
-        "Physical Sciences": 4,
-        Geography: 4,
-      },
-    },
-    {
-      id: "ul-bsc-water-sanitation-sciences",
-      name: "BSc (Water & Sanitation Sciences)",
-      faculty: "Science & Agriculture - Agriculture and Environmental Sciences",
-      apsMin: 24,
-      duration: "4 years",
-      subjectRequirements: {
-        English: 4,
-        Mathematics: 5,
-        "Physical Sciences": 5,
-        "Life Sciences": 4,
       },
     },
 
-    // Faculty of Management & Law - Accountancy
-    {
-      id: "ul-bacc",
-      name: "BAcc (Bachelor of Accountancy)",
-      faculty: "Management & Law - Accountancy",
-      apsMin: 30,
-      duration: "4 years",
-      subjectRequirements: {
-        English: 4,
-        Mathematics: 4,
-      },
-    },
+    // Management & Law - Accountancy
     {
       id: "ul-bcom-accountancy",
       name: "BCom (Accountancy)",
@@ -439,23 +678,12 @@ export class UL extends BaseUniversity {
       apsMin: 28,
       duration: "3 years",
       subjectRequirements: {
-        English: 4,
-        Mathematics: 4,
+        "English": 4,
+        "Mathematics": 4,
       },
     },
 
-    // Faculty of Management & Law - Economics and Management
-    {
-      id: "ul-bcom-business-management",
-      name: "BCom (Business Management)",
-      faculty: "Management & Law - Economics and Management",
-      apsMin: 26,
-      duration: "3 years",
-      subjectRequirements: {
-        English: 4,
-        Mathematics: 3,
-      },
-    },
+    // Management & Law - Economics and Management
     {
       id: "ul-bcom-human-resource-management",
       name: "BCom (Human Resource Management)",
@@ -463,8 +691,8 @@ export class UL extends BaseUniversity {
       apsMin: 26,
       duration: "3 years",
       subjectRequirements: {
-        English: 4,
-        Mathematics: 3,
+        "English": 4,
+        "Mathematics": 3,
       },
     },
     {
@@ -474,9 +702,9 @@ export class UL extends BaseUniversity {
       apsMin: 26,
       duration: "3 years",
       subjectRequirements: {
-        English: 4,
-        Mathematics: 3,
-        Economics: 4,
+        "English": 4,
+        "Mathematics": 3,
+        "Economics": 4,
       },
     },
     {
@@ -486,7 +714,7 @@ export class UL extends BaseUniversity {
       apsMin: 26,
       duration: "3 years",
       subjectRequirements: {
-        English: 4,
+        "English": 4,
       },
     },
     {
@@ -496,7 +724,7 @@ export class UL extends BaseUniversity {
       apsMin: 26,
       duration: "3 years",
       subjectRequirements: {
-        English: 4,
+        "English": 4,
       },
     },
     {
@@ -506,8 +734,8 @@ export class UL extends BaseUniversity {
       apsMin: 26,
       duration: "3 years",
       subjectRequirements: {
-        English: 4,
-        Mathematics: {
+        "English": 4,
+        "Mathematics": {
           alternatives: [
             { subject: "Mathematics", level: 3 },
             { subject: "Mathematical Literacy", level: 5 },
@@ -516,99 +744,7 @@ export class UL extends BaseUniversity {
       },
     },
 
-    // Faculty of Management & Law - Law
-    {
-      id: "ul-llb",
-      name: "LLB (Bachelor of Laws)",
-      faculty: "Management & Law - Law",
-      apsMin: 30,
-      duration: "4 years",
-      subjectRequirements: {
-        English: 5,
-      },
-    },
-
-    // Faculty of Health Sciences - Medicine
-    {
-      id: "ul-mbchb",
-      name: "MBChB (Bachelor of Medicine & Bachelor of Surgery)",
-      faculty: "Health Sciences - Medicine",
-      apsMin: 27,
-      duration: "6 years",
-      subjectRequirements: {
-        English: 4,
-        Mathematics: 5,
-        "Physical Sciences": 5,
-        "Life Sciences": 5,
-      },
-    },
-
-    // Faculty of Health Sciences - Healthcare Sciences
-    {
-      id: "ul-bsc-dietetics",
-      name: "BSc (Dietetics)",
-      faculty: "Health Sciences - Healthcare Sciences",
-      apsMin: 26,
-      duration: "4 years",
-      subjectRequirements: {
-        English: 4,
-        Mathematics: 4,
-        "Physical Sciences": 5,
-        "Life Sciences": 5,
-      },
-    },
-    {
-      id: "ul-boptom",
-      name: "BOptom (Bachelor of Optometry)",
-      faculty: "Health Sciences - Healthcare Sciences",
-      apsMin: 27,
-      duration: "4 years",
-      subjectRequirements: {
-        English: 4,
-        Mathematics: 5,
-        "Physical Sciences": 5,
-        "Life Sciences": 5,
-      },
-    },
-    {
-      id: "ul-bsc-medical-sciences",
-      name: "BSc (Medical Sciences)",
-      faculty: "Health Sciences - Healthcare Sciences",
-      apsMin: 26,
-      duration: "4 years",
-      subjectRequirements: {
-        English: 4,
-        Mathematics: 4,
-        "Physical Sciences": 5,
-        "Life Sciences": 5,
-      },
-    },
-    {
-      id: "ul-bnurs",
-      name: "BNurs (Bachelor of Nursing)",
-      faculty: "Health Sciences - Healthcare Sciences",
-      apsMin: 26,
-      duration: "4 years",
-      subjectRequirements: {
-        English: 4,
-        Mathematics: 4,
-        "Physical Sciences": 5,
-        "Life Sciences": 5,
-      },
-    },
-    {
-      id: "ul-bpharm",
-      name: "BPharm (Bachelor of Pharmacy)",
-      faculty: "Health Sciences - Healthcare Sciences",
-      apsMin: 27,
-      duration: "4 years",
-      subjectRequirements: {
-        English: 4,
-        Mathematics: 5,
-        "Physical Sciences": 5,
-        "Life Sciences": 5,
-      },
-    },
+    // Management & Law - Law
   ];
 
   /**

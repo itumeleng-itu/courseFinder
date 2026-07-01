@@ -102,18 +102,584 @@ export class NWU extends BaseUniversity {
   `;
 
   protected readonly _courses: Course[] = [
-    // FACULTY OF ENGINEERING
+    // Faculty of Health Sciences
+    {
+      id: "nwu-dip-coaching-science",
+      name: "Diploma in Coaching Science",
+      faculty: "Faculty of Health Sciences",
+      apsMin: 18,
+      duration: "2 years",
+      subjectRequirements: {
+        "language of tuition": 4,
+      },
+      additionalRequirements: ["Academic paper selection", "Best average mark"],
+      careerOpportunities: ["Sport Coaching"],
+    },
+    {
+      id: "nwu-bhs-sport-coaching",
+      name: "Bachelor of Health Sciences in Sport Coaching and Human Movement Sciences",
+      faculty: "Faculty of Health Sciences",
+      apsMin: 24,
+      duration: "3 years",
+      subjectRequirements: {
+        "language of tuition": 4,
+      },
+      additionalRequirements: ["Academic paper selection", "Best average mark"],
+      careerOpportunities: ["Sport Coaching", "Human Movement Sciences"],
+    },
+    {
+      id: "nwu-bhs-recreation-science",
+      name: "Bachelor of Health Sciences in Recreation Science and Tourism Management",
+      faculty: "Faculty of Health Sciences",
+      apsMin: 24,
+      duration: "3 years",
+      subjectRequirements: {
+        "language of tuition": 4,
+      },
+      additionalRequirements: ["Academic paper selection", "Best average mark"],
+      careerOpportunities: ["Sport and Recreation Administration"],
+    },
+    {
+      id: "nwu-bhs-biokinetics",
+      name: "Bachelor of Health Sciences in Biokinetics",
+      faculty: "Faculty of Health Sciences",
+      apsMin: 32,
+      duration: "4 years",
+      subjectRequirements: {
+        "language of tuition": 4,
+        "mathematics": {
+          alternatives: [
+            { subject: "mathematics", level: 3 },
+            { subject: "mathematical literacy", level: 4 },
+          ],
+        },
+        "physical sciences or life sciences": 4,
+      },
+      additionalRequirements: ["Medically fit for physical component", "Academic paper selection", "Best average mark"],
+      careerOpportunities: ["Biokinetics"],
+    },
+    {
+      id: "nwu-bpharm",
+      name: "Bachelor of Pharmacy",
+      faculty: "Faculty of Health Sciences",
+      apsMin: 32,
+      duration: "4 years",
+      subjectRequirements: {
+        "Mathematics": 5,
+        "Physical Sciences": 5,
+        "Language of Tuition": 4,
+      },
+      additionalRequirements: ["Academic paper selection", "Best average mark"],
+      careerOpportunities: ["Pharmacy"],
+    },
+    {
+      id: "nwu-bhs-physiology-biochemistry",
+      name: "Bachelor of Health Sciences in Physiology and Biochemistry",
+      faculty: "Faculty of Health Sciences",
+      apsMin: 26,
+      duration: "3 years",
+      subjectRequirements: {
+        "mathematics": 5,
+        "physical sciences": 4,
+        "language of tuition": 4,
+      },
+      additionalRequirements: ["Academic paper selection", "Best average mark"],
+      careerOpportunities: ["Physiology", "Biochemistry"],
+    },
+    {
+      id: "nwu-bhs-physiology-psychology",
+      name: "Bachelor of Health Sciences in Physiology and Psychology",
+      faculty: "Faculty of Health Sciences",
+      apsMin: 26,
+      duration: "3 years",
+      subjectRequirements: {
+        "mathematics": 3,
+        "physical sciences": 4,
+        "language of tuition": 4,
+      },
+      additionalRequirements: ["Academic paper selection", "Best average mark"],
+      careerOpportunities: ["Physiology", "Psychology"],
+    },
+    {
+      id: "nwu-bcs-consumer-studies",
+      name: "Bachelor of Consumer Studies",
+      faculty: "Faculty of Health Sciences",
+      apsMin: 24,
+      duration: "3 years",
+      subjectRequirements: {
+        "natural sciences": 4,
+        "language of tuition": 4,
+      },
+      additionalRequirements: ["Academic paper selection", "Best average mark"],
+      careerOpportunities: ["Consumer Studies"],
+    },
+    {
+      id: "nwu-bcs-food-product-management",
+      name: "Bachelor of Consumer Studies in Food Product Management",
+      faculty: "Faculty of Health Sciences",
+      apsMin: 24,
+      duration: "4 years",
+      subjectRequirements: {
+        "mathematics": 4,
+        "natural sciences": 4,
+        "language of tuition": 4,
+      },
+      additionalRequirements: ["Academic paper selection", "Best average mark"],
+      careerOpportunities: ["Food Product Management"],
+    },
+    {
+      id: "nwu-bcs-fashion-retail-management",
+      name: "Bachelor of Consumer Studies in Fashion Retail Management",
+      faculty: "Faculty of Health Sciences",
+      apsMin: 24,
+      duration: "4 years",
+      subjectRequirements: {
+        "mathematics": 4,
+        "natural sciences": 4,
+        "language of tuition": 4,
+      },
+      additionalRequirements: ["Academic paper selection", "Best average mark"],
+      careerOpportunities: ["Fashion Retail Management"],
+    },
+    {
+      id: "nwu-bsc-dietetics",
+      name: "Bachelor of Science in Dietetics",
+      faculty: "Faculty of Health Sciences",
+      apsMin: 30,
+      duration: "4 years",
+      subjectRequirements: {
+        "mathematics": 5,
+        "physical sciences": 5,
+        "language of tuition": 4,
+      },
+      additionalRequirements: ["Academic paper selection", "Best average mark"],
+      careerOpportunities: ["Dietetics"],
+    },
+    {
+      id: "nwu-bhs-occupational-hygiene",
+      name: "Bachelor of Health Sciences in Occupational Hygiene",
+      faculty: "Faculty of Health Sciences",
+      apsMin: 27,
+      duration: "4 years",
+      subjectRequirements: {
+        "mathematics": 5,
+        "physical sciences": 5,
+        "language of tuition": 4,
+      },
+      additionalRequirements: ["Academic paper selection", "Best average mark"],
+      careerOpportunities: ["Occupational Hygiene"],
+    },
+    {
+      id: "nwu-ba-psychology-labour",
+      name: "Bachelor of Arts in Psychology and Labour Relations Management",
+      faculty: "Faculty of Health Sciences",
+      apsMin: 26,
+      duration: "3 years",
+      subjectRequirements: {
+        "mathematics": {
+          alternatives: [
+            { subject: "mathematics", level: 3 },
+            { subject: "mathematical literacy", level: 5 },
+          ],
+        },
+        "language of tuition": 4,
+      },
+      additionalRequirements: ["Academic paper selection"],
+      careerOpportunities: ["Psychology", "Labour Relations Management"],
+    },
+    {
+      id: "nwu-bss-psychology",
+      name: "Bachelor of Social Science in Psychology",
+      faculty: "Faculty of Health Sciences",
+      apsMin: 26,
+      duration: "3 years",
+      subjectRequirements: {
+        "language of tuition": 4,
+      },
+      additionalRequirements: ["Academic paper selection"],
+      careerOpportunities: ["Psychology"],
+    },
+    {
+      id: "nwu-bsocial-work",
+      name: "Bachelor of Social Work",
+      faculty: "Faculty of Health Sciences",
+      apsMin: 28,
+      duration: "4 years",
+      subjectRequirements: {
+        "Language of Tuition": 4,
+      },
+      additionalRequirements: ["Academic paper selection", "Best average mark"],
+      careerOpportunities: ["Social Work"],
+    },
+    {
+      id: "nwu-bnursing",
+      name: "Bachelor of Nursing",
+      faculty: "Faculty of Health Sciences",
+      apsMin: 25,
+      duration: "4 years",
+      subjectRequirements: {
+        "Physical Sciences": 4,
+        "Mathematics": 4,
+        "Life Sciences": 4,
+        "Language of Tuition": 4,
+      },
+      additionalRequirements: ["Job shadowing programme (40 hours) recommended"],
+      careerOpportunities: ["Nursing"],
+    },
+
+    // Faculty of Natural and Agricultural Sciences
+    {
+      id: "nwu-dip-animal-health",
+      name: "Diploma in Animal Health",
+      faculty: "Faculty of Natural and Agricultural Sciences",
+      apsMin: 22,
+      duration: "3 years",
+      subjectRequirements: {
+        "english": 3,
+        "physical science or life science": 3,
+        "mathematics": {
+          alternatives: [
+            { subject: "mathematics", level: 3 },
+            { subject: "technical mathematics", level: 4 },
+          ],
+        },
+      },
+      careerOpportunities: ["Animal Health"],
+    },
+    {
+      id: "nwu-dip-animal-science",
+      name: "Diploma in Animal Science",
+      faculty: "Faculty of Natural and Agricultural Sciences",
+      apsMin: 22,
+      duration: "3 years",
+      subjectRequirements: {
+        "english": 3,
+        "physical science or life science or agricultural science": 3,
+        "mathematics": {
+          alternatives: [
+            { subject: "mathematics", level: 3 },
+            { subject: "technical mathematics", level: 4 },
+            { subject: "mathematical literacy", level: 5 },
+          ],
+        },
+      },
+      careerOpportunities: ["Animal Science"],
+    },
+    {
+      id: "nwu-dip-plant-science",
+      name: "Diploma in Plant Science with Crop Production",
+      faculty: "Faculty of Natural and Agricultural Sciences",
+      apsMin: 22,
+      duration: "3 years",
+      subjectRequirements: {
+        "english": 3,
+        "physical science or life science or agricultural science": 3,
+        "mathematics": {
+          alternatives: [
+            { subject: "mathematics", level: 3 },
+            { subject: "technical mathematics", level: 4 },
+            { subject: "mathematical literacy", level: 5 },
+          ],
+        },
+      },
+      careerOpportunities: ["Crop Production"],
+    },
+    {
+      id: "nwu-bsc-physical-sciences",
+      name: "Bachelor of Science (Various Specialisations)",
+      faculty: "Faculty of Natural and Agricultural Sciences",
+      apsMin: 26,
+      duration: "3 years",
+      subjectRequirements: {
+        "mathematics": 5,
+        "physical sciences": 4,
+      },
+      careerOpportunities: ["Chemistry", "Physics", "Mathematics", "Computer Science", "Applied Mathematics", "Electronics"],
+    },
+    {
+      id: "nwu-bsc-extended",
+      name: "Extended Bachelor of Science",
+      faculty: "Faculty of Natural and Agricultural Sciences",
+      apsMin: 24,
+      duration: "4 years",
+      subjectRequirements: {
+        "english": 4,
+        "mathematics": {
+          alternatives: [
+            { subject: "mathematics", level: 3 },
+            { subject: "technical mathematics", level: 4 },
+          ],
+        },
+        "physical sciences": 3,
+      },
+      careerOpportunities: ["Biological Sciences", "Environmental Sciences", "Mathematical Sciences"],
+    },
+    {
+      id: "nwu-bsc-it",
+      name: "Bachelor of Science in Information Technology",
+      faculty: "Faculty of Natural and Agricultural Sciences",
+      apsMin: 26,
+      duration: "3 years",
+      subjectRequirements: {
+        "mathematics": {
+          alternatives: [
+            { subject: "mathematics", level: 4 },
+            { subject: "technical mathematics", level: 5 },
+          ],
+        },
+      },
+      careerOpportunities: ["Information Technology"],
+    },
+    {
+      id: "nwu-bsc-it-extended",
+      name: "Extended Bachelor of Science in Information Technology",
+      faculty: "Faculty of Natural and Agricultural Sciences",
+      apsMin: 24,
+      duration: "4 years",
+      subjectRequirements: {
+        "mathematics": {
+          alternatives: [
+            { subject: "mathematics", level: 3 },
+            { subject: "technical mathematics", level: 4 },
+          ],
+        },
+      },
+      careerOpportunities: ["Information Technology"],
+    },
+    {
+      id: "nwu-bsc-math-sciences",
+      name: "Bachelor of Science in Mathematical Sciences",
+      faculty: "Faculty of Natural and Agricultural Sciences",
+      apsMin: 26,
+      duration: "3 years",
+      subjectRequirements: {
+        "mathematics": 5,
+        "physical sciences": 4,
+      },
+      careerOpportunities: ["Statistics", "Mathematics", "Applied Mathematics"],
+    },
+    {
+      id: "nwu-bsc-biological-sciences",
+      name: "Bachelor of Science in Biological Sciences",
+      faculty: "Faculty of Natural and Agricultural Sciences",
+      apsMin: 26,
+      duration: "3 years",
+      subjectRequirements: {
+        "mathematics": {
+          alternatives: [
+            { subject: "mathematics", level: 4 },
+            { subject: "technical mathematics", level: 5 },
+          ],
+        },
+        "physical sciences": 4,
+      },
+      careerOpportunities: ["Microbiology", "Botany", "Biochemistry", "Chemistry", "Physiology", "Zoology"],
+    },
+    {
+      id: "nwu-bsc-financial-math",
+      name: "Bachelor of Science in Financial Mathematics",
+      faculty: "Faculty of Natural and Agricultural Sciences",
+      apsMin: 32,
+      duration: "3 years",
+      subjectRequirements: {
+        "mathematics": 6,
+      },
+    },
+
+    // Faculty of Economic and Management Sciences
+    {
+      id: "nwu-bcom-accounting",
+      name: "Bachelor of Commerce (BCom) in Accounting",
+      faculty: "Faculty of Economic and Management Sciences",
+      apsMin: 24,
+      duration: "3 years",
+      subjectRequirements: {
+        "mathematics": 3,
+        "english home language": 4,
+      },
+    },
+    {
+      id: "nwu-bcom-chartered-accountancy",
+      name: "Bachelor of Commerce (BCom) in Chartered Accountancy",
+      faculty: "Faculty of Economic and Management Sciences",
+      apsMin: 32,
+      duration: "3 years",
+      subjectRequirements: {
+        "mathematics": 5,
+      },
+    },
+
+    // Faculty of Humanities
+    {
+      id: "nwu-ba-communication",
+      name: "Bachelor of Arts (BA) Communication",
+      faculty: "Faculty of Humanities",
+      apsMin: 24,
+      duration: "3 years",
+      subjectRequirements: {
+        "english home language": 5,
+      },
+    },
+
+    // Faculty of Education
+    {
+      id: "nwu-bed-foundation-phase",
+      name: "Bachelor of Education (BEd) in Foundation Phase (Grade R – 3)",
+      faculty: "Faculty of Education",
+      apsMin: 26,
+      duration: "4 years",
+    },
+    {
+      id: "nwu-bed-intermediate-math-science",
+      name: "Bachelor of Education (BEd) in Intermediate Phase (Grade 4 – 6) with Mathematics, Science and Technology",
+      faculty: "Faculty of Education",
+      apsMin: 26,
+      duration: "4 years",
+      subjectRequirements: {
+        "home language": 4,
+        "first additional language": 4,
+        "mathematics": {
+          alternatives: [
+            { subject: "mathematics", level: 3 },
+            { subject: "technical mathematics", level: 4 },
+          ],
+        },
+      },
+      careerOpportunities: ["Intermediate Phase Teacher"],
+    },
+    {
+      id: "nwu-bed-intermediate-life-skills",
+      name: "Bachelor of Education (BEd) in Intermediate Phase (Grade 4 – 6) with Life Skills and Social Sciences",
+      faculty: "Faculty of Education",
+      apsMin: 26,
+      duration: "4 years",
+      subjectRequirements: {
+        "home language": 4,
+        "first additional language": 4,
+      },
+      careerOpportunities: ["Intermediate Phase Teacher"],
+    },
+    {
+      id: "nwu-bed-fet-economics",
+      name: "Bachelor of Education (BEd) in Senior and Further Education and Training (Grade 7 – 12) with Economics",
+      faculty: "Faculty of Education",
+      apsMin: 26,
+      duration: "4 years",
+      subjectRequirements: {
+        "home language": 4,
+        "first additional language": 4,
+      },
+      careerOpportunities: ["Senior and FET Phase Teacher"],
+    },
+    {
+      id: "nwu-bed-fet-physical-sciences",
+      name: "Bachelor of Education (BEd) in Senior and Further Education and Training (Grade 7 – 12) with Physical Sciences",
+      faculty: "Faculty of Education",
+      apsMin: 26,
+      duration: "4 years",
+      subjectRequirements: {
+        "home language": 4,
+        "first additional language": 4,
+        "physical sciences": 4,
+        "mathematics": {
+          alternatives: [
+            { subject: "mathematics", level: 4 },
+            { subject: "technical mathematics", level: 5 },
+          ],
+        },
+      },
+      careerOpportunities: ["Senior and FET Phase Teacher"],
+    },
+
+    // Faculty of Engineering
+    {
+      id: "nwu-beng-engineering",
+      name: "Bachelor of Engineering (BEng)",
+      faculty: "Faculty of Engineering",
+      apsMin: 34,
+      duration: "4 years",
+      subjectRequirements: {
+        "mathematics": 6,
+        "physical sciences": 6,
+        "english or afrikaans": 5,
+      },
+      additionalRequirements: ["70% in Grade 12 Mathematics", "70% in Grade 12 Physical Sciences"],
+      careerOpportunities: ["Chemical Engineer", "Electrical and Electronic Engineer", "Computer and Electronic Engineer", "Mechanical Engineer", "Industrial Engineer", "Mechatronic Engineer"],
+    },
+
+    // Faculty of Law
+    {
+      id: "nwu-ba-law",
+      name: "Bachelor of Arts (BA) in Law",
+      faculty: "Faculty of Law",
+      apsMin: 30,
+      duration: "3 years",
+      subjectRequirements: {
+        "home language": 5,
+        "first additional language": 5,
+        "mathematics": {
+          alternatives: [
+            { subject: "mathematics", level: 3 },
+            { subject: "mathematical literacy", level: 5 },
+          ],
+        },
+      },
+      additionalRequirements: ["Selection process", "Full matriculation exemption"],
+      careerOpportunities: ["Legal Practitioner", "Legal Advisor"],
+    },
+    {
+      id: "nwu-bcom-law",
+      name: "Bachelor of Commerce (BCom) in Law",
+      faculty: "Faculty of Law",
+      apsMin: 30,
+      duration: "3 years",
+      subjectRequirements: {
+        "home language": 5,
+        "first additional language": 5,
+        "mathematics": 3,
+      },
+      additionalRequirements: ["Selection process", "Full matriculation exemption"],
+      careerOpportunities: ["Legal Practitioner", "Corporate Legal Advisor"],
+    },
+    {
+      id: "nwu-llb",
+      name: "Bachelor of Laws (LLB)",
+      faculty: "Faculty of Law",
+      apsMin: 34,
+      duration: "4 years",
+      subjectRequirements: {
+        "Home Language": 5,
+        "First Additional Language": 5,
+      },
+      additionalRequirements: ["Selection process", "Full matriculation exemption"],
+      careerOpportunities: ["Advocate", "Attorney", "Magistrate"],
+    },
+
+    // Faculty of Theology
+    {
+      id: "nwu-ba-ancient-languages",
+      name: "BA in Ancient Languages",
+      faculty: "Faculty of Theology",
+      apsMin: 24,
+      duration: "3 years",
+      subjectRequirements: {
+        "English": 4,
+      },
+      additionalRequirements: ["Full matriculation exemption"],
+      careerOpportunities: ["Researcher", "Academic"],
+    },
+
+    // Engineering
     {
       id: "nwu-beng-chemical",
       name: "BEng (Chemical Engineering)",
       faculty: "Engineering",
       apsMin: 34,
       duration: "4 years",
-      campus: "Potchefstroom",
       subjectRequirements: {
-        Mathematics: 7,
+        "Mathematics": 7,
         "Physical Sciences": 7,
-        Language: {
+        "Language": {
           alternatives: [
             { subject: "English Home Language", level: 6 },
             { subject: "English First Additional Language", level: 6 },
@@ -122,10 +688,7 @@ export class NWU extends BaseUniversity {
         "Afrikaans Home Language": 6,
         "Afrikaans First Additional Language": 6,
       },
-      additionalRequirements:
-        "Conditional acceptance with Grade 11 results: APS 31, Mathematics 65%, Physical Sciences 65%, Language of instruction 60%",
-      notes:
-        "Alternative entry route: Students with 65% in both Mathematics AND Physical Sciences, and an APS of 31, may write an entry test. Students with 40%+ in both Mathematics and Physical Sciences and at least 60% in the language of instruction can apply for the 1-year Xcel bridging programme.",
+      additionalRequirements: ["Conditional acceptance with Grade 11 results: APS 31, Mathematics 65%, Physical Sciences 65%, Language of instruction 60%"],
     },
     {
       id: "nwu-beng-electrical",
@@ -133,11 +696,10 @@ export class NWU extends BaseUniversity {
       faculty: "Engineering",
       apsMin: 34,
       duration: "4 years",
-      campus: "Potchefstroom",
       subjectRequirements: {
-        Mathematics: 7,
+        "Mathematics": 7,
         "Physical Sciences": 7,
-        Language: {
+        "Language": {
           alternatives: [
             { subject: "English Home Language", level: 6 },
             { subject: "English First Additional Language", level: 6 },
@@ -146,10 +708,7 @@ export class NWU extends BaseUniversity {
         "Afrikaans Home Language": 6,
         "Afrikaans First Additional Language": 6,
       },
-      additionalRequirements:
-        "Conditional acceptance with Grade 11 results: APS 31, Mathematics 65%, Physical Sciences 65%, Language of instruction 60%",
-      notes:
-        "Alternative entry route: Students with 65% in both Mathematics AND Physical Sciences, and an APS of 31, may write an entry test. Students with 40%+ in both Mathematics and Physical Sciences and at least 60% in the language of instruction can apply for the 1-year Xcel bridging programme.",
+      additionalRequirements: ["Conditional acceptance with Grade 11 results: APS 31, Mathematics 65%, Physical Sciences 65%, Language of instruction 60%"],
     },
     {
       id: "nwu-beng-computer",
@@ -157,11 +716,10 @@ export class NWU extends BaseUniversity {
       faculty: "Engineering",
       apsMin: 34,
       duration: "4 years",
-      campus: "Potchefstroom",
       subjectRequirements: {
-        Mathematics: 7,
+        "Mathematics": 7,
         "Physical Sciences": 7,
-        Language: {
+        "Language": {
           alternatives: [
             { subject: "English Home Language", level: 6 },
             { subject: "English First Additional Language", level: 6 },
@@ -170,10 +728,7 @@ export class NWU extends BaseUniversity {
         "Afrikaans Home Language": 6,
         "Afrikaans First Additional Language": 6,
       },
-      additionalRequirements:
-        "Conditional acceptance with Grade 11 results: APS 31, Mathematics 65%, Physical Sciences 65%, Language of instruction 60%",
-      notes:
-        "Alternative entry route: Students with 65% in both Mathematics AND Physical Sciences, and an APS of 31, may write an entry test. Students with 40%+ in both Mathematics and Physical Sciences and at least 60% in the language of instruction can apply for the 1-year Xcel bridging programme.",
+      additionalRequirements: ["Conditional acceptance with Grade 11 results: APS 31, Mathematics 65%, Physical Sciences 65%, Language of instruction 60%"],
     },
     {
       id: "nwu-beng-electromechanical",
@@ -181,11 +736,10 @@ export class NWU extends BaseUniversity {
       faculty: "Engineering",
       apsMin: 34,
       duration: "4 years",
-      campus: "Potchefstroom",
       subjectRequirements: {
-        Mathematics: 7,
+        "Mathematics": 7,
         "Physical Sciences": 7,
-        Language: {
+        "Language": {
           alternatives: [
             { subject: "English Home Language", level: 6 },
             { subject: "English First Additional Language", level: 6 },
@@ -194,10 +748,7 @@ export class NWU extends BaseUniversity {
         "Afrikaans Home Language": 6,
         "Afrikaans First Additional Language": 6,
       },
-      additionalRequirements:
-        "Conditional acceptance with Grade 11 results: APS 31, Mathematics 65%, Physical Sciences 65%, Language of instruction 60%",
-      notes:
-        "Alternative entry route: Students with 65% in both Mathematics AND Physical Sciences, and an APS of 31, may write an entry test. Students with 40%+ in both Mathematics and Physical Sciences and at least 60% in the language of instruction can apply for the 1-year Xcel bridging programme.",
+      additionalRequirements: ["Conditional acceptance with Grade 11 results: APS 31, Mathematics 65%, Physical Sciences 65%, Language of instruction 60%"],
     },
     {
       id: "nwu-beng-mechanical",
@@ -205,11 +756,10 @@ export class NWU extends BaseUniversity {
       faculty: "Engineering",
       apsMin: 34,
       duration: "4 years",
-      campus: "Potchefstroom",
       subjectRequirements: {
-        Mathematics: 7,
+        "Mathematics": 7,
         "Physical Sciences": 7,
-        Language: {
+        "Language": {
           alternatives: [
             { subject: "English Home Language", level: 6 },
             { subject: "English First Additional Language", level: 6 },
@@ -218,10 +768,7 @@ export class NWU extends BaseUniversity {
         "Afrikaans Home Language": 6,
         "Afrikaans First Additional Language": 6,
       },
-      additionalRequirements:
-        "Conditional acceptance with Grade 11 results: APS 31, Mathematics 65%, Physical Sciences 65%, Language of instruction 60%",
-      notes:
-        "Alternative entry route: Students with 65% in both Mathematics AND Physical Sciences, and an APS of 31, may write an entry test. Students with 40%+ in both Mathematics and Physical Sciences and at least 60% in the language of instruction can apply for the 1-year Xcel bridging programme.",
+      additionalRequirements: ["Conditional acceptance with Grade 11 results: APS 31, Mathematics 65%, Physical Sciences 65%, Language of instruction 60%"],
     },
     {
       id: "nwu-beng-industrial",
@@ -229,11 +776,10 @@ export class NWU extends BaseUniversity {
       faculty: "Engineering",
       apsMin: 34,
       duration: "4 years",
-      campus: "Potchefstroom",
       subjectRequirements: {
-        Mathematics: 7,
+        "Mathematics": 7,
         "Physical Sciences": 7,
-        Language: {
+        "Language": {
           alternatives: [
             { subject: "English Home Language", level: 6 },
             { subject: "English First Additional Language", level: 6 },
@@ -242,10 +788,7 @@ export class NWU extends BaseUniversity {
         "Afrikaans Home Language": 6,
         "Afrikaans First Additional Language": 6,
       },
-      additionalRequirements:
-        "Conditional acceptance with Grade 11 results: APS 31, Mathematics 65%, Physical Sciences 65%, Language of instruction 60%",
-      notes:
-        "Alternative entry route: Students with 65% in both Mathematics AND Physical Sciences, and an APS of 31, may write an entry test. Students with 40%+ in both Mathematics and Physical Sciences and at least 60% in the language of instruction can apply for the 1-year Xcel bridging programme.",
+      additionalRequirements: ["Conditional acceptance with Grade 11 results: APS 31, Mathematics 65%, Physical Sciences 65%, Language of instruction 60%"],
     },
     {
       id: "nwu-beng-mechatronic",
@@ -253,11 +796,10 @@ export class NWU extends BaseUniversity {
       faculty: "Engineering",
       apsMin: 34,
       duration: "4 years",
-      campus: "Potchefstroom",
       subjectRequirements: {
-        Mathematics: 7,
+        "Mathematics": 7,
         "Physical Sciences": 7,
-        Language: {
+        "Language": {
           alternatives: [
             { subject: "English Home Language", level: 6 },
             { subject: "English First Additional Language", level: 6 },
@@ -266,26 +808,21 @@ export class NWU extends BaseUniversity {
         "Afrikaans Home Language": 6,
         "Afrikaans First Additional Language": 6,
       },
-      additionalRequirements:
-        "Conditional acceptance with Grade 11 results: APS 31, Mathematics 65%, Physical Sciences 65%, Language of instruction 60%",
-      notes:
-        "Alternative entry route: Students with 65% in both Mathematics AND Physical Sciences, and an APS of 31, may write an entry test. Students with 40%+ in both Mathematics and Physical Sciences and at least 60% in the language of instruction can apply for the 1-year Xcel bridging programme.",
+      additionalRequirements: ["Conditional acceptance with Grade 11 results: APS 31, Mathematics 65%, Physical Sciences 65%, Language of instruction 60%"],
     },
 
-    // FACULTY OF LAW
+    // Law
     {
       id: "nwu-ba-law-psychology",
       name: "BA in Law with Psychology",
       faculty: "Law",
       apsMin: 28,
       duration: "3 years",
-      campus: "Potchefstroom, Vanderbijlpark",
       subjectRequirements: {
         "Home Language": 5,
         "First Additional Language": 5,
       },
-      additionalRequirements:
-        "Selection process applies. Academic performance is important. Limited capacity.",
+      additionalRequirements: ["Selection process applies. Academic performance is important. Limited capacity."],
     },
     {
       id: "nwu-ba-law-politics",
@@ -293,13 +830,11 @@ export class NWU extends BaseUniversity {
       faculty: "Law",
       apsMin: 28,
       duration: "3 years",
-      campus: "Potchefstroom, Vanderbijlpark",
       subjectRequirements: {
         "Home Language": 5,
         "First Additional Language": 5,
       },
-      additionalRequirements:
-        "Selection process applies. Academic performance is important. Limited capacity.",
+      additionalRequirements: ["Selection process applies. Academic performance is important. Limited capacity."],
     },
     {
       id: "nwu-ba-law-industrial-psychology",
@@ -307,42 +842,11 @@ export class NWU extends BaseUniversity {
       faculty: "Law",
       apsMin: 28,
       duration: "3 years",
-      campus: "Potchefstroom, Vanderbijlpark",
       subjectRequirements: {
         "Home Language": 5,
         "First Additional Language": 5,
       },
-      additionalRequirements:
-        "Selection process applies. Academic performance is important. Limited capacity.",
-    },
-    {
-      id: "nwu-bcom-law",
-      name: "BCom in Law",
-      faculty: "Law",
-      apsMin: 30,
-      duration: "3 years",
-      campus: "Potchefstroom, Vanderbijlpark",
-      subjectRequirements: {
-        "Home Language": 5,
-        "First Additional Language": 5,
-        Mathematics: 4,
-      },
-      additionalRequirements:
-        "Selection process applies. Academic performance is important. Limited capacity.",
-    },
-    {
-      id: "nwu-llb",
-      name: "Bachelor of Laws (LLB)",
-      faculty: "Law",
-      apsMin: 30,
-      duration: "4 years",
-      campus: "Mahikeng, Potchefstroom",
-      subjectRequirements: {
-        "Home Language": 5,
-        "First Additional Language": 5,
-      },
-      additionalRequirements:
-        "Selection process applies. Academic performance is important. Limited capacity.",
+      additionalRequirements: ["Selection process applies. Academic performance is important. Limited capacity."],
     },
     {
       id: "nwu-llb-extended",
@@ -350,33 +854,28 @@ export class NWU extends BaseUniversity {
       faculty: "Law",
       apsMin: 28,
       duration: "5 years",
-      campus: "Mahikeng",
       subjectRequirements: {
         "Home Language": 4,
         "First Additional Language": 4,
-        Math: {
+        "Math": {
           alternatives: [
             { subject: "Mathematics", level: 3 },
             { subject: "Mathematical Literacy", level: 5 },
           ],
         },
       },
-      additionalRequirements:
-        "Selection process applies. Academic performance is important. Limited capacity.",
-      notes:
-        "Language of instruction is English. Additional support will be provided to students in a form of peer mentoring, tutorials, and supplementary instruction in all official languages of NWU.",
+      additionalRequirements: ["Selection process applies. Academic performance is important. Limited capacity."],
     },
 
-    // FACULTY OF NATURAL AND AGRICULTURAL SCIENCES
+    // Natural and Agricultural Sciences
     {
       id: "nwu-bsc-chemistry-physics",
       name: "BSc with Chemistry and Physics",
       faculty: "Natural and Agricultural Sciences",
       apsMin: 26,
       duration: "3 years",
-      campus: "Mahikeng, Potchefstroom",
       subjectRequirements: {
-        Mathematics: 5,
+        "Mathematics": 5,
         "Physical Sciences": 4,
       },
     },
@@ -386,9 +885,8 @@ export class NWU extends BaseUniversity {
       faculty: "Natural and Agricultural Sciences",
       apsMin: 26,
       duration: "3 years",
-      campus: "Mahikeng, Potchefstroom",
       subjectRequirements: {
-        Mathematics: 5,
+        "Mathematics": 5,
         "Physical Sciences": 4,
       },
     },
@@ -398,9 +896,8 @@ export class NWU extends BaseUniversity {
       faculty: "Natural and Agricultural Sciences",
       apsMin: 26,
       duration: "3 years",
-      campus: "Mahikeng, Potchefstroom, Vanderbijlpark",
       subjectRequirements: {
-        Mathematics: 5,
+        "Mathematics": 5,
         "Physical Sciences": 4,
       },
     },
@@ -410,9 +907,8 @@ export class NWU extends BaseUniversity {
       faculty: "Natural and Agricultural Sciences",
       apsMin: 26,
       duration: "3 years",
-      campus: "Mahikeng, Potchefstroom",
       subjectRequirements: {
-        Mathematics: 4,
+        "Mathematics": 4,
         "Technical Mathematics": 5,
         "Physical Sciences": 4,
       },
@@ -423,9 +919,8 @@ export class NWU extends BaseUniversity {
       faculty: "Natural and Agricultural Sciences",
       apsMin: 32,
       duration: "3 years",
-      campus: "Potchefstroom, Vanderbijlpark",
       subjectRequirements: {
-        Mathematics: 6,
+        "Mathematics": 6,
       },
     },
     {
@@ -434,9 +929,8 @@ export class NWU extends BaseUniversity {
       faculty: "Natural and Agricultural Sciences",
       apsMin: 32,
       duration: "3 years",
-      campus: "Potchefstroom, Vanderbijlpark",
       subjectRequirements: {
-        Mathematics: 6,
+        "Mathematics": 6,
       },
     },
     {
@@ -445,9 +939,8 @@ export class NWU extends BaseUniversity {
       faculty: "Natural and Agricultural Sciences",
       apsMin: 32,
       duration: "3 years",
-      campus: "Potchefstroom, Vanderbijlpark",
       subjectRequirements: {
-        Mathematics: 6,
+        "Mathematics": 6,
       },
     },
     {
@@ -456,35 +949,20 @@ export class NWU extends BaseUniversity {
       faculty: "Natural and Agricultural Sciences",
       apsMin: 32,
       duration: "3 years",
-      campus: "Potchefstroom",
       subjectRequirements: {
-        Mathematics: 6,
+        "Mathematics": 6,
       },
     },
 
-    // FACULTY OF ECONOMIC AND MANAGEMENT SCIENCES
-    {
-      id: "nwu-bcom-chartered-accountancy",
-      name: "BCom in Chartered Accountancy",
-      faculty: "Economic and Management Sciences",
-      apsMin: 32,
-      duration: "3 years",
-      campus: "Mahikeng, Potchefstroom, Vanderbijlpark",
-      subjectRequirements: {
-        Mathematics: 5,
-      },
-      additionalRequirements:
-        "Mathematics level 6 (70-79%) if the student did not take Grade 12 Accounting",
-    },
+    // Economic and Management Sciences
     {
       id: "nwu-bcom-financial-accountancy",
       name: "BCom in Financial Accountancy",
       faculty: "Economic and Management Sciences",
       apsMin: 28,
       duration: "3 years",
-      campus: "Mahikeng, Potchefstroom, Vanderbijlpark",
       subjectRequirements: {
-        Mathematics: 4,
+        "Mathematics": 4,
       },
     },
     {
@@ -493,14 +971,12 @@ export class NWU extends BaseUniversity {
       faculty: "Economic and Management Sciences",
       apsMin: 36,
       duration: "3 years",
-      campus: "Potchefstroom",
       subjectRequirements: {
-        Mathematics: 5,
-        Afrikaans: 5,
-        English: 5,
+        "Mathematics": 5,
+        "Afrikaans": 5,
+        "English": 5,
       },
-      additionalRequirements:
-        "Mathematics level 6 (70-79%) if the student did not take Grade 12 Accounting",
+      additionalRequirements: ["Mathematics level 6 (70-79%) if the student did not take Grade 12 Accounting"],
     },
     {
       id: "nwu-bcom-management-accountancy",
@@ -508,9 +984,8 @@ export class NWU extends BaseUniversity {
       faculty: "Economic and Management Sciences",
       apsMin: 30,
       duration: "3 years",
-      campus: "Potchefstroom, Vanderbijlpark",
       subjectRequirements: {
-        Mathematics: 5,
+        "Mathematics": 5,
       },
     },
     {
@@ -519,9 +994,8 @@ export class NWU extends BaseUniversity {
       faculty: "Economic and Management Sciences",
       apsMin: 30,
       duration: "3 years",
-      campus: "Mahikeng, Potchefstroom, Vanderbijlpark",
       subjectRequirements: {
-        Mathematics: 4,
+        "Mathematics": 4,
       },
     },
     {
@@ -530,89 +1004,22 @@ export class NWU extends BaseUniversity {
       faculty: "Economic and Management Sciences",
       apsMin: 24,
       duration: "3 years",
-      campus: "Mahikeng, Potchefstroom, Vanderbijlpark",
       subjectRequirements: {
-        Mathematics: 3,
+        "Mathematics": 3,
       },
     },
 
-    // FACULTY OF HEALTH SCIENCES
-    {
-      id: "nwu-bpharm",
-      name: "Bachelor of Pharmacy",
-      faculty: "Health Sciences",
-      apsMin: 32,
-      duration: "4 years",
-      campus: "Potchefstroom",
-      subjectRequirements: {
-        Mathematics: 5,
-        "Physical Sciences": 5,
-        "Language of Tuition": 4,
-      },
-      additionalRequirements:
-        "Life Sciences is recommended. Academic paper selection. Best average mark.",
-      notes:
-        "Late applications will be considered on merit, depending on capacity.",
-    },
-    {
-      id: "nwu-bsc-dietetics",
-      name: "BSc in Dietetics",
-      faculty: "Health Sciences",
-      apsMin: 30,
-      duration: "4 years",
-      campus: "Potchefstroom",
-      subjectRequirements: {
-        Mathematics: 5,
-        "Physical Sciences": 5,
-        "Language of Tuition": 4,
-      },
-      additionalRequirements: "Academic paper selection. Best average mark.",
-    },
-    {
-      id: "nwu-bnursing",
-      name: "Bachelor of Nursing",
-      faculty: "Health Sciences",
-      apsMin: 25,
-      duration: "4 years",
-      campus: "Potchefstroom, Mahikeng",
-      subjectRequirements: {
-        "Physical Sciences": 4,
-        Mathematics: 4,
-        "Life Sciences": 4,
-        "Language of Tuition": 4,
-      },
-      additionalRequirements:
-        "Participation in the 'job shadowing programme' (40 hours) is recommended.",
-      notes:
-        "Due to high volumes of applications and limited capacity, a selection process will be followed.",
-    },
-    {
-      id: "nwu-bsocial-work",
-      name: "Bachelor of Social Work",
-      faculty: "Health Sciences",
-      apsMin: 28,
-      duration: "4 years",
-      campus: "Potchefstroom, Mahikeng, Vanderbijlpark",
-      subjectRequirements: {
-        "Language of Tuition": 4,
-      },
-      additionalRequirements: "Academic paper selection. Best average mark.",
-      notes: "Late applications will be considered on merit.",
-    },
-
-    // FACULTY OF EDUCATION
+    // Education
     {
       id: "nwu-bed-foundation",
       name: "BEd in Foundation Phase (Grade R-3)",
       faculty: "Education",
       apsMin: 26,
       duration: "4 years",
-      campus: "Mahikeng, Potchefstroom, Vanderbijlpark, Distance",
       subjectRequirements: {
         "Home Language": 4,
         "First Additional Language": 4,
       },
-      notes: "Language options vary by campus. Distance learning available.",
     },
     {
       id: "nwu-bed-intermediate-mst",
@@ -620,11 +1027,10 @@ export class NWU extends BaseUniversity {
       faculty: "Education",
       apsMin: 26,
       duration: "4 years",
-      campus: "Potchefstroom, Vanderbijlpark",
       subjectRequirements: {
         "Home Language": 4,
         "First Additional Language": 4,
-        Mathematics: 3,
+        "Mathematics": 3,
         "Technical Mathematics": 4,
       },
     },
@@ -634,7 +1040,6 @@ export class NWU extends BaseUniversity {
       faculty: "Education",
       apsMin: 26,
       duration: "4 years",
-      campus: "Potchefstroom, Vanderbijlpark, Distance",
       subjectRequirements: {
         "Home Language": 4,
         "First Additional Language": 4,
@@ -646,11 +1051,10 @@ export class NWU extends BaseUniversity {
       faculty: "Education",
       apsMin: 26,
       duration: "4 years",
-      campus: "Mahikeng, Potchefstroom, Vanderbijlpark, Distance",
       subjectRequirements: {
         "Home Language": 4,
         "First Additional Language": 4,
-        Mathematics: 5,
+        "Mathematics": 5,
       },
     },
     {
@@ -659,45 +1063,26 @@ export class NWU extends BaseUniversity {
       faculty: "Education",
       apsMin: 26,
       duration: "4 years",
-      campus: "Mahikeng, Potchefstroom, Vanderbijlpark",
       subjectRequirements: {
         "Home Language": 4,
         "First Additional Language": 4,
         "Physical Sciences": 4,
-        Mathematics: 4,
+        "Mathematics": 4,
         "Technical Mathematics": 5,
       },
     },
 
-    // FACULTY OF HUMANITIES
-    {
-      id: "nwu-ba-communication",
-      name: "BA in Communication",
-      faculty: "Humanities",
-      apsMin: 24,
-      duration: "3 years",
-      campus: "Mahikeng, Potchefstroom, Vanderbijlpark",
-      subjectRequirements: {
-        Language: {
-          alternatives: [
-            { subject: "English Home Language", level: 5 },
-            { subject: "English First Additional Language", level: 5 },
-          ],
-        },
-      },
-    },
+    // Humanities
     {
       id: "nwu-ba-graphic-design",
       name: "BA in Graphic Design",
       faculty: "Humanities",
       apsMin: 24,
       duration: "4 years",
-      campus: "Potchefstroom",
       subjectRequirements: {
-        English: 5,
+        "English": 5,
       },
-      additionalRequirements:
-        "A screening process including submission of a photo portfolio, academic record, and interview.",
+      additionalRequirements: ["A screening process including submission of a photo portfolio, academic record, and interview."],
     },
     {
       id: "nwu-ba-music-society",
@@ -705,12 +1090,10 @@ export class NWU extends BaseUniversity {
       faculty: "Humanities",
       apsMin: 21,
       duration: "3 years",
-      campus: "Potchefstroom",
       subjectRequirements: {
-        English: 4,
+        "English": 4,
       },
-      additionalRequirements:
-        "Successful completion of a practical audition (Grade 3 standard), a theoretical placement test (Grade 2 standard), and a language proficiency test.",
+      additionalRequirements: ["Successful completion of a practical audition (Grade 3 standard), a theoretical placement test (Grade 2 standard), and a language proficiency test."],
     },
     {
       id: "nwu-bmus",
@@ -718,35 +1101,19 @@ export class NWU extends BaseUniversity {
       faculty: "Humanities",
       apsMin: 24,
       duration: "4 years",
-      campus: "Potchefstroom",
-      additionalRequirements:
-        "Successful completion of a practical audition (Grade 6 standard), a theoretical placement test (Grade 5 standard), and a language proficiency test.",
+      additionalRequirements: ["Successful completion of a practical audition (Grade 6 standard), a theoretical placement test (Grade 5 standard), and a language proficiency test."],
     },
 
-    // FACULTY OF THEOLOGY
-    {
-      id: "nwu-ba-ancient-languages",
-      name: "BA in Ancient Languages",
-      faculty: "Theology",
-      apsMin: 24,
-      duration: "3 years",
-      campus: "Potchefstroom",
-      subjectRequirements: {
-        English: 4,
-      },
-    },
+    // Theology
     {
       id: "nwu-ba-pastoral-psychology",
       name: "BA in Pastoral Psychology",
       faculty: "Theology",
       apsMin: 26,
       duration: "3 years",
-      campus: "Mahikeng, Vanderbijlpark",
       subjectRequirements: {
-        English: 4,
+        "English": 4,
       },
-      notes:
-        "In consultation with Association of Christian Religious Practitioners (ACRP)",
     },
     {
       id: "nwu-bdiv",
@@ -754,12 +1121,9 @@ export class NWU extends BaseUniversity {
       faculty: "Theology",
       apsMin: 24,
       duration: "4 years",
-      campus: "Potchefstroom, Distance",
       subjectRequirements: {
-        English: 4,
+        "English": 4,
       },
-      notes:
-        "In consultation with Curators of Reformed Churches in SA, Hervormde Kerk, and Dutch Reformed Church",
     },
   ];
 

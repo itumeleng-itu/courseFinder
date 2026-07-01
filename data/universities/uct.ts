@@ -22,700 +22,422 @@ export class UCT extends BaseUniversity {
   };
 
   protected readonly _courses: Course[] = [
-    // FACULTY OF COMMERCE
+    // Faculty of Engineering and the Built Environment
+    {
+      id: "uct-bas",
+      name: "Bachelor of Architectural Studies",
+      faculty: "Faculty of Engineering and the Built Environment",
+      apsMin: 30,
+      duration: "3 years",
+      subjectRequirements: {
+        "Mathematics": 4,
+        "English": 4,
+      },
+      additionalRequirements: ["NBT required", "Portfolio required"],
+      careerOpportunities: ["Architect", "Urban Designer", "Architectural Technologist"],
+    },
+
+    // Faculty of Humanities
+    {
+      id: "uct-ba-fine-art",
+      name: "Bachelor of Arts in Fine Art",
+      faculty: "Faculty of Humanities",
+      apsMin: 30,
+      duration: "4 years",
+      subjectRequirements: {
+        "English": 4,
+      },
+      additionalRequirements: ["NBT required", "Portfolio required"],
+      careerOpportunities: ["Artist", "Curator", "Art Educator", "Gallery Manager"],
+    },
+
+    // Faculty of Commerce
+    {
+      id: "uct-bcom-actuarial-science",
+      name: "Bachelor of Commerce in Actuarial Science",
+      faculty: "Faculty of Commerce",
+      apsMin: 30,
+      duration: "3 years",
+      subjectRequirements: {
+        "mathematics": 6,
+      },
+      additionalRequirements: ["NBT required"],
+      careerOpportunities: ["Actuary", "Risk Analyst", "Financial Consultant"],
+    },
+    {
+      id: "uct-bbussc-actuarial",
+      name: "Bachelor of Business Science in Actuarial Science",
+      faculty: "Faculty of Commerce",
+      apsMin: 30,
+      duration: "4 years",
+      subjectRequirements: {
+        "Mathematics": 7,
+        "English": 5,
+      },
+      additionalRequirements: ["NBT required"],
+      careerOpportunities: ["Actuary", "Investment Analyst", "Financial Manager"],
+    },
+
+    // Faculty of Law
+    {
+      id: "uct-llb-law",
+      name: "Bachelor of Laws",
+      faculty: "Faculty of Law",
+      apsMin: 30,
+      duration: "4 years",
+      additionalRequirements: ["NBT required"],
+      careerOpportunities: ["Advocate", "Attorney", "Legal Advisor"],
+    },
+
+    // Commerce
     {
       id: "uct-bcom-general",
       name: "Bachelor of Commerce (General)",
       faculty: "Commerce",
-      apsMin: 32, // Traditional APS (FPS 435/600 equivalent)
+      apsMin: 32,
       duration: "3 years",
       subjectRequirements: {
-        Mathematics: 5, // 60% = Level 5
-        English: 4, // 50% = Level 4 (HL) or Level 5 for FAL
+        "Mathematics": 5,
+        "English": 4,
       },
-      additionalRequirements: [
-        "NBT scores of Upper Intermediate or above for AL & QL",
-        "Various specializations available including Accounting, Economics, Finance, Management Studies, Marketing",
-      ],
-      careerOpportunities: [
-        "Chartered Accountant (CA)",
-        "Financial Analyst",
-        "Investment Manager",
-        "Marketing Manager",
-        "Management Consultant",
-        "Economist",
-      ],
+      additionalRequirements: ["NBT scores of Upper Intermediate or above for AL & QL", "Various specializations available including Accounting, Economics, Finance, Management Studies, Marketing"],
+      careerOpportunities: ["Chartered Accountant (CA)", "Financial Analyst", "Investment Manager", "Marketing Manager", "Management Consultant", "Economist"],
     },
     {
       id: "uct-bbussc-general",
       name: "Bachelor of Business Science (General)",
       faculty: "Commerce",
-      apsMin: 32, // Traditional APS (FPS 435/600 equivalent)
+      apsMin: 32,
       duration: "4 years",
       subjectRequirements: {
-        Mathematics: 5, // 60% = Level 5
-        English: 4, // 50% = Level 4 (HL) or Level 5 for FAL
+        "Mathematics": 5,
+        "English": 4,
       },
-      additionalRequirements: [
-        "NBT scores of Upper Intermediate or above for AL & QL",
-        "Various specializations available including Actuarial Science, Computer Science, Finance",
-      ],
-      careerOpportunities: [
-        "Business Analyst",
-        "Strategic Consultant",
-        "Investment Banking",
-        "Corporate Finance",
-        "Risk Management",
-      ],
-    },
-    {
-      id: "uct-bbussc-actuarial",
-      name: "Bachelor of Business Science in Actuarial Science",
-      faculty: "Commerce",
-      apsMin: 34, // Traditional APS - highly competitive (FPS 435/600 equivalent)
-      duration: "4 years",
-      subjectRequirements: {
-        Mathematics: 7, // 80% = Level 7
-        English: 5, // 60% = Level 5 (HL) or Level 7 for FAL
-      },
-      additionalRequirements: [
-        "NBT scores of Proficient for AL & QL (FAL applicants)",
-        "Extremely competitive program",
-        "Strong mathematical aptitude required",
-      ],
-      careerOpportunities: [
-        "Actuary (FASSA qualification)",
-        "Risk Management",
-        "Insurance Industry",
-        "Pension Fund Management",
-        "Investment Banking",
-        "Quantitative Finance",
-      ],
+      additionalRequirements: ["NBT scores of Upper Intermediate or above for AL & QL", "Various specializations available including Actuarial Science, Computer Science, Finance"],
+      careerOpportunities: ["Business Analyst", "Strategic Consultant", "Investment Banking", "Corporate Finance", "Risk Management"],
     },
     {
       id: "uct-bcom-computer-science",
       name: "Bachelor of Commerce in Computer Science",
       faculty: "Commerce",
-      apsMin: 32, // Traditional APS (FPS 435/600 equivalent)
+      apsMin: 32,
       duration: "3 years",
       subjectRequirements: {
-        Mathematics: 6, // 70% = Level 6
-        English: 4, // 50% = Level 4 (HL) or Level 5 for FAL
+        "Mathematics": 6,
+        "English": 4,
       },
-      additionalRequirements: [
-        "NBT scores of Upper Intermediate or above for AL & QL",
-        "Strong programming and analytical skills",
-      ],
-      careerOpportunities: [
-        "Software Developer",
-        "Systems Analyst",
-        "IT Consultant",
-        "Data Scientist",
-        "Business Intelligence Analyst",
-      ],
+      additionalRequirements: ["NBT scores of Upper Intermediate or above for AL & QL", "Strong programming and analytical skills"],
+      careerOpportunities: ["Software Developer", "Systems Analyst", "IT Consultant", "Data Scientist", "Business Intelligence Analyst"],
     },
 
-    // FACULTY OF ENGINEERING & THE BUILT ENVIRONMENT
+    // Engineering & the Built Environment
     {
       id: "uct-bsc-eng-civil",
       name: "BSc Engineering (Civil)",
       faculty: "Engineering & the Built Environment",
-      apsMin: 35, // Traditional APS (FPS 500/600 equivalent)
+      apsMin: 35,
       duration: "4 years",
       subjectRequirements: {
-        Mathematics: 6, // 75% = Level 6
-        "Physical Sciences": 6, // 70% = Level 6
+        "Mathematics": 6,
+        "Physical Sciences": 6,
       },
-      additionalRequirements: [
-        "NBT in Mathematics, AL & QL required",
-        "ECSA accredited program",
-        "Washington Accord recognized",
-      ],
-      careerOpportunities: [
-        "Civil Engineer",
-        "Structural Engineer",
-        "Water Resources Engineer",
-        "Transportation Engineer",
-        "Construction Manager",
-        "Project Manager",
-      ],
+      additionalRequirements: ["NBT in Mathematics, AL & QL required", "ECSA accredited program", "Washington Accord recognized"],
+      careerOpportunities: ["Civil Engineer", "Structural Engineer", "Water Resources Engineer", "Transportation Engineer", "Construction Manager", "Project Manager"],
     },
     {
       id: "uct-bsc-eng-electrical",
       name: "BSc Engineering (Electrical, Electrical and Computer Engineering and Mechatronics)",
       faculty: "Engineering & the Built Environment",
-      apsMin: 36, // Traditional APS (FPS 500/600 equivalent)
+      apsMin: 36,
       duration: "4 years",
       subjectRequirements: {
-        Mathematics: 7, // 80% = Level 7
-        "Physical Sciences": 6, // 75% = Level 6
+        "Mathematics": 7,
+        "Physical Sciences": 6,
       },
-      additionalRequirements: [
-        "NBT in Mathematics, AL & QL required",
-        "ECSA accredited program",
-        "Specialization options available in multiple disciplines",
-      ],
-      careerOpportunities: [
-        "Electrical Engineer",
-        "Power Systems Engineer",
-        "Electronics Engineer",
-        "Telecommunications Engineer",
-        "Control Systems Engineer",
-        "Mechatronics Engineer",
-      ],
+      additionalRequirements: ["NBT in Mathematics, AL & QL required", "ECSA accredited program", "Specialization options available in multiple disciplines"],
+      careerOpportunities: ["Electrical Engineer", "Power Systems Engineer", "Electronics Engineer", "Telecommunications Engineer", "Control Systems Engineer", "Mechatronics Engineer"],
     },
     {
       id: "uct-bsc-eng-mechanical",
       name: "BSc Engineering (Mechanical)",
       faculty: "Engineering & the Built Environment",
-      apsMin: 36, // Traditional APS (FPS 500/600 equivalent)
+      apsMin: 36,
       duration: "4 years",
       subjectRequirements: {
-        Mathematics: 7, // 80% = Level 7
-        "Physical Sciences": 6, // 75% = Level 6
+        "Mathematics": 7,
+        "Physical Sciences": 6,
       },
-      additionalRequirements: [
-        "NBT in Mathematics, AL & QL required",
-        "ECSA accredited program",
-        "Foundation for aeronautical and biomedical engineering",
-      ],
-      careerOpportunities: [
-        "Mechanical Engineer",
-        "Aeronautical Engineer",
-        "Automotive Engineer",
-        "Manufacturing Engineer",
-        "Energy Systems Engineer",
-      ],
+      additionalRequirements: ["NBT in Mathematics, AL & QL required", "ECSA accredited program", "Foundation for aeronautical and biomedical engineering"],
+      careerOpportunities: ["Mechanical Engineer", "Aeronautical Engineer", "Automotive Engineer", "Manufacturing Engineer", "Energy Systems Engineer"],
     },
     {
       id: "uct-bsc-eng-chemical",
       name: "BSc Engineering (Chemical)",
       faculty: "Engineering & the Built Environment",
-      apsMin: 36, // Traditional APS (FPS 500/600 equivalent)
+      apsMin: 36,
       duration: "4 years",
       subjectRequirements: {
-        Mathematics: 7, // 80% = Level 7
-        "Physical Sciences": 6, // 70% = Level 6
+        "Mathematics": 7,
+        "Physical Sciences": 6,
       },
-      additionalRequirements: [
-        "NBT in Mathematics, AL & QL required",
-        "ECSA accredited program",
-        "Focus on process industries",
-      ],
-      careerOpportunities: [
-        "Chemical Engineer",
-        "Process Engineer",
-        "Environmental Engineer",
-        "Petrochemical Engineer",
-        "Food Process Engineer",
-      ],
-    },
-    {
-      id: "uct-bas",
-      name: "Bachelor of Architectural Studies",
-      faculty: "Engineering & the Built Environment",
-      apsMin: 30, // Traditional APS (FPS 400/600 equivalent)
-      duration: "3 years",
-      subjectRequirements: {
-        Mathematics: 4, // 50% = Level 4
-        English: 4, // 50% = Level 4
-      },
-      additionalRequirements: [
-        "Portfolio submission required (75% or above for guaranteed admission)",
-        "Creative exercises must be completed",
-        "Foundation for Master of Architecture",
-      ],
-      careerOpportunities: [
-        "Architectural Technologist",
-        "Urban Designer",
-        "Landscape Architect",
-        "Conservation Specialist",
-        "City Planner",
-      ],
+      additionalRequirements: ["NBT in Mathematics, AL & QL required", "ECSA accredited program", "Focus on process industries"],
+      careerOpportunities: ["Chemical Engineer", "Process Engineer", "Environmental Engineer", "Petrochemical Engineer", "Food Process Engineer"],
     },
     {
       id: "uct-bsc-construction",
       name: "BSc Construction Studies",
       faculty: "Engineering & the Built Environment",
-      apsMin: 33, // Traditional APS (FPS 450/600 equivalent)
+      apsMin: 33,
       duration: "3 years",
       subjectRequirements: {
-        Mathematics: 5, // 65% = Level 5
-        "Physical Sciences": 5, // 60% = Level 5
+        "Mathematics": 5,
+        "Physical Sciences": 5,
       },
-      additionalRequirements: [
-        "NBT in Mathematics, AL & QL required",
-        "SACQSP and RICS accredited",
-        "Leads to Quantity Surveying Honours",
-      ],
-      careerOpportunities: [
-        "Quantity Surveyor",
-        "Construction Manager",
-        "Project Manager",
-        "Cost Consultant",
-        "Contract Administrator",
-      ],
+      additionalRequirements: ["NBT in Mathematics, AL & QL required", "SACQSP and RICS accredited", "Leads to Quantity Surveying Honours"],
+      careerOpportunities: ["Quantity Surveyor", "Construction Manager", "Project Manager", "Cost Consultant", "Contract Administrator"],
     },
 
-    // FACULTY OF HEALTH SCIENCES
+    // Health Sciences
     {
       id: "uct-mbchb",
       name: "Bachelor of Medicine and Bachelor of Surgery (MBChB)",
       faculty: "Health Sciences",
-      apsMin: 38, // Traditional APS - highly competitive (FPS 628/900 equivalent)
+      apsMin: 38,
       duration: "6 years",
       subjectRequirements: {
-        Mathematics: 6, // 70% = Level 6
-        "Physical Sciences": 6, // 70% = Level 6
-        English: 5, // 65% = Level 5
+        "Mathematics": 6,
+        "Physical Sciences": 6,
+        "English": 5,
       },
-      additionalRequirements: [
-        "NBT scores of Proficient for AL, QL and Mathematics",
-        "Extremely competitive program (240 places available)",
-        "Followed by 2 years internship and 1 year community service",
-      ],
-      careerOpportunities: [
-        "Medical Doctor",
-        "Specialist Physician",
-        "Surgeon",
-        "General Practitioner",
-        "Medical Researcher",
-        "Public Health Specialist",
-      ],
+      additionalRequirements: ["NBT scores of Proficient for AL, QL and Mathematics", "Extremely competitive program (240 places available)", "Followed by 2 years internship and 1 year community service"],
+      careerOpportunities: ["Medical Doctor", "Specialist Physician", "Surgeon", "General Practitioner", "Medical Researcher", "Public Health Specialist"],
     },
     {
       id: "uct-bsc-physiotherapy",
       name: "BSc Physiotherapy",
       faculty: "Health Sciences",
-      apsMin: 35, // Traditional APS (FPS 550/900 equivalent)
+      apsMin: 35,
       duration: "4 years",
       subjectRequirements: {
-        Mathematics: 5, // 60% = Level 5
-        "Physical Sciences": 5, // 65% = Level 5 (or Life Sciences)
-        English: 5, // 65% = Level 5
+        "Mathematics": 5,
+        "Physical Sciences": 5,
+        "English": 5,
       },
-      additionalRequirements: [
-        "NBT scores of Intermediate or above for AL, QL and Mathematics",
-        "70 places available",
-        "Followed by 1 year community service",
-      ],
-      careerOpportunities: [
-        "Physiotherapist",
-        "Sports Physiotherapist",
-        "Rehabilitation Specialist",
-        "Private Practice Owner",
-        "Hospital-based Therapist",
-      ],
+      additionalRequirements: ["NBT scores of Intermediate or above for AL, QL and Mathematics", "70 places available", "Followed by 1 year community service"],
+      careerOpportunities: ["Physiotherapist", "Sports Physiotherapist", "Rehabilitation Specialist", "Private Practice Owner", "Hospital-based Therapist"],
     },
     {
       id: "uct-bsc-occupational-therapy",
       name: "BSc Occupational Therapy",
       faculty: "Health Sciences",
-      apsMin: 34, // Traditional APS (FPS 540/900 equivalent)
+      apsMin: 34,
       duration: "4 years",
       subjectRequirements: {
-        Mathematics: 5, // 60% = Level 5 (or Mathematical Literacy Level 6)
-        "Physical Sciences": 5, // 65% = Level 5 (or Life Sciences)
-        English: 5, // 65% = Level 5
+        "Mathematics": 5,
+        "Physical Sciences": 5,
+        "English": 5,
       },
-      additionalRequirements: [
-        "NBT scores of Intermediate or above for AL, QL and Mathematics",
-        "70 places available",
-        "Mathematical Literacy accepted with higher percentage",
-      ],
-      careerOpportunities: [
-        "Occupational Therapist",
-        "Rehabilitation Specialist",
-        "Community Health Worker",
-        "School-based Therapist",
-        "Mental Health Specialist",
-      ],
+      additionalRequirements: ["NBT scores of Intermediate or above for AL, QL and Mathematics", "70 places available", "Mathematical Literacy accepted with higher percentage"],
+      careerOpportunities: ["Occupational Therapist", "Rehabilitation Specialist", "Community Health Worker", "School-based Therapist", "Mental Health Specialist"],
     },
     {
       id: "uct-bsc-audiology",
       name: "BSc Audiology",
       faculty: "Health Sciences",
-      apsMin: 34, // Traditional APS (FPS 530/900 equivalent)
+      apsMin: 34,
       duration: "4 years",
       subjectRequirements: {
-        Mathematics: 5, // 60% = Level 5 (or Mathematical Literacy Level 6)
-        "Physical Sciences": 5, // 65% = Level 5 (or Life Sciences)
-        English: 5, // 65% = Level 5
+        "Mathematics": 5,
+        "Physical Sciences": 5,
+        "English": 5,
       },
-      additionalRequirements: [
-        "NBT scores of Intermediate or above for AL, QL and Mathematics",
-        "37 places available",
-        "Followed by 1 year community service",
-      ],
-      careerOpportunities: [
-        "Audiologist",
-        "Hearing Aid Specialist",
-        "Noise Control Specialist",
-        "School Audiologist",
-        "Hospital-based Audiologist",
-      ],
+      additionalRequirements: ["NBT scores of Intermediate or above for AL, QL and Mathematics", "37 places available", "Followed by 1 year community service"],
+      careerOpportunities: ["Audiologist", "Hearing Aid Specialist", "Noise Control Specialist", "School Audiologist", "Hospital-based Audiologist"],
     },
     {
       id: "uct-bsc-speech-language",
       name: "BSc Speech-Language Pathology",
       faculty: "Health Sciences",
-      apsMin: 34, // Traditional APS (FPS 525/900 equivalent)
+      apsMin: 34,
       duration: "4 years",
       subjectRequirements: {
-        Mathematics: 5, // 60% = Level 5 (or Mathematical Literacy Level 6)
-        "Physical Sciences": 5, // 65% = Level 5 (or Life Sciences)
-        English: 5, // 65% = Level 5
+        "Mathematics": 5,
+        "Physical Sciences": 5,
+        "English": 5,
       },
-      additionalRequirements: [
-        "NBT scores of Intermediate or above for AL, QL and Mathematics",
-        "40 places available",
-        "Followed by 1 year community service",
-      ],
-      careerOpportunities: [
-        "Speech-Language Therapist",
-        "Communication Disorders Specialist",
-        "School-based Therapist",
-        "Voice Therapist",
-        "Swallowing Disorders Specialist",
-      ],
+      additionalRequirements: ["NBT scores of Intermediate or above for AL, QL and Mathematics", "40 places available", "Followed by 1 year community service"],
+      careerOpportunities: ["Speech-Language Therapist", "Communication Disorders Specialist", "School-based Therapist", "Voice Therapist", "Swallowing Disorders Specialist"],
     },
 
-    // FACULTY OF HUMANITIES
+    // Humanities
     {
       id: "uct-ba",
       name: "Bachelor of Arts",
       faculty: "Humanities",
-      apsMin: 30, // Traditional APS (FPS 435/600 equivalent)
+      apsMin: 30,
       duration: "3 years",
       subjectRequirements: {
-        English: 4, // 50% = Level 4 (HL) or Level 5 for FAL
+        "English": 4,
       },
-      additionalRequirements: [
-        "NBT AL: Proficient for guaranteed admission",
-        "Wide range of majors available",
-        "Flexible degree structure",
-      ],
-      careerOpportunities: [
-        "Teacher",
-        "Journalist",
-        "Social Worker",
-        "Museum Curator",
-        "Translator",
-        "Cultural Analyst",
-        "Government Official",
-      ],
+      additionalRequirements: ["NBT AL: Proficient for guaranteed admission", "Wide range of majors available", "Flexible degree structure"],
+      careerOpportunities: ["Teacher", "Journalist", "Social Worker", "Museum Curator", "Translator", "Cultural Analyst", "Government Official"],
     },
     {
       id: "uct-bsocsci",
       name: "Bachelor of Social Science",
       faculty: "Humanities",
-      apsMin: 30, // Traditional APS (FPS 435/600 equivalent)
+      apsMin: 30,
       duration: "3 years",
       subjectRequirements: {
-        English: 4, // 50% = Level 4 (HL) or Level 5 for FAL
+        "English": 4,
       },
-      additionalRequirements: [
-        "NBT AL: Proficient for guaranteed admission",
-        "Social science focused majors",
-        "Research-oriented approach",
-      ],
-      careerOpportunities: [
-        "Social Researcher",
-        "Policy Analyst",
-        "NGO Worker",
-        "Community Development Officer",
-        "Market Researcher",
-        "Human Resources Specialist",
-      ],
+      additionalRequirements: ["NBT AL: Proficient for guaranteed admission", "Social science focused majors", "Research-oriented approach"],
+      careerOpportunities: ["Social Researcher", "Policy Analyst", "NGO Worker", "Community Development Officer", "Market Researcher", "Human Resources Specialist"],
     },
     {
       id: "uct-bsocsci-ppe",
       name: "Bachelor of Social Science in Philosophy, Politics and Economics",
       faculty: "Humanities",
-      apsMin: 30, // Traditional APS (FPS 435/600 equivalent)
+      apsMin: 30,
       duration: "3 years",
       subjectRequirements: {
-        Mathematics: 5, // 60% = Level 5
-        English: 4, // 50% = Level 4 (HL) or Level 5 for FAL
+        "Mathematics": 5,
+        "English": 4,
       },
-      additionalRequirements: [
-        "NBT AL: Proficient",
-        "NBT QL: Upper Intermediate or above",
-        "Classic combination degree",
-      ],
-      careerOpportunities: [
-        "Policy Analyst",
-        "Political Advisor",
-        "Economist",
-        "Journalist",
-        "Diplomat",
-        "Management Consultant",
-      ],
+      additionalRequirements: ["NBT AL: Proficient", "NBT QL: Upper Intermediate or above", "Classic combination degree"],
+      careerOpportunities: ["Policy Analyst", "Political Advisor", "Economist", "Journalist", "Diplomat", "Management Consultant"],
     },
     {
       id: "uct-bsw",
       name: "Bachelor of Social Work",
       faculty: "Humanities",
-      apsMin: 30, // Traditional APS (FPS 435/600 equivalent)
+      apsMin: 30,
       duration: "4 years",
       subjectRequirements: {
-        English: 4, // 50% = Level 4 (HL) or Level 5 for FAL
+        "English": 4,
       },
-      additionalRequirements: [
-        "NBT AL: Proficient for guaranteed admission",
-        "May require admissions interview",
-        "Professional qualification",
-      ],
-      careerOpportunities: [
-        "Social Worker",
-        "Community Development Worker",
-        "Child Protection Officer",
-        "Family Therapist",
-        "NGO Program Manager",
-      ],
-    },
-    {
-      id: "uct-ba-fine-art",
-      name: "Bachelor of Arts in Fine Art",
-      faculty: "Humanities",
-      apsMin: 28, // Traditional APS (FPS 380/600 equivalent)
-      duration: "4 years",
-      subjectRequirements: {
-        English: 4, // 50% = Level 4 (HL) or Level 5 for FAL
-      },
-      additionalRequirements: [
-        "Portfolio evaluation required",
-        "NBT AL: Intermediate or above",
-        "Leading indicator is portfolio performance",
-      ],
-      careerOpportunities: [
-        "Visual Artist",
-        "Curator",
-        "Art Teacher",
-        "Gallery Manager",
-        "Art Critic",
-        "Arts Administrator",
-      ],
+      additionalRequirements: ["NBT AL: Proficient for guaranteed admission", "May require admissions interview", "Professional qualification"],
+      careerOpportunities: ["Social Worker", "Community Development Worker", "Child Protection Officer", "Family Therapist", "NGO Program Manager"],
     },
     {
       id: "uct-bmus",
       name: "Bachelor of Music",
       faculty: "Humanities",
-      apsMin: 28, // Traditional APS (FPS 380/600 equivalent)
+      apsMin: 28,
       duration: "4 years",
       subjectRequirements: {
-        English: 4, // 50% = Level 4 (HL) or Level 5 for FAL
-        Music: 5, // 60% = Level 5
+        "English": 4,
+        "Music": 5,
       },
-      additionalRequirements: [
-        "Audition, interview and music theory test required",
-        "Unisa Music Theory Grade V or above",
-        "Unisa Music Practical Grade VII or above",
-      ],
-      careerOpportunities: [
-        "Professional Musician",
-        "Music Teacher",
-        "Composer",
-        "Music Producer",
-        "Audio Technologist",
-        "Music Therapist",
-      ],
+      additionalRequirements: ["Audition, interview and music theory test required", "Unisa Music Theory Grade V or above", "Unisa Music Practical Grade VII or above"],
+      careerOpportunities: ["Professional Musician", "Music Teacher", "Composer", "Music Producer", "Audio Technologist", "Music Therapist"],
     },
 
-    // FACULTY OF LAW
+    // Law
     {
       id: "uct-llb-undergraduate",
       name: "Bachelor of Laws (LLB) - 4 year",
       faculty: "Law",
-      apsMin: 34, // Traditional APS (FPS 470/600 equivalent)
+      apsMin: 34,
       duration: "4 years",
       subjectRequirements: {
-        English: 4, // 50% = Level 4 (HL) or Level 5 for FAL
+        "English": 4,
       },
-      additionalRequirements: [
-        "NBT scores of proficient for AL and intermediate or above for QL",
-        "Highly competitive program",
-        "Professional legal qualification",
-      ],
-      careerOpportunities: [
-        "Attorney",
-        "Advocate",
-        "Magistrate",
-        "Judge",
-        "Legal Advisor",
-        "Corporate Lawyer",
-        "Human Rights Lawyer",
-      ],
+      additionalRequirements: ["NBT scores of proficient for AL and intermediate or above for QL", "Highly competitive program", "Professional legal qualification"],
+      careerOpportunities: ["Attorney", "Advocate", "Magistrate", "Judge", "Legal Advisor", "Corporate Lawyer", "Human Rights Lawyer"],
     },
 
-    // FACULTY OF SCIENCE
+    // Science
     {
       id: "uct-bsc",
       name: "Bachelor of Science",
       faculty: "Science",
-      apsMin: 36, // Traditional APS (FPS 550/800 equivalent)
+      apsMin: 36,
       duration: "3 years",
       subjectRequirements: {
-        Mathematics: 6, // 70% = Level 6
-        "Physical Sciences": 5, // 60% = Level 5
+        "Mathematics": 6,
+        "Physical Sciences": 5,
       },
-      additionalRequirements: [
-        "NBT in Mathematics, AL & QL required",
-        "Wide range of majors available",
-        "Some majors have limited places",
-      ],
-      careerOpportunities: [
-        "Research Scientist",
-        "Laboratory Technician",
-        "Environmental Consultant",
-        "Data Scientist",
-        "Science Teacher",
-        "Medical Researcher",
-      ],
+      additionalRequirements: ["NBT in Mathematics, AL & QL required", "Wide range of majors available", "Some majors have limited places"],
+      careerOpportunities: ["Research Scientist", "Laboratory Technician", "Environmental Consultant", "Data Scientist", "Science Teacher", "Medical Researcher"],
     },
     {
       id: "uct-bsc-computer-science",
       name: "BSc Computer Science",
       faculty: "Science",
-      apsMin: 36, // Traditional APS (FPS 550/800 equivalent)
+      apsMin: 36,
       duration: "3 years",
       subjectRequirements: {
-        Mathematics: 6, // 70% = Level 6
-        "Physical Sciences": 5, // 60% = Level 5 (or Information Technology)
+        "Mathematics": 6,
+        "Physical Sciences": 5,
       },
-      additionalRequirements: [
-        "NBT in Mathematics, AL & QL required",
-        "Strong programming foundation",
-        "BCS accredited program",
-      ],
-      careerOpportunities: [
-        "Software Developer",
-        "Systems Analyst",
-        "Data Scientist",
-        "Cybersecurity Specialist",
-        "AI/ML Engineer",
-        "Research Scientist",
-      ],
+      additionalRequirements: ["NBT in Mathematics, AL & QL required", "Strong programming foundation", "BCS accredited program"],
+      careerOpportunities: ["Software Developer", "Systems Analyst", "Data Scientist", "Cybersecurity Specialist", "AI/ML Engineer", "Research Scientist"],
     },
     {
       id: "uct-bsc-mathematics",
       name: "BSc Mathematics",
       faculty: "Science",
-      apsMin: 36, // Traditional APS (FPS 550/800 equivalent)
+      apsMin: 36,
       duration: "3 years",
       subjectRequirements: {
-        Mathematics: 6, // 70% = Level 6
-        "Physical Sciences": 5, // 60% = Level 5
+        "Mathematics": 6,
+        "Physical Sciences": 5,
       },
-      additionalRequirements: [
-        "NBT in Mathematics, AL & QL required",
-        "Strong analytical skills required",
-        "Foundation for various careers",
-      ],
-      careerOpportunities: [
-        "Mathematician",
-        "Statistician",
-        "Actuary",
-        "Data Analyst",
-        "Financial Analyst",
-        "Research Scientist",
-      ],
+      additionalRequirements: ["NBT in Mathematics, AL & QL required", "Strong analytical skills required", "Foundation for various careers"],
+      careerOpportunities: ["Mathematician", "Statistician", "Actuary", "Data Analyst", "Financial Analyst", "Research Scientist"],
     },
     {
       id: "uct-bsc-physics",
       name: "BSc Physics",
       faculty: "Science",
-      apsMin: 36, // Traditional APS (FPS 550/800 equivalent)
+      apsMin: 36,
       duration: "3 years",
       subjectRequirements: {
-        Mathematics: 6, // 70% = Level 6
-        "Physical Sciences": 5, // 60% = Level 5
+        "Mathematics": 6,
+        "Physical Sciences": 5,
       },
-      additionalRequirements: [
-        "NBT in Mathematics, AL & QL required",
-        "Strong mathematical foundation",
-        "Research opportunities available",
-      ],
-      careerOpportunities: [
-        "Physicist",
-        "Research Scientist",
-        "Engineer",
-        "Data Scientist",
-        "Medical Physicist",
-        "Science Teacher",
-      ],
+      additionalRequirements: ["NBT in Mathematics, AL & QL required", "Strong mathematical foundation", "Research opportunities available"],
+      careerOpportunities: ["Physicist", "Research Scientist", "Engineer", "Data Scientist", "Medical Physicist", "Science Teacher"],
     },
     {
       id: "uct-bsc-chemistry",
       name: "BSc Chemistry",
       faculty: "Science",
-      apsMin: 36, // Traditional APS (FPS 550/800 equivalent)
+      apsMin: 36,
       duration: "3 years",
       subjectRequirements: {
-        Mathematics: 6, // 70% = Level 6
-        "Physical Sciences": 5, // 60% = Level 5
+        "Mathematics": 6,
+        "Physical Sciences": 5,
       },
-      additionalRequirements: [
-        "NBT in Mathematics, AL & QL required",
-        "Laboratory work intensive",
-        "Central science foundation",
-      ],
-      careerOpportunities: [
-        "Chemist",
-        "Research Scientist",
-        "Quality Control Analyst",
-        "Environmental Consultant",
-        "Pharmaceutical Scientist",
-        "Science Teacher",
-      ],
+      additionalRequirements: ["NBT in Mathematics, AL & QL required", "Laboratory work intensive", "Central science foundation"],
+      careerOpportunities: ["Chemist", "Research Scientist", "Quality Control Analyst", "Environmental Consultant", "Pharmaceutical Scientist", "Science Teacher"],
     },
     {
       id: "uct-bsc-biology",
       name: "BSc Biology",
       faculty: "Science",
-      apsMin: 36, // Traditional APS (FPS 550/800 equivalent)
+      apsMin: 36,
       duration: "3 years",
       subjectRequirements: {
-        Mathematics: 6, // 70% = Level 6
-        "Physical Sciences": 5, // 60% = Level 5
+        "Mathematics": 6,
+        "Physical Sciences": 5,
       },
-      additionalRequirements: [
-        "NBT in Mathematics, AL & QL required",
-        "Limited places available",
-        "Field work opportunities",
-      ],
-      careerOpportunities: [
-        "Biologist",
-        "Conservation Scientist",
-        "Research Scientist",
-        "Environmental Consultant",
-        "Science Teacher",
-        "Wildlife Manager",
-      ],
+      additionalRequirements: ["NBT in Mathematics, AL & QL required", "Limited places available", "Field work opportunities"],
+      careerOpportunities: ["Biologist", "Conservation Scientist", "Research Scientist", "Environmental Consultant", "Science Teacher", "Wildlife Manager"],
     },
     {
       id: "uct-bsc-geology",
       name: "BSc Geology",
       faculty: "Science",
-      apsMin: 36, // Traditional APS (FPS 550/800 equivalent)
+      apsMin: 36,
       duration: "3 years",
       subjectRequirements: {
-        Mathematics: 6, // 70% = Level 6
-        "Physical Sciences": 5, // 60% = Level 5
+        "Mathematics": 6,
+        "Physical Sciences": 5,
       },
-      additionalRequirements: [
-        "NBT in Mathematics, AL & QL required",
-        "Limited places available",
-        "Field work component",
-      ],
-      careerOpportunities: [
-        "Geologist",
-        "Mining Engineer",
-        "Environmental Consultant",
-        "Petroleum Geologist",
-        "Hydrogeologist",
-        "Research Scientist",
-      ],
+      additionalRequirements: ["NBT in Mathematics, AL & QL required", "Limited places available", "Field work component"],
+      careerOpportunities: ["Geologist", "Mining Engineer", "Environmental Consultant", "Petroleum Geologist", "Hydrogeologist", "Research Scientist"],
     },
   ];
 
