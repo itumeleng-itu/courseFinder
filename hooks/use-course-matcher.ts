@@ -20,16 +20,11 @@ export function useCourseMatcher(subjects: Subject[], calculatedDefaultAPS: numb
     const findCourses = useCallback(() => {
         if (!calculatedDefaultAPS || calculatedDefaultAPS <= 0) return
 
-        const studentPercentages: Record<string, number> = Object.fromEntries(
-            subjects.map((s) => [s.name, s.percentage])
-        )
-
         const universityInstances = getAllUniversityInstances()
         const uniMatches: CourseMatch[] = []
 
         universityInstances.forEach((universityInstance) => {
-            const calculatedAPS = universityInstance.calculateApsScore(studentPercentages)
-            if (calculatedAPS <= 0) return
+            if (calculatedDefaultAPS <= 0) return
 
             const universityForDisplay = {
                 id: universityInstance.id,
@@ -45,7 +40,7 @@ export function useCourseMatcher(subjects: Subject[], calculatedDefaultAPS: numb
                 if (apsRequired <= 0) return
 
                 const requirementCheck = checkSubjectRequirements(subjects, course.subjectRequirements)
-                if (calculatedAPS >= apsRequired && requirementCheck.meets && isUndergraduateCourse(course.name)) {
+                if (calculatedDefaultAPS >= apsRequired && requirementCheck.meets && isUndergraduateCourse(course.name)) {
                     uniMatches.push({
                         course: course as Course,
                         university: universityForDisplay,
@@ -60,9 +55,6 @@ export function useCourseMatcher(subjects: Subject[], calculatedDefaultAPS: numb
         // Extended curriculum programs (foundation year alternatives)
         const extendedMatches: CourseMatch[] = []
         universityInstances.forEach((universityInstance) => {
-            const calculatedAPS = universityInstance.calculateApsScore(studentPercentages)
-            if (calculatedAPS <= 0) return
-
             const universityForDisplay = {
                 id: universityInstance.id,
                 name: universityInstance.name,
@@ -77,7 +69,7 @@ export function useCourseMatcher(subjects: Subject[], calculatedDefaultAPS: numb
                 if (apsRequired <= 0) return
 
                 const requirementCheck = checkSubjectRequirements(subjects, course.subjectRequirements)
-                if (calculatedAPS >= apsRequired && requirementCheck.meets) {
+                if (calculatedDefaultAPS >= apsRequired && requirementCheck.meets) {
                     extendedMatches.push({
                         course: course as Course,
                         university: universityForDisplay,
