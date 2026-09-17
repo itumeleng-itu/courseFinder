@@ -310,7 +310,7 @@
 courseFinder/
 ├── app/                          # Next.js app directory (pages & API routes)
 │   ├── api/                      # API route handlers
-│   │   ├── admin/                # Admin endpoints (empty - planned)
+│   │   │                         # (no admin/ here -- retired, see "Admin System" below)
 │   │   ├── bursaries/            # Bursary scraping API
 │   │   ├── certificate/          # Certificate upload API
 │   │   ├── chat/                 # AI chatbot API
@@ -975,7 +975,21 @@ subjectRequirements: {
 
 **Authentication**: Not fully implemented (planned)
 
-**Admin System**: Basic structure in place (`app/api/admin/` directory empty)
+**Admin System**: Retired. A cookie-session admin portal (`/admin`, `/admin/dashboard`) with
+PDF-upload flows for university prospectuses and school performance reports existed for a
+time, but wrote its output with `fs.writeFile` to `data/universities/*.ts` and
+`data/school-performance.json` on the server's own filesystem — which is read-only in
+Vercel's production environment, so uploads silently failed to persist past the next cold
+start. It also duplicated an AI-guess PDF-parsing approach the actual admissions-data
+pipeline (coursefind-data, a separate repo) had already tried and moved away from for being
+unreliable. Removed rather than fixed in place: `app/admin/`, `app/api/admin/`, `lib/admin/`,
+`middleware.ts` (existed solely to gate `/admin/dashboard`), and `scripts/sync-prospectuses.ts`
+(the CLI equivalent, already broken — see git history). University course data now comes from
+`coursefind-data`'s own ingestion pipeline (`docs/BUNDLE_FORMAT.md` → `ingest_bundle.py`, which
+validates and diffs before writing, backed by real Postgres persistence); `data/universities/`
+here still exists and is still read by the app, it just isn't editable from this admin portal.
+`ADMIN_SECRET` is unrelated and still live — it gates `/api/matric-stats`'s cache-clear
+endpoint, which never went through this portal.
 
 ### Planned Features
 
