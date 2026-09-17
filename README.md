@@ -1,263 +1,176 @@
 # CourseFinder SA
 
-> Helping South African matric students find their perfect university course
+> Helping South African matric students find out which university courses they actually qualify for.
 
-[![Deployed on Vercel](https://img.shields.io/badge/Deployed%20on-Vercel-black?style=for-the-badge&logo=vercel)](https://vercel.com/matomejohn170-gmailcoms-projects/v0-matric-university-app)
-[![Next.js](https://img.shields.io/badge/Next.js-15.1.3-black?style=for-the-badge&logo=next.js)](https://nextjs.org)
+[![Next.js](https://img.shields.io/badge/Next.js-16-black?style=for-the-badge&logo=next.js)](https://nextjs.org)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.x-blue?style=for-the-badge&logo=typescript)](https://www.typescriptlang.org)
+[![Deployed on Vercel](https://img.shields.io/badge/Deployed%20on-Vercel-black?style=for-the-badge&logo=vercel)](https://vercel.com)
 
 ---
 
-## 🎓 About CourseFinder SA
+## About
 
-**CourseFinder SA** is a comprehensive web application designed to help South African matric students make informed decisions about their higher education. We provide intelligent course matching, bursary information, past papers, real-time statistics, and AI-powered guidance.
+A learner types in their matric subjects and percentages; CourseFinder tells them which university programmes they qualify for, which they're just short of and why, and what else is available (extended-curriculum foundation years, TVET colleges) if a degree isn't within reach yet.
 
-### Key Features
+This repository is the **frontend** — the Next.js app learners actually use. It does **not** carry its own admission-matching logic for every institution any more: the eligibility check for institutions it has been verified against is delegated to a separate service, **[coursefind-data](https://github.com/itumeleng-itu/cf-data)**, over HTTP. See [Backend integration](#backend-integration-coursefind-data) below for exactly how that works, and why only *some* institutions go through it today.
 
-✅ **Course Finder** - Match students with suitable courses based on APS scores and subject requirements  
-✅ **28 Universities** - Comprehensive coverage of South African public universities  
-✅ **Bursary Portal** - Daily-updated undergraduate bursary information  
-✅ **Past Papers** - 10+ years of NSC past papers and memoranda  
-✅ **AI Chatbot** - Intelligent assistant powered by Google Gemini  
-✅ **Real-Time Statistics** - Live matric pass rates (national & provincial)  
-✅ **Extended Programs** - Foundation year alternatives for students just below APS requirements  
-✅ **Academic Calendar** - Important dates and deadlines  
-✅ **TVET Colleges** - Alternative educational pathways
+### Features
+
+- **Course matching** — subjects + percentages in, qualifying programmes out, with a specific reason shown for anything a learner just misses
+- **Extended Curriculum Programmes** — foundation-year alternatives surfaced when a learner is below a degree's normal APS
+- **TVET colleges** — an alternative pathway shown alongside university results
+- **AI-assisted chat** — a study/course-guidance assistant (OpenRouter, Gemini models — see [`GOOGLE-AI-INTEGRATION.md`](./GOOGLE-AI-INTEGRATION.md))
+- **Matric pass-rate statistics** — national and provincial, with year-over-year comparisons
+- **Past papers** — NSC past papers and memoranda
+- **Academic calendar** — application windows and other key dates
 
 ---
 
-## 🚀 Quick Start
+## Backend integration (coursefind-data)
+
+Admission rules for South African universities are genuinely institution-specific — different APS formulas, different Home-Language/First-Additional-Language handling, different exceptions per faculty — and getting them right one institution at a time, verified against the actual prospectus, is the entire reason **[coursefind-data](https://github.com/itumeleng-itu/cf-data)** exists. This app used to reimplement that matching logic locally against its own bundled per-university data files; it now calls coursefind-data's API for whichever institutions it has verified data for, and only falls back to its own local data for the rest.
+
+```mermaid
+flowchart TB
+    Learner(["Learner enters subjects & percentages"]) --> Page["/find-course page"]
+    Page --> Hook["useCourseMatcher hook"]
+
+    Hook --> MetaCall["GET /api/qualify/meta"]
+    MetaCall --> MetaProxy["Next.js proxy route<br/>app/api/qualify/meta"]
+    MetaProxy -->|"server-side, no CORS needed"| Meta["coursefind-data:<br/>GET /v1/meta"]
+    Meta --> Covered{{"Which institutions<br/>does the API cover<br/>right now?"}}
+
+    Covered -->|"covered (e.g. UJ)"| QualifyCall["POST /api/qualify"]
+    QualifyCall --> QualifyProxy["Next.js proxy route<br/>app/api/qualify"]
+    QualifyProxy -->|"server-side"| Qualify["coursefind-data:<br/>POST /v1/qualify"]
+    Qualify --> Result1["Qualified + near-miss programmes<br/>(hand-verified data, per-institution scoring)"]
+
+    Covered -->|"not covered yet<br/>(other 25 institutions)"| LocalMatch["Local matcher<br/>checkSubjectRequirements()<br/>against data/universities/*.ts"]
+    LocalMatch --> Result2["Qualified programmes<br/>(locally-sourced, unverified)"]
+
+    Result1 --> Merge["Merged, sorted course list"]
+    Result2 --> Merge
+    Merge --> Learner
+
+    style Qualify fill:#0a5,color:#fff
+    style LocalMatch fill:#a50,color:#fff
+```
+
+A few things worth knowing if you're touching this code:
+
+- **The API call is server-side, not from the browser.** coursefind-data has no CORS configuration, so `app/api/qualify/route.ts` and `app/api/qualify/meta/route.ts` proxy the request from this app's own server — the browser only ever talks to this app's origin, and `QUALIFY_API_URL` (where coursefind-data is actually running) never reaches the client bundle.
+- **Coverage is discovered, not hardcoded.** `lib/qualify-api.ts`'s `fetchCoveredInstitutions()` calls `/v1/meta` on every match attempt rather than assuming a fixed institution list. As coursefind-data onboards more institutions, this app picks them up automatically — no code change needed here.
+- **If the API is unreachable**, an institution it's supposed to be authoritative for shows a visible error rather than silently falling back to (known-less-reliable) local data for it; every *other* institution is unaffected, since local matching for them never depended on the API being up in the first place.
+- **Extended-curriculum and TVET-college matching are always local.** coursefind-data doesn't carry an "extended" flag or cover TVET colleges at all yet, so those two result lists use `checkSubjectRequirements()` against `data/universities/*.ts` / `data/colleges.ts` regardless of which institution is involved.
+- **The two repos share no code or schema package.** `lib/qualify-api.ts`'s types and `lib/subject-slugs.ts`'s subject mapping are hand-mirrors of coursefind-data's Pydantic models and `Subject` enum respectively — each file says so in its own comment, and either one going stale relative to the other is a real risk nothing currently catches automatically.
+
+---
+
+## Tech stack
+
+| Layer | Technology |
+|---|---|
+| Framework | **Next.js 16** (App Router, Turbopack), React 19, TypeScript |
+| Styling | Tailwind CSS, shadcn/ui |
+| Backend (this app) | Next.js API routes — proxies to coursefind-data, plus chat/news/stats endpoints |
+| Backend (course matching) | **[coursefind-data](https://github.com/itumeleng-itu/cf-data)** — a separate FastAPI service; see above |
+| AI chat | OpenRouter (Gemini models) |
+| Storage (past papers, some assets) | Appwrite |
+| Testing | Jest + ts-jest + Testing Library |
+| Deployment | Vercel |
+
+---
+
+## Project structure
+
+```
+courseFinder/
+├── app/
+│   ├── api/
+│   │   ├── qualify/             # Proxy to coursefind-data's /v1/qualify
+│   │   │   ├── route.ts
+│   │   │   └── meta/route.ts    # Proxy to coursefind-data's /v1/meta
+│   │   ├── chat/                 # AI chat assistant
+│   │   ├── matric-stats/, provincial-pass-rates/, nsc-2025/, news/
+│   ├── find-course/               # The course-matching page + local matcher
+│   │   ├── page.tsx
+│   │   ├── utils.ts                # checkSubjectRequirements() -- local matching logic
+│   │   └── types.ts
+│   ├── calendar/, colleges/, matric-results/, past-papers/, study-tips/, universities/
+│
+├── hooks/
+│   └── use-course-matcher.ts      # Orchestrates API vs local matching -- see diagram above
+│
+├── lib/
+│   ├── qualify-api.ts              # coursefind-data API client (mirrors its response types)
+│   ├── subject-slugs.ts            # Subject name -> coursefind-data slug mapping
+│   ├── subject-aliases.ts          # Local subject-name normalisation (HL/FAL parsing etc.)
+│   ├── aps-calculator.ts, aps/     # Per-institution APS formulas (used by local matching only)
+│   └── utils/subject-validator.ts  # Subject-picker conflict rules (one HL, one FAL, etc.)
+│
+├── data/
+│   ├── universities/                # 26 institutions' locally-sourced course data
+│   └── colleges.ts                  # TVET college data
+│
+└── __tests__/                       # Jest test suite
+```
+
+---
+
+## Getting started
 
 ### Prerequisites
 
-- **Node.js** 18+ ([Download](https://nodejs.org))
-- **npm** or **pnpm**
-- **Google AI API Key** ([Get here](https://makersuite.google.com/app/apikey))
+- Node.js 18+
+- A running **[coursefind-data](https://github.com/itumeleng-itu/cf-data)** instance if you want the main course list to use real backend data (`uv run uvicorn app.main:app --reload` from that repo, or point at a deployed instance) — without one, the API-covered institution(s) will show a visible error and every other institution still works from local data
 
 ### Installation
 
 ```bash
-# Clone the repository
 git clone https://github.com/itumeleng-itu/courseFinder.git
 cd courseFinder
-
-# Install dependencies
 npm install
 
-# Set up environment variables
 cp .env.example .env.local
-# Edit .env.local and add your GOOGLE_API_KEY
+# QUALIFY_API_URL defaults to http://localhost:8000 -- point it at coursefind-data
+# if it's running somewhere else. See .env.example for the full comment.
 
-# Run development server
 npm run dev
-
-# Open http://localhost:3000
+# → http://localhost:3000
 ```
 
-**That's it!** You're ready to start developing. 🎉
+### Environment variables
 
----
+| Variable | Required? | Purpose |
+|---|---|---|
+| `QUALIFY_API_URL` | No — defaults to `http://localhost:8000` | Where coursefind-data's API is running. Server-side only, see [Backend integration](#backend-integration-coursefind-data). |
+| `OPENROUTER_API_KEY` | For the AI chat feature | See [`GOOGLE-AI-INTEGRATION.md`](./GOOGLE-AI-INTEGRATION.md) |
+| Appwrite variables | For past-papers storage | See [`SYSTEM_DOCUMENTATION.md`](./SYSTEM_DOCUMENTATION.md) |
 
-## 📚 Documentation
-
-Comprehensive documentation is available to help you understand, develop, and maintain the system.
-
-### Documentation Hub
-
-📖 **[DOCUMENTATION_INDEX.md](./DOCUMENTATION_INDEX.md)** - Start here for navigation
-
-### Quick Links
-
-| Document | Purpose | Audience |
-|----------|---------|----------|
-| **[DEVELOPER_QUICKSTART.md](./DEVELOPER_QUICKSTART.md)** | Get started in 5 minutes | New Developers |
-| **[SYSTEM_DOCUMENTATION.md](./SYSTEM_DOCUMENTATION.md)** | Complete system architecture & features | Developers, Architects |
-| **[API_REFERENCE.md](./API_REFERENCE.md)** | All API endpoints and usage | Developers |
-| **[MAINTENANCE_OPERATIONS.md](./MAINTENANCE_OPERATIONS.md)** | Daily/monthly operations guide | DevOps, SysAdmins |
-| **[API-DEBUGGING-SUMMARY.md](./API-DEBUGGING-SUMMARY.md)** | Troubleshooting guide | Developers |
-| **[GOOGLE-AI-INTEGRATION.md](./GOOGLE-AI-INTEGRATION.md)** | AI integration details | Developers |
-| **[YEARLY-CACHING.md](./YEARLY-CACHING.md)** | Caching strategy | Developers |
-| **[DATA-SOURCES.md](./DATA-SOURCES.md)** | Data source information | Data Teams |
-
----
-
-## 🛠️ Technology Stack
-
-**Frontend**
-- Next.js 15.1.3 (React 19, App Router)
-- TypeScript 5.x
-- Tailwind CSS 3.4
-- shadcn/ui components
-
-**Backend**
-- Next.js API Routes
-- Google Gemini AI (chatbot & data)
-- Appwrite (database & storage)
-- Cheerio (web scraping)
-
-**Deployment**
-- Vercel (hosting & serverless)
-- Appwrite Cloud (backend services)
-
----
-
-## 📂 Project Structure
-
-```
-courseFinder/
-├── app/                    # Next.js app directory (pages & API routes)
-│   ├── api/                # API endpoints
-│   ├── find-course/        # Course finder page
-│   ├── bursaries/          # Bursaries page
-│   └── ...
-├── components/             # React components
-│   ├── ui/                 # shadcn/ui components
-│   ├── chatbot.tsx         # AI chatbot
-│   └── ...
-├── data/                   # Static data
-│   ├── universities/       # 28 university data files
-│   └── colleges.ts         # TVET colleges
-├── lib/                    # Utilities & helpers
-├── docs/                   # Documentation (this!)
-└── __tests__/              # Test files
-```
-
----
-
-## 🧪 Development
-
-### Available Commands
+### Testing
 
 ```bash
-# Development
-npm run dev              # Start dev server
-npm run build            # Build for production
-npm run start            # Run production build
-
-# Testing
-npm run test             # Run tests
-npm run test:watch       # Watch mode
-npm run test:coverage    # With coverage
-
-# Code Quality
-npm run lint             # Lint code
-```
-
-### Environment Variables
-
-Required in `.env.local`:
-
-```env
-# Required
-GOOGLE_API_KEY=your_google_ai_key
-
-# Optional (for full features)
-NEXT_PUBLIC_APPWRITE_ENDPOINT=https://cloud.appwrite.io/v1
-NEXT_PUBLIC_APPWRITE_PROJECT_ID=your_project_id
-OCR_SPACE_API_KEY=your_ocr_key
+npm run test              # run once
+npm run test:watch        # watch mode
+npm run test:coverage     # with coverage
 ```
 
 ---
 
-## 🌐 Deployment
+## Documentation
 
-### Vercel (Recommended)
-
-The application is deployed on Vercel:
-
-**Production URL**: [https://vercel.com/matomejohn170-gmailcoms-projects/v0-matric-university-app](https://vercel.com/matomejohn170-gmailcoms-projects/v0-matric-university-app)
-
-**Deploy Steps**:
-1. Push to `main` branch
-2. Vercel auto-deploys
-3. Set environment variables in Vercel dashboard
-
-See [SYSTEM_DOCUMENTATION.md - Deployment](./SYSTEM_DOCUMENTATION.md#deployment) for details.
+| Document | Covers |
+|---|---|
+| [`SYSTEM_DOCUMENTATION.md`](./SYSTEM_DOCUMENTATION.md) | Full system architecture, including what was removed and why |
+| [`API_REFERENCE.md`](./API_REFERENCE.md) | This app's own API routes |
+| [`GOOGLE-AI-INTEGRATION.md`](./GOOGLE-AI-INTEGRATION.md) | The AI chat assistant |
+| [`YEARLY-CACHING.md`](./YEARLY-CACHING.md) | How yearly stats data is cached |
+| [`DATA-SOURCES.md`](./DATA-SOURCES.md) | Where the locally-sourced university/college data came from |
+| [`API-DEBUGGING-SUMMARY.md`](./API-DEBUGGING-SUMMARY.md) | Troubleshooting notes |
+| **[coursefind-data's README](https://github.com/itumeleng-itu/cf-data)** | The backend this app calls for course matching |
 
 ---
 
-## 🤝 Contributing
+## Related repository
 
-We welcome contributions! Here's how:
-
-1. **Fork** the repository
-2. **Create** a feature branch (`git checkout -b feature/amazing-feature`)
-3. **Commit** your changes (`git commit -m 'Add amazing feature'`)
-4. **Push** to branch (`git push origin feature/amazing-feature`)
-5. **Open** a Pull Request
-
-**Before submitting**:
-- Run tests: `npm run test`
-- Lint code: `npm run lint`
-- Update documentation if needed
-
----
-
-## 📊 Key Statistics
-
-- **28 Universities** - Complete coverage of SA public universities
-- **2,500+ Courses** - Undergraduate programs across all fields
-- **35+ Bursaries** - Updated daily
-- **10 Years** - Past papers (2014-2024)
-- **9 Provinces** - Statistics and pass rates
-
----
-
-## 🎯 Roadmap
-
-### Current Version (v0.1.0)
-
-✅ Course finder with APS matching  
-✅ 28 university database  
-✅ AI chatbot assistant  
-✅ Bursaries scraping  
-✅ Past papers library  
-✅ Statistics dashboard  
-
-### Planned Features
-
-- [ ] User authentication & profiles
-- [ ] Saved favorite courses
-- [ ] Application deadline reminders
-- [ ] University comparison tool
-- [ ] Career path recommendations
-- [ ] Mobile application (Flutter)
-- [ ] Admin CRM system
-
----
-
-## 📞 Support
-
-**Documentation**: See [DOCUMENTATION_INDEX.md](./DOCUMENTATION_INDEX.md)  
-**Issues**: [GitHub Issues](https://github.com/itumeleng-itu/courseFinder/issues)  
-**Contact**: Development Team
-
----
-
-## 📄 License
-
-This project is licensed under the MIT License - see the LICENSE file for details.
-
----
-
-## 🙏 Acknowledgments
-
-- **Department of Basic Education** - For official matric statistics
-- **South African Universities** - For course information
-- **Google** - For Gemini AI API
-- **Appwrite** - For backend services
-- **Vercel** - For hosting and deployment
-- **shadcn/ui** - For beautiful UI components
-
----
-
-## 📈 Project Status
-
-**Status**: ✅ Production Ready  
-**Version**: 0.1.0  
-**Last Updated**: 2025-11-25  
-**Maintained**: Active development
-
----
-
-**Built with ❤️ for South African students**
+**[coursefind-data](https://github.com/itumeleng-itu/cf-data)** — the admission-matching API and hand-verified programme dataset this app calls for eligibility checking. Start there to understand how a programme's requirements get verified, how APS scoring actually works per institution, or to add a new institution's data.
