@@ -50,6 +50,7 @@ export default function FindCoursePage() {
     recommendedColleges,
     extendedPrograms,
     findCourses: runMatcher,
+    isMatching,
     setQualifyingCourses,
     setRecommendedColleges,
     setExtendedPrograms,
@@ -67,7 +68,7 @@ export default function FindCoursePage() {
     setCurrentSubject(""); setCurrentPercentage(""); setHasCalculated(false)
   }
 
-  const findCourses = () => {
+  const findCourses = async () => {
     if (subjects.length < 7) {
       toast({ title: "Add more subjects", description: "Please add at least 7 subjects." })
       return
@@ -75,8 +76,11 @@ export default function FindCoursePage() {
     setApsScore(calculatedDefaultAPS)
     setNscResult(evaluateNSC(subjects) as any)
     setVisibleCount(48)
-    runMatcher()
     setHasCalculated(true)
+    const error = await runMatcher()
+    if (error) {
+      toast({ title: "Course matching unavailable", description: error, variant: "destructive" })
+    }
   }
 
   const filteredCourses = useMemo(() => {
@@ -137,9 +141,9 @@ export default function FindCoursePage() {
                       />
                     ))}
                     <div className="pt-4 space-y-3">
-                      <Button onClick={findCourses} className="w-full glass-button text-lg font-bold h-12 shadow-lg hover:shadow-xl transition-all" size="lg" disabled={!canCalculate}>
+                      <Button onClick={findCourses} className="w-full glass-button text-lg font-bold h-12 shadow-lg hover:shadow-xl transition-all" size="lg" disabled={!canCalculate || isMatching}>
                         <Calculator className="h-5 w-5 mr-2" />
-                        Calculate APS
+                        {isMatching ? "Checking courses..." : "Calculate APS"}
                       </Button>
                       <Button onClick={() => { setSubjects([]); setHasCalculated(false); setQualifyingCourses([]); setRecommendedColleges([]); setExtendedPrograms([]); setVisibleCount(48) }} variant="ghost" className="w-full text-muted-foreground hover:text-destructive">
                         Reset All Subjects
