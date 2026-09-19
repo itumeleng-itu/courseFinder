@@ -21,6 +21,7 @@ import { SubjectInputForm } from "@/components/find-course/subject-input-form"
 import { CourseFilters } from "@/components/find-course/course-filters"
 import { CourseMatchCard } from "@/components/find-course/course-match-card"
 import { UpgradeRecommendation } from "@/components/find-course/upgrade-recommendation"
+import { MaintenanceNotice } from "@/components/maintenance-notice"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
 
@@ -189,6 +190,9 @@ export default function FindCoursePage() {
           </div>
 
           <div className="flex-1 flex flex-col lg:overflow-hidden h-auto">
+            <div className="p-4 md:px-6 md:pt-6 md:pb-0 shrink-0 empty:hidden">
+              <MaintenanceNotice />
+            </div>
             {hasCalculated && (
               <>
                 <CourseFilters searchQuery={searchQuery} setSearchQuery={setSearchQuery} qualifiedCount={qualifiedCount} />
