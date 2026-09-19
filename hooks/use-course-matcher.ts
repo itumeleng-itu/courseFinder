@@ -7,6 +7,25 @@ import { getAllUniversityInstances } from "@/data/universities"
 import { getAllColleges, collegeToUniversityFormat } from "@/data/colleges"
 import { fetchQualification, fetchCoveredInstitutions, QualifyApiError, QualifyProgrammeResult } from "@/lib/qualify-api"
 
+/** TEMPORARY testing toggle -- coursefind-data is being onboarded one
+ * institution at a time (TUT first), and while that's in progress the
+ * product owner wants the main course list to show ONLY what the API
+ * has actually verified, not a mix of API-backed and legacy-local
+ * results with no visual distinction between them. false means: every
+ * institution NOT yet covered by /v1/meta shows an EMPTY main list
+ * instead of falling back to data/universities/*.ts -- a real, deliberate
+ * regression for those institutions' main lists, not a bug.
+ *
+ * Flip back to true once there's more than one or two institutions still
+ * pending, or once the UI can visually distinguish API-verified results
+ * from local ones -- at that point the fallback in Section 4 of
+ * docs/audit/04-integration-review.md (this repo's own coursefind-data
+ * audit) becomes the right default again: some real data beats none for
+ * institutions the API hasn't reached yet. Extended-curriculum and TVET
+ * matching are unaffected either way -- the API doesn't cover those at
+ * all yet, so they always use local data regardless of this flag. */
+const LOCAL_MAIN_LIST_FALLBACK_ENABLED = false
+
 const isUndergraduateCourse = (name: string) => {
     const n = name.toLowerCase()
     const exclude = ["honours", "postgraduate", "pgdip", "pgcert", "master", "masters", "msc", "ma ", "llm", "phd", "doctor", "doctorate", "mba"]
@@ -125,23 +144,25 @@ export function useCourseMatcher(subjects: Subject[], calculatedDefaultAPS: numb
             }
         }
 
-        for (const universityInstance of getAllUniversityInstances()) {
-            if (coveredInstitutions.has(universityInstance.id)) continue
-            const universityForDisplay = universities.get(universityInstance.id) ?? displayFor(universityInstance)
-            universityInstance.courses.forEach((course) => {
-                const apsRequired = (course as Course).apsMin ?? (course as Course).apsRequired ?? 0
-                if (apsRequired <= 0) return
-                const requirementCheck = checkSubjectRequirements(subjects, course.subjectRequirements)
-                if (calculatedDefaultAPS >= apsRequired && requirementCheck.meets && isUndergraduateCourse(course.name)) {
-                    localMainListMatches.push({
-                        course: course as Course,
-                        university: universityForDisplay,
-                        meetsRequirements: true,
-                        missingRequirements: [],
-                        metRequirements: requirementCheck.met,
-                    })
-                }
-            })
+        if (LOCAL_MAIN_LIST_FALLBACK_ENABLED) {
+            for (const universityInstance of getAllUniversityInstances()) {
+                if (coveredInstitutions.has(universityInstance.id)) continue
+                const universityForDisplay = universities.get(universityInstance.id) ?? displayFor(universityInstance)
+                universityInstance.courses.forEach((course) => {
+                    const apsRequired = (course as Course).apsMin ?? (course as Course).apsRequired ?? 0
+                    if (apsRequired <= 0) return
+                    const requirementCheck = checkSubjectRequirements(subjects, course.subjectRequirements)
+                    if (calculatedDefaultAPS >= apsRequired && requirementCheck.meets && isUndergraduateCourse(course.name)) {
+                        localMainListMatches.push({
+                            course: course as Course,
+                            university: universityForDisplay,
+                            meetsRequirements: true,
+                            missingRequirements: [],
+                            metRequirements: requirementCheck.met,
+                        })
+                    }
+                })
+            }
         }
 
         setQualifyingCourses(
