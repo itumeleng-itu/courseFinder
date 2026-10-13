@@ -2,6 +2,7 @@ import { Card, CardHeader, CardTitle, CardDescription, CardContent } from "@/com
 import { Badge } from "@/components/ui/badge"
 import { CheckCircle2, AlertCircle, Bookmark, GraduationCap } from "lucide-react"
 import { CourseMatch } from "@/app/find-course/types"
+import { ProgrammeCourses } from "@/components/find-course/programme-courses"
 
 interface CourseMatchCardProps {
   match: CourseMatch
@@ -10,6 +11,10 @@ interface CourseMatchCardProps {
 
 export function CourseMatchCard({ match, index }: CourseMatchCardProps) {
   const { course, university, meetsRequirements, missingRequirements, metRequirements } = match
+  // Only an API-backed match has a qualification_code the API can serve
+  // a course list for -- see CourseMatch.apiBacked. course.id is
+  // optional on the shared Course type, so both are checked.
+  const canShowCourses = Boolean(match.apiBacked && course.id && university.id)
   const apsToDisplay = course.apsMin ?? course.apsRequired ?? "N/A"
   
   const formatCareers = (careers: string | string[] | undefined): string => {
@@ -62,6 +67,13 @@ export function CourseMatchCard({ match, index }: CourseMatchCardProps) {
             )}
           </div>
         </div>
+
+        {canShowCourses && (
+          <ProgrammeCourses
+            institution={university.id}
+            qualificationCode={course.id!}
+          />
+        )}
       </CardContent>
     </Card>
   )

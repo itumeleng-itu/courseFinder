@@ -88,6 +88,9 @@ function toCourseMatch(result: QualifyProgrammeResult, universities: Map<string,
         meetsRequirements: true,
         missingRequirements: [],
         metRequirements: [`APS ${result.score_actual} (required ${result.score_required ?? "?"})`],
+        // Set here and nowhere else: this is the only path where
+        // course.id is a qualification_code the API will answer for.
+        apiBacked: true,
     }
 }
 

@@ -152,13 +152,21 @@ describe("fetching the courses behind a qualifying programme", () => {
       .rejects.toBeInstanceOf(ProgrammeNotFoundError)
   })
 
-  /** The three Wits records that carry no course list, and why. Two of
-   * them are the prospectus's own doing -- its pages 89 and 94 print the
-   * programme's requirements and careers and no course outline at all,
-   * which the extraction recorded as 0 courses for those pages rather
-   * than inventing any. The third has no prospectus page. So "no
-   * courses" here is a fact about the source, not a gap in the fetch,
-   * and a client must say "not published" rather than "failed". */
+  /** The three Wits records that carry no course list, and why -- all
+   * three are the prospectus's own doing, not a gap in the fetch.
+   *
+   *   ABA00  BA        page 89 prints requirements and careers and no
+   *   ABA02  BA (Law)  page 94 course outline; the extraction recorded
+   *                    0 courses for both rather than inventing any.
+   *   WITS-BSC-GEN     appears ONLY in the admissions table on page 24
+   *                    ("Bachelor of Science (BSc) General  3  42+  5
+   *                    5"), with no programme page anywhere in the
+   *                    document -- confirmed by searching all 68 pages
+   *                    for the name, which matches once. Its
+   *                    qualification code is synthetic for the same
+   *                    reason: Wits publishes none for it.
+   *
+   * So a client must say "not published" here, never "failed". */
   const NO_COURSE_LIST = new Set(["ABA00", "ABA02", "WITS-BSC-GEN"])
 
   it("reaches every course list the learner's qualifying programmes have", async () => {
