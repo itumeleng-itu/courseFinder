@@ -1,12 +1,13 @@
 "use client"
 
 /**
- * The courses a learner would actually study, on the results card.
+ * The courses a learner would actually study.
  *
- * Collapsed by default and fetched only when opened -- see
- * hooks/use-programme-courses.ts for why (a results page can hold ~90
- * programmes and ~1,700 courses behind them; a learner opens two or
- * three).
+ * Lives inside the programme detail dialog, and fetches only while that
+ * dialog is open -- see hooks/use-programme-courses.ts for why (a
+ * results page can hold ~90 programmes and ~1,700 courses behind them;
+ * a learner opens two or three). `enabled` is the dialog's own open
+ * state, so a card that is never clicked costs nothing.
  *
  * TWO THINGS THIS GETS RIGHT THAT A NAIVE RENDER WOULD NOT
  *
@@ -24,14 +25,8 @@
  *    untidy one. A choice is rendered as one item reading "X or Y".
  */
 import { useState } from "react"
-import { BookOpen, ChevronDown, Loader2 } from "lucide-react"
 import { Badge } from "@/components/ui/badge"
 import { Skeleton } from "@/components/ui/skeleton"
-import {
-  Collapsible,
-  CollapsibleContent,
-  CollapsibleTrigger,
-} from "@/components/ui/collapsible"
 import { useProgrammeCourses } from "@/hooks/use-programme-courses"
 import {
   orderedStages,
@@ -41,12 +36,15 @@ import {
   type ProgrammeStream,
 } from "@/lib/qualify-api"
 
-interface ProgrammeCoursesProps {
+interface ProgrammeCourseListProps {
   /** Institution id as the API knows it, e.g. "wits". */
   institution: string
   /** The programme's qualification_code, e.g. "SBA11". */
   qualificationCode: string
   academicYear?: number
+  /** Whether to fetch. Pass the dialog's open state: a results page
+   * holds dozens of these, and a card nobody opens must cost nothing. */
+  enabled?: boolean
 }
 
 function CourseLine({ entry }: { entry: CourseRequirement }) {
@@ -103,17 +101,17 @@ function StreamCourses({ stream }: { stream: ProgrammeStream }) {
   )
 }
 
-export function ProgrammeCourses({
+export function ProgrammeCourseList({
   institution,
   qualificationCode,
   academicYear,
-}: ProgrammeCoursesProps) {
-  const [open, setOpen] = useState(false)
+  enabled = true,
+}: ProgrammeCourseListProps) {
   const [streamIndex, setStreamIndex] = useState(0)
   const { detail, loading, unavailable, error } = useProgrammeCourses(
     institution,
     qualificationCode,
-    { enabled: open, academicYear },
+    { enabled, academicYear },
   )
 
   const streams = detail?.streams ?? []
@@ -122,17 +120,7 @@ export function ProgrammeCourses({
   const stream = streams[Math.min(streamIndex, Math.max(streams.length - 1, 0))]
 
   return (
-    <Collapsible open={open} onOpenChange={setOpen} className="space-y-2">
-      <CollapsibleTrigger className="flex w-full items-center gap-1.5 text-xs font-semibold uppercase tracking-wider text-muted-foreground hover:text-foreground transition-colors">
-        <BookOpen className="h-3 w-3" />
-        What you&apos;d study
-        {loading && <Loader2 className="h-3 w-3 animate-spin" />}
-        <ChevronDown
-          className={`h-3 w-3 ml-auto transition-transform ${open ? "rotate-180" : ""}`}
-        />
-      </CollapsibleTrigger>
-
-      <CollapsibleContent className="space-y-3">
+    <div className="space-y-3">
         {loading && (
           <div className="space-y-2">
             <Skeleton className="h-3 w-24" />
@@ -211,7 +199,6 @@ export function ProgrammeCourses({
             )}
           </p>
         )}
-      </CollapsibleContent>
-    </Collapsible>
+    </div>
   )
 }

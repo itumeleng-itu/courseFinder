@@ -19,6 +19,10 @@ import { CourseMatchCard } from "@/components/find-course/course-match-card"
 import type { CourseMatch } from "@/app/find-course/types"
 import { clearProgrammeCourseCache } from "@/hooks/use-programme-courses"
 
+/** The card is one button; its detail -- courses included -- is in a
+ * modal. So "open the details" is the click a learner makes. */
+const openDetails = () => fireEvent.click(screen.getByRole("button", { name: /Details/i }))
+
 const API = process.env.LIVE_QUALIFY_API_URL ?? "http://127.0.0.1:8099"
 const realFetch = global.fetch
 
@@ -72,13 +76,14 @@ function match(code: string, name: string, apiBacked = true): CourseMatch {
 }
 
 describe("a learner looking at a Wits result card", () => {
-  it("shows no course section until they ask for it", async () => {
+  it("shows no courses, and fetches nothing, until the card is opened", async () => {
     render(<CourseMatchCard match={match("FBA00", "Bachelor of Architectural Studies")} index={0} />)
 
-    expect(screen.getByText(/what you'd study/i)).toBeInTheDocument()
-    // The trigger is there; the courses are neither fetched nor shown.
-    // A results page can carry ~90 of these cards, so fetching on mount
-    // would mean ~90 requests for a learner who opens two.
+    // The card shows what a learner scans by, and nothing is fetched.
+    // A results page can carry ~90 of these, so fetching on mount would
+    // mean ~90 requests for a learner who opens two.
+    expect(screen.getByText("Bachelor of Architectural Studies")).toBeInTheDocument()
+    expect(screen.queryByText(/what you'd study/i)).not.toBeInTheDocument()
     expect(screen.queryByText("Applied Mathematics")).not.toBeInTheDocument()
     expect(requests).toEqual([])
   })
@@ -86,7 +91,7 @@ describe("a learner looking at a Wits result card", () => {
   it("shows the real first-year courses when they open it", async () => {
     render(<CourseMatchCard match={match("FBA00", "Bachelor of Architectural Studies")} index={0} />)
 
-    fireEvent.click(screen.getByText(/what you'd study/i))
+    openDetails()
 
     // Printed on prospectus page 70, under FIRST YEAR.
     await waitFor(() => expect(screen.getByText("Applied Mathematics")).toBeInTheDocument())
@@ -101,7 +106,7 @@ describe("a learner looking at a Wits result card", () => {
     // merged would list "Introductory Life Sciences" six times.
     render(<CourseMatchCard match={match("SBA11", "BSc in the field of Biological Sciences")} index={0} />)
 
-    fireEvent.click(screen.getByText(/what you'd study/i))
+    openDetails()
     await waitFor(() => expect(screen.getByText(/6 majors share this degree/i)).toBeInTheDocument())
 
     const first = screen.getByRole("button", { name: "Applied Ecology and Global Change" })
@@ -121,7 +126,7 @@ describe("a learner looking at a Wits result card", () => {
   it("renders an either/or requirement as one choice, not two courses", async () => {
     render(<CourseMatchCard match={match("CBA10", "BCom in Information Systems")} index={0} />)
 
-    fireEvent.click(screen.getByText(/what you'd study/i))
+    openDetails()
     await waitFor(() => expect(screen.getByText(/First Year/i)).toBeInTheDocument())
 
     const choices = screen.queryAllByText(/^One of: /)
@@ -137,18 +142,52 @@ describe("a learner looking at a Wits result card", () => {
     // no course outline at all.
     render(<CourseMatchCard match={match("ABA00", "Bachelor of Arts")} index={0} />)
 
-    fireEvent.click(screen.getByText(/what you'd study/i))
+    openDetails()
 
     await waitFor(() =>
       expect(screen.getByText(/does not publish a course outline/i)).toBeInTheDocument())
     expect(screen.queryByText(/could not be loaded/i)).not.toBeInTheDocument()
   })
 
-  it("offers nothing to open for a locally-sourced match", async () => {
+  it("is one keyboard-reachable control, and closes with Escape", async () => {
+    // The whole card is clickable, so it has to BE a control rather
+    // than a div that happens to respond to a mouse -- otherwise it is
+    // unreachable by keyboard and unannounced by a screen reader.
+    render(<CourseMatchCard match={match("FBA00", "Bachelor of Architectural Studies")} index={0} />)
+
+    const card = screen.getByRole("button", { name: /Bachelor of Architectural Studies/i })
+    expect(card).toHaveAttribute("aria-haspopup", "dialog")
+    card.focus()
+    expect(card).toHaveFocus()
+
+    fireEvent.keyDown(card, { key: "Enter", code: "Enter" })
+    fireEvent.click(card)
+    await waitFor(() => expect(screen.getByRole("dialog")).toBeInTheDocument())
+
+    fireEvent.keyDown(document.activeElement ?? document.body, { key: "Escape", code: "Escape" })
+    await waitFor(() => expect(screen.queryByRole("dialog")).not.toBeInTheDocument())
+  })
+
+  it("keeps the programme name and APS on the card itself", () => {
+    // What a learner scans the grid by must not move into the modal.
+    render(<CourseMatchCard match={match("FBA00", "Bachelor of Architectural Studies")} index={0} />)
+
+    expect(screen.getByText("Bachelor of Architectural Studies")).toBeInTheDocument()
+    expect(screen.getByText("Wits")).toBeInTheDocument()
+    expect(screen.getByText(/APS 42/)).toBeInTheDocument()
+  })
+
+  it("opens a detail modal with no course section for a local match", async () => {
     // Those ids are not qualification_codes; asking the API for their
     // courses would 404 on every card.
     render(<CourseMatchCard match={match("uj-bcom-acc", "BCom Accounting", false)} index={0} />)
+    openDetails()
 
+    // The modal still opens -- it carries the requirements and careers
+    // -- but asks for no course list, because that id is not a
+    // qualification_code the API would answer for.
+    expect(screen.getByRole("dialog")).toBeInTheDocument()
     expect(screen.queryByText(/what you'd study/i)).not.toBeInTheDocument()
+    expect(requests).toEqual([])
   })
 })
