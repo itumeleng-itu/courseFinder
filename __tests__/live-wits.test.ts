@@ -100,8 +100,12 @@ describe("live API, Wits 2027", () => {
   })
 
   it("returns results the card renderer can read without falling back", async () => {
+    // includeNearMisses is opted into here, against the app's default:
+    // this checks the SHAPE of a programme result, and this certificate
+    // qualifies for nothing, so near misses are the only sample of that
+    // shape available. The app itself does not ask for them.
     const body = await fetchQualification(CERT, {
-      academicYear: 2027, institutions: ["wits"],
+      academicYear: 2027, institutions: ["wits"], includeNearMisses: true,
     })
     const all: QualifyProgrammeResult[] = [...body.qualified, ...body.near_misses]
     expect(all.length).toBeGreaterThan(0)
@@ -120,9 +124,13 @@ describe("live API, Wits 2027", () => {
   })
 
   it("gives a learner a reason, not just a rejection", async () => {
+    // Also opted in: the reasons are what a future "what would get you
+    // in" screen would be built from, so the API must keep producing
+    // them even though nothing renders them today.
     const body = await fetchQualification(CERT, {
-      academicYear: 2027, institutions: ["wits"],
+      academicYear: 2027, institutions: ["wits"], includeNearMisses: true,
     })
+    expect(body.near_misses.length).toBeGreaterThan(0)
     for (const r of body.near_misses) {
       expect(r.failures.length).toBeGreaterThan(0)
       for (const f of r.failures) {

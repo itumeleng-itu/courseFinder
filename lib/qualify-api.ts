@@ -175,6 +175,21 @@ function toApiSubjects(subjects: SubjectEntry[]): { subject: string; percentage:
 export interface FetchQualificationOptions {
   academicYear?: number
   institutions?: string[]
+  /** Ask the API for programmes the learner did NOT get into but failed
+   * two or fewer requirements on. Defaults to FALSE, and should stay
+   * that way unless something is actually going to render them.
+   *
+   * Measured against the live API: for a learner who qualifies for
+   * nothing -- the case where the bucket sounds most useful -- near
+   * misses are 30 of the response's 41 KB, 73% of a payload that is
+   * then discarded. For a strong learner it is 7 of 40 KB. Compute is
+   * negligible either way (~0.4 ms); the cost is bandwidth, paid on
+   * every search by every learner.
+   *
+   * Note that "near" counts UNMET REQUIREMENTS, not distance: a
+   * programme missed by 13 APS points is a near miss because it failed
+   * on one front, while one missed by a point on three fronts is not.
+   * Anything built on this bucket needs to sort by margin itself. */
   includeNearMisses?: boolean
 }
 
@@ -206,7 +221,7 @@ export async function fetchQualification(
         subjects: apiSubjects,
         academic_year: options.academicYear,
         institutions: options.institutions,
-        include_near_misses: options.includeNearMisses ?? true,
+        include_near_misses: options.includeNearMisses ?? false,
       }),
     })
   } catch (error) {

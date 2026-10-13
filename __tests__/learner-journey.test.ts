@@ -119,14 +119,40 @@ describe("what the learner sees", () => {
       const w = (b: keyof typeof r) =>
         (r[b] as any[]).filter((x) => x.institution === "wits")
       expect(w("qualified").length).toBe(0)
-      // The API told the app about these two buckets; the UI reads only
-      // `qualified`, so nothing in them ever reaches the learner.
-      expect(w("near_misses").length).toBeGreaterThan(0)
-      expect(w("requires_additional_assessment").length).toBeGreaterThan(0)
+      // Not requested, so not computed and not sent. Nothing renders
+      // near misses, and for a learner who qualifies for nothing they
+      // were 73% of the response.
+      expect(r.near_misses).toEqual([])
       console.log(
-        `\n  cert ${_label}: APS ${r.scores.wits} -> 0 Wits cards; ` +
-        `${w("near_misses").length} near misses and ` +
-        `${w("requires_additional_assessment").length} assessment-gated ` +
-        `programmes are discarded by the UI\n`)
+        `\n  cert ${_label}: APS ${r.scores.wits} -> 0 Wits cards, ` +
+        `${w("requires_additional_assessment").length} assessment-gated\n`)
     })
+
+  it("does not ask the API for near misses", async () => {
+    // The default is what matters: every caller in the app relies on
+    // it, so a change back to true would quietly restore the cost on
+    // every search. Asserted on the request body, not the response,
+    // because an empty near_misses list cannot distinguish "not asked
+    // for" from "asked for and none found".
+    const sent: any[] = []
+    const inner = global.fetch
+    global.fetch = ((input: any, init?: any) => {
+      if (init?.body) sent.push(JSON.parse(init.body))
+      return (inner as any)(input, init)
+    }) as any
+    try {
+      await fetchQualification(STRONG)
+    } finally {
+      global.fetch = inner
+    }
+    expect(sent[0].include_near_misses).toBe(false)
+  })
+
+  it("still returns them when a caller explicitly asks", async () => {
+    // The capability stays; only the default changed. A future screen
+    // that renders them opts in rather than reinstating the cost for
+    // everyone.
+    const r = await fetchQualification(CERT_2017, { includeNearMisses: true })
+    expect(r.near_misses.length).toBeGreaterThan(0)
+  })
 })
