@@ -1,0 +1,132 @@
+/** @jest-environment node */
+/**
+ * What a learner actually sees after entering their marks.
+ *
+ * Uses the same path app/find-course/page.tsx runs through
+ * hooks/use-course-matcher.ts: fetchCoveredInstitutions, then
+ * fetchQualification, then response.qualified filtered by
+ * isUndergraduateCourse. Needs a coursefind-data API on port 8099.
+ */
+import * as http from "http"
+import { fetchQualification, fetchCoveredInstitutions } from "@/lib/qualify-api"
+
+const realFetch = global.fetch
+
+function nodeFetch(url: string, init?: any): Promise<any> {
+  const t = new URL(url)
+  return new Promise((res, rej) => {
+    const r = http.request(
+      { hostname: t.hostname, port: t.port, path: t.pathname + t.search,
+        method: init?.method ?? "GET", headers: init?.headers ?? {} },
+      (x) => { let d = ""
+               x.on("data", (c) => (d += c))
+               x.on("end", () => res({ ok: (x.statusCode ?? 500) < 400,
+                                       status: x.statusCode,
+                                       json: async () => JSON.parse(d),
+                                       text: async () => d })) },
+    )
+    r.on("error", rej)
+    if (init?.body) r.write(init.body)
+    r.end()
+  })
+}
+
+beforeAll(() => {
+  // jest.setup.js mocks global.fetch; stand in for the Next.js proxy routes.
+  global.fetch = ((input: any, init?: any) => {
+    const url = typeof input === "string" ? input : input.url
+    if (url.startsWith("/api/qualify/meta")) return nodeFetch("http://127.0.0.1:8099/v1/meta", init)
+    if (url.startsWith("/api/qualify")) return nodeFetch("http://127.0.0.1:8099/v1/qualify", init)
+    return nodeFetch(url, init)
+  }) as any
+})
+afterAll(() => { global.fetch = realFetch })
+
+/** The exact predicate hooks/use-course-matcher.ts applies to the API's
+ * qualified list before building course cards. */
+const isUndergraduateCourse = (name: string) => {
+  const n = name.toLowerCase()
+  const exclude = ["honours", "postgraduate", "pgdip", "pgcert", "master", "masters",
+                   "msc", "ma ", "llm", "phd", "doctor", "doctorate", "mba"]
+  if (exclude.some((t) => n.includes(t))) return false
+  const include = ["bachelor", "bsc", "ba ", "beng", "bcom", "diploma",
+                   "higher certificate", "national diploma", "advanced diploma", "undergraduate"]
+  return include.some((t) => n.includes(t)) || !exclude.some((t) => n.includes(t))
+}
+
+const STRONG = [
+  { name: "English Home Language", percentage: 82 },
+  { name: "Afrikaans First Additional Language", percentage: 74 },
+  { name: "Mathematics", percentage: 78 },
+  { name: "Physical Sciences", percentage: 71 },
+  { name: "Life Sciences", percentage: 68 },
+  { name: "Geography", percentage: 66 },
+  { name: "Life Orientation", percentage: 85 },
+] as any
+
+/** The three real statements of results pasted into this session, as the
+ * learner would type them into the form. */
+const CERT_2017 = [
+  { name: "IsiZulu Home Language", percentage: 77 },
+  { name: "English First Additional Language", percentage: 75 },
+  { name: "Mathematics", percentage: 8 },
+  { name: "Life Orientation", percentage: 83 },
+  { name: "Geography", percentage: 72 },
+  { name: "History", percentage: 78 },
+  { name: "Life Sciences", percentage: 50 },
+] as any
+
+const CERT_2022 = [
+  { name: "IsiZulu Home Language", percentage: 76 },
+  { name: "English First Additional Language", percentage: 61 },
+  { name: "Mathematical Literacy", percentage: 40 },
+  { name: "Life Orientation", percentage: 73 },
+  { name: "Business Studies", percentage: 67 },
+  { name: "Economics", percentage: 64 },
+  { name: "Tourism", percentage: 48 },
+] as any
+
+const CERT_2024 = [
+  { name: "IsiZulu Home Language", percentage: 83 },
+  { name: "English First Additional Language", percentage: 75 },
+  { name: "Mathematics", percentage: 41 },
+  { name: "Life Orientation", percentage: 87 },
+  { name: "Geography", percentage: 51 },
+  { name: "Life Sciences", percentage: 54 },
+  { name: "Physical Sciences", percentage: 30 },
+] as any
+
+describe("what the learner sees", () => {
+  it("picks Wits up from /v1/meta with no code change", async () => {
+    expect((await fetchCoveredInstitutions()).has("wits")).toBe(true)
+  })
+
+  it("shows Wits programmes to a learner who qualifies", async () => {
+    const r = await fetchQualification(STRONG)
+    const shown = r.qualified.filter((x) => isUndergraduateCourse(x.name))
+    const wits = shown.filter((x) => x.institution === "wits")
+    expect(wits.length).toBeGreaterThan(0)
+    console.log(`\n  scores ${JSON.stringify(r.scores)} -> ${wits.length} Wits cards, e.g.`)
+    for (const w of wits.slice(0, 4)) console.log(`     ${w.qualification_code}  ${w.name}`)
+    // the name filter drops none of them
+    expect(shown.length).toBe(r.qualified.length)
+  })
+
+  it.each([["2017", CERT_2017], ["2022", CERT_2022], ["2024", CERT_2024]])(
+    "shows no Wits cards at all for the real certificate %s",
+    async (_label, marks) => {
+      const r = await fetchQualification(marks as any)
+      const w = (b: keyof typeof r) =>
+        (r[b] as any[]).filter((x) => x.institution === "wits")
+      expect(w("qualified").length).toBe(0)
+      // The API told the app about these two buckets; the UI reads only
+      // `qualified`, so nothing in them ever reaches the learner.
+      expect(w("near_misses").length).toBeGreaterThan(0)
+      expect(w("requires_additional_assessment").length).toBeGreaterThan(0)
+      console.log(
+        `\n  cert ${_label}: APS ${r.scores.wits} -> 0 Wits cards; ` +
+        `${w("near_misses").length} near misses and ` +
+        `${w("requires_additional_assessment").length} assessment-gated ` +
+        `programmes are discarded by the UI\n`)
+    })
+})

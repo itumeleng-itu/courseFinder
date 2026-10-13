@@ -1,25 +1,96 @@
 import type { SubjectEntry } from "../types"
 import { APSResult } from "./types"
 import { percentageToLevel, percentageToLevel8 } from "./utils"
+import { toSubjectSlug } from "@/lib/subject-slugs"
+
+/**
+ * Wits APS, exactly as prospectus page 13 prints it.
+ *
+ * This MUST agree with coursefind-data's custom_points_with_bonus under
+ * the Wits scoring_config (seeds/institutions.json), because that is what
+ * /v1/qualify uses to decide admission. A learner shown one number here
+ * and judged on another is being misled.
+ *
+ * Three things make Wits different from the national NSC scale, and the
+ * previous implementation got all three wrong:
+ *
+ *   1. 0-39% SCORES ZERO, not NSC level 1 or 2. percentageToLevel8 pays
+ *      2 points for a 35% mark; Wits pays nothing.
+ *
+ *   2. ENGLISH AND MATHEMATICS EARN +2, from 60% upward only. The column
+ *      is headed "Wits APS for English and Mathematics". It attaches to
+ *      the SUBJECT English -- Home Language or First Additional -- and to
+ *      Mathematics, never to whichever language a learner happens to
+ *      offer as their Home Language. isiZulu HL at 77% is worth 6 while
+ *      English FAL at 75% is worth 8: a higher mark, fewer points.
+ *      Awarding the bonus to any Home Language inflates the score of most
+ *      South African learners.
+ *
+ *   3. LIFE ORIENTATION USES ITS OWN COMPRESSED 0-4 SCALE, and is always
+ *      one of the seven -- "the best seven subjects including Life
+ *      Orientation". Halving the ordinary band is close but not equal,
+ *      and letting LO compete for a place drops it the moment a learner
+ *      offers an eighth subject, overstating them.
+ *
+ * Checked against the live API for six certificates in
+ * __tests__/wits-aps-drift.test.ts, including the three real ones.
+ */
+const WITS_BANDS: [number, number][] = [
+    [90, 8], [80, 7], [70, 6], [60, 5], [50, 4], [40, 3], [0, 0],
+]
+const WITS_LO_BANDS: [number, number][] = [
+    [90, 4], [80, 3], [70, 2], [60, 1], [0, 0],
+]
+/** Slugs the +2 attaches to. Names are mapped through toSubjectSlug so
+ * "English First Additional Language" and "English Home Language" both
+ * qualify and "IsiZulu Home Language" does not. */
+const WITS_BONUS_SLUGS = new Set(["english_hl", "english_fal", "mathematics"])
+const WITS_BONUS_FROM = 60
+const WITS_SUBJECT_COUNT = 7
+
+function witsPoints(percentage: number, bands: [number, number][]): number {
+    for (const [floor, points] of bands) if (percentage >= floor) return points
+    return 0
+}
 
 export function calculateWitsAPS(subjects: SubjectEntry[]): APSResult {
-    const sortedSubjects = [...subjects].sort((a, b) => Number(b.percentage) - Number(a.percentage))
-    const bestSeven = sortedSubjects.slice(0, 7)
-    let aps = 0
-    const breakdown: string[] = []
+    const scored = subjects
+        .filter((s) => s.name && Number(s.percentage) >= 0)
+        .map((s) => {
+            const percentage = Number(s.percentage)
+            const slug = toSubjectSlug(s.name)
+            const isLO = slug === "life_orientation"
+            const base = witsPoints(percentage, isLO ? WITS_LO_BANDS : WITS_BANDS)
+            const bonus =
+                !isLO && slug && WITS_BONUS_SLUGS.has(slug) && percentage >= WITS_BONUS_FROM
+                    ? 2
+                    : 0
+            return { subject: s, slug, isLO, percentage, points: base + bonus, base, bonus }
+        })
 
-    bestSeven.forEach((subject) => {
-        let points = percentageToLevel8(Number(subject.percentage))
-        if (subject.name.toLowerCase() === "life orientation") {
-            points = Math.floor(points / 2)
-            breakdown.push(`${subject.name}: ${subject.percentage}% = Level ${percentageToLevel8(Number(subject.percentage))} ÷ 2 = ${points} pts`)
-        } else {
-            breakdown.push(`${subject.name}: ${subject.percentage}% = Level ${percentageToLevel8(Number(subject.percentage))} = ${points} pts`)
-        }
-        aps += points
-    })
+    // Life Orientation takes one of the seven places before anything
+    // competes for the rest -- page 13's "including Life Orientation".
+    const lo = scored.filter((s) => s.isLO)
+    const rest = scored
+        .filter((s) => !s.isLO)
+        .sort((a, b) => b.points - a.points)
+    const counted = [...lo, ...rest].slice(0, WITS_SUBJECT_COUNT)
 
-    return { aps, method: "Wits: NSC 1-8 scale, best 7 subjects (LO counts half)", breakdown, eligibleSubjects: bestSeven }
+    const aps = counted.reduce((sum, s) => sum + s.points, 0)
+    const breakdown = counted.map((s) =>
+        s.isLO
+            ? `${s.subject.name}: ${s.percentage}% = ${s.points} pts (Life Orientation scale, max 4)`
+            : s.bonus
+              ? `${s.subject.name}: ${s.percentage}% = ${s.base} +${s.bonus} = ${s.points} pts`
+              : `${s.subject.name}: ${s.percentage}% = ${s.points} pts`,
+    )
+
+    return {
+        aps,
+        method: "Wits: best 7 including Life Orientation, +2 for English and Mathematics from 60%",
+        breakdown,
+        eligibleSubjects: counted.map((s) => s.subject),
+    }
 }
 
 export function calculateUWCAPS(subjects: SubjectEntry[]): APSResult {
