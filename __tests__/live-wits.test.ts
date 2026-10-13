@@ -33,7 +33,7 @@ const API = process.env.LIVE_QUALIFY_API_URL ?? "http://127.0.0.1:8099"
 // thing the setup cannot stand in front of.
 import * as http from "http"
 
-function realFetch(url: string, init?: any): Promise<any> {
+function nodeFetch(url: string, init?: any): Promise<any> {
   const target = new URL(url)
   return new Promise((resolve, reject) => {
     const req = http.request(
@@ -63,16 +63,21 @@ function realFetch(url: string, init?: any): Promise<any> {
   })
 }
 
+/** jest.setup.js's mock, put back afterwards -- nodeFetch below is a
+ * transport, not the global fetch, and leaving it installed would hand
+ * the next suite a fetch that talks to a real port. */
+const originalFetch = global.fetch
+
 beforeAll(() => {
   // Stand in for the Next.js proxy routes, which forward verbatim.
   global.fetch = ((input: any, init?: any) => {
     const url = typeof input === "string" ? input : input.url
-    if (url.startsWith("/api/qualify/meta")) return realFetch(`${API}/v1/meta`, init)
-    if (url.startsWith("/api/qualify")) return realFetch(`${API}/v1/qualify`, init)
-    return realFetch(input, init)
+    if (url.startsWith("/api/qualify/meta")) return nodeFetch(`${API}/v1/meta`, init)
+    if (url.startsWith("/api/qualify")) return nodeFetch(`${API}/v1/qualify`, init)
+    return nodeFetch(input, init)
   }) as typeof fetch
 })
-afterAll(() => { global.fetch = realFetch })
+afterAll(() => { global.fetch = originalFetch })
 
 // Subject names exactly as a learner picks them in the UI, not slugs.
 const CERT = [
@@ -141,11 +146,11 @@ describe("live API, Wits 2027", () => {
   })
 
   it("serves Wits course lists through the programmes endpoint", async () => {
-    const list = await (await realFetch(
+    const list = await (await nodeFetch(
       `${API}/v1/programmes?institution=wits&with_curriculum=true`)).json()
     expect(list.length).toBe(57)
 
-    const detail = await (await realFetch(`${API}/v1/programmes/wits/EFA03`)).json()
+    const detail = await (await nodeFetch(`${API}/v1/programmes/wits/EFA03`)).json()
     expect(detail.streams.map((s: any) => s.name))
       .toEqual(["Electrical Engineering", "Information Engineering"])
 
