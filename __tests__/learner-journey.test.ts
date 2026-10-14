@@ -112,6 +112,45 @@ describe("what the learner sees", () => {
     expect(shown.length).toBe(r.qualified.length)
   })
 
+  it.each([["2017", CERT_2017, 15], ["2022", CERT_2022, 20], ["2024", CERT_2024, 40]])(
+    "gives the real certificate %s somewhere to go, now TUT is loaded",
+    async (label, marks, atLeast) => {
+      // The point of adding TUT. These three learners qualified for
+      // NOTHING at Wits -- correctly, its bars run 33-43 and they score
+      // 29-33 -- and saw an empty page. TUT's run 18-30, the band they
+      // are actually in. A floor rather than an exact count, so a data
+      // refresh that adds programmes does not fail this, but one that
+      // empties their results does.
+      const r = await fetchQualification(marks as any)
+      const tut = r.qualified.filter((x) => x.institution === "tut")
+      expect(tut.length).toBeGreaterThanOrEqual(atLeast)
+      console.log(`\n  cert ${label}: TUT APS ${r.scores.tut} -> ` +
+                  `${tut.length} TUT cards (Wits: ` +
+                  `${r.qualified.filter((x) => x.institution === "wits").length})`)
+    })
+
+  it("shows no course list for a TUT programme, and does not pretend otherwise", async () => {
+    // TUT's source document carries admission requirements only -- no
+    // curriculum anywhere in its 20 pages. So a TUT card must say the
+    // outline is not published rather than failing or showing an empty
+    // section as if something were missing.
+    const r = await fetchQualification(CERT_2024 as any)
+    const tut = r.qualified.filter((x) => x.institution === "tut")
+    expect(tut.length).toBeGreaterThan(0)
+
+    const { GET } = await import("@/app/api/programmes/[institution]/[code]/route")
+    const { NextRequest } = await import("next/server")
+    const code = tut[0].qualification_code
+    const body = await (await GET(
+      new NextRequest(`http://localhost/api/programmes/tut/${code}/`),
+      { params: Promise.resolve({ institution: "tut", code }) },
+    )).json()
+
+    const courses = body.streams.flatMap((s: any) => Object.values(s.curriculum).flat())
+    expect(courses).toEqual([])
+    expect(body.source_doc).toContain("tut")
+  })
+
   it.each([["2017", CERT_2017], ["2022", CERT_2022], ["2024", CERT_2024]])(
     "shows no Wits cards at all for the real certificate %s",
     async (_label, marks) => {
