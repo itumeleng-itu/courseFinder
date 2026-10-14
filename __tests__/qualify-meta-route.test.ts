@@ -1,51 +1,44 @@
 /**
  * @jest-environment node
+ *
+ * GET /api/qualify/meta, now answered from the bundled dataset.
+ *
+ * The shape is load-bearing beyond this route: fetchCoveredInstitutions()
+ * reads `institutions` to decide, per university, whether to trust the
+ * matcher's list or fall back to this app's local data. A renamed or
+ * empty field there does not throw -- it silently empties the main
+ * course list for every institution.
  */
 import { GET } from "@/app/api/qualify/meta/route"
+import { PROGRAMMES } from "@/lib/qualify/data"
 
-function mockUpstream(response: { ok?: boolean; status?: number; jsonBody: unknown }) {
-  ;(global.fetch as jest.Mock).mockResolvedValueOnce({
-    ok: response.ok ?? true,
-    status: response.status ?? 200,
-    json: async () => response.jsonBody,
-  })
-}
+describe("GET /api/qualify/meta", () => {
+  it("reports the dataset actually bundled, not a hardcoded list", async () => {
+    const body = await (await GET()).json()
 
-describe("GET /api/qualify/meta (proxy to coursefind-data's /v1/meta)", () => {
-  it("forwards to coursefind-data's /v1/meta", async () => {
-    mockUpstream({ jsonBody: { institutions: { uj: [2027] } } })
-
-    await GET()
-
-    const [url] = (global.fetch as jest.Mock).mock.calls[0]
-    expect(url).toMatch(/\/v1\/meta$/)
+    expect(body.programme_count).toBe(PROGRAMMES.length)
+    expect(Object.keys(body.institutions).sort())
+      .toEqual([...new Set(PROGRAMMES.map((p) => p.institution_id))].sort())
   })
 
-  it("returns the upstream JSON body verbatim on success", async () => {
-    const upstreamBody = { data_version: "v1", academic_years: [2027], institutions: { uj: [2027] }, programme_count: 29 }
-    mockUpstream({ jsonBody: upstreamBody })
-
-    const response = await GET()
-
-    expect(response.status).toBe(200)
-    expect(await response.json()).toEqual(upstreamBody)
+  it("covers Wits, which is what the frontend checks before showing it", async () => {
+    const body = await (await GET()).json()
+    expect(body.institutions.wits).toContain(2027)
   })
 
-  it("returns 502 when coursefind-data is unreachable, without throwing", async () => {
-    ;(global.fetch as jest.Mock).mockRejectedValueOnce(new Error("ECONNREFUSED"))
-
-    const response = await GET()
-
-    expect(response.status).toBe(502)
-    const body = await response.json()
-    expect(body.error).toMatch(/unreachable/i)
+  it("names the cf-data release the data came from", async () => {
+    // Without this a mismatched programmes.json is undetectable from
+    // outside -- the numbers would simply be wrong.
+    const body = await (await GET()).json()
+    expect(body.data_version).toMatch(/^\d{4}\.\d+$/)
   })
 
-  it("passes through coursefind-data's own status code on failure", async () => {
-    mockUpstream({ ok: false, status: 500, jsonBody: { detail: "boom" } })
-
-    const response = await GET()
-
-    expect(response.status).toBe(500)
+  it("keeps every field the client's QualifyMetaResponse declares", async () => {
+    const body = await (await GET()).json()
+    expect(Object.keys(body).sort()).toEqual([
+      "academic_years", "data_version", "institutions", "programme_count",
+    ])
+    expect(Array.isArray(body.academic_years)).toBe(true)
+    expect(body.academic_years).toContain(2027)
   })
 })
