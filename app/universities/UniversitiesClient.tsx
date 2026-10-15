@@ -41,6 +41,30 @@ function getUniversityDateStatus(close: Record<string, string>): DateStatus {
   return "open"
 }
 
+/**
+ * Whether an application-opening date is still ahead of us.
+ *
+ * Closing dates earn a "(Closed)" strikethrough when they pass, because a
+ * learner needs to know the door shut. An opening date is different: once it
+ * is behind us it carries no information at all, and "Opens: 1 March 2026"
+ * shown in October 2026 actively misleads -- it reads as an upcoming date to
+ * anyone skimming, and it is the university's PREVIOUS intake.
+ *
+ * So the row is rendered only for a date we can parse AND that is still to
+ * come. An unparseable or missing date is also not shown: we cannot claim a
+ * cycle is upcoming when we do not know that it is. The dates below are
+ * maintained by hand, so they go stale every year; this keeps the page silent
+ * rather than wrong until the new cycle's dates are filled in.
+ */
+export function isOpeningDateUpcoming(dateStr: string | undefined | null): boolean {
+  if (!dateStr) return false
+  const d = parseDateStr(dateStr)
+  if (!d) return false
+  const today = new Date()
+  today.setHours(0, 0, 0, 0)
+  return d >= today
+}
+
 function getDateLineStatus(dateStr: string): "past" | "soon" | "open" {
   const today = new Date()
   today.setHours(0, 0, 0, 0)
@@ -189,10 +213,12 @@ export default function UniversitiesClient({ universities }: { universities: Uni
               </CardHeader>
 
               <CardContent className="flex-grow space-y-3 pb-3">
-                <div className="flex items-center text-sm text-primary font-medium bg-primary/10 dark:bg-primary/20 px-3 py-2 rounded-md">
-                  <Calendar className="w-4 h-4 mr-2 shrink-0" />
-                  Opens: {appInfo?.open ?? "1 April 2026"}
-                </div>
+                {isOpeningDateUpcoming(appInfo?.open) && (
+                  <div className="flex items-center text-sm text-primary font-medium bg-primary/10 dark:bg-primary/20 px-3 py-2 rounded-md">
+                    <Calendar className="w-4 h-4 mr-2 shrink-0" />
+                    Opens: {appInfo!.open}
+                  </div>
+                )}
 
                 {appInfo && (
                   <div className="rounded-md border bg-muted/30 p-3 space-y-2">
