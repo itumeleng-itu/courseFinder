@@ -33,6 +33,16 @@ describe("GET /api/qualify/meta", () => {
     expect(body.data_version).toMatch(/^\d{4}\.\d+$/)
   })
 
+  it("forbids caching, so it cannot report a dataset that is no longer deployed", async () => {
+    // A stale copy of this route outlived a deploy: it kept answering
+    // with the previous release's 89 programmes while the same app's
+    // /api/programmes route served the new data. force-dynamic only
+    // stops pre-rendering; a CDN needs telling.
+    const r = await GET()
+    expect(r.headers.get("Cache-Control")).toMatch(/no-store/)
+    expect(r.headers.get("CDN-Cache-Control")).toMatch(/no-store/)
+  })
+
   it("keeps every field the client's QualifyMetaResponse declares", async () => {
     const body = await (await GET()).json()
     expect(Object.keys(body).sort()).toEqual([
