@@ -42,17 +42,16 @@ beforeAll(() => {
 })
 afterAll(() => { global.fetch = realFetch })
 
-/** The exact predicate hooks/use-course-matcher.ts applies to the API's
- * qualified list before building course cards. */
-const isUndergraduateCourse = (name: string) => {
-  const n = name.toLowerCase()
-  const exclude = ["honours", "postgraduate", "pgdip", "pgcert", "master", "masters",
-                   "msc", "ma ", "llm", "phd", "doctor", "doctorate", "mba"]
-  if (exclude.some((t) => n.includes(t))) return false
-  const include = ["bachelor", "bsc", "ba ", "beng", "bcom", "diploma",
-                   "higher certificate", "national diploma", "advanced diploma", "undergraduate"]
-  return include.some((t) => n.includes(t)) || !exclude.some((t) => n.includes(t))
-}
+/** Imported, not reimplemented.
+ *
+ * This file used to carry its own copy of the predicate "exactly as
+ * hooks/use-course-matcher.ts applies it". The two then drifted, which
+ * is the one thing a copy must not do: the real filter was hiding every
+ * UJ diploma (the substring "ma " matches "Diploma Architecture") and
+ * this test could not see it, because the copy had the same bug and the
+ * assertion compared the two. A test that reimplements the thing it is
+ * testing only ever proves it can reproduce its own mistakes. */
+import { isUndergraduateCourse } from "@/hooks/use-course-matcher"
 
 const STRONG = [
   { name: "English Home Language", percentage: 82 },

@@ -26,12 +26,40 @@ import { fetchQualification, fetchCoveredInstitutions, QualifyApiError, QualifyP
  * all yet, so they always use local data regardless of this flag. */
 const LOCAL_MAIN_LIST_FALLBACK_ENABLED = false
 
-const isUndergraduateCourse = (name: string) => {
+/** Qualification words are matched as WHOLE WORDS, not substrings.
+ *
+ * The exclusion list used `n.includes(t)`, and one of its entries was
+ * "ma " -- for "MA History". "Diploma Architecture" contains "ma ", and
+ * so does every other name of the form "Diploma <something>". When UJ's
+ * 2027 prospectus brought in 24 diplomas named exactly that way, all 24
+ * were hidden from learners who qualified for them: the matcher returned
+ * them, the list silently dropped them.
+ *
+ * "ma" and "msc" are the dangerous ones, but any of these can sit inside
+ * an ordinary word, so the whole comparison is done on word boundaries.
+ */
+const EXCLUDE_WORDS = [
+    "honours", "postgraduate", "pgdip", "pgcert", "master", "masters",
+    "msc", "ma", "llm", "phd", "doctor", "doctorate", "mba",
+]
+const INCLUDE_WORDS = [
+    "bachelor", "bsc", "ba", "beng", "bengtech", "bcom", "bed", "bhsc",
+    "diploma", "higher certificate", "national diploma", "advanced diploma",
+    "undergraduate",
+]
+
+const hasWord = (haystack: string, phrase: string) =>
+    new RegExp(`(^|[^a-z0-9])${phrase.replace(/\s+/g, "\\s+")}([^a-z0-9]|$)`, "i").test(haystack)
+
+export const isUndergraduateCourse = (name: string) => {
     const n = name.toLowerCase()
-    const exclude = ["honours", "postgraduate", "pgdip", "pgcert", "master", "masters", "msc", "ma ", "llm", "phd", "doctor", "doctorate", "mba"]
-    if (exclude.some((t) => n.includes(t))) return false
-    const include = ["bachelor", "bsc", "ba ", "beng", "bcom", "diploma", "higher certificate", "national diploma", "advanced diploma", "undergraduate"]
-    return include.some((t) => n.includes(t)) || !exclude.some((t) => n.includes(t))
+    // Anything not named as a postgraduate qualification is shown. The
+    // include list is kept because it documents what this feed carries
+    // and makes the intent readable, but it does not gate anything: a
+    // name matching neither list is far more likely to be an
+    // undergraduate programme we have not seen the wording of than a
+    // postgraduate one that avoided every word above.
+    return !EXCLUDE_WORDS.some((t) => hasWord(n, t))
 }
 
 /** Institution display metadata (short name, website, location) still
