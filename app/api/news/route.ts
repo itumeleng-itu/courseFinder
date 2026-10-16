@@ -1,8 +1,14 @@
 import { NextResponse } from "next/server"
 import { NewsArticle, FALLBACK_ARTICLES } from "@/data/fallback-news"
-import { isWithin48Hours, buildImageForArticle, isRelevantToStudents } from "@/lib/news-utils"
-
-
+import {
+  buildImageForArticle,
+  classifyArticle,
+  dedupeArticles,
+  hoursSincePublished,
+  isFreshForTopic,
+  looksOpenToMatriculants,
+  type ArticleTopic,
+} from "@/lib/news-utils"
 
 // ─── In-memory cache (survives warm instances, resets on cold start) ──────────
 let _memoryCache: { articles: NewsArticle[]; savedAt: number } | null = null
@@ -27,23 +33,106 @@ export const revalidate = 3600 // 1 hour ISR
 
 const NEWS_API_KEY = process.env.NEWS_API_KEY
 
-// ─── Fetcher ──────────────────────────────────────────────────────────────────
-async function fetchRealNews(): Promise<NewsArticle[]> {
-  if (!NEWS_API_KEY) {
-    console.warn("[News] NEWS_API_KEY not set — skipping live fetch")
-    return []
-  }
+const MAX = 8
 
+/**
+ * How many of the MAX slots each topic is guaranteed, in order.
+ *
+ * Without reservations the feed is simply whatever is freshest, and general
+ * schooling news is published daily while a bursary call is announced once.
+ * Sorting by date alone therefore buries exactly the item a matriculant most
+ * needs. Unused slots fall through to the next topic, so a quiet bursary week
+ * costs nothing.
+ */
+const SLOTS: Array<{ topic: ArticleTopic; reserved: number }> = [
+  { topic: "bursary", reserved: 3 },
+  { topic: "university", reserved: 3 },
+  { topic: "schooling", reserved: 2 },
+]
+
+/**
+ * Three targeted sweeps instead of one broad category request.
+ *
+ * The old call asked for category=education,technology,science,health and
+ * nothing else, so bursary and university stories only appeared by accident.
+ * newsdata.io's `q` is what actually searches, and it is the only way to ask
+ * for funding news specifically.
+ *
+ * Ordered by value to a matriculant: the bursary sweep runs first, so when
+ * the same story is syndicated across mastheads the copy kept is the one
+ * found by the best-targeted query.
+ *
+ * Cost: three requests per cache miss rather than one. The hour-long cache
+ * bounds that at roughly 72 requests a day. If the plan's daily credits run
+ * short, drop the schooling sweep first -- the broad education category is
+ * the one that produced the Pope's surgery.
+ */
+const SWEEPS: Array<{ label: ArticleTopic; params: Record<string, string> }> = [
+  {
+    label: "bursary",
+    params: {
+      q: 'bursary OR bursaries OR scholarship OR NSFAS OR "student funding"',
+    },
+  },
+  {
+    label: "university",
+    params: {
+      q: 'university OR "higher education" OR admissions OR "applications open" OR "TVET college"',
+    },
+  },
+  {
+    label: "schooling",
+    params: { category: "education", q: "matric OR school OR learners" },
+  },
+]
+
+function toArticle(item: any): NewsArticle {
+  // Build fallback image only if API didn't supply one
+  const fallback = !item.image_url ? buildImageForArticle(item) : null
+
+  return {
+    // ── Identity ──────────────────────────────────────────────────────
+    article_id: item.article_id,                            // "da149f92..."
+    link: item.link || "#",                           // full article URL
+
+    // ── Content ───────────────────────────────────────────────────────
+    title: item.title || "No title",
+    // item.content === "ONLY AVAILABLE IN PAID PLANS" on free tier — never use it
+    description: item.description || "No description available",
+
+    // ── Dates ─────────────────────────────────────────────────────────
+    pubDate: item.pubDate || new Date().toISOString(), // "2026-03-19 19:35:00"
+    pubDateTZ: item.pubDateTZ || "UTC",                    // "UTC"
+
+    // ── Source ────────────────────────────────────────────────────────
+    source_id: item.source_id || "unknown",          // "landeszeitung"
+    source_name: item.source_name || item.source_id || "Unknown", // "Lz – Landeszeitung"
+    source_url: item.source_url || null,
+    source_icon: item.source_icon || null,
+    source_priority: item.source_priority ?? null,
+
+    // ── Taxonomy ──────────────────────────────────────────────────────
+    category: Array.isArray(item.category) ? item.category : ["top"], // ["top","lifestyle"]
+    language: item.language || "en",
+    country: Array.isArray(item.country) ? item.country : [],      // ["germany"]
+    keywords: Array.isArray(item.keywords) ? item.keywords : null,
+    datatype: item.datatype || "news",
+    duplicate: item.duplicate ?? false,
+
+    // ── Media ─────────────────────────────────────────────────────────
+    image_url: item.image_url || fallback?.image_url || null,
+    video_url: item.video_url || null,
+    alt_text: item.title || fallback?.alt_text || "News image",
+  }
+}
+
+async function runSweep(params: Record<string, string>): Promise<NewsArticle[]> {
   const url = new URL("https://newsdata.io/api/1/news")
-  url.searchParams.set("apikey", NEWS_API_KEY)
+  url.searchParams.set("apikey", NEWS_API_KEY as string)
   url.searchParams.set("country", "za")
   url.searchParams.set("language", "en")
-  // Broad category set — more results per credit on free plan
-  url.searchParams.set(
-    "category",
-    "education,technology,science,health"
-  )
   url.searchParams.set("size", "10") // max on free plan
+  for (const [k, v] of Object.entries(params)) url.searchParams.set(k, v)
 
   try {
     const response = await fetch(url.toString(), {
@@ -53,8 +142,7 @@ async function fetchRealNews(): Promise<NewsArticle[]> {
     })
 
     if (!response.ok) {
-      const errorText = await response.text()
-      console.error(`[News] HTTP ${response.status}:`, errorText)
+      console.error(`[News] HTTP ${response.status}:`, await response.text())
       return []
     }
 
@@ -65,54 +153,65 @@ async function fetchRealNews(): Promise<NewsArticle[]> {
       return []
     }
 
-    const raw: any[] = data.results ?? []
-    const filtered = raw.filter(isRelevantToStudents)
-
-    const articles: NewsArticle[] = filtered.map((item: any) => {
-      // Build fallback image only if API didn't supply one
-      const fallback = !item.image_url ? buildImageForArticle(item) : null
-
-      return {
-        // ── Identity ──────────────────────────────────────────────────────
-        article_id: item.article_id,                            // "da149f92..."
-        link: item.link || "#",                           // full article URL
-
-        // ── Content ───────────────────────────────────────────────────────
-        title: item.title || "No title",
-        // item.content === "ONLY AVAILABLE IN PAID PLANS" on free tier — never use it
-        description: item.description || "No description available",
-
-        // ── Dates ─────────────────────────────────────────────────────────
-        pubDate: item.pubDate || new Date().toISOString(), // "2026-03-19 19:35:00"
-        pubDateTZ: item.pubDateTZ || "UTC",                    // "UTC"
-
-        // ── Source ────────────────────────────────────────────────────────
-        source_id: item.source_id || "unknown",          // "landeszeitung"
-        source_name: item.source_name || item.source_id || "Unknown", // "Lz – Landeszeitung"
-        source_url: item.source_url || null,
-        source_icon: item.source_icon || null,
-        source_priority: item.source_priority ?? null,
-
-        // ── Taxonomy ──────────────────────────────────────────────────────
-        category: Array.isArray(item.category) ? item.category : ["top"], // ["top","lifestyle"]
-        language: item.language || "en",
-        country: Array.isArray(item.country) ? item.country : [],      // ["germany"]
-        keywords: Array.isArray(item.keywords) ? item.keywords : null,
-        datatype: item.datatype || "news",
-        duplicate: item.duplicate ?? false,
-
-        // ── Media ─────────────────────────────────────────────────────────
-        image_url: item.image_url || fallback?.image_url || null,
-        video_url: item.video_url || null,
-        alt_text: item.title || fallback?.alt_text || "News image",
-      }
-    })
-
-    return articles
+    return (data.results ?? []).map(toArticle)
   } catch (error) {
     console.error("[News] Fetch error:", error)
     return []
   }
+}
+
+// ─── Fetcher ──────────────────────────────────────────────────────────────────
+async function fetchRealNews(): Promise<NewsArticle[]> {
+  if (!NEWS_API_KEY) {
+    console.warn("[News] NEWS_API_KEY not set — skipping live fetch")
+    return []
+  }
+
+  // One sweep failing must not take the others down with it.
+  const results = await Promise.all(SWEEPS.map((s) => runSweep(s.params)))
+  return dedupeArticles(results.flat())
+}
+
+/**
+ * Fill the feed topic by topic, newest first within each topic.
+ *
+ * Bursary items that mention matric, school leavers or first-year intake sort
+ * above those that read as postgraduate funding. That is ordering only: the
+ * headline cannot establish eligibility, so nothing here tells a learner they
+ * qualify -- it just puts the likelier ones where they will be seen.
+ */
+export function selectArticles(articles: NewsArticle[], max = MAX): NewsArticle[] {
+  const byTopic = new Map<ArticleTopic, NewsArticle[]>()
+
+  for (const a of dedupeArticles(articles)) {
+    const topic = classifyArticle(a)
+    if (!topic) continue
+    if (!isFreshForTopic(a.pubDate, topic)) continue
+    byTopic.set(topic, [...(byTopic.get(topic) ?? []), a])
+  }
+
+  for (const [topic, list] of byTopic) {
+    list.sort((x, y) => {
+      if (topic === "bursary") {
+        const d = Number(looksOpenToMatriculants(y)) - Number(looksOpenToMatriculants(x))
+        if (d !== 0) return d
+      }
+      return (hoursSincePublished(x.pubDate) ?? Infinity) - (hoursSincePublished(y.pubDate) ?? Infinity)
+    })
+  }
+
+  const picked: NewsArticle[] = []
+  // First pass: each topic's reserved share.
+  for (const { topic, reserved } of SLOTS) {
+    picked.push(...(byTopic.get(topic) ?? []).slice(0, reserved))
+  }
+  // Second pass: hand unclaimed slots to whoever has articles left.
+  for (const { topic, reserved } of SLOTS) {
+    if (picked.length >= max) break
+    picked.push(...(byTopic.get(topic) ?? []).slice(reserved, reserved + (max - picked.length)))
+  }
+
+  return picked.slice(0, max)
 }
 
 // ─── Route Handler ────────────────────────────────────────────────────────────
@@ -128,20 +227,19 @@ export async function GET() {
     }
 
     const fetchedArticles = await fetchRealNews()
-    const MAX = 8
 
     if (fetchedArticles.length > 0) {
       saveToCache(fetchedArticles)
     }
 
-    const fresh = fetchedArticles.filter((a) => isWithin48Hours(a.pubDate))
-
-    let normalized = fresh.slice(0, MAX)
+    let normalized = selectArticles(fetchedArticles)
     let source: "Live Feed" | "Cached" | "Static Fallback" = "Live Feed"
 
     if (normalized.length === 0) {
-      // Fall back to cached articles without time filter — best available data
-      const cachedNews = getCachedNews()
+      // Fall back to cached articles without the freshness filter — best
+      // available data, still topic-filtered so the feed cannot silently
+      // revert to general news.
+      const cachedNews = getCachedNews().filter((a) => classifyArticle(a) !== null)
       if (cachedNews.length > 0) {
         normalized = cachedNews.slice(0, MAX)
         source = "Cached"
@@ -150,7 +248,6 @@ export async function GET() {
         normalized = FALLBACK_ARTICLES.slice(0, MAX)
         source = "Static Fallback"
       }
-
     }
 
     return NextResponse.json(

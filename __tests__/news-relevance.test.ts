@@ -1,0 +1,162 @@
+/** @jest-environment node */
+/**
+ * What the homepage news feed is allowed to show a matriculant.
+ *
+ * The fixtures below are the eight articles coursefind.co.za/api/news
+ * actually returned on 16 October 2026, headlines unchanged. Six had nothing
+ * to do with school, two were about school and were duplicates of each other,
+ * and not one concerned a bursary or a university. That is the regression
+ * these tests exist to hold shut.
+ */
+import { classifyArticle, dedupeArticles, isFreshForTopic, looksOpenToMatriculants } from "@/lib/news-utils"
+import { selectArticles } from "@/app/api/news/route"
+import type { NewsArticle } from "@/data/fallback-news"
+
+const hoursAgo = (h: number) =>
+  new Date(Date.now() - h * 3600_000).toISOString().replace("T", " ").slice(0, 19)
+
+let seq = 0
+const article = (over: Partial<NewsArticle> & { title: string }): NewsArticle => ({
+  article_id: `a${seq++}`,
+  link: `https://example.test/${seq}`,
+  description: "",
+  pubDate: hoursAgo(2),
+  pubDateTZ: "UTC",
+  source_id: "src",
+  source_name: "Src",
+  source_url: null,
+  source_icon: null,
+  source_priority: null,
+  category: ["top"],
+  language: "en",
+  country: ["south africa"],
+  keywords: null,
+  datatype: "news",
+  duplicate: false,
+  image_url: null,
+  video_url: null,
+  alt_text: over.title,
+  ...over,
+})
+
+/** Verbatim from the live feed, 16 October 2026. */
+const LIVE_FEED_THAT_SHIPPED = [
+  article({ title: "Pixel 10a vs Galaxy A57: What $599 Buys After the Price Hikes", category: ["technology"] }),
+  article({ title: "PRASA showcases rail recovery and launches new long-distance bus fleet", category: ["top", "technology"] }),
+  article({ title: "Alibaba's AI Agents Now Work 4-Hour Shifts. QwenGyre Is How It Stops Paying GPUs to Wait", category: ["technology"] }),
+  article({ title: "China investigates reported brake pedal bracket fracture in Huawei-backed Maextro EV", category: ["top", "technology"] }),
+  article({ title: "Pope Leo recovering as planned after lung cancer surgery, doctors say", source_id: "timeslive", category: ["top", "health"] }),
+  article({ title: "Pope Leo recovering as planned after lung cancer surgery, doctors say", source_id: "sowetanlive", category: ["top", "health"] }),
+  article({ title: "WATCH: Orient Islamic School matrics share reactions to English Paper 3", source_id: "pretorianews", category: ["education"] }),
+  article({ title: "Orient Islamic School matrics share reactions to English Paper 3", source_id: "businessreport_co_za", category: ["top", "education"] }),
+]
+
+describe("relevance", () => {
+  it("rejects the six off-topic articles the feed was shipping", () => {
+    const offTopic = LIVE_FEED_THAT_SHIPPED.slice(0, 6)
+
+    expect(offTopic.filter((a) => classifyArticle(a) !== null)).toEqual([])
+  })
+
+  it("still keeps the school story, which is the point of the feed", () => {
+    expect(classifyArticle(LIVE_FEED_THAT_SHIPPED[6])).toBe("schooling")
+  })
+
+  it("does not let a broad category alone carry an article through", () => {
+    // The old filter passed anything tagged top/technology/health/world.
+    // Category is corroboration now, never the decision.
+    expect(classifyArticle(article({ title: "Rand firms against dollar", category: ["top", "business"] }))).toBeNull()
+    expect(classifyArticle(article({ title: "School fire guts Limpopo classroom block", category: ["education"] }))).toBe("schooling")
+  })
+
+  it("picks bursary out of a funding headline, and university out of an admissions one", () => {
+    expect(classifyArticle(article({ title: "Sasol opens 2027 bursary applications" }))).toBe("bursary")
+    expect(classifyArticle(article({ title: "Wits admissions close early this year" }))).toBe("university")
+  })
+
+  it("reads keywords as well as the headline", () => {
+    const a = article({ title: "Funding call announced", keywords: ["NSFAS", "undergraduate"] })
+    expect(classifyArticle(a)).toBe("bursary")
+  })
+})
+
+describe("deduplication", () => {
+  it("collapses the same story syndicated across mastheads", () => {
+    // Both Pope copies and both matric copies occupied separate slots,
+    // and newsdata.io's own `duplicate` flag caught neither pair.
+    const titles = dedupeArticles(LIVE_FEED_THAT_SHIPPED).map((a) => a.title)
+
+    expect(titles.filter((t) => t.includes("Pope Leo"))).toHaveLength(1)
+    expect(titles.filter((t) => t.includes("English Paper 3"))).toHaveLength(1)
+  })
+})
+
+describe("freshness by topic", () => {
+  it("keeps a bursary call that is weeks old, because it is still open", () => {
+    // Under the old flat 48-hour window a bursary was visible for one day of
+    // an application window that runs for months.
+    expect(isFreshForTopic(hoursAgo(20 * 24), "bursary")).toBe(true)
+    expect(isFreshForTopic(hoursAgo(40 * 24), "bursary")).toBe(false)
+  })
+
+  it("still holds daily schooling news to 48 hours", () => {
+    expect(isFreshForTopic(hoursAgo(12), "schooling")).toBe(true)
+    expect(isFreshForTopic(hoursAgo(72), "schooling")).toBe(false)
+  })
+})
+
+describe("first-year signals", () => {
+  it("separates a matric-intake bursary from a postgraduate one", () => {
+    expect(looksOpenToMatriculants(article({ title: "Bursary open to Grade 12 learners for 2027 intake" }))).toBe(true)
+    expect(looksOpenToMatriculants(article({ title: "PhD research bursary for staff" }))).toBe(false)
+  })
+})
+
+describe("selectArticles", () => {
+  it("shows a bursary even when general news is fresher", () => {
+    const feed = [
+      ...Array.from({ length: 8 }, (_, i) =>
+        article({ title: `Matric exam timetable update ${i}`, pubDate: hoursAgo(1) })),
+      article({ title: "Funza Lushaka bursary applications open to matriculants", pubDate: hoursAgo(300) }),
+    ]
+
+    const titles = selectArticles(feed).map((a) => a.title)
+    expect(titles).toContain("Funza Lushaka bursary applications open to matriculants")
+  })
+
+  it("puts matric-eligible bursaries above postgraduate ones", () => {
+    const feed = [
+      article({ title: "Postgraduate bursary for doctoral candidates", pubDate: hoursAgo(1) }),
+      article({ title: "NSFAS bursary opens for Grade 12 school leavers", pubDate: hoursAgo(50) }),
+    ]
+
+    expect(selectArticles(feed)[0].title).toBe("NSFAS bursary opens for Grade 12 school leavers")
+  })
+
+  it("admits nothing off-topic, even with slots going spare", () => {
+    const feed = [...LIVE_FEED_THAT_SHIPPED]
+    const picked = selectArticles(feed)
+
+    expect(picked.every((a) => classifyArticle(a) !== null)).toBe(true)
+    expect(picked.map((a) => a.title)).toEqual([
+      "WATCH: Orient Islamic School matrics share reactions to English Paper 3",
+    ])
+  })
+
+  it("gives spare slots away rather than leaving the feed short", () => {
+    // Bursary reserves 3; with only one bursary the other two must go to
+    // university and schooling, not go unused.
+    const feed = [
+      article({ title: "Sasol bursary opens for matriculants" }),
+      ...Array.from({ length: 6 }, (_, i) => article({ title: `University admissions change ${i}` })),
+      ...Array.from({ length: 4 }, (_, i) => article({ title: `Matric exam news ${i}` })),
+    ]
+
+    expect(selectArticles(feed)).toHaveLength(8)
+  })
+
+  it("never exceeds the slot count", () => {
+    const feed = Array.from({ length: 40 }, (_, i) => article({ title: `Bursary announcement ${i}` }))
+    expect(selectArticles(feed)).toHaveLength(8)
+  })
+})
