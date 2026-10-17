@@ -242,3 +242,55 @@ describe("the route's own caching", () => {
     expect(swr).toBeLessThanOrEqual(900)
   })
 })
+
+describe("the cache-hit path", () => {
+  /**
+   * The cache holds RAW sweep results -- everything all five queries
+   * returned, unfiltered and uncapped. Served directly it put 27
+   * articles on the homepage, among them Brazilian elections, a Turkish
+   * salt lake and uranium mining, because selectArticles is the only
+   * thing that applies the topic filter, the slot reservations and the
+   * cap.
+   *
+   * The earlier code filtered inside the fetch, so only relevant
+   * articles ever reached the cache. Moving the filter out made the
+   * cache raw and left this path behind it.
+   */
+  const RAW_SWEEP_RESULTS = [
+    article({ title: "NSFAS bursary applications open for 2027 matriculants" }),
+    article({ title: "Wits admissions close early this year" }),
+    article({ title: "Matric exam results released" }),
+    article({ title: "Turkey's Salt Lake, life in the shadow of drought" }),
+    article({ title: "Brazil's left rallies as Lula closes gap before runoff" }),
+    article({ title: "Uranium American, DISA Partner to Recover Uranium Waste" }),
+    article({ title: "Tenders Closing Today: Deadlines and Closing Times" }),
+    ...Array.from({ length: 20 }, (_, i) => article({ title: `Mining update ${i}` })),
+  ]
+
+  it("filters and caps what the cache holds", () => {
+    const picked = selectArticles(RAW_SWEEP_RESULTS)
+    expect(picked).toHaveLength(3)
+    expect(picked.map((a) => a.title)).toEqual(
+      expect.arrayContaining([expect.stringContaining("NSFAS bursary")]),
+    )
+  })
+
+  it("lets nothing off-topic through from the cache", () => {
+    for (const title of ["Turkey's Salt Lake", "Brazil's left", "Uranium American", "Tenders Closing"]) {
+      expect(selectArticles(RAW_SWEEP_RESULTS).some((a) => a.title.includes(title))).toBe(false)
+    }
+  })
+
+  it("can ignore age without ignoring relevance", () => {
+    // The stale-cache fallback: better an old bursary call than a fresh
+    // article about something else.
+    const old = [
+      article({ title: "Matric exam results released", pubDate: hoursAgo(1000) }),
+      article({ title: "Uranium American recovers waste", pubDate: hoursAgo(1) }),
+    ]
+    expect(selectArticles(old)).toHaveLength(0)
+    const relaxed = selectArticles(old, 8, { ignoreAge: true })
+    expect(relaxed).toHaveLength(1)
+    expect(relaxed[0].title).toContain("Matric")
+  })
+})

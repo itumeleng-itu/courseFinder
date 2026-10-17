@@ -213,13 +213,15 @@ async function fetchRealNews(): Promise<NewsArticle[]> {
  * headline cannot establish eligibility, so nothing here tells a learner they
  * qualify -- it just puts the likelier ones where they will be seen.
  */
-export function selectArticles(articles: NewsArticle[], max = MAX): NewsArticle[] {
+export function selectArticles(
+  articles: NewsArticle[], max = MAX, { ignoreAge = false } = {},
+): NewsArticle[] {
   const byTopic = new Map<ArticleTopic, NewsArticle[]>()
 
   for (const a of dedupeArticles(articles)) {
     const topic = classifyArticle(a)
     if (!topic) continue
-    if (!isFreshForTopic(a.pubDate, topic)) continue
+    if (!ignoreAge && !isFreshForTopic(a.pubDate, topic)) continue
     byTopic.set(topic, [...(byTopic.get(topic) ?? []), a])
   }
 
@@ -252,7 +254,18 @@ export async function GET() {
   try {
     // Serve from memory cache if still fresh — avoids burning daily API credits
     if (hasFreshCache()) {
-      const cached = getCachedNews()
+      // Through selectArticles, exactly like a live fetch.
+      //
+      // The cache holds the RAW sweep results -- every article all five
+      // queries returned, unfiltered and uncapped. Returning it directly
+      // served 27 articles including Brazilian elections, a Turkish salt
+      // lake and uranium mining, because the only thing that applies the
+      // topic filter, the slot reservations and the cap is this function.
+      //
+      // The old code got away with it: it filtered inside the fetch, so
+      // only relevant articles were ever cached. Moving the filter here
+      // made the cache raw, and this branch was not updated to match.
+      const cached = selectArticles(getCachedNews())
       return NextResponse.json(
         { success: true, articles: cached, source: "Cached", count: cached.length,
           sweeps: lastSweepCounts },
@@ -273,9 +286,11 @@ export async function GET() {
       // Fall back to cached articles without the freshness filter — best
       // available data, still topic-filtered so the feed cannot silently
       // revert to general news.
-      const cachedNews = getCachedNews().filter((a) => classifyArticle(a) !== null)
+      // Last resort, so age is ignored -- but topic, slots and the cap
+      // still apply. Stale and on-topic beats fresh and irrelevant.
+      const cachedNews = selectArticles(getCachedNews(), MAX, { ignoreAge: true })
       if (cachedNews.length > 0) {
-        normalized = cachedNews.slice(0, MAX)
+        normalized = cachedNews
         source = "Cached"
       } else {
         // Last resort — use static fallback (auto-rotated on successful fetches)
