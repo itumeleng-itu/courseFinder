@@ -18,7 +18,7 @@ import raw from "@/data/qualify/programmes.json"
 import type { Institution, Programme } from "./engine"
 
 /** The cf-data release this file was exported from. */
-export const DATA_VERSION = "2027.3"
+export const DATA_VERSION = "2027.4"
 
 interface DataFile {
   institutions: Institution[]
