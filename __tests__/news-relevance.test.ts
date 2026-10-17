@@ -221,3 +221,24 @@ describe("selectArticles", () => {
     expect(selectArticles(feed)).toHaveLength(8)
   })
 })
+
+describe("the route's own caching", () => {
+  it("is dynamic, not a build-time snapshot", async () => {
+    // `revalidate` alone made Next prerender this route as static
+    // content, served from one snapshot for every query string and
+    // allowed to go a year stale. Two deploys in a row appeared not to
+    // land because of it.
+    const mod = await import("@/app/api/news/route")
+    expect((mod as any).dynamic).toBe("force-dynamic")
+    expect((mod as any).revalidate).toBeUndefined()
+  })
+
+  it("does not let the edge serve a day-old feed", async () => {
+    const mod = await import("@/app/api/news/route")
+    const res = await (mod as any).GET()
+    const cc = res.headers.get("Cache-Control") ?? ""
+    const swr = Number(/stale-while-revalidate=(\d+)/.exec(cc)?.[1] ?? "0")
+    expect(swr).toBeGreaterThan(0)
+    expect(swr).toBeLessThanOrEqual(900)
+  })
+})

@@ -28,12 +28,37 @@ function hasFreshCache(): boolean {
 }
 
 // ─── Config ───────────────────────────────────────────────────────────────────
-// Do NOT combine revalidate with force-dynamic — they conflict
-export const revalidate = 3600 // 1 hour ISR
+/**
+ * This route must run per request. It used to carry `revalidate = 3600`
+ * and nothing else, which made Next PRERENDER IT AS STATIC CONTENT:
+ *
+ *     Route (app)        Revalidate  Expire
+ *     o /api/news                1h      1y
+ *
+ * A static route is served from one snapshot whatever the query string,
+ * so ?v=2 and ?v=3 came back byte-identical, and with Expire 1y the
+ * snapshot could outlive any reasonable idea of "news". Two deploys in a
+ * row looked like they had not landed; both had, and the frozen build
+ * output was being served over them. That is the second time in this
+ * codebase a caching default has made a healthy deploy look broken.
+ *
+ * Credit use is still bounded, by the in-memory cache below (one upstream
+ * fetch per warm instance per hour) and by s-maxage on the response.
+ * revalidate and force-dynamic conflict, so the former is gone.
+ */
+export const dynamic = "force-dynamic"
 
 const NEWS_API_KEY = process.env.NEWS_API_KEY
 
 const MAX = 8
+
+/** An hour fresh at the edge, ten minutes stale while revalidating.
+ *
+ * s-maxage stays at an hour because that is what keeps upstream credit
+ * use to roughly one fetch an hour. The old value paired it with
+ * stale-while-revalidate=86400, which allowed a full day of serving
+ * yesterday's news while a refresh happened somewhere behind it. */
+const NEWS_CACHE = "public, s-maxage=3600, stale-while-revalidate=600"
 
 /**
  * How many of the MAX slots each topic is guaranteed, in order.
@@ -229,8 +254,9 @@ export async function GET() {
     if (hasFreshCache()) {
       const cached = getCachedNews()
       return NextResponse.json(
-        { success: true, articles: cached, source: "Cached", count: cached.length },
-        { headers: { "Cache-Control": "public, s-maxage=3600, stale-while-revalidate=86400" } }
+        { success: true, articles: cached, source: "Cached", count: cached.length,
+          sweeps: lastSweepCounts },
+        { headers: { "Cache-Control": NEWS_CACHE } }
       )
     }
 
@@ -261,7 +287,7 @@ export async function GET() {
     return NextResponse.json(
       { success: true, articles: normalized, source, count: normalized.length,
         sweeps: lastSweepCounts },
-      { headers: { "Cache-Control": "public, s-maxage=3600, stale-while-revalidate=86400" } }
+      { headers: { "Cache-Control": NEWS_CACHE } }
     )
   } catch (error) {
     console.error("[News] GET handler error:", error)
