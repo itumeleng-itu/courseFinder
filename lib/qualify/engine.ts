@@ -126,8 +126,25 @@ function resolveScoring(
   return [strategy, config]
 }
 
+/** How to describe a score to the learner.
+ *
+ * "Requires an APS of 80" is wrong for an institution that does not
+ * publish an APS. Stellenbosch asks for "an NSC aggregate of at least
+ * 80% (excluding Life Orientation)", and a learner reading "APS of 80"
+ * against their own APS of 38 will think they are 42 points short of a
+ * programme they may already meet.
+ *
+ * Kept identical to _SCORE_WORDING in the Python engine's main.py --
+ * the differential suite compares failure messages verbatim. */
+function scorePhrases(strategy: string): [(v: number) => string, (v: number) => string] {
+  if (strategy === "percentage_sum_div_10") {
+    return [(v) => `an average of ${v}%`, (v) => `${v}%`]
+  }
+  return [(v) => `an APS of ${v}`, (v) => `${v}`]
+}
+
 function evaluateProgramme(
-  programme: Programme, marks: Marks, achieved: number,
+  programme: Programme, marks: Marks, achieved: number, strategy = "",
 ): ProgrammeResult {
   const nsc = programme.requirements.nsc
   const excluded = new Set<string>(nsc.excluded_subjects ?? [])
@@ -146,9 +163,10 @@ function evaluateProgramme(
       required: null, actual: achieved, subject: null,
     })
   } else if (achieved < required) {
+    const [needs, have] = scorePhrases(strategy)
     failures.push({
       kind: "score",
-      message: `Requires an APS of ${required}; you have ${achieved}`,
+      message: `Requires ${needs(required)}; you have ${have(achieved)}`,
       required, actual: achieved, subject: null,
     })
   }
@@ -230,7 +248,9 @@ export function runQualify(
       achieved = scores[institutionId]
     }
 
-    const result = evaluateProgramme(programme, marks, achieved)
+    const result = evaluateProgramme(
+      programme, marks, achieved, resolveScoring(institution, programme)[0],
+    )
     if (result.failures.length === 0) qualified.push(result)
     else if (includeNearMisses && result.failures.length <= 2) nearMisses.push(result)
   }
