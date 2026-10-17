@@ -74,15 +74,24 @@ export const SCHOOLING_KEYWORDS = [
 
 export type ArticleTopic = "bursary" | "university" | "schooling"
 
-const haystack = (article: {
-    title?: string
-    description?: string
-    keywords?: string[] | null
-}): string =>
-    [article.title, article.description, ...(article.keywords ?? [])]
-        .filter(Boolean)
-        .join(" ")
-        .toLowerCase()
+/**
+ * The TITLE decides, not the body.
+ *
+ * Matching the description and the editor's keywords too looked
+ * generous and was wrong. A Moneyweb podcast about offshore crypto
+ * gambling carries the keywords "nsfas" and "student funding" because
+ * it mentions where grant money ends up; a report on Brazil's election
+ * mentions "new university grants" in passing. Both read as student
+ * news and both took one of eight slots.
+ *
+ * What the feed is asking is "is this article ABOUT bursaries, a
+ * university, or leaving school" -- and the headline is where that is
+ * answered. The sweeps return around thirty articles for eight slots,
+ * so there is no shortage to make up by being loose, and an empty slot
+ * costs a learner less than a filled irrelevant one.
+ */
+const haystack = (article: { title?: string }): string =>
+    (article.title ?? "").toLowerCase()
 
 /**
  * Whole-word matching. Substring matching is what let the feed through.

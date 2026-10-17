@@ -80,9 +80,21 @@ describe("relevance", () => {
     expect(classifyArticle(article({ title: "Wits admissions close early this year" }))).toBe("university")
   })
 
-  it("reads keywords as well as the headline", () => {
-    const a = article({ title: "Funding call announced", keywords: ["NSFAS", "undergraduate"] })
-    expect(classifyArticle(a)).toBe("bursary")
+  it("decides on the headline, not the keywords or the body", () => {
+    // This used to assert the opposite. Reading keywords and
+    // description as well let in a crypto-gambling podcast tagged
+    // "nsfas" and "student funding", and a Brazilian election report
+    // whose body mentions "new university grants" -- two of eight slots
+    // on live articles dated 16 October.
+    expect(classifyArticle(article({
+      title: "Is crypto a gateway to offshore gambling or a way to curb it?",
+      keywords: ["nsfas", "student funding"],
+    }))).toBeNull()
+    expect(classifyArticle(article({
+      title: "Brazil's left rallies as Lula closes gap before runoff",
+      description: "Lula unveiled debt relief and new university grants; students marched.",
+    }))).toBeNull()
+    expect(classifyArticle(article({ title: "NSFAS opens 2027 applications" }))).toBe("bursary")
   })
 })
 
