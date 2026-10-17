@@ -1,4 +1,4 @@
-import { NewsArticle, STUDENT_RELEVANT_KEYWORDS } from "@/data/fallback-news"
+import { NewsArticle } from "@/data/fallback-news"
 
 // ─── Relevance Filter ─────────────────────────────────────────────────────────
 /**
@@ -49,6 +49,29 @@ export const UNIVERSITY_KEYWORDS = [
     "stellenbosch", "rhodes university", "walk-in", "clearing",
 ]
 
+/**
+ * Schooling terms specific enough to stand alone.
+ *
+ * Deliberately NOT the older STUDENT_RELEVANT_KEYWORDS list, which leans
+ * on bare words -- "education", "school", "student", "study", "career",
+ * "college". Each of those appears constantly in writing that has
+ * nothing to do with choosing a course, and this feed has eight slots.
+ * A story needs to be about school-leaving itself to earn one.
+ *
+ * STUDENT_RELEVANT_KEYWORDS is still exported from data/fallback-news.ts
+ * and still used by nothing else; it is left alone rather than edited,
+ * since narrowing a shared list in place would change whatever picks it
+ * up next.
+ */
+export const SCHOOLING_KEYWORDS = [
+    "matric", "matrics", "matriculant", "matriculants",
+    "grade 11", "grade 12", "nsc", "senior certificate",
+    "final exam", "final exams", "exam results", "matric results",
+    "school leaver", "school leavers", "school-leaver",
+    "learnership", "learnerships", "apprenticeship", "apprenticeships",
+    "nbt", "nbts", "subject choice", "career guidance", "gap year",
+]
+
 export type ArticleTopic = "bursary" | "university" | "schooling"
 
 const haystack = (article: {
@@ -61,8 +84,20 @@ const haystack = (article: {
         .join(" ")
         .toLowerCase()
 
-const matches = (text: string, terms: string[]) =>
-    terms.some((t) => text.includes(t.toLowerCase()))
+/**
+ * Whole-word matching. Substring matching is what let the feed through.
+ *
+ * "exam" is a substring of "example", and "for example" appears in
+ * roughly every article ever written. "nsc" sits inside "unscheduled"
+ * and "sunscreen". With `includes`, a story about offshore crypto
+ * gambling and one about clinical liability both read as student news,
+ * and did -- they held two of the eight slots on 17 October.
+ */
+const hasWord = (text: string, phrase: string) =>
+    new RegExp(`(^|[^a-z0-9])${phrase.toLowerCase().replace(/\s+/g, "\\s+")}([^a-z0-9]|$)`)
+        .test(text)
+
+const matches = (text: string, terms: string[]) => terms.some((t) => hasWord(text, t))
 
 /**
  * Which bucket an article belongs to, or null if it is not for this audience.
@@ -79,7 +114,7 @@ export function classifyArticle(article: {
 
     if (matches(text, BURSARY_KEYWORDS)) return "bursary"
     if (matches(text, UNIVERSITY_KEYWORDS)) return "university"
-    if (matches(text, STUDENT_RELEVANT_KEYWORDS)) return "schooling"
+    if (matches(text, SCHOOLING_KEYWORDS)) return "schooling"
     return null
 }
 

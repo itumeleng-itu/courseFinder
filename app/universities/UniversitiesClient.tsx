@@ -56,6 +56,33 @@ function getUniversityDateStatus(close: Record<string, string>): DateStatus {
  * maintained by hand, so they go stale every year; this keeps the page silent
  * rather than wrong until the new cycle's dates are filled in.
  */
+/**
+ * Whether the whole table belongs to an intake cycle that is over.
+ *
+ * A single university whose deadlines have all passed really is closed,
+ * and "(Closed)" is the right thing to say. But these dates are typed in
+ * by hand for one intake, and when that intake ends they do not expire --
+ * they just sit there. Come early 2027 every card would read "Closed",
+ * and the page would be telling matriculants that every university in
+ * South Africa is shut, when the truth is only that next cycle's dates
+ * have not been entered.
+ *
+ * The signal is the table as a whole: if not one closing date anywhere
+ * across all 26 universities is still ahead, the data is stale rather
+ * than the country being closed.
+ */
+export function cycleIsHistorical(info: Record<string, UniAppInfo> = appInfoMap): boolean {
+    const dates = Object.values(info)
+        .flatMap((i) => Object.values(i.close))
+        .map(parseDateStr)
+        .filter((d): d is Date => d !== null)
+    if (!dates.length) return false
+    const today = new Date()
+    today.setHours(0, 0, 0, 0)
+    return dates.every((d) => d < today)
+}
+
+
 export function isOpeningDateUpcoming(dateStr: string | undefined | null): boolean {
   if (!dateStr) return false
   const d = parseDateStr(dateStr)
@@ -141,6 +168,7 @@ const appInfoMap: Record<string, UniAppInfo> = {
 }
 
 export default function UniversitiesClient({ universities }: { universities: UniData[] }) {
+  const stale = cycleIsHistorical()
   return (
     <div className="space-y-6 lg:space-y-8">
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
@@ -151,11 +179,27 @@ export default function UniversitiesClient({ universities }: { universities: Uni
         <RequiredDocumentsModal />
       </div>
 
+      {stale && (
+        <div
+          role="status"
+          className="rounded-md border border-amber-500/50 bg-amber-50 px-4 py-3 text-sm text-amber-950 dark:bg-amber-950/30 dark:text-amber-100"
+        >
+          <span className="font-medium">These are last intake&apos;s dates.</span>{" "}
+          Every application window listed below has closed, which means the next
+          cycle&apos;s dates have not been published here yet — not that applications
+          are shut everywhere. Check each university&apos;s own site for the current
+          dates.
+        </div>
+      )}
+
       <div className="grid gap-5 grid-cols-1 sm:grid-cols-2 xl:grid-cols-3">
         {universities.map((uni) => {
           const appInfo = appInfoMap[uni.id]
           const logoUrl = logoMap[uni.id] || uni.logo
           const dateStatus = appInfo ? getUniversityDateStatus(appInfo.close) : "open"
+          // A "Closed" badge on every card is the page asserting
+          // something it cannot know once the cycle is over.
+          const showStatus = !stale
 
           const statusBadge = {
             closed: (
@@ -201,7 +245,7 @@ export default function UniversitiesClient({ universities }: { universities: Uni
                   <div className="flex-1 min-w-0">
                     <div className="flex items-center gap-2 flex-wrap mb-0.5">
                       <h3 className="text-lg font-bold leading-tight">{uni.shortName}</h3>
-                      {statusBadge}
+                      {showStatus && statusBadge}
                     </div>
                     <p className="text-sm text-muted-foreground leading-snug">{uni.name}</p>
                     <div className="flex items-center text-xs text-muted-foreground mt-1.5">
@@ -222,9 +266,11 @@ export default function UniversitiesClient({ universities }: { universities: Uni
 
                 {appInfo && (
                   <div className="rounded-md border bg-muted/30 p-3 space-y-2">
-                    <p className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">Closing Dates</p>
+                    <p className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">
+                      {stale ? "Closing Dates (last intake)" : "Closing Dates"}
+                    </p>
                     {Object.entries(appInfo.close).map(([faculty, date], idx) => {
-                      const s = getDateLineStatus(date)
+                      const s = stale ? "open" : getDateLineStatus(date)
                       return (
                         <div key={idx} className="flex items-start justify-between gap-3 text-sm">
                           <span className="text-muted-foreground text-xs leading-relaxed">{faculty}</span>

@@ -66,7 +66,13 @@ describe("relevance", () => {
     // The old filter passed anything tagged top/technology/health/world.
     // Category is corroboration now, never the decision.
     expect(classifyArticle(article({ title: "Rand firms against dollar", category: ["top", "business"] }))).toBeNull()
-    expect(classifyArticle(article({ title: "School fire guts Limpopo classroom block", category: ["education"] }))).toBe("schooling")
+    // Nor does "education" rescue a story that is not about leaving
+    // school. This assertion used to expect "schooling", which
+    // contradicted the rule stated in lib/news-utils.ts a few lines from
+    // where it was written -- a school fire is news, but it is not one
+    // of eight slots belonging to a learner choosing a course.
+    expect(classifyArticle(article({ title: "School fire guts Limpopo classroom block", category: ["education"] }))).toBeNull()
+    expect(classifyArticle(article({ title: "Matric pupils evacuated after Limpopo school fire", category: ["education"] }))).toBe("schooling")
   })
 
   it("picks bursary out of a funding headline, and university out of an admissions one", () => {
@@ -77,6 +83,61 @@ describe("relevance", () => {
   it("reads keywords as well as the headline", () => {
     const a = article({ title: "Funding call announced", keywords: ["NSFAS", "undergraduate"] })
     expect(classifyArticle(a)).toBe("bursary")
+  })
+})
+
+/** The second live feed, 17 October 2026 -- after the relevance filter
+ * shipped and before whole-word matching did. Five of eight were on
+ * topic, a real improvement on the Pope, but three still were not, and
+ * each got in through a substring. */
+const LIVE_FEED_AFTER_THE_FIRST_FIX = [
+  article({ title: "Is crypto a gateway to offshore gambling or a way to curb it?",
+            description: "Analysts point to one example of offshore flows.", source_id: "moneyweb" }),
+  article({ title: "AI is a tool, and using it doesn't transfer clinical responsibility",
+            description: "For example, a clinician remains accountable.", source_id: "bmj" }),
+  article({ title: "Changing Expectations, Empowering Girls: Dr. Rasha Kelej of Merck Foundation",
+            description: "A programme on girls' education across Africa.", source_id: "africa_newsroom" }),
+  article({ title: "South Africa: Higher Education Committee Concerned by CETA",
+            source_id: "africa_newsroom" }),
+  article({ title: "A VIEW OF THE WEEK: One brutal exam does not make a bad matric",
+            source_id: "citizen" }),
+  article({ title: "Education Department dismisses fake matric exam paper leak",
+            source_id: "capetownetc" }),
+]
+
+describe("whole-word matching", () => {
+  it("does not read \"for example\" as an exam", () => {
+    // "exam" is a substring of "example". This is how a crypto-gambling
+    // story and a clinical-liability one held two of eight slots.
+    expect(classifyArticle(LIVE_FEED_AFTER_THE_FIRST_FIX[0])).toBeNull()
+    expect(classifyArticle(LIVE_FEED_AFTER_THE_FIRST_FIX[1])).toBeNull()
+  })
+
+  it("does not read \"unscheduled\" or \"sunscreen\" as NSC", () => {
+    expect(classifyArticle(article({ title: "Unscheduled outage hits the line" }))).toBeNull()
+    expect(classifyArticle(article({ title: "Sunscreen recall widens" }))).toBeNull()
+  })
+
+  it("still matches the real words", () => {
+    expect(classifyArticle(article({ title: "Matric exam results released" }))).toBe("schooling")
+    expect(classifyArticle(article({ title: "NSC pass rate climbs" }))).toBe("schooling")
+  })
+
+  it("drops education stories that are not about school-leaving", () => {
+    // A worthy story, and not one of the eight slots a matriculant
+    // choosing a course has to spend.
+    expect(classifyArticle(LIVE_FEED_AFTER_THE_FIRST_FIX[2])).toBeNull()
+  })
+
+  it("keeps the ones that belong", () => {
+    expect(classifyArticle(LIVE_FEED_AFTER_THE_FIRST_FIX[3])).toBe("university")
+    expect(classifyArticle(LIVE_FEED_AFTER_THE_FIRST_FIX[4])).toBe("schooling")
+    expect(classifyArticle(LIVE_FEED_AFTER_THE_FIRST_FIX[5])).toBe("schooling")
+  })
+
+  it("admits half of that feed, where the filter admitted all of it", () => {
+    const kept = LIVE_FEED_AFTER_THE_FIRST_FIX.filter((a) => classifyArticle(a) !== null)
+    expect(kept).toHaveLength(3)
   })
 })
 

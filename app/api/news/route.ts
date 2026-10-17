@@ -67,23 +67,21 @@ const SLOTS: Array<{ topic: ArticleTopic; reserved: number }> = [
  * short, drop the schooling sweep first -- the broad education category is
  * the one that produced the Pope's surgery.
  */
-const SWEEPS: Array<{ label: ArticleTopic; params: Record<string, string> }> = [
-  {
-    label: "bursary",
-    params: {
-      q: 'bursary OR bursaries OR scholarship OR NSFAS OR "student funding"',
-    },
-  },
-  {
-    label: "university",
-    params: {
-      q: 'university OR "higher education" OR admissions OR "applications open" OR "TVET college"',
-    },
-  },
-  {
-    label: "schooling",
-    params: { category: "education", q: "matric OR school OR learners" },
-  },
+const SWEEPS: Array<{ label: string; params: Record<string, string> }> = [
+  // One term per sweep.
+  //
+  // The first version sent boolean queries ('bursary OR bursaries OR
+  // scholarship OR NSFAS OR "student funding"'). Those returned nothing
+  // recognisable as a bursary across a full day of hourly fetches, and
+  // from outside there is no way to tell a query the plan rejected from
+  // a genuinely quiet news day. A single plain term is the form least
+  // likely to be refused, and the per-sweep counts reported below say
+  // which ones are actually producing.
+  { label: "bursary", params: { q: "bursary" } },
+  { label: "bursaries", params: { q: "bursaries" } },
+  { label: "nsfas", params: { q: "NSFAS" } },
+  { label: "university", params: { q: "university" } },
+  { label: "schooling", params: { category: "education" } },
 ]
 
 function toArticle(item: any): NewsArticle {
@@ -161,6 +159,15 @@ async function runSweep(params: Record<string, string>): Promise<NewsArticle[]> 
 }
 
 // ─── Fetcher ──────────────────────────────────────────────────────────────────
+/** How many raw articles each sweep returned on the last live fetch.
+ *
+ * Reported on the response so the feed can be diagnosed from outside.
+ * Without it, "no bursary articles" is indistinguishable between a query
+ * the provider refused, a plan limit, and a quiet week -- and the logs
+ * that would say which are not reachable from here. Counts only; no
+ * content, nothing a caller could mistake for data. */
+const lastSweepCounts: Record<string, number> = {}
+
 async function fetchRealNews(): Promise<NewsArticle[]> {
   if (!NEWS_API_KEY) {
     console.warn("[News] NEWS_API_KEY not set — skipping live fetch")
@@ -169,6 +176,7 @@ async function fetchRealNews(): Promise<NewsArticle[]> {
 
   // One sweep failing must not take the others down with it.
   const results = await Promise.all(SWEEPS.map((s) => runSweep(s.params)))
+  SWEEPS.forEach((s, i) => (lastSweepCounts[s.label] = results[i].length))
   return dedupeArticles(results.flat())
 }
 
@@ -251,7 +259,8 @@ export async function GET() {
     }
 
     return NextResponse.json(
-      { success: true, articles: normalized, source, count: normalized.length },
+      { success: true, articles: normalized, source, count: normalized.length,
+        sweeps: lastSweepCounts },
       { headers: { "Cache-Control": "public, s-maxage=3600, stale-while-revalidate=86400" } }
     )
   } catch (error) {

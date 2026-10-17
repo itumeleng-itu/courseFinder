@@ -1,7 +1,7 @@
 import "@testing-library/jest-dom"
 import { render, screen } from "@testing-library/react"
 
-import UniversitiesClient, { isOpeningDateUpcoming, type UniData } from "@/app/universities/UniversitiesClient"
+import UniversitiesClient, { cycleIsHistorical, isOpeningDateUpcoming, type UniData } from "@/app/universities/UniversitiesClient"
 
 /**
  * The universities page advertised "Opens: 1 March 2026" in October 2026.
@@ -95,5 +95,57 @@ describe("the universities page", () => {
 
     expect(screen.queryByText(/Opens:/i)).not.toBeInTheDocument()
     expect(screen.queryByText(/1 April 2026/)).not.toBeInTheDocument()
+  })
+})
+
+
+/**
+ * The closing dates go the same way the opening dates went.
+ *
+ * Within a cycle, striking through a passed deadline and marking it
+ * "(Closed)" is correct and useful. The failure comes later: these dates
+ * are hand-typed for one intake and never expire, so once the cycle is
+ * over every one of the 26 cards reads "Closed" and the page tells a
+ * matriculant that every university in South Africa is shut. What is
+ * actually true is that next cycle's dates have not been entered.
+ */
+describe("a cycle that has ended", () => {
+  it("is not detected while any application window is still open", () => {
+    setToday("2026-10-17T09:00:00+02:00")
+    // UMP closes 30 November 2026, so the 2027 cycle is still running.
+    expect(cycleIsHistorical()).toBe(false)
+  })
+
+  it("is detected once every window has passed", () => {
+    setToday("2027-03-01T09:00:00+02:00")
+    expect(cycleIsHistorical()).toBe(true)
+  })
+
+  it("keeps saying Closed while the cycle is live", () => {
+    setToday("2026-10-17T09:00:00+02:00")
+    render(<UniversitiesClient universities={[WITS]} />)
+
+    // Wits' windows closed in June and September 2026, and that is real.
+    expect(screen.getAllByText(/Closed/i).length).toBeGreaterThan(0)
+    expect(screen.queryByText(/last intake/i)).not.toBeInTheDocument()
+  })
+
+  it("stops saying Closed once the whole table is historical", () => {
+    setToday("2027-03-01T09:00:00+02:00")
+    render(<UniversitiesClient universities={[WITS]} />)
+
+    expect(screen.queryByText(/\(Closed\)/i)).not.toBeInTheDocument()
+    expect(screen.getByRole("status")).toHaveTextContent(/last intake/i)
+    expect(screen.getByRole("status")).toHaveTextContent(/not that applications are shut everywhere/i)
+  })
+
+  it("still shows the dates, labelled as the previous intake", () => {
+    // Suppressed, not deleted -- last year's dates are a useful guide to
+    // roughly when the next ones land.
+    setToday("2027-03-01T09:00:00+02:00")
+    render(<UniversitiesClient universities={[WITS]} />)
+
+    expect(screen.getByText(/Closing Dates \(last intake\)/i)).toBeInTheDocument()
+    expect(screen.getByText(/30 September 2026/)).toBeInTheDocument()
   })
 })
