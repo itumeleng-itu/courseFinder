@@ -99,3 +99,49 @@ export function institutionCampuses(institutionId: string): CampusOffering[] {
     }))
     .sort((a, b) => b.programmeCount - a.programmeCount || a.name.localeCompare(b.name))
 }
+
+export type CampusProgramme = {
+  code: string
+  name: string
+  faculty: string | null
+}
+
+export type CampusDetail = CampusOffering & {
+  /** Every bundled programme taught here, alphabetical. */
+  programmes: CampusProgramme[]
+}
+
+/**
+ * The same campuses, with the programme list filled in.
+ *
+ * Separate from institutionCampuses because the list page shows 26
+ * universities at once and only needs the counts; carrying every
+ * programme name for all of them would be a lot of markup nobody
+ * reads. A single university's page shows one institution and can
+ * afford the detail.
+ */
+export function institutionCampusDetail(institutionId: string): CampusDetail[] {
+  const byCampus = new Map<string, Map<string, CampusProgramme>>()
+
+  for (const programme of PROGRAMMES as unknown as Array<Record<string, unknown>>) {
+    if (programme.institution_id !== institutionId) continue
+    for (const value of (programme.campus as string[] | undefined) ?? []) {
+      for (const campus of normaliseCampus(institutionId, value)) {
+        const entry = byCampus.get(campus) ?? new Map<string, CampusProgramme>()
+        entry.set(String(programme.qualification_code), {
+          code: String(programme.qualification_code),
+          name: String(programme.name),
+          faculty: (programme.faculty as string | null) ?? null,
+        })
+        byCampus.set(campus, entry)
+      }
+    }
+  }
+
+  return institutionCampuses(institutionId).map((campus) => ({
+    ...campus,
+    programmes: [...(byCampus.get(campus.name)?.values() ?? [])].sort((a, b) =>
+      a.name.localeCompare(b.name),
+    ),
+  }))
+}

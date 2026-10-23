@@ -1,7 +1,5 @@
-"use client"
-
-import React from "react"
-import { Building2, ChevronDown } from "lucide-react"
+import Link from "next/link"
+import { ArrowRight, Building2 } from "lucide-react"
 import type { CampusOffering } from "@/lib/campuses"
 
 /**
@@ -16,14 +14,24 @@ import type { CampusOffering } from "@/lib/campuses"
  * Faculties are capped at four per campus with a count for the rest,
  * because a learner scanning twenty-six cards wants to know whether
  * their field is on that campus, not to read a full faculty register.
+ *
+ * Anything past the first two campuses goes to the university's own
+ * page rather than expanding in place. An in-card expander pushed
+ * every card below it down the list, and it had nowhere to put what
+ * a learner actually wants next -- TUT's Pretoria campus alone
+ * teaches 69 programmes, and no card is the right place for that.
  */
-export function CampusList({ campuses }: { campuses: CampusOffering[] }) {
-  const [expanded, setExpanded] = React.useState(false)
-
+export function CampusList({
+  campuses,
+  universityId,
+}: {
+  campuses: CampusOffering[]
+  universityId: string
+}) {
   if (campuses.length === 0) return null
 
   const single = campuses.length === 1
-  const shown = expanded || single ? campuses : campuses.slice(0, 2)
+  const shown = single ? campuses : campuses.slice(0, 2)
   const hidden = campuses.length - shown.length
 
   return (
@@ -50,16 +58,15 @@ export function CampusList({ campuses }: { campuses: CampusOffering[] }) {
         </div>
       ))}
 
-      {hidden > 0 && (
-        <button
-          type="button"
-          onClick={() => setExpanded(true)}
-          className="flex items-center gap-1 text-xs font-medium text-primary hover:underline"
-        >
-          Show {hidden} more {hidden === 1 ? "campus" : "campuses"}
-          <ChevronDown className="w-3 h-3" />
-        </button>
-      )}
+      <Link
+        href={`/universities/${universityId}`}
+        className="flex items-center gap-1 text-xs font-medium text-primary hover:underline"
+      >
+        {hidden > 0
+          ? `View all ${campuses.length} campuses`
+          : "View campus details"}
+        <ArrowRight className="w-3 h-3" />
+      </Link>
     </div>
   )
 }
