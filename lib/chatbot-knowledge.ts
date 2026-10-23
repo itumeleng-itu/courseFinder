@@ -2,7 +2,7 @@ import { PROGRAMMES, INSTITUTIONS_BY_ID } from "@/lib/qualify/data"
 import { subjectDisplayName, MIN_PCT_FOR_LEVEL } from "@/lib/qualify/evaluator"
 import { careerPathsFor } from "@/lib/career-paths"
 import { appInfoMap } from "@/data/university-applications"
-import { institutionCampuses } from "@/lib/campuses"
+import { institutionCampuses, institutionOnlineOffering } from "@/lib/campuses"
 
 /**
  * Answers to the questions the chatbot used to deflect.
@@ -306,6 +306,16 @@ export function campusAnswer(institutionId: string): string | null {
     lines.push(campus.faculties.slice(0, 5).map((f) => f.name).join(" · "))
     lines.push("")
   }
+
+  // Said after the campuses and not counted among them -- online is a
+  // mode of delivery, not somewhere a learner goes.
+  const online = institutionOnlineOffering(institutionId)
+  if (online) {
+    lines.push(
+      `A further ${online.programmeCount} ${online.programmeCount === 1 ? "programme is" : "programmes are"} studied online, with no campus attendance.`,
+    )
+  }
+
   return lines.join("\n").trim()
 }
 

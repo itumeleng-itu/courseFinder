@@ -1,5 +1,5 @@
 import Link from "next/link"
-import { ArrowRight, Building2 } from "lucide-react"
+import { ArrowRight, Building2, Monitor } from "lucide-react"
 import type { CampusOffering } from "@/lib/campuses"
 
 /**
@@ -20,12 +20,19 @@ import type { CampusOffering } from "@/lib/campuses"
  * every card below it down the list, and it had nowhere to put what
  * a learner actually wants next -- TUT's Pretoria campus alone
  * teaches 69 programmes, and no card is the right place for that.
+ *
+ * Online delivery arrives separately and sits below the count rather
+ * than inside it. It is a mode, not a place: listed as a campus it
+ * said TUT has ten campuses when it has nine, and it answers none of
+ * what a learner reads a campus list for.
  */
 export function CampusList({
   campuses,
+  online,
   universityId,
 }: {
   campuses: CampusOffering[]
+  online?: CampusOffering | null
   universityId: string
 }) {
   if (campuses.length === 0) return null
@@ -57,6 +64,14 @@ export function CampusList({
           </p>
         </div>
       ))}
+
+      {online && online.programmeCount > 0 && (
+        <p className="flex items-center gap-1.5 text-xs text-muted-foreground pt-0.5">
+          <Monitor className="w-3.5 h-3.5 shrink-0" />
+          {online.programmeCount}{" "}
+          {online.programmeCount === 1 ? "programme is" : "programmes are"} offered online
+        </p>
+      )}
 
       <Link
         href={`/universities/${universityId}`}

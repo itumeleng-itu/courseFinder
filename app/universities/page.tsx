@@ -1,5 +1,5 @@
 import { getAllUniversityInstances } from "@/data/universities"
-import { institutionCampuses } from "@/lib/campuses"
+import { institutionCampuses, institutionOnlineOffering } from "@/lib/campuses"
 import UniversitiesClient from "./UniversitiesClient"
 import type { UniData } from "./UniversitiesClient"
 import { DashboardSidebar } from "@/components/app-sidebar"
@@ -31,6 +31,10 @@ export default function UniversitiesPage() {
     // into a "use client" file would ship ~1MB of JSON to every
     // visitor to list a handful of campus names.
     campuses: institutionCampuses(uni.id),
+    // Online delivery is reported apart from the campuses so it is
+    // never counted as one. "Online" is a value in TUT's and UJ's
+    // campus columns, but it is a mode, not a place.
+    online: institutionOnlineOffering(uni.id),
     // Safely get location string to prevent any class reference errors
     locationString: typeof (uni as any).getLocationString === "function" 
         ? (uni as any).getLocationString() 

@@ -1,10 +1,10 @@
 import Link from "next/link"
 import { notFound } from "next/navigation"
-import { ArrowLeft, Building2, Calendar, CreditCard, ExternalLink, Globe, MapPin } from "lucide-react"
+import { ArrowLeft, Building2, Calendar, CreditCard, ExternalLink, Globe, MapPin, Monitor } from "lucide-react"
 
 import { getAllUniversityInstances } from "@/data/universities"
 import { appInfoMap } from "@/data/university-applications"
-import { institutionCampusDetail } from "@/lib/campuses"
+import { institutionCampusDetail, institutionOnlineOffering } from "@/lib/campuses"
 import { cycleIsHistorical, getDateLineStatus, isOpeningDateUpcoming } from "@/lib/application-dates"
 import { DashboardSidebar } from "@/components/app-sidebar"
 import { SidebarInset } from "@/components/ui/sidebar"
@@ -50,6 +50,10 @@ export default async function UniversityPage({ params }: Params) {
 
   const appInfo = appInfoMap[uni.id]
   const campuses = institutionCampusDetail(uni.id)
+  // Not a campus. Both TUT and UJ record online delivery in their
+  // campus column, so it has its own section below rather than a card
+  // among the places a learner could move to.
+  const online = institutionOnlineOffering(uni.id)
   const stale = cycleIsHistorical()
   const location = [uni.location?.city, uni.location?.province].filter(Boolean).join(", ")
 
@@ -192,6 +196,38 @@ export default async function UniversityPage({ params }: Params) {
               ))
             )}
           </section>
+
+          {online && online.programmeCount > 0 && (
+            <section className="space-y-4">
+              <h2 className="font-semibold">Studied online</h2>
+              <Card>
+                <CardHeader className="pb-3">
+                  <div className="flex items-start justify-between gap-4">
+                    <h3 className="flex items-center gap-2 font-semibold">
+                      <Monitor className="w-4 h-4 shrink-0 text-muted-foreground" />
+                      No campus attendance
+                    </h3>
+                    <span className="text-sm text-muted-foreground shrink-0">
+                      {online.programmeCount}{" "}
+                      {online.programmeCount === 1 ? "programme" : "programmes"}
+                    </span>
+                  </div>
+                  <p className="text-xs text-muted-foreground pt-1">
+                    {online.faculties.map((f) => `${f.name} (${f.count})`).join(" · ")}
+                  </p>
+                </CardHeader>
+                <CardContent>
+                  <ul className="grid gap-x-6 gap-y-1 sm:grid-cols-2 text-sm">
+                    {online.programmes.map((programme) => (
+                      <li key={programme.code} className="text-muted-foreground">
+                        {programme.name}
+                      </li>
+                    ))}
+                  </ul>
+                </CardContent>
+              </Card>
+            </section>
+          )}
         </div>
       </SidebarInset>
       <Chatbot />

@@ -2,7 +2,11 @@ import "@testing-library/jest-dom"
 import { render, screen, within } from "@testing-library/react"
 
 import { CampusList } from "@/components/universities/campus-list"
-import { institutionCampusDetail, institutionCampuses } from "@/lib/campuses"
+import {
+  institutionCampusDetail,
+  institutionCampuses,
+  institutionOnlineOffering,
+} from "@/lib/campuses"
 
 /**
  * The campus block on a university card, and the page it leads to.
@@ -44,6 +48,35 @@ describe("the campus block on a university card", () => {
       "href",
       "/universities/su",
     )
+  })
+
+  it("counts only campuses in the heading, and names online separately", () => {
+    render(
+      <CampusList
+        campuses={campuses}
+        online={institutionOnlineOffering("tut")}
+        universityId="tut"
+      />,
+    )
+
+    // TUT has nine campuses. The heading used to read ten, because
+    // "Online" came through the campus column and was counted.
+    expect(screen.getByText("Campuses (9)")).toBeInTheDocument()
+    expect(screen.queryByText("Campuses (10)")).not.toBeInTheDocument()
+    expect(screen.getByText(/programmes are offered online/i)).toBeInTheDocument()
+    expect(screen.getByRole("link", { name: /view all 9 campuses/i })).toBeInTheDocument()
+  })
+
+  it("says nothing about online study for a university that offers none", () => {
+    render(
+      <CampusList
+        campuses={institutionCampuses("su")}
+        online={institutionOnlineOffering("su")}
+        universityId="su"
+      />,
+    )
+
+    expect(screen.queryByText(/offered online/i)).not.toBeInTheDocument()
   })
 
   it("renders nothing when the source carries no campus data", () => {
@@ -95,5 +128,18 @@ describe("the data behind a university page", () => {
 
   it("returns nothing for an institution with no programme data", () => {
     expect(institutionCampusDetail("uct")).toEqual([])
+  })
+
+  it("carries the online programmes in full, for their own section", () => {
+    // The page gives these a section of their own. It needs the same
+    // detail a campus card gets, or the section can only show a count.
+    const online = institutionOnlineOffering("tut")!
+
+    expect(online.programmes).toHaveLength(online.programmeCount)
+    expect(online.faculties.length).toBeGreaterThan(0)
+    for (const programme of online.programmes) {
+      expect(programme.name).toBeTruthy()
+      expect(programme.code).toBeTruthy()
+    }
   })
 })

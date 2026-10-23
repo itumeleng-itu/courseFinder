@@ -1,4 +1,4 @@
-import { institutionCampuses } from "@/lib/campuses"
+import { institutionCampuses, institutionCampusDetail, institutionOnlineOffering } from "@/lib/campuses"
 import { PROGRAMMES } from "@/lib/qualify/data"
 
 /**
@@ -41,6 +41,8 @@ describe("campuses derived from the bundle", () => {
 
     expect(names).not.toContain("Arcadia and Pretoria Campuses")
     expect(names).not.toContain("Soshanguve Campus")
+    // Nine campuses, and no tenth. TUT has exactly these.
+    expect(names).toHaveLength(9)
   })
 
   it("files a Mbombela-only programme at Mbombela, not at its page banner", () => {
@@ -75,6 +77,35 @@ describe("campuses derived from the bundle", () => {
 
   it("returns nothing for an institution that is not in the bundle", () => {
     expect(institutionCampuses("uct")).toEqual([])
+  })
+
+  it("keeps online delivery out of the campus list and its count", () => {
+    // TUT and UJ both use the campus column to record online
+    // delivery. Counted as a campus it told a learner TUT has ten
+    // campuses when it has nine, and it answers nothing a campus
+    // list is read for -- which is where they would have to live.
+    for (const institution of ["tut", "uj"]) {
+      expect(institutionCampuses(institution).map((c) => c.name)).not.toContain("Online")
+      expect(institutionCampusDetail(institution).map((c) => c.name)).not.toContain("Online")
+    }
+  })
+
+  it("still reports what is taught online, separately", () => {
+    // Dropping it from the campus list must not lose it: three TUT
+    // programmes and two UJ ones are online-only, and a learner who
+    // cannot move to Pretoria needs to see them.
+    const tut = institutionOnlineOffering("tut")!
+    expect(tut.name).toBe("Online")
+    expect(tut.programmeCount).toBeGreaterThan(0)
+    expect(tut.programmes).toHaveLength(tut.programmeCount)
+
+    expect(institutionOnlineOffering("uj")?.programmeCount).toBeGreaterThan(0)
+  })
+
+  it("reports no online offering for an institution that has none", () => {
+    expect(institutionOnlineOffering("su")).toBeNull()
+    expect(institutionOnlineOffering("wits")).toBeNull()
+    expect(institutionOnlineOffering("uct")).toBeNull()
   })
 
   it("orders campuses by size and lists faculties commonest first", () => {

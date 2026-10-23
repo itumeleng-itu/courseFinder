@@ -34,6 +34,8 @@ export type UniData = {
   /** Derived from the programme bundle on the server, so the 1MB
    * dataset is not shipped to the browser just to list campuses. */
   campuses?: CampusOffering[]
+  /** Online delivery, kept apart from the campuses. */
+  online?: CampusOffering | null
 }
 
 const logoMap: Record<string, string> = {
@@ -188,7 +190,11 @@ export default function UniversitiesClient({ universities }: { universities: Uni
                   </div>
                 )}
 
-                <CampusList campuses={uni.campuses ?? []} universityId={uni.id} />
+                <CampusList
+                  campuses={uni.campuses ?? []}
+                  online={uni.online}
+                  universityId={uni.id}
+                />
 
                 {appInfo && (
                   <div className="flex items-center gap-2 text-xs text-muted-foreground pt-1">
