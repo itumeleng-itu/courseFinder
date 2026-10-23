@@ -12,9 +12,14 @@ import { PROGRAMMES } from "@/lib/qualify/data"
  *
  *  - UJ publishes campus CODES ("APK", "DFC"). They are meaningless to
  *    a matriculant choosing where to study, so they are expanded.
- *  - TUT prints "Arcadia and Pretoria Campuses" as one value, meaning
- *    the programme runs at both. Left alone it renders as a third,
- *    non-existent campus, so it is split.
+ *
+ * TUT used to need the same treatment here -- it shipped "Arcadia and
+ * Pretoria Campuses" as a single value and omitted Polokwane,
+ * Mbombela, eMalahleni and Online entirely. That is now fixed in
+ * coursefind-data's TUT converter, which reads the prospectus's
+ * per-programme campus column, so nothing is needed for it here. UJ
+ * would be better fixed the same way, upstream, whenever its
+ * converter is next touched.
  *
  * Wits ships no campus data at all. That is a gap in the source, not
  * something to paper over: institutionCampuses returns an empty list
@@ -39,20 +44,7 @@ const UJ_CAMPUS_NAMES: Record<string, string> = {
   Online: "Online",
 }
 
-/**
- * Source values that name more than one campus.
- *
- * Matched on the exact printed string rather than by splitting on
- * "and", because "Arts and Design Campus" would split into two
- * campuses that do not exist.
- */
-const COMPOUND_CAMPUSES: Record<string, string[]> = {
-  "Arcadia and Pretoria Campuses": ["Arcadia Campus", "Pretoria Campus"],
-}
-
 function normaliseCampus(institutionId: string, raw: string): string[] {
-  const compound = COMPOUND_CAMPUSES[raw]
-  if (compound) return compound
   if (institutionId === "uj") return [UJ_CAMPUS_NAMES[raw] ?? raw]
   return [raw]
 }
