@@ -1,9 +1,8 @@
 import { SYSTEM_PROMPT } from "@/constants/prompts"
 import { NextResponse } from "next/server"
 import { generateLocalFallback } from "@/lib/chatbot-fallback"
-import { studyMethods, generalStudyTips } from "@/data/study-data"
-import { getAllEventsWithStatus } from "@/lib/calendar-events"
 import { universities } from "@/data/universities"
+import { answerFromData, retrieveContext } from "@/lib/chatbot-knowledge"
 
 export const dynamic = "force-dynamic"
 
@@ -175,6 +174,26 @@ export async function POST(request: Request) {
             }
         }
 
+        // Answer from the dataset before reaching for a model.
+        //
+        // These are questions with one correct answer sitting in a
+        // file this app ships -- a programme's requirements, a
+        // closing date, where a university's campuses are. The
+        // chatbot used to send a per-university summary to the model
+        // and redirect the learner to /find-course for anything more
+        // specific, because the full course list did not fit in a
+        // free model's context. Retrieving the few relevant records
+        // removes both problems: the answer is the data itself, it
+        // costs nothing, and it works with no API key at all.
+        const dataAnswer = answerFromData(userMessage)
+        if (dataAnswer) {
+            return NextResponse.json({
+                success: true,
+                response: dataAnswer,
+                _metadata: { model: "dataset", cached: false, timestamp: new Date().toISOString(), tokensUsed: 0 }
+            }, { headers: { "X-Model-Used": "dataset", "X-RateLimit-Remaining": String(rateLimit.remaining) } })
+        }
+
         // If no API key, try local fallback instead of returning an error
         if (!OPENROUTER_API_KEY) {
             const localResponse = generateLocalFallback(userMessage)
@@ -190,13 +209,15 @@ export async function POST(request: Request) {
 
         const messages: Array<{ role: "system" | "user" | "assistant"; content: string }> = []
         
-        // Compact context — full course lists are too large for free model token budgets.
-        // Students needing course details are directed to the /find-course page.
-        const allEvents = getAllEventsWithStatus()
+        // What the question is about, retrieved rather than dumped.
+        //
+        // The university summary below is kept as orientation, but
+        // the records that answer the question are attached by
+        // retrieveContext, so the model no longer has to say "I don't
+        // have course details" for a course this app ships.
+        const retrieved = retrieveContext(userMessage)
         const appContextData = {
-          studyMethods,
-          generalStudyTips,
-          calendarEvents: allEvents.map((e: any) => ({ name: e.name, date: e.date.toISOString().split('T')[0], type: e.type })),
+          ...(retrieved ?? {}),
           universities: universities.map((u: any) => ({
              shortName: u.shortName,
              name: u.name,
@@ -217,7 +238,9 @@ export async function POST(request: Request) {
         const Contextual_System_Prompt = `${SYSTEM_PROMPT}
         
 === DATABASE CONTEXT ===
-You possess the entire CourseFinder dataset. You must use the following JSON data to directly answer user queries about specific universities, courses, requirements, study tips, or calendar dates. NEVER guess or hallucinate. Use this exact data:
+The JSON below holds the records relevant to THIS question, retrieved from CourseFinder's own dataset, plus a summary of every university.
+
+Answer from it directly. Do not tell the user to visit another page for information that is present here -- matchedProgrammes carries real entry requirements and career paths, applicationDates the real opening and closing dates, campuses the real campuses. If the data does not cover what was asked, say so plainly and briefly. NEVER guess or invent a requirement, date or fee.
 \`\`\`json
 ${JSON.stringify(appContextData)}
 \`\`\`

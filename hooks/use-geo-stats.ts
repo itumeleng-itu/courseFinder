@@ -1,4 +1,5 @@
 import { useState, useCallback, useEffect, useMemo } from "react"
+import { log } from "@/lib/log"
 import { normalizeProvince, PROVINCES } from "@/lib/geo-constants"
 import { useLocation } from "@/components/providers/location-provider"
 
@@ -70,12 +71,12 @@ export function useGeoStats() {
             const json = await resp.json()
             const prov = normalizeProvince(json.region || json.region_name || "")
             if (!prov) {
-                console.warn("IP region not recognized:", json.region)
+                log.warn("IP region not recognized:", json.region)
                 return null
             }
             return prov
         } catch (e) {
-            console.error("IP detection error:", e)
+            log.warn("IP detection failed, falling back:", e)
             return null
         }
     }, [])
@@ -90,7 +91,7 @@ export function useGeoStats() {
                 if (json?.success) return json as ApiResponse
             }
         } catch (e) {
-            console.warn("API fetch failed, falling back to mock or error", e)
+            log.warn("API fetch failed, falling back to mock or error", e)
         }
 
         // Fallback Mock Data if API fails (since user didn't provide API code)
@@ -156,7 +157,7 @@ export function useGeoStats() {
                     }
                 } catch (e) {
                     // Fallback to IP if reverse geo fails
-                    console.warn("Reverse geo failed, trying IP", e)
+                    log.warn("Reverse geo failed, trying IP", e)
                     try {
                         const prov = await detectLocationByIP()
                         if (prov) {
@@ -232,7 +233,7 @@ export function useGeoStats() {
 
 
     const handleAllow = useCallback(() => {
-        requestLocation().catch(console.error)
+        requestLocation().catch((e) => log.warn("Location request declined or failed:", e))
     }, [requestLocation])
 
     const handleManualSelect = useCallback(async (prov: string) => {
@@ -246,7 +247,7 @@ export function useGeoStats() {
             setData(series)
             setPhase("done")
         } catch (e: unknown) {
-            console.error("Manual selection error:", e)
+            log.error("Manual selection error:", e)
             setError(e instanceof Error ? e.message : "Failed to load data for selected province.")
             setPhase("error")
         } finally {

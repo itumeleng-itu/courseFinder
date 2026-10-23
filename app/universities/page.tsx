@@ -1,4 +1,5 @@
 import { getAllUniversityInstances } from "@/data/universities"
+import { institutionCampuses } from "@/lib/campuses"
 import UniversitiesClient from "./UniversitiesClient"
 import type { UniData } from "./UniversitiesClient"
 import { DashboardSidebar } from "@/components/app-sidebar"
@@ -25,6 +26,11 @@ export default function UniversitiesPage() {
     city: uni.location?.city || "",
     province: uni.location?.province || "",
     courseCount: uni.courses?.length || 0,
+    // Computed here rather than in the client component: deriving
+    // campuses needs the whole programme bundle, and importing that
+    // into a "use client" file would ship ~1MB of JSON to every
+    // visitor to list a handful of campus names.
+    campuses: institutionCampuses(uni.id),
     // Safely get location string to prevent any class reference errors
     locationString: typeof (uni as any).getLocationString === "function" 
         ? (uni as any).getLocationString() 

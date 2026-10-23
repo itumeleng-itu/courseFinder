@@ -10,16 +10,11 @@ import {
 } from "@/components/ui/sidebar"
 import { cn } from "@/lib/utils"
 import { motion } from "framer-motion"
-import { DollarSign, LayoutDashboard, Search, FileText, BookOpen, Calendar, Lightbulb, Landmark } from "lucide-react"
+import { DollarSign, LayoutDashboard, Search, FileText, Landmark } from "lucide-react"
 import { Logo } from "@/components/logo"
 import type { Route } from "./nav-main"
 import DashboardNavigation from "@/components/nav-main"
-import { NotificationsPopover } from "@/components/nav-notifications"
 import { Personalise } from "@/components/personalise"
-import { getCalendarNotifications } from "@/lib/calendar-events"
-
-// No sample notifications - using only calendar events
-const sampleNotifications: never[] = []
 
 const dashboardRoutes: Route[] = [
   {
@@ -46,38 +41,11 @@ const dashboardRoutes: Route[] = [
     icon: <Landmark className="size-4" />,
     link: "/universities",
   },
-  {
-    id: "study-tools",
-    title: "Study Tools",
-    icon: <BookOpen className="size-4" />,
-    link: "/study-tools",
-    subs: [
-      {
-        title: "Past Question Papers",
-        icon: <FileText className="size-4" />,
-        link: "/past-papers",
-      },
-      {
-        title: "Calendar",
-        icon: <Calendar className="size-4" />,
-        link: "/calendar",
-      },
-      {
-        title: "Study Tips",
-        icon: <Lightbulb className="size-4" />,
-        link: "/study-tips",
-      },
-    ],
-  },
 ]
 
 export function DashboardSidebar() {
   const { state } = useSidebar()
   const isCollapsed = state === "collapsed"
-
-  // Combine regular notifications with calendar events
-  const calendarNotifications = getCalendarNotifications(1) // Get events for next 24 hours
-  const allNotifications = [...sampleNotifications, ...calendarNotifications]
 
   return (
     <Sidebar variant="inset" collapsible="icon" className={cn("glass-sidebar hidden xl:flex")}>
@@ -101,7 +69,6 @@ export function DashboardSidebar() {
           animate={{ opacity: 1, scale: 1 }}
           transition={{ duration: 0.5 }}
         >
-          <NotificationsPopover notifications={allNotifications} />
           <SidebarTrigger className="ml-auto" />
         </motion.div>
       </SidebarHeader>

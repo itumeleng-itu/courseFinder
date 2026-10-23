@@ -16,6 +16,7 @@
  * response models field-for-field. Keep them in sync if that contract
  * changes -- there is no shared schema package between the two repos.
  */
+import { log } from "@/lib/log"
 import type { Subject as SubjectEntry } from "@/app/find-course/types"
 import { toSubjectSlug } from "@/lib/subject-slugs"
 
@@ -164,7 +165,7 @@ function toApiSubjects(subjects: SubjectEntry[]): { subject: string; percentage:
     .map((s) => {
       const slug = toSubjectSlug(s.name)
       if (!slug) {
-        console.warn(`[qualify-api] no API slug for subject "${s.name}" -- omitted from request`)
+        log.warn(`[qualify-api] no API slug for subject "${s.name}" -- omitted from request`)
         return null
       }
       return { subject: slug, percentage: Math.round(s.percentage) }

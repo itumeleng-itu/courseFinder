@@ -1,7 +1,18 @@
 import { NextResponse } from "next/server"
 
-// Purely static historical data — cache for 1 year at the edge
-export const revalidate = 31536000
+/**
+ * Must run per request: the handler reads `province` and `years` off
+ * the query string, so the response genuinely varies by URL.
+ *
+ * It carried `revalidate` instead, which asks Next to prerender it at
+ * build time. Reading request.url then throws DYNAMIC_SERVER_USAGE,
+ * and every single build logged the resulting error before falling
+ * back to rendering it dynamically anyway. Same trap /api/news was in.
+ *
+ * Caching is unaffected: the year-long s-maxage on the response below
+ * is what actually keeps this at the edge.
+ */
+export const dynamic = "force-dynamic"
 
 
 interface SeriesPoint {

@@ -6,8 +6,8 @@
  * user still gets useful information instead of a generic error.
  */
 
+import { answerFromData } from "@/lib/chatbot-knowledge"
 import { universities } from "@/data/universities"
-import { studyMethods, generalStudyTips } from "@/data/study-data"
 
 // ---------------------------------------------------------------------------
 // Keyword-based topic detection
@@ -27,10 +27,8 @@ const TOPIC_KEYWORDS: Record<string, string[]> = {
     computerScience: ["computer science", "bsc computer", "it", "information technology", "software", "programming"],
     education: ["bed", "education", "teaching", "teacher"],
     nursing: ["nursing", "nurse"],
-    studyTips: ["study", "study tips", "study method", "how to study", "exam preparation", "revision", "exam tips"],
     university: ["university", "universities", "campus", "institution"],
     bursary: ["bursary", "bursaries", "scholarship", "scholarships", "nsfas", "funding", "financial aid"],
-    pastPapers: ["past paper", "past papers", "previous exam", "old exam", "exam paper", "question paper", "question papers", "previous paper"],
     matric: ["matric", "matric results", "nsc", "grade 12", "final exam"],
 }
 
@@ -144,28 +142,6 @@ ${matchingUnis.length > 0 ? matchingUnis.join("\n\n") : `No specific ${fieldName
 For complete listings and requirements, visit our [Find Course](/find-course) page.`
 }
 
-function buildStudyTipsResponse(): string {
-    const methodsList = studyMethods
-        .filter((m) => m.effectiveness >= 4)
-        .slice(0, 5)
-        .map((m) => `- **${m.title}**: ${m.description} (${m.timeRequired})`)
-        .join("\n")
-
-    const tipsList = generalStudyTips
-        .map((cat) => `**${cat.category}:**\n${cat.tips.slice(0, 3).map((t) => `  - ${t}`).join("\n")}`)
-        .join("\n\n")
-
-    return `**Top Study Methods**
-
-${methodsList}
-
-**General Tips**
-
-${tipsList}
-
-For detailed study guides, visit our [Study Tips](/study-tips) page!`
-}
-
 function buildBursaryResponse(): string {
     return `**Bursaries & Financial Aid**
 
@@ -182,21 +158,6 @@ Here are key resources for South African students:
 4. Meet the minimum APS and subject requirements
 
 Visit our [Bursaries](/bursaries) page for current opportunities!`
-}
-
-function buildPastPapersResponse(): string {
-    return `**Past Papers**
-
-Past examination papers are one of the best ways to prepare for exams. We have a collection of previous NSC and university papers available.
-
-**How to use past papers effectively:**
-1. Start with the most recent papers
-2. Time yourself under exam conditions
-3. Mark your answers honestly
-4. Focus on question patterns and common topics
-5. Review the marking memo to understand what examiners expect
-
-Browse our collection on the [Past Papers](/past-papers) page!`
 }
 
 function buildMatricResponse(): string {
@@ -225,6 +186,13 @@ Check your results and next steps on our [Matric Results](/matric-results) page.
  * Returns null if the question can't be answered locally.
  */
 export function generateLocalFallback(message: string): string | null {
+    // The dataset answers first here too, so an offline learner gets
+    // the same real requirements, dates and campuses as an online
+    // one. This path used to search a legacy course list by substring
+    // and return bare names with no requirements attached.
+    const fromData = answerFromData(message)
+    if (fromData) return fromData
+
     const topics = detectTopics(message)
 
     const primary = topics.length > 0 ? topics[0].topic : ""
@@ -262,15 +230,12 @@ Browse the [Find Course](/find-course) page for full details and APS requirement
 **I can help with:**
 - 📊 APS calculations and requirements
 - 🎓 University courses and admissions
-- 📚 Study tips and methods
 - 💰 Bursary information
-- 📝 Past papers
 - 📋 Matric results information
 
 Try asking about one of these topics, or browse the app directly:
 - [Find Course](/find-course) — APS calculator & course matching
-- [Study Tips](/study-tips) — Proven study methods
-- [Past Papers](/past-papers) — Previous exam papers
+- [Universities](/universities) — Institutions, campuses & application dates
 - [Matric Results](/matric-results) — Results & next steps
 
 *Note: I'm using local data because the AI service is temporarily unavailable. Responses may be more limited than usual.*`
@@ -301,17 +266,11 @@ Try asking about one of these topics, or browse the app directly:
         case "nursing":
             response = buildCourseFieldResponse("nursing", "Nursing")
             break
-        case "studyTips":
-            response = buildStudyTipsResponse()
-            break
         case "university":
             response = buildUniversityListResponse()
             break
         case "bursary":
             response = buildBursaryResponse()
-            break
-        case "pastPapers":
-            response = buildPastPapersResponse()
             break
         case "matric":
             response = buildMatricResponse()

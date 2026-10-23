@@ -65,9 +65,7 @@ export default function RootLayout({
             dangerouslySetInnerHTML={{
               __html: `
                 if ('serviceWorker' in navigator) {
-                  navigator.serviceWorker.register('/service-worker.js').then(() => {
-                    console.log('[PWA] Service Worker registered successfully')
-                  }).catch((error) => {
+                  navigator.serviceWorker.register('/service-worker.js').catch((error) => {
                     console.error('[PWA] Service Worker registration failed:', error)
                   })
                 }

@@ -75,9 +75,7 @@ Only give links when user says things like:
 - [Dashboard](/) - Home page
 - [Find Course](/find-course) - APS calculator and course matching
 - [Matric Results](/matric-results) - Check NSC results
-- [Past Papers](/past-papers) - Previous exam papers
-- [Calendar](/calendar) - Academic dates
-- [Study Tips](/study-tips) - Study methods
+- [Universities](/universities) - Institutions, campuses and application dates
 - [Bursaries](/bursaries) - Scholarships and financial aid
 
 ---

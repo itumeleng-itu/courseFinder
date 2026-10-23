@@ -68,12 +68,12 @@ export default function NotFound() {
             Quick links
           </p>
           <div className="flex flex-wrap gap-3 justify-center">
-            <Link 
-              href="/past-papers" 
+            <Link
+              href="/universities"
               className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-secondary/50 hover:bg-secondary text-sm transition-colors"
             >
               <BookOpen className="h-4 w-4" />
-              Past Papers
+              Universities
             </Link>
             <Link 
               href="/matric-results" 
