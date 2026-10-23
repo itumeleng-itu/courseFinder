@@ -2,6 +2,15 @@ import { ResponsiveContainer, BarChart, XAxis, Tooltip as ReTooltip, Bar, Cell }
 import { SeriesPoint, ApiResponse } from "@/hooks/use-geo-stats"
 import { rateFormat } from "@/lib/geo-constants"
 
+/** Matches the h-32 wrapper below.
+ *
+ * ResponsiveContainer with height="100%" has to measure its parent,
+ * and it renders once before its ResizeObserver first fires --
+ * logging "The width(-1) and height(-1) of chart should be greater
+ * than 0" on every page load. Giving it a number it already knows
+ * leaves only the width to measure, and the warning goes away. */
+const CHART_HEIGHT = 128
+
 interface YoYBarChartProps {
   data: ApiResponse
   yoy: Array<{ year: number; delta: number }>
@@ -26,7 +35,7 @@ export function YoYBarChart({ data, yoy }: YoYBarChartProps) {
       </div>
 
       <div className="w-full h-32 mt-4 min-w-0">
-        <ResponsiveContainer width="100%" height="100%" minWidth={0}>
+        <ResponsiveContainer width="100%" height={CHART_HEIGHT} minWidth={0}>
           <BarChart
             data={data.provinceSeries.map((point: SeriesPoint, index: number) => ({
               year: point.year.toString(),
@@ -37,7 +46,7 @@ export function YoYBarChart({ data, yoy }: YoYBarChartProps) {
           >
             <XAxis dataKey="year" tick={{ fontSize: 11, fill: "currentColor" }} axisLine={false} tickLine={false} className="text-muted-foreground" />
             <ReTooltip
-              formatter={(value: number) => [`${value.toFixed(1)}%`, "Pass Rate"]}
+              formatter={(value) => [`${Number(value).toFixed(1)}%`, "Pass Rate"] as [string, string]}
               contentStyle={{
                 backgroundColor: "hsl(var(--card))",
                 border: "1px solid hsl(var(--border))",

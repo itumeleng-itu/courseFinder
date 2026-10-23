@@ -14,6 +14,15 @@ import {
 import { SeriesPoint, ApiResponse } from "@/hooks/use-geo-stats"
 import { rateFormat } from "@/lib/geo-constants"
 
+/** Matches the h-64 wrapper below.
+ *
+ * ResponsiveContainer with height="100%" has to measure its parent,
+ * and it renders once before its ResizeObserver first fires --
+ * logging "The width(-1) and height(-1) of chart should be greater
+ * than 0" on every page load. Giving it a number it already knows
+ * leaves only the width to measure, and the warning goes away. */
+const CHART_HEIGHT = 256
+
 interface PassRateChartsProps {
   isMobile: boolean
   province: string | null
@@ -30,12 +39,12 @@ export function PassRateCharts({ isMobile, province, data }: PassRateChartsProps
   if (isMobile) {
     return (
       <div className="w-full h-64 min-w-0">
-        <ResponsiveContainer width="100%" height="100%" minWidth={0}>
+        <ResponsiveContainer width="100%" height={CHART_HEIGHT} minWidth={0}>
           <BarChart data={chartData} margin={{ top: 10, right: 24, left: 0, bottom: 0 }}>
             <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#e5e7eb" />
             <XAxis dataKey="year" tick={{ fontSize: 12 }} axisLine={false} tickLine={false} />
             <YAxis domain={[60, 95]} tickFormatter={(v) => `${v}%`} tick={{ fontSize: 12 }} axisLine={false} tickLine={false} />
-            <ReTooltip formatter={(v: number | string) => rateFormat(Number(v))} />
+            <ReTooltip formatter={(v) => rateFormat(Number(v))} />
             <Legend wrapperStyle={{ fontSize: 12 }} />
             <Bar dataKey="province" name={province || "Province"} fill="#0ea5e9" radius={[4, 4, 0, 0]} />
             <Bar dataKey="national" name="National" fill="#10b981" radius={[4, 4, 0, 0]} />
@@ -47,13 +56,13 @@ export function PassRateCharts({ isMobile, province, data }: PassRateChartsProps
 
   return (
     <div className="w-full h-64 min-w-0">
-      <ResponsiveContainer width="100%" height="100%" minWidth={0}>
+      <ResponsiveContainer width="100%" height={CHART_HEIGHT} minWidth={0}>
         <LineChart data={chartData} margin={{ top: 20, right: 30, left: 0, bottom: 10 }}>
           <CartesianGrid strokeDasharray="0" vertical={false} className="stroke-muted" />
           <XAxis dataKey="year" tick={{ fontSize: 12 }} axisLine={false} tickLine={false} dy={10} className="text-muted-foreground" />
           <YAxis domain={[60, 95]} tickFormatter={(v) => `${v}%`} tick={{ fontSize: 12 }} axisLine={false} tickLine={false} dx={-5} className="text-muted-foreground" />
           <ReTooltip
-            formatter={(v: number | string) => rateFormat(Number(v))}
+            formatter={(v) => rateFormat(Number(v))}
             contentStyle={{
               backgroundColor: "hsl(var(--card))",
               border: "1px solid hsl(var(--border))",

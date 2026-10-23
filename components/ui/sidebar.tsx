@@ -461,8 +461,12 @@ SidebarGroupLabel.displayName = "SidebarGroupLabel"
 
 const SidebarGroupAction = React.forwardRef<
   HTMLButtonElement,
-  React.ComponentProps<"button"> & { asChild?: boolean }
->(({ className, asChild = false, ...props }, ref) => {
+  // showOnHover was used in the class list below but never declared
+  // or destructured -- copied from SidebarMenuAction, which does take
+  // it. Nothing renders this component yet, so it has never thrown,
+  // but the first use would have been a ReferenceError.
+  React.ComponentProps<"button"> & { asChild?: boolean; showOnHover?: boolean }
+>(({ className, asChild = false, showOnHover = false, ...props }, ref) => {
   const Comp = asChild ? Slot : "button"
 
   return (

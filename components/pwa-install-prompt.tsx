@@ -19,29 +19,53 @@ export function PWAInstallPrompt() {
       return
     }
 
-    // Check for beforeinstallprompt event
-    const handleBeforeInstallPrompt = (e: BeforeInstallPromptEvent) => {
-      e.preventDefault()
-      // Guard: only show once per app open (session)
-      if (sessionStorage.getItem(SHOWN_KEY) === "1") {
-        return
+    const alreadyOffered = () => {
+      try {
+        return sessionStorage.getItem(SHOWN_KEY) === "1"
+      } catch {
+        return false
       }
-      setDeferredPrompt(e)
+    }
+
+    /**
+     * preventDefault() is called ONLY when we are about to show our
+     * own prompt.
+     *
+     * It used to run first, before the once-per-session guard. So on
+     * every navigation after the first, this suppressed Chrome's
+     * install banner and then returned without ever calling prompt(),
+     * and Chrome logged "Banner not shown:
+     * beforeinstallpromptevent.preventDefault() called. The page must
+     * call beforeinstallpromptevent.prompt()" — on each page, for the
+     * rest of the session.
+     *
+     * Suppressing the banner is a promise to show our own instead. If
+     * we are not going to, the honest thing is to leave the event
+     * alone and let the browser offer its native banner.
+     */
+    const handleBeforeInstallPrompt = (event: Event) => {
+      if (alreadyOffered()) return
+
+      event.preventDefault()
+      setDeferredPrompt(event as BeforeInstallPromptEvent)
       setIsVisible(true)
-      sessionStorage.setItem(SHOWN_KEY, "1")
+      try {
+        sessionStorage.setItem(SHOWN_KEY, "1")
+      } catch {}
+    }
+
+    const handleInstalled = () => {
+      setIsVisible(false)
+      setDeferredPrompt(null)
     }
 
     window.addEventListener("beforeinstallprompt", handleBeforeInstallPrompt)
-
-    // Check if app is installed
-    window.addEventListener("appinstalled", () => {
-
-      setIsVisible(false)
-      setDeferredPrompt(null)
-    })
+    window.addEventListener("appinstalled", handleInstalled)
 
     return () => {
       window.removeEventListener("beforeinstallprompt", handleBeforeInstallPrompt)
+      // Was never removed, so each mount added another listener.
+      window.removeEventListener("appinstalled", handleInstalled)
     }
   }, [])
 

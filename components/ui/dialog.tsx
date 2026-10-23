@@ -26,11 +26,23 @@ export interface DialogContentProps extends React.ComponentPropsWithoutRef<typeo
   container?: HTMLElement | null
 }
 
-export function DialogContent({ className, children, container, style, ...props }: DialogContentProps) {
+/**
+ * Forwards its ref to the underlying Radix content element.
+ *
+ * It was a plain function component, so a caller passing `ref` got a
+ * type error and, at runtime, no ref at all. info-dialog.tsx needs
+ * one to measure the dialog when anchoring it to its trigger, and was
+ * silently measuring nothing.
+ */
+export const DialogContent = React.forwardRef<
+  React.ElementRef<typeof DialogPrimitive.Content>,
+  DialogContentProps
+>(function DialogContent({ className, children, container, style, ...props }, ref) {
   return (
     <DialogPortal container={container}>
       <DialogOverlay />
       <DialogPrimitive.Content
+        ref={ref}
         style={style}
         className={cn(
           // Positioning and layout - use bracket notation for specificity
@@ -49,7 +61,7 @@ export function DialogContent({ className, children, container, style, ...props 
       </DialogPrimitive.Content>
     </DialogPortal>
   )
-}
+})
 
 export function DialogHeader({ className, ...props }: React.HTMLAttributes<HTMLDivElement>) {
   return (
